@@ -1634,40 +1634,115 @@ Class ANALIZ_TEP_FORM_ON_SHOW: WebForm
 		
 		// --- Идентификаторы полей-кодов для режима «Выводить коды аналитик»
 		// (ТТ, лист «Вывод полей в отчете», колонка «Поле» при «Выводить код = да»).
-		// Указываются только там, где код отличается от основного идентификатора поля.
-		_codeIds.Add("CB_PLANT", "SP");
-		_codeIds.Add("CB_SOLD_TO", "KEY");
-		_codeIds.Add("CB_ZPH_USR2", "CODE_ZPH_USR0");
-		_codeIds.Add("CB_PERIOD_TYPE", "PERIOD_TY");
+		// Ключ — основной идентификатор поля; указываются только те, где код отличается от него.
+		_codeIds.Add("PLANT", "SP");
+		_codeIds.Add("SOLD_TO", "KEY");
+		_codeIds.Add("ZPH_USR2", "CODE_ZPH_USR0");
+		_codeIds.Add("PERIOD_TYPE", "PERIOD_TY");
 	End Sub InitOutputFieldIds;
 	
 	/// <summary>
 	/// 	Пересобирает P_FIELD_LIST по состояниям чек-боксов и генерирует гиперссылку.
 	/// 	Единственная точка изменения списка полей: чек-боксы + таблица InitOutputFieldIds.
+	/// 	Перебор контролов — явным списком: IWebComponents нельзя объявлять как тип
+	/// 	(в отличие от IWebComponent), поэтому Self.Components здесь не используется.
 	/// </summary>
 	Sub RefreshFieldList;
 	Var
-		components: IWebComponents;
-		component: IWebComponent;
-		cb: IWebCheckBox;
 		codes: String;
-		i, count: Integer;
 	Begin
 		If IsNull(fieldList) Then fieldList := New StringList.Create; End If;
 		fieldList.Clear;
 		addDefaultFieldsToStringList;
 		
-		components := Self.Components;
-		If Not IsNull(components) Then
-			count := components.Count;
-			For i := 0 To count - 1 Do
-				component := components.Item(i);
-				If component Is IWebCheckBox Then
-					cb := component As IWebCheckBox;
-					If cb.Checked Then addFieldId(cb.Name); End If;
-				End If;
-			End For;
-		End If;
+		CollectIfChecked(CB_ACTTYPE, "CB_ACTTYPE");
+		CollectIfChecked(CB_ACT_UNIT, "CB_ACT_UNIT");
+		CollectIfChecked(CB_COSTCENTER, "CB_COSTCENTER");
+		CollectIfChecked(CB_MATERIAL, "CB_MATERIAL");
+		CollectIfChecked(CB_PERIOD_TYPE, "CB_PERIOD_TYPE");
+		CollectIfChecked(CB_PLANT, "CB_PLANT");
+		CollectIfChecked(CB_POSID, "CB_POSID");
+		CollectIfChecked(CB_PROFIT_CTR, "CB_PROFIT_CTR");
+		CollectIfChecked(CB_SOLD_TO, "CB_SOLD_TO");
+		CollectIfChecked(CB_UCVOLTLEVL, "CB_UCVOLTLEVL");
+		CollectIfChecked(CB_VENDOR, "CB_VENDOR");
+		CollectIfChecked(CB_ZAVIATYPE, "CB_ZAVIATYPE");
+		CollectIfChecked(CB_ZBUR_AREA, "CB_ZBUR_AREA");
+		CollectIfChecked(CB_ZBUR_BEG, "CB_ZBUR_BEG");
+		CollectIfChecked(CB_ZBUR_END, "CB_ZBUR_END");
+		CollectIfChecked(CB_ZBUR_LU, "CB_ZBUR_LU");
+		CollectIfChecked(CB_ZBUR_PLST, "CB_ZBUR_PLST");
+		CollectIfChecked(CB_ZDEBITOR, "CB_ZDEBITOR");
+		CollectIfChecked(CB_ZDOGLINK, "CB_ZDOGLINK");
+		CollectIfChecked(CB_ZEQUI, "CB_ZEQUI");
+		CollectIfChecked(CB_ZFUNC_LOC, "CB_ZFUNC_LOC");
+		CollectIfChecked(CB_ZGAZ_TYPE, "CB_ZGAZ_TYPE");
+		CollectIfChecked(CB_ZGEN_POD, "CB_ZGEN_POD");
+		CollectIfChecked(CB_ZGEN_ZAK, "CB_ZGEN_ZAK");
+		CollectIfChecked(CB_ZHRGRPMO, "CB_ZHRGRPMO");
+		CollectIfChecked(CB_ZINDTXT1, "CB_ZINDTXT1");
+		CollectIfChecked(CB_ZLIB_INDC, "CB_ZLIB_INDC");
+		CollectIfChecked(CB_ZLIB_INFS, "CB_ZLIB_INFS");
+		CollectIfChecked(CB_ZOBJEM, "CB_ZOBJEM");
+		CollectIfChecked(CB_ZORGUNIT, "CB_ZORGUNIT");
+		CollectIfChecked(CB_ZPHD_COMM, "CB_ZPHD_COMM");
+		CollectIfChecked(CB_ZPHD_DOG, "CB_ZPHD_DOG");
+		CollectIfChecked(CB_ZPHD_GRSR, "CB_ZPHD_GRSR");
+		CollectIfChecked(CB_ZPHD_IS, "CB_ZPHD_IS");
+		CollectIfChecked(CB_ZPHD_KON, "CB_ZPHD_KON");
+		CollectIfChecked(CB_ZPHD_NCH, "CB_ZPHD_NCH");
+		CollectIfChecked(CB_ZPHD_NOP1, "CB_ZPHD_NOP1");
+		CollectIfChecked(CB_ZPHD_PHD, "CB_ZPHD_PHD");
+		CollectIfChecked(CB_ZPHD_PRIZ, "CB_ZPHD_PRIZ");
+		CollectIfChecked(CB_ZPHD_SK, "CB_ZPHD_SK");
+		CollectIfChecked(CB_ZPHD_SPR, "CB_ZPHD_SPR");
+		CollectIfChecked(CB_ZPHD_SR, "CB_ZPHD_SR");
+		CollectIfChecked(CB_ZPHD_STAT, "CB_ZPHD_STAT");
+		CollectIfChecked(CB_ZPHD_USL1, "CB_ZPHD_USL1");
+		CollectIfChecked(CB_ZPH_ESO2, "CB_ZPH_ESO2");
+		CollectIfChecked(CB_ZPH_OPLST, "CB_ZPH_OPLST");
+		CollectIfChecked(CB_ZPH_TEHK, "CB_ZPH_TEHK");
+		CollectIfChecked(CB_ZPH_USR2, "CB_ZPH_USR2");
+		CollectIfChecked(CB_ZPILOT, "CB_ZPILOT");
+		CollectIfChecked(CB_ZPKR_SUBP, "CB_ZPKR_SUBP");
+		CollectIfChecked(CB_ZSHIFR, "CB_ZSHIFR");
+		CollectIfChecked(CB_ZSIU_FLD, "CB_ZSIU_FLD");
+		CollectIfChecked(CB_ZSIU_TY, "CB_ZSIU_TY");
+		CollectIfChecked(CB_ZSKV_KUST, "CB_ZSKV_KUST");
+		CollectIfChecked(CB_ZSKV_ST, "CB_ZSKV_ST");
+		CollectIfChecked(CB_ZUCVOLTTR, "CB_ZUCVOLTTR");
+		CollectIfChecked(CB_Z_CL_NAPR, "CB_Z_CL_NAPR");
+		CollectIfChecked(CB_Z_SKV_GEO, "CB_Z_SKV_GEO");
+		CollectIfChecked(CbHigherInd, "CbHigherInd");
+		CollectIfChecked(CB_ACTIVITY_TYPE, "CB_ACTIVITY_TYPE");
+		CollectIfChecked(CB_IND_TYPE, "CB_IND_TYPE");
+		CollectIfChecked(CB_TEP_FORM_OF_SNG, "CB_TEP_FORM_OF_SNG");
+		CollectIfChecked(CB_TEP_OWNER, "CB_TEP_OWNER");
+		CollectIfChecked(CB_FUNCTION_OF_WOKERS, "CB_FUNCTION_OF_WOKERS");
+		CollectIfChecked(CB_VOLUME, "CB_VOLUME");
+		CollectIfChecked(CB_TRUD, "CB_TRUD");
+		CollectIfChecked(CB_COMPARABLE_PRICES, "CB_COMPARABLE_PRICES");
+		CollectIfChecked(CB_CURRENT_PRICES, "CB_CURRENT_PRICES");
+		CollectIfChecked(CB_ACTTYPE2, "CB_ACTTYPE2");
+		CollectIfChecked(CB_JANUARY, "CB_JANUARY");
+		CollectIfChecked(CB_FEBRUARY, "CB_FEBRUARY");
+		CollectIfChecked(CB_MARCH, "CB_MARCH");
+		CollectIfChecked(CB_APRIL, "CB_APRIL");
+		CollectIfChecked(CB_MAY, "CB_MAY");
+		CollectIfChecked(CB_JUNE, "CB_JUNE");
+		CollectIfChecked(CB_JULY, "CB_JULY");
+		CollectIfChecked(CB_AUGUST, "CB_AUGUST");
+		CollectIfChecked(CB_SEPTEMBER, "CB_SEPTEMBER");
+		CollectIfChecked(CB_OCTOBER, "CB_OCTOBER");
+		CollectIfChecked(CB_NOVEMBER, "CB_NOVEMBER");
+		CollectIfChecked(CB_DECEMBER, "CB_DECEMBER");
+		CollectIfChecked(CB_FIRST_QUARTER, "CB_FIRST_QUARTER");
+		CollectIfChecked(CB_SECOND_QUARTER, "CB_SECOND_QUARTER");
+		CollectIfChecked(CB_THIRD_QUARTER, "CB_THIRD_QUARTER");
+		CollectIfChecked(CB_FOURTH_QUARTER, "CB_FOURTH_QUARTER");
+		CollectIfChecked(CB_SIX_MONTH, "CB_SIX_MONTH");
+		CollectIfChecked(CB_NINE_MONTH, "CB_NINE_MONTH");
+		CollectIfChecked(CB_YEAR, "CB_YEAR");
 		
 		// Режим «Выводить информацию по статусам»: к выбранным периодам добавляются поля статусов
 		If (Not IsNull(CB_DISPLAY_INFO_BY_STATUS)) And CB_DISPLAY_INFO_BY_STATUS.Checked Then
@@ -1698,13 +1773,13 @@ Class ANALIZ_TEP_FORM_ON_SHOW: WebForm
 		Return value As String;
 	End Function fieldIdByControl;
 	
-	Sub addFieldId(controlName: String);
-	Var
-		fieldId: String;
+	/// <summary>Добавляет поле, если его чек-бокс отмечен (идентификатор берётся из таблицы)</summary>
+	Sub CollectIfChecked(cb: IWebCheckBox; controlName: String);
 	Begin
-		fieldId := fieldIdByControl(controlName);
-		addFieldToList(fieldId);
-	End Sub addFieldId;
+		If IsNull(cb) Then Return; End If;
+		If Not cb.Checked Then Return; End If;
+		addFieldToList(fieldIdByControl(controlName));
+	End Sub CollectIfChecked;
 	
 	/// <summary>Добавляет идентификатор в список полей, если его там ещё нет</summary>
 	Sub addFieldToList(fieldId: String);
@@ -1716,25 +1791,15 @@ Class ANALIZ_TEP_FORM_ON_SHOW: WebForm
 	/// <summary>Поля статусов для выбранных периодов (режим «Выводить информацию по статусам»)</summary>
 	Sub addStatusFields;
 	Var
-		components: IWebComponents;
-		component: IWebComponent;
-		cb: IWebCheckBox;
 		fieldId: String;
 		i, count: Integer;
 	Begin
-		components := Self.Components;
-		If IsNull(components) Then Return; End If;
-		count := components.Count;
+		// count фиксируем заранее: добавляемые поля статусов не должны попасть в этот же перебор
+		count := fieldList.Count;
 		For i := 0 To count - 1 Do
-			component := components.Item(i);
-			If component Is IWebCheckBox Then
-				cb := component As IWebCheckBox;
-				If cb.Checked Then
-					fieldId := fieldIdByControl(cb.Name);
-					If fieldId.StartsWith("ZSIU_INDV_") Then
-						addFieldToList(fieldId + C_STATUS_FIELD_SUFFIX);
-					End If;
-				End If;
+			fieldId := fieldList.Item(i);
+			If fieldId.StartsWith("ZSIU_INDV_") Then
+				addFieldToList(fieldId + C_STATUS_FIELD_SUFFIX);
 			End If;
 		End For;
 	End Sub addStatusFields;
@@ -1743,26 +1808,15 @@ Class ANALIZ_TEP_FORM_ON_SHOW: WebForm
 	Function codeFieldsText: String;
 	Var
 		list: IStringList;
-		components: IWebComponents;
-		component: IWebComponent;
-		cb: IWebCheckBox;
 		codeId: Variant;
 		i, count: Integer;
 	Begin
 		list := New StringList.Create;
-		components := Self.Components;
-		If IsNull(components) Then Return ""; End If;
-		count := components.Count;
+		count := fieldList.Count;
 		For i := 0 To count - 1 Do
-			component := components.Item(i);
-			If component Is IWebCheckBox Then
-				cb := component As IWebCheckBox;
-				If cb.Checked Then
-					codeId := _codeIds.Item(cb.Name);
-					If Not IsNull(codeId) Then
-						If list.IndexOf(codeId As String) = -1 Then list.Add(codeId As String); End If;
-					End If;
-				End If;
+			codeId := _codeIds.Item(fieldList.Item(i));
+			If Not IsNull(codeId) Then
+				If list.IndexOf(codeId As String) = -1 Then list.Add(codeId As String); End If;
 			End If;
 		End For;
 		Return list.Text(", ");

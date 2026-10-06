@@ -63,7 +63,16 @@ for name, n in counts.items():
     if n > 1:
         problems.append('дублирующееся имя подпрограммы: %s (x%d)' % (name, n))
 
-# --- 3. вложенные подпрограммы ---
+# --- 3. запрещённые конструкции платформы ---
+for i, l in enumerate(lines, 1):
+    if not live[i - 1]:
+        continue
+    if 'IWebComponents' in l:
+        problems.append('стр.%d: IWebComponents нельзя объявлять как тип (в отличие от IWebComponent)' % i)
+    if 'Self.Components' in l:
+        problems.append('стр.%d: Self.Components использовать нельзя — перебирайте контролы явным списком' % i)
+
+# --- 3а. вложенные подпрограммы ---
 for i, l in enumerate(lines, 1):
     if live[i - 1] and re.match(r'^\t\t' + MOD + r'(Sub|Function)\s', l):
         problems.append('стр.%d: осталась вложенная подпрограмма: %s' % (i, l.strip()))
@@ -79,19 +88,35 @@ for cb in sorted(set(calls)):
         problems.append('fillFieldListByStatusFlag(%s): тип %s, а не WebCheckBox' % (cb, controls[cb]))
 
 # --- 5. таблицы соответствия ---
-field_keys = re.findall(r'_fieldIds\.Add\("([^"]+)"', text)
-code_keys = re.findall(r'_codeIds\.Add\("([^"]+)"', text)
-for k in sorted(set(field_keys + code_keys)):
+field_pairs = re.findall(r'_fieldIds\.Add\("([^"]+)",\s*"([^"]+)"\)', text)
+field_keys = [k for k, _ in field_pairs]              # имена контролов
+field_ids = set(v for _, v in field_pairs)            # идентификаторы полей отчёта
+code_pairs = re.findall(r'_codeIds\.Add\("([^"]+)",\s*"([^"]+)"\)', text)
+for k in sorted(set(field_keys)):
     if k not in controls:
         problems.append('таблица соответствия: контрол %s не объявлен' % k)
     elif controls[k] != 'WebCheckBox':
         problems.append('таблица соответствия: %s имеет тип %s' % (k, controls[k]))
-for k in code_keys:
-    if k not in field_keys:
-        problems.append('_codeIds: %s отсутствует в _fieldIds' % k)
+for k, v in code_pairs:
+    if k not in field_ids:
+        problems.append('_codeIds: ключ %s отсутствует среди значений _fieldIds' % k)
 dupes = [k for k in set(field_keys) if field_keys.count(k) > 1]
 for k in dupes:
     problems.append('_fieldIds: дубль ключа %s' % k)
+
+# --- 5а. сбор состояний чек-боксов ---
+collect = re.findall(r'CollectIfChecked\(\s*([A-Za-z_]\w*)\s*,\s*"([^"]+)"\s*\)', code)
+collect = [(c, n) for c, n in collect if c != 'cb']   # без строки-определения метода
+for ctrl, name in collect:
+    if ctrl != name:
+        problems.append('CollectIfChecked(%s, "%s"): имя контрола и ключ таблицы должны совпадать' % (ctrl, name))
+    if ctrl not in controls:
+        problems.append('CollectIfChecked(%s): контрол не объявлен' % ctrl)
+    elif ctrl not in field_keys:
+        problems.append('CollectIfChecked(%s): контрол отсутствует в _fieldIds' % ctrl)
+not_collected = sorted(c for c in field_keys if c not in [c for c, _ in collect])
+for c in not_collected:
+    problems.append('чек-бокс %s размечен, но не собирается в RefreshFieldList' % c)
 
 # --- 6. покрытие чек-боксов идентификаторами ---
 checkboxes = [c for c, t in controls.items() if t == 'WebCheckBox']

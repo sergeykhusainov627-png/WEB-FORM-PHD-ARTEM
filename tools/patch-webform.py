@@ -73,6 +73,16 @@ for c, f, title in NEW_FIELDS:
     pairs_block.append('\t\t_fieldIds.Add("%s", "%s");%s// %s' % (c, f, ' ' * max(1, 34 - len(c) - len(f)), title))
 pairs_text = '\n'.join(pairs_block)
 
+# Строки сбора состояний чек-боксов: IWebComponents нельзя объявлять как тип (в отличие от
+# IWebComponent) и Self.Components использовать нельзя — перебираем контролы явным списком.
+collect_lines = []
+for ctrl, _fid in sorted(pairs):
+    collect_lines.append('\t\tCollectIfChecked(%s, "%s");' % (ctrl, ctrl))
+for ctrl, _fid, _title in NEW_FIELDS:
+    if ctrl not in {c for c, _ in pairs}:
+        collect_lines.append('\t\tCollectIfChecked(%s, "%s");' % (ctrl, ctrl))
+collect_text = '\n'.join(collect_lines)
+
 # ---------------------------------------------------------------- 1. поля класса
 src = sub_once(
     r'(\t_hlink: ITabHyperlink;\n)',
@@ -291,40 +301,28 @@ __FIELDS__
 		
 		// --- Идентификаторы полей-кодов для режима «Выводить коды аналитик»
 		// (ТТ, лист «Вывод полей в отчете», колонка «Поле» при «Выводить код = да»).
-		// Указываются только там, где код отличается от основного идентификатора поля.
-		_codeIds.Add("CB_PLANT", "SP");
-		_codeIds.Add("CB_SOLD_TO", "KEY");
-		_codeIds.Add("CB_ZPH_USR2", "CODE_ZPH_USR0");
-		_codeIds.Add("CB_PERIOD_TYPE", "PERIOD_TY");
+		// Ключ — основной идентификатор поля; указываются только те, где код отличается от него.
+		_codeIds.Add("PLANT", "SP");
+		_codeIds.Add("SOLD_TO", "KEY");
+		_codeIds.Add("ZPH_USR2", "CODE_ZPH_USR0");
+		_codeIds.Add("PERIOD_TYPE", "PERIOD_TY");
 	End Sub InitOutputFieldIds;
 	
 	/// <summary>
 	/// 	Пересобирает P_FIELD_LIST по состояниям чек-боксов и генерирует гиперссылку.
 	/// 	Единственная точка изменения списка полей: чек-боксы + таблица InitOutputFieldIds.
+	/// 	Перебор контролов — явным списком: IWebComponents нельзя объявлять как тип
+	/// 	(в отличие от IWebComponent), поэтому Self.Components здесь не используется.
 	/// </summary>
 	Sub RefreshFieldList;
 	Var
-		components: IWebComponents;
-		component: IWebComponent;
-		cb: IWebCheckBox;
 		codes: String;
-		i, count: Integer;
 	Begin
 		If IsNull(fieldList) Then fieldList := New StringList.Create; End If;
 		fieldList.Clear;
 		addDefaultFieldsToStringList;
 		
-		components := Self.Components;
-		If Not IsNull(components) Then
-			count := components.Count;
-			For i := 0 To count - 1 Do
-				component := components.Item(i);
-				If component Is IWebCheckBox Then
-					cb := component As IWebCheckBox;
-					If cb.Checked Then addFieldId(cb.Name); End If;
-				End If;
-			End For;
-		End If;
+__COLLECT__
 		
 		// Режим «Выводить информацию по статусам»: к выбранным периодам добавляются поля статусов
 		If (Not IsNull(CB_DISPLAY_INFO_BY_STATUS)) And CB_DISPLAY_INFO_BY_STATUS.Checked Then
@@ -355,13 +353,13 @@ __FIELDS__
 		Return value As String;
 	End Function fieldIdByControl;
 	
-	Sub addFieldId(controlName: String);
-	Var
-		fieldId: String;
+	/// <summary>Добавляет поле, если его чек-бокс отмечен (идентификатор берётся из таблицы)</summary>
+	Sub CollectIfChecked(cb: IWebCheckBox; controlName: String);
 	Begin
-		fieldId := fieldIdByControl(controlName);
-		addFieldToList(fieldId);
-	End Sub addFieldId;
+		If IsNull(cb) Then Return; End If;
+		If Not cb.Checked Then Return; End If;
+		addFieldToList(fieldIdByControl(controlName));
+	End Sub CollectIfChecked;
 	
 	/// <summary>Добавляет идентификатор в список полей, если его там ещё нет</summary>
 	Sub addFieldToList(fieldId: String);
@@ -373,25 +371,15 @@ __FIELDS__
 	/// <summary>Поля статусов для выбранных периодов (режим «Выводить информацию по статусам»)</summary>
 	Sub addStatusFields;
 	Var
-		components: IWebComponents;
-		component: IWebComponent;
-		cb: IWebCheckBox;
 		fieldId: String;
 		i, count: Integer;
 	Begin
-		components := Self.Components;
-		If IsNull(components) Then Return; End If;
-		count := components.Count;
+		// count фиксируем заранее: добавляемые поля статусов не должны попасть в этот же перебор
+		count := fieldList.Count;
 		For i := 0 To count - 1 Do
-			component := components.Item(i);
-			If component Is IWebCheckBox Then
-				cb := component As IWebCheckBox;
-				If cb.Checked Then
-					fieldId := fieldIdByControl(cb.Name);
-					If fieldId.StartsWith("ZSIU_INDV_") Then
-						addFieldToList(fieldId + C_STATUS_FIELD_SUFFIX);
-					End If;
-				End If;
+			fieldId := fieldList.Item(i);
+			If fieldId.StartsWith("ZSIU_INDV_") Then
+				addFieldToList(fieldId + C_STATUS_FIELD_SUFFIX);
 			End If;
 		End For;
 	End Sub addStatusFields;
@@ -400,26 +388,15 @@ __FIELDS__
 	Function codeFieldsText: String;
 	Var
 		list: IStringList;
-		components: IWebComponents;
-		component: IWebComponent;
-		cb: IWebCheckBox;
 		codeId: Variant;
 		i, count: Integer;
 	Begin
 		list := New StringList.Create;
-		components := Self.Components;
-		If IsNull(components) Then Return ""; End If;
-		count := components.Count;
+		count := fieldList.Count;
 		For i := 0 To count - 1 Do
-			component := components.Item(i);
-			If component Is IWebCheckBox Then
-				cb := component As IWebCheckBox;
-				If cb.Checked Then
-					codeId := _codeIds.Item(cb.Name);
-					If Not IsNull(codeId) Then
-						If list.IndexOf(codeId As String) = -1 Then list.Add(codeId As String); End If;
-					End If;
-				End If;
+			codeId := _codeIds.Item(fieldList.Item(i));
+			If Not IsNull(codeId) Then
+				If list.IndexOf(codeId As String) = -1 Then list.Add(codeId As String); End If;
 			End If;
 		End For;
 		Return list.Text(", ");
@@ -514,7 +491,7 @@ __FIELDS__
 		
 		Return False;
 	End Function isPlantPrivileged;
-'''.replace('__FIELDS__', pairs_text)
+'''.replace('__FIELDS__', pairs_text).replace('__COLLECT__', collect_text)
 
 src = sub_once(r'(\nEnd Class ANALIZ_TEP_FORM_ON_SHOW;)',
                '\n' + '\n'.join(new_subs) + '\n' + HELPERS + r'\1', src, 'вставка обработчиков и справки')
@@ -535,6 +512,8 @@ for l in src.split('\n'):
         continue
     live.append(l)
 assert not any('_AnalyzTepHyperlink.SetParamValue' in l for l in live), 'остались прямые вызовы'
+# IWebComponents нельзя объявлять как тип (в отличие от IWebComponent), Self.Components — тоже
+assert not any('IWebComponents' in l or 'Self.Components' in l for l in live), 'использован IWebComponents/Self.Components'
 
 io.open(dst_path, 'w', encoding='utf-8', newline='').write(src.replace('\n', '\r\n'))
 print('готово: %s' % dst_path)
