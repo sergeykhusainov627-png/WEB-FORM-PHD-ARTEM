@@ -263,7 +263,6 @@ Class ANALIZ_TEP_FORM_ON_SHOW: WebForm
 	Const C_PARAM_PLANT = "PLANT";
 	Const C_PARAM_CALYEAR = "CALYEAR";
 	Const C_PARAM_ZTYPEIND = "ZTYPEIND";
-	Const C_PARAM_P_ANALYTIC_SET = "P_ANALYTIC_SET";
 	Const C_PARAM_ZLIB_INFS = "ZLIB_INFS";
 	Const C_PARAM_ZBUR_BEG = "ZBUR_BEG";
 	Const C_PARAM_ZBUR_END = "ZBUR_END";
@@ -1109,7 +1108,7 @@ Class ANALIZ_TEP_FORM_ON_SHOW: WebForm
 
 	Sub CbNovemberOnChange;
 	Begin
-		fillFieldListByStatusFlag(CB_NOVEMBER, "ZSIU_INDV_11");
+		
 	End Sub CbNovemberOnChange;
 
 	Sub CB_DECEMBEROnChange;
@@ -1129,7 +1128,7 @@ Class ANALIZ_TEP_FORM_ON_SHOW: WebForm
 
 	Sub CbThirdQuarterOnChange;
 	Begin
-		fillFieldListByStatusFlag(CB_THIRD_QUARTER, "ZSIU_INDV_Q3");
+		
 	End Sub CbThirdQuarterOnChange;
 
 	Sub CB_FOURTH_QUARTEROnChange;
@@ -1394,66 +1393,7 @@ Class ANALIZ_TEP_FORM_ON_SHOW: WebForm
 	Begin
 	End Sub addFieldsWithoutCheckBox;
 
-	Sub CbHigherIndOnChange;
-	Begin
-		fillFieldListByStatusFlag(CbHigherInd, "ZPH_HIGHER");
-	End Sub CbHigherIndOnChange;
-	Sub CB_ACTIVITY_TYPEOnChange;
-	Begin
-		fillFieldListByStatusFlag(CB_ACTIVITY_TYPE, "ACTVTS");
-	End Sub CB_ACTIVITY_TYPEOnChange;
-	Sub CB_IND_TYPEOnChange;
-	Begin
-		fillFieldListByStatusFlag(CB_IND_TYPE, "ID1");
-	End Sub CB_IND_TYPEOnChange;
-	Sub CB_TEP_FORM_OF_SNGOnChange;
-	Begin
-		fillFieldListByStatusFlag(CB_TEP_FORM_OF_SNG, "ZF_NUMB");
-	End Sub CB_TEP_FORM_OF_SNGOnChange;
-	Sub CB_TEP_OWNEROnChange;
-	Begin
-		fillFieldListByStatusFlag(CB_TEP_OWNER, "OWNER");
-	End Sub CB_TEP_OWNEROnChange;
-	Sub CB_FUNCTION_OF_WOKERSOnChange;
-	Begin
-		fillFieldListByStatusFlag(CB_FUNCTION_OF_WOKERS, "ZPH_FUNC");
-	End Sub CB_FUNCTION_OF_WOKERSOnChange;
-	Sub CB_VOLUMEOnChange;
-	Begin
-		fillFieldListByStatusFlag(CB_VOLUME, "ZPH_VOLUME");
-	End Sub CB_VOLUMEOnChange;
-	Sub CB_TRUDOnChange;
-	Begin
-		fillFieldListByStatusFlag(CB_TRUD, "ZPH_TRUD");
-	End Sub CB_TRUDOnChange;
-	Sub CB_COMPARABLE_PRICESOnChange;
-	Begin
-		fillFieldListByStatusFlag(CB_COMPARABLE_PRICES, "ZPH_PRICE_CP");
-	End Sub CB_COMPARABLE_PRICESOnChange;
-	Sub CB_CURRENT_PRICESOnChange;
-	Begin
-		fillFieldListByStatusFlag(CB_CURRENT_PRICES, "ZPH_PRICE_CD");
-	End Sub CB_CURRENT_PRICESOnChange;
-	Sub CB_ACTTYPE2OnChange;
-	Begin
-		fillFieldListByStatusFlag(CB_ACTTYPE2, "ZPH_ACTTYPE2");
-	End Sub CB_ACTTYPE2OnChange;
-	Sub CB_NOVEMBEROnChange;
-	Begin
-		fillFieldListByStatusFlag(CB_NOVEMBER, "ZSIU_INDV_11");
-	End Sub CB_NOVEMBEROnChange;
-	Sub CB_THIRD_QUARTEROnChange;
-	Begin
-		fillFieldListByStatusFlag(CB_THIRD_QUARTER, "ZSIU_INDV_Q3");
-	End Sub CB_THIRD_QUARTEROnChange;
-	Sub CB_DISPLAY_CODE_ANALYTOnChange;
-	Begin
-		RefreshFieldList;
-	End Sub CB_DISPLAY_CODE_ANALYTOnChange;
-	Sub CB_DISPLAY_INFO_BY_STATUSOnChange;
-	Begin
-		RefreshFieldList;
-	End Sub CB_DISPLAY_INFO_BY_STATUSOnChange;
+
 
 	// ============================================================================================
 	//  «Поля для вывода» — идентификаторы полей отчёта для параметра P_FIELD_LIST
@@ -1474,7 +1414,7 @@ Class ANALIZ_TEP_FORM_ON_SHOW: WebForm
 		If Not IsNull(_fieldIds) Then Return; End If;
 		_fieldIds := New Hashtable.Create;
 		_codeIds := New Hashtable.Create;
-		// --- существующие поля (идентификаторы уже согласованы с отчётом) ---
+		// --- подтверждённые поля (контролы используются в исходном модуле) ---
 		_fieldIds.Add("CB_ACTTYPE", "ACTTYPE");
 		_fieldIds.Add("CB_ACT_UNIT", "ACT_UNIT");
 		_fieldIds.Add("CB_COSTCENTER", "COSTCENTER");
@@ -1534,18 +1474,22 @@ Class ANALIZ_TEP_FORM_ON_SHOW: WebForm
 		_fieldIds.Add("CB_Z_CL_NAPR", "Z_CL_NAPR");
 		_fieldIds.Add("CB_Z_SKV_GEO", "Z_SKV_GEO");
 		
-		// --- поля ТТ, для которых обработчиков не было ---
-		_fieldIds.Add("CbHigherInd", "ZPH_HIGHER");             // Вышестоящий ТЭП (⚠ уточнить)
-		_fieldIds.Add("CB_ACTIVITY_TYPE", "ACTVTS");            // Вид деятельности
-		_fieldIds.Add("CB_IND_TYPE", "ID1");                    // Вид показателя
-		_fieldIds.Add("CB_TEP_FORM_OF_SNG", "ZF_NUMB");         // Формы отчётов
-		_fieldIds.Add("CB_TEP_OWNER", "OWNER");                 // Владелец ТЭП
-		_fieldIds.Add("CB_FUNCTION_OF_WOKERS", "ZPH_FUNC");     // Функция/задача (⚠ уточнить)
-		_fieldIds.Add("CB_VOLUME", "ZPH_VOLUME");               // Объёмный (⚠ уточнить)
-		_fieldIds.Add("CB_TRUD", "ZPH_TRUD");                   // Трудоёмкость (⚠ уточнить)
-		_fieldIds.Add("CB_COMPARABLE_PRICES", "ZPH_PRICE_CP");  // В сопоставимых ценах (⚠ уточнить)
-		_fieldIds.Add("CB_CURRENT_PRICES", "ZPH_PRICE_CD");     // В действующих ценах (⚠ уточнить)
-		_fieldIds.Add("CB_ACTTYPE2", "ZPH_ACTTYPE2");           // Вид работ (классификация) (⚠ уточнить)
+		// --- поля ТТ, контролы которых в исходном модуле не использовались ---
+		// Существование этих компонентов на форме не подтверждено: ссылка на отсутствующий
+		// контрол ломает дизайнер формы («Ошибка сервера»). Когда компонент появится,
+		// раскомментируйте строку и добавьте в RefreshFieldList строку
+		//     CollectIfChecked(<Контрол>, "<Контрол>");
+		// _fieldIds.Add("CbHigherInd", "ZPH_HIGHER"); // Вышестоящий ТЭП (⚠ уточнить) (компонент не подтверждён)
+		// _fieldIds.Add("CB_ACTIVITY_TYPE", "ACTVTS"); // Вид деятельности (компонент не подтверждён)
+		// _fieldIds.Add("CB_IND_TYPE", "ID1");        // Вид показателя (компонент не подтверждён)
+		// _fieldIds.Add("CB_TEP_FORM_OF_SNG", "ZF_NUMB"); // Формы отчётов (компонент не подтверждён)
+		// _fieldIds.Add("CB_TEP_OWNER", "OWNER");     // Владелец ТЭП (компонент не подтверждён)
+		// _fieldIds.Add("CB_FUNCTION_OF_WOKERS", "ZPH_FUNC"); // Функция/задача (⚠ уточнить) (компонент не подтверждён)
+		// _fieldIds.Add("CB_VOLUME", "ZPH_VOLUME");   // Объёмный (⚠ уточнить) (компонент не подтверждён)
+		// _fieldIds.Add("CB_TRUD", "ZPH_TRUD");       // Трудоёмкость (⚠ уточнить) (компонент не подтверждён)
+		// _fieldIds.Add("CB_COMPARABLE_PRICES", "ZPH_PRICE_CP"); // В сопоставимых ценах (⚠ уточнить) (компонент не подтверждён)
+		// _fieldIds.Add("CB_CURRENT_PRICES", "ZPH_PRICE_CD"); // В действующих ценах (⚠ уточнить) (компонент не подтверждён)
+		// _fieldIds.Add("CB_ACTTYPE2", "ZPH_ACTTYPE2"); // Вид работ (классификация) (⚠ уточнить) (компонент не подтверждён)
 		_fieldIds.Add("CB_JANUARY", "ZSIU_INDV_01");            // Январь
 		_fieldIds.Add("CB_FEBRUARY", "ZSIU_INDV_02");           // Февраль
 		_fieldIds.Add("CB_MARCH", "ZSIU_INDV_03");              // Март
@@ -1556,11 +1500,11 @@ Class ANALIZ_TEP_FORM_ON_SHOW: WebForm
 		_fieldIds.Add("CB_AUGUST", "ZSIU_INDV_08");             // Август
 		_fieldIds.Add("CB_SEPTEMBER", "ZSIU_INDV_09");          // Сентябрь
 		_fieldIds.Add("CB_OCTOBER", "ZSIU_INDV_10");            // Октябрь
-		_fieldIds.Add("CB_NOVEMBER", "ZSIU_INDV_11");           // Ноябрь
+		// _fieldIds.Add("CB_NOVEMBER", "ZSIU_INDV_11"); // Ноябрь (компонент не подтверждён)
 		_fieldIds.Add("CB_DECEMBER", "ZSIU_INDV_12");           // Декабрь
 		_fieldIds.Add("CB_FIRST_QUARTER", "ZSIU_INDV_Q1");      // I кв.
 		_fieldIds.Add("CB_SECOND_QUARTER", "ZSIU_INDV_Q2");     // II кв.
-		_fieldIds.Add("CB_THIRD_QUARTER", "ZSIU_INDV_Q3");      // III кв.
+		// _fieldIds.Add("CB_THIRD_QUARTER", "ZSIU_INDV_Q3"); // III кв. (компонент не подтверждён)
 		_fieldIds.Add("CB_FOURTH_QUARTER", "ZSIU_INDV_Q4");     // IV кв.
 		_fieldIds.Add("CB_SIX_MONTH", "ZSIU_INDV_Q6");          // 6 мес.
 		_fieldIds.Add("CB_NINE_MONTH", "ZSIU_INDV_Q9");         // 9 мес.
@@ -1582,8 +1526,6 @@ Class ANALIZ_TEP_FORM_ON_SHOW: WebForm
 	/// 	(в отличие от IWebComponent), поэтому Self.Components здесь не используется.
 	/// </summary>
 	Sub RefreshFieldList;
-	Var
-		codes: String;
 	Begin
 		If IsNull(fieldList) Then fieldList := New StringList.Create; End If;
 		fieldList.Clear;
@@ -1647,17 +1589,6 @@ Class ANALIZ_TEP_FORM_ON_SHOW: WebForm
 		CollectIfChecked(CB_ZUCVOLTTR, "CB_ZUCVOLTTR");
 		CollectIfChecked(CB_Z_CL_NAPR, "CB_Z_CL_NAPR");
 		CollectIfChecked(CB_Z_SKV_GEO, "CB_Z_SKV_GEO");
-		CollectIfChecked(CbHigherInd, "CbHigherInd");
-		CollectIfChecked(CB_ACTIVITY_TYPE, "CB_ACTIVITY_TYPE");
-		CollectIfChecked(CB_IND_TYPE, "CB_IND_TYPE");
-		CollectIfChecked(CB_TEP_FORM_OF_SNG, "CB_TEP_FORM_OF_SNG");
-		CollectIfChecked(CB_TEP_OWNER, "CB_TEP_OWNER");
-		CollectIfChecked(CB_FUNCTION_OF_WOKERS, "CB_FUNCTION_OF_WOKERS");
-		CollectIfChecked(CB_VOLUME, "CB_VOLUME");
-		CollectIfChecked(CB_TRUD, "CB_TRUD");
-		CollectIfChecked(CB_COMPARABLE_PRICES, "CB_COMPARABLE_PRICES");
-		CollectIfChecked(CB_CURRENT_PRICES, "CB_CURRENT_PRICES");
-		CollectIfChecked(CB_ACTTYPE2, "CB_ACTTYPE2");
 		CollectIfChecked(CB_JANUARY, "CB_JANUARY");
 		CollectIfChecked(CB_FEBRUARY, "CB_FEBRUARY");
 		CollectIfChecked(CB_MARCH, "CB_MARCH");
@@ -1668,29 +1599,25 @@ Class ANALIZ_TEP_FORM_ON_SHOW: WebForm
 		CollectIfChecked(CB_AUGUST, "CB_AUGUST");
 		CollectIfChecked(CB_SEPTEMBER, "CB_SEPTEMBER");
 		CollectIfChecked(CB_OCTOBER, "CB_OCTOBER");
-		CollectIfChecked(CB_NOVEMBER, "CB_NOVEMBER");
 		CollectIfChecked(CB_DECEMBER, "CB_DECEMBER");
 		CollectIfChecked(CB_FIRST_QUARTER, "CB_FIRST_QUARTER");
 		CollectIfChecked(CB_SECOND_QUARTER, "CB_SECOND_QUARTER");
-		CollectIfChecked(CB_THIRD_QUARTER, "CB_THIRD_QUARTER");
 		CollectIfChecked(CB_FOURTH_QUARTER, "CB_FOURTH_QUARTER");
 		CollectIfChecked(CB_SIX_MONTH, "CB_SIX_MONTH");
 		CollectIfChecked(CB_NINE_MONTH, "CB_NINE_MONTH");
 		CollectIfChecked(CB_YEAR, "CB_YEAR");
 		
 		// Режим «Выводить информацию по статусам»: к выбранным периодам добавляются поля статусов
-		If (Not IsNull(CB_DISPLAY_INFO_BY_STATUS)) And CB_DISPLAY_INFO_BY_STATUS.Checked Then
-			addStatusFields;
-		End If;
+		// Если чек-бокс CB_DISPLAY_INFO_BY_STATUS появится на форме (с обработчиком
+		// CB_DISPLAY_INFO_BY_STATUSOnChange), раскомментировать строку:
+		// If CB_DISPLAY_INFO_BY_STATUS.Checked Then addStatusFields; End If;
+		
+		// Режим «Выводить коды аналитик»: в P_ANALYTIC_SET уходит список полей-кодов
+		// Если чек-бокс CB_DISPLAY_CODE_ANALYT появится на форме (с обработчиком
+		// CB_DISPLAY_CODE_ANALYTOnChange), раскомментировать строку:
+		// If CB_DISPLAY_CODE_ANALYT.Checked Then setParamOrRemove(C_PARAM_P_ANALYTIC_SET, codeFieldsText); End If;
 		
 		Hyperlink.SetParamValue("P_FIELD_LIST", fieldList.Text(", "));
-		
-		// Режим «Выводить коды аналитик»: список аналитик, по которым отчёт добавляет коды
-		codes := "";
-		If (Not IsNull(CB_DISPLAY_CODE_ANALYT)) And CB_DISPLAY_CODE_ANALYT.Checked Then
-			codes := codeFieldsText;
-		End If;
-		setParamOrRemove(C_PARAM_P_ANALYTIC_SET, codes);
 		
 		Hyperlink.Generate;
 		If Not IsNull(TextArea1) Then TextArea1.Text := Hyperlink.Action; End If;
@@ -1778,15 +1705,15 @@ Class ANALIZ_TEP_FORM_ON_SHOW: WebForm
 	Sub initOutputDefaults;
 	Begin
 		If Not C_APPLY_DEFAULT_CHECKED Then Return; End If;
-		// Основные данные: СП, ТЭП, Ед.измерения (Год — без чек-бокса, см. C_FIELDS_WITHOUT_CHECKBOX)
+		// Отмечаются только те контролы, существование которых подтверждено исходным модулем.
+		// Для неподтверждённых строки закомментированы — включить после добавления компонентов.
 		SetCheckBoxIfExists(CB_PLANT, True);
 		SetCheckBoxIfExists(CB_ZLIB_INDC, True);
 		SetCheckBoxIfExists(CB_ACT_UNIT, True);
-		// Значения ТЭП: кварталы, полугодие, 9 месяцев и год
 		SetCheckBoxIfExists(CB_FIRST_QUARTER, True);
 		SetCheckBoxIfExists(CB_SECOND_QUARTER, True);
 		SetCheckBoxIfExists(CB_SIX_MONTH, True);
-		SetCheckBoxIfExists(CB_THIRD_QUARTER, True);
+		// SetCheckBoxIfExists(CB_THIRD_QUARTER, True);   // компонент не подтверждён
 		SetCheckBoxIfExists(CB_NINE_MONTH, True);
 		SetCheckBoxIfExists(CB_FOURTH_QUARTER, True);
 		SetCheckBoxIfExists(CB_YEAR, True);

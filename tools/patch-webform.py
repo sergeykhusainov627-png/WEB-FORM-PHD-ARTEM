@@ -20,7 +20,24 @@ def sub_once(pattern, repl, text, what):
         raise SystemExit('НЕ НАЙДЕНО (%s): %s' % (what, pattern[:70]))
     return new
 
-# ---------------------------------------------------------------- 0. сбор таблицы полей
+# ---------------------------------------------------------------- 0. подтверждённые контролы
+# Дизайнер формы падает, если модуль ссылается на контрол, которого нет на форме. Признак того,
+# что компонент существует: в исходном модуле есть обработчик <Контрол>On<Событие> или контрол
+# уже используется в теле обработчика. Всё остальное (объявлено, но нигде не использовалось)
+# считаем неподтверждённым и НЕ трогаем — такие строки в коде закомментированы.
+DECLARED_CB = set(re.findall(r'^\t([A-Za-z_]\w*)\s*:\s*WebCheckBox;', src, re.M))
+
+SAFE = set()
+for m in re.finditer(r'^\t+Sub\s+([A-Za-z_]\w*)On[A-Za-z0-9_]*\s*;', src, re.M):
+    SAFE.add(m.group(1))                      # обработчик сгенерирован дизайнером по имени контрола
+for m in re.finditer(r'fillFieldListByStatusFlag\(\s*([A-Za-z_]\w*)\s*,', src):
+    SAFE.add(m.group(1))                      # контрол уже используется в теле обработчика
+SAFE &= DECLARED_CB
+UNSAFE = sorted(DECLARED_CB - SAFE)
+print('подтверждённых чек-боксов: %d; неподтверждённых: %d' % (len(SAFE), len(UNSAFE)))
+print('неподтверждённые (ссылок в коде не будет): ' + (', '.join(UNSAFE) if UNSAFE else '—'))
+
+# ---------------------------------------------------------------- 1. сбор таблицы полей
 existing = re.findall(r'fillFieldListByStatusFlag\(\s*([A-Za-z_]\w*)\s*,\s*"([^"]+)"\s*\)', src)
 existing = [(c, f) for c, f in existing if c != 'CB']          # без строки-определения метода
 seen, pairs = set(), []
@@ -64,24 +81,73 @@ for ctrl, fid, title in PERIODS:
     if (ctrl, fid) not in [(a, b) for a, b, _ in NEW_FIELDS]:
         NEW_FIELDS.append((ctrl, fid, title))
 
-pairs_block = ['\t\t// --- существующие поля (идентификаторы уже согласованы с отчётом) ---']
+pairs_block = ['\t\t// --- подтверждённые поля (контролы используются в исходном модуле) ---']
 for c, f in sorted(pairs):
     pairs_block.append('\t\t_fieldIds.Add("%s", "%s");' % (c, f))
 pairs_block.append('\t\t')
-pairs_block.append('\t\t// --- поля ТТ, для которых обработчиков не было ---')
+pairs_block.append('\t\t// --- поля ТТ, контролы которых в исходном модуле не использовались ---')
+pairs_block.append('\t\t// Существование этих компонентов на форме не подтверждено: ссылка на отсутствующий')
+pairs_block.append('\t\t// контрол ломает дизайнер формы («Ошибка сервера»). Когда компонент появится,')
+pairs_block.append('\t\t// раскомментируйте строку и добавьте в RefreshFieldList строку')
+pairs_block.append('\t\t//     CollectIfChecked(<Контрол>, "<Контрол>");')
 for c, f, title in NEW_FIELDS:
-    pairs_block.append('\t\t_fieldIds.Add("%s", "%s");%s// %s' % (c, f, ' ' * max(1, 34 - len(c) - len(f)), title))
+    if c in SAFE:
+        pairs_block.append('\t\t_fieldIds.Add("%s", "%s");%s// %s' % (c, f, ' ' * max(1, 34 - len(c) - len(f)), title))
+    else:
+        pairs_block.append('\t\t// _fieldIds.Add("%s", "%s");%s// %s (компонент не подтверждён)' % (c, f, ' ' * max(1, 22 - len(c) - len(f)), title))
 pairs_text = '\n'.join(pairs_block)
 
-# Строки сбора состояний чек-боксов: IWebComponents нельзя объявлять как тип (в отличие от
-# IWebComponent) и Self.Components использовать нельзя — перебираем контролы явным списком.
+# Строки сбора состояний чек-боксов: только подтверждённые контролы.
 collect_lines = []
 for ctrl, _fid in sorted(pairs):
-    collect_lines.append('\t\tCollectIfChecked(%s, "%s");' % (ctrl, ctrl))
+    if ctrl in SAFE:
+        collect_lines.append('\t\tCollectIfChecked(%s, "%s");' % (ctrl, ctrl))
 for ctrl, _fid, _title in NEW_FIELDS:
-    if ctrl not in {c for c, _ in pairs}:
+    if ctrl in SAFE and ctrl not in {c for c, _ in pairs}:
         collect_lines.append('\t\tCollectIfChecked(%s, "%s");' % (ctrl, ctrl))
 collect_text = '\n'.join(collect_lines)
+
+# Чек-боксы, отмечаемые по умолчанию (ТТ): только подтверждённые контролы
+DEFAULT_CHECKED = ['CB_PLANT', 'CB_ZLIB_INDC', 'CB_ACT_UNIT',
+                   'CB_FIRST_QUARTER', 'CB_SECOND_QUARTER', 'CB_SIX_MONTH',
+                   'CB_THIRD_QUARTER', 'CB_NINE_MONTH', 'CB_FOURTH_QUARTER', 'CB_YEAR']
+default_lines = []
+for c in DEFAULT_CHECKED:
+    if c in SAFE:
+        default_lines.append('\t\tSetCheckBoxIfExists(%s, True);' % c)
+    else:
+        default_lines.append('\t\t// SetCheckBoxIfExists(%s, True);   // компонент не подтверждён' % c)
+defaults_text = '\n'.join(default_lines)
+
+# Режимы «статусы»/«коды аналитик» включаются сами, как только у их чек-боксов появится обработчик
+# (то есть компонент добавлен на форму в дизайнере).
+status_live = 'CB_DISPLAY_INFO_BY_STATUS' in SAFE
+codes_live = 'CB_DISPLAY_CODE_ANALYT' in SAFE
+status_block = ('\t\t// Режим «Выводить информацию по статусам»: к выбранным периодам добавляются поля статусов\n'
+                + ('\t\tIf CB_DISPLAY_INFO_BY_STATUS.Checked Then addStatusFields; End If;' if status_live else
+                   '\t\t// Если чек-бокс CB_DISPLAY_INFO_BY_STATUS появится на форме (с обработчиком\n'
+                   '\t\t// CB_DISPLAY_INFO_BY_STATUSOnChange), раскомментировать строку:\n'
+                   '\t\t// If CB_DISPLAY_INFO_BY_STATUS.Checked Then addStatusFields; End If;'))
+codes_block = ('\t\t// Режим «Выводить коды аналитик»: в P_ANALYTIC_SET уходит список полей-кодов\n'
+               + ('\t\tIf CB_DISPLAY_CODE_ANALYT.Checked Then setParamOrRemove(C_PARAM_P_ANALYTIC_SET, codeFieldsText); End If;' if codes_live else
+                  '\t\t// Если чек-бокс CB_DISPLAY_CODE_ANALYT появится на форме (с обработчиком\n'
+                  '\t\t// CB_DISPLAY_CODE_ANALYTOnChange), раскомментировать строку:\n'
+                  '\t\t// If CB_DISPLAY_CODE_ANALYT.Checked Then setParamOrRemove(C_PARAM_P_ANALYTIC_SET, codeFieldsText); End If;'))
+modes_text = status_block + '\n\t\t\n' + codes_block
+modes_var = '\t\tcodes: String;\n' if codes_live else ''
+
+# (блок подтверждённых контролов перенесён в начало файла)
+DECLARED_CB = set(re.findall(r'^\t([A-Za-z_]\w*)\s*:\s*WebCheckBox;', src, re.M))
+
+SAFE = set()
+for m in re.finditer(r'^\t+Sub\s+([A-Za-z_]\w*)On[A-Za-z0-9_]*\s*;', src, re.M):
+    SAFE.add(m.group(1))                      # обработчик сгенерирован дизайнером по имени контрола
+for m in re.finditer(r'fillFieldListByStatusFlag\(\s*([A-Za-z_]\w*)\s*,', src):
+    SAFE.add(m.group(1))                      # контрол уже используется в теле обработчика
+SAFE &= DECLARED_CB
+UNSAFE = sorted(DECLARED_CB - SAFE)
+print('подтверждённых чек-боксов: %d; неподтверждённых: %d' % (len(SAFE), len(UNSAFE)))
+print('неподтверждённые (ссылок в коде не будет): ' + (', '.join(UNSAFE) if UNSAFE else '—'))
 
 # ---------------------------------------------------------------- 1. поля класса
 src = sub_once(
@@ -241,6 +307,8 @@ for macro, var in [('ZLIB_INFS', 'p_zlib_infs'), ('ZBUR_BEG', 'p_zbur_beg'), ('Z
 
 # ---------------------------------------------------------------- 12. пустые обработчики периодов
 for ctrl, fid, title in PERIODS:
+    if ctrl not in SAFE:                      # контрол не подтверждён — тело не трогаем
+        continue
     handler = PERIOD_HANDLERS.get(ctrl, ctrl)
     src = sub_once(
         r'\tSub %sOnChange;\n\tBegin\n\t\t\n\tEnd Sub %sOnChange;' % (handler, handler),
@@ -253,27 +321,30 @@ for ctrl, fid, title in PERIODS:
 # ---------------------------------------------------------------- 13. новые обработчики + справка
 new_subs = []
 for ctrl, fid, title in NEW_FIELDS:
-    if ctrl in PERIOD_CTRLS:         # обработчики периодов заполнены в шаге 12 (в т.ч. под их именами)
+    if ctrl in PERIOD_CTRLS:                 # обработчики периодов заполнены в шаге 12
+        continue
+    if ctrl not in SAFE:                     # контрол не подтверждён — обработчик не создаём
         continue
     new_subs.append('''\tSub %sOnChange;
 \tBegin
 \t\tfillFieldListByStatusFlag(%s, "%s");
 \tEnd Sub %sOnChange;''' % (ctrl, ctrl, fid, ctrl))
 
-# Дубли обработчиков периодов под каноничными именами: если в дизайнере событие привязано
-# к <Контрол>OnChange, сработает именно этот вариант (у CbNovember/CbThirdQuarter имена иные).
+# Дубли обработчиков периодов под каноничными именами — только если контрол подтверждён
 for ctrl, fid, title in PERIODS:
-    if PERIOD_HANDLERS.get(ctrl, ctrl) != ctrl:
+    if PERIOD_HANDLERS.get(ctrl, ctrl) != ctrl and ctrl in SAFE:
         new_subs.append('''\tSub %sOnChange;
 \tBegin
 \t\tfillFieldListByStatusFlag(%s, "%s");
 \tEnd Sub %sOnChange;''' % (ctrl, ctrl, fid, ctrl))
 
-new_subs.append('''\tSub CB_DISPLAY_CODE_ANALYTOnChange;
+if 'CB_DISPLAY_CODE_ANALYT' in SAFE:
+    new_subs.append('''\tSub CB_DISPLAY_CODE_ANALYTOnChange;
 \tBegin
 \t\tRefreshFieldList;
 \tEnd Sub CB_DISPLAY_CODE_ANALYTOnChange;''')
-new_subs.append('''\tSub CB_DISPLAY_INFO_BY_STATUSOnChange;
+if 'CB_DISPLAY_INFO_BY_STATUS' in SAFE:
+    new_subs.append('''\tSub CB_DISPLAY_INFO_BY_STATUSOnChange;
 \tBegin
 \t\tRefreshFieldList;
 \tEnd Sub CB_DISPLAY_INFO_BY_STATUSOnChange;''')
@@ -317,7 +388,7 @@ __FIELDS__
 	/// </summary>
 	Sub RefreshFieldList;
 	Var
-		codes: String;
+__MODESVAR__		i: Integer;
 	Begin
 		If IsNull(fieldList) Then fieldList := New StringList.Create; End If;
 		fieldList.Clear;
@@ -325,19 +396,9 @@ __FIELDS__
 		
 __COLLECT__
 		
-		// Режим «Выводить информацию по статусам»: к выбранным периодам добавляются поля статусов
-		If (Not IsNull(CB_DISPLAY_INFO_BY_STATUS)) And CB_DISPLAY_INFO_BY_STATUS.Checked Then
-			addStatusFields;
-		End If;
+__MODES__
 		
 		Hyperlink.SetParamValue("P_FIELD_LIST", fieldList.Text(", "));
-		
-		// Режим «Выводить коды аналитик»: список аналитик, по которым отчёт добавляет коды
-		codes := "";
-		If (Not IsNull(CB_DISPLAY_CODE_ANALYT)) And CB_DISPLAY_CODE_ANALYT.Checked Then
-			codes := codeFieldsText;
-		End If;
-		setParamOrRemove(C_PARAM_P_ANALYTIC_SET, codes);
 		
 		Hyperlink.Generate;
 		If Not IsNull(TextArea1) Then TextArea1.Text := Hyperlink.Action; End If;
@@ -425,18 +486,9 @@ __COLLECT__
 	Sub initOutputDefaults;
 	Begin
 		If Not C_APPLY_DEFAULT_CHECKED Then Return; End If;
-		// Основные данные: СП, ТЭП, Ед.измерения (Год — без чек-бокса, см. C_FIELDS_WITHOUT_CHECKBOX)
-		SetCheckBoxIfExists(CB_PLANT, True);
-		SetCheckBoxIfExists(CB_ZLIB_INDC, True);
-		SetCheckBoxIfExists(CB_ACT_UNIT, True);
-		// Значения ТЭП: кварталы, полугодие, 9 месяцев и год
-		SetCheckBoxIfExists(CB_FIRST_QUARTER, True);
-		SetCheckBoxIfExists(CB_SECOND_QUARTER, True);
-		SetCheckBoxIfExists(CB_SIX_MONTH, True);
-		SetCheckBoxIfExists(CB_THIRD_QUARTER, True);
-		SetCheckBoxIfExists(CB_NINE_MONTH, True);
-		SetCheckBoxIfExists(CB_FOURTH_QUARTER, True);
-		SetCheckBoxIfExists(CB_YEAR, True);
+		// Отмечаются только те контролы, существование которых подтверждено исходным модулем.
+		// Для неподтверждённых строки закомментированы — включить после добавления компонентов.
+__DEFAULTS__
 	End Sub initOutputDefaults;
 	
 	Sub SetCheckBoxIfExists(CB: IWebCheckBox; checked: Boolean);
@@ -500,7 +552,7 @@ __COLLECT__
 		
 		Return False;
 	End Function isPlantPrivileged;
-'''.replace('__FIELDS__', pairs_text).replace('__COLLECT__', collect_text)
+'''.replace('__FIELDS__', pairs_text).replace('__COLLECT__', collect_text).replace('__DEFAULTS__', defaults_text).replace('__MODES__', modes_text).replace('__MODESVAR__', modes_var)
 
 src = sub_once(r'(\nEnd Class ANALIZ_TEP_FORM_ON_SHOW;)',
                '\n' + '\n'.join(new_subs) + '\n' + HELPERS + r'\1', src, 'вставка обработчиков и справки')

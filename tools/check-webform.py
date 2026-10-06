@@ -20,6 +20,27 @@ def declarations(src_text):
                 out.append((m.group(1), m.group(2)))
     return out
 
+def strip_comments(src_text):
+    """Убирает // и { }-комментарии: по ним нельзя делать выводы (закомментированные
+    объявления и вызовы не должны попадать в проверки)."""
+    keep, in_b = [], False
+    for l in src_text.split('\n'):
+        t = l.strip()
+        if in_b:
+            if '}' in t:
+                in_b = False
+            continue
+        if t.startswith('//'):
+            continue
+        if t.startswith('{'):
+            if '}' not in t:
+                in_b = True
+            continue
+        keep.append(l)
+    return '\n'.join(keep)
+
+code = strip_comments(text)
+
 # --- разметка: живой код / комментарий / внутри { } ---
 live = [True] * len(lines)
 in_brace = False
@@ -102,10 +123,10 @@ for cb in sorted(set(calls)):
         problems.append('fillFieldListByStatusFlag(%s): тип %s, а не WebCheckBox' % (cb, controls[cb]))
 
 # --- 5. таблицы соответствия ---
-field_pairs = re.findall(r'_fieldIds\.Add\("([^"]+)",\s*"([^"]+)"\)', text)
+field_pairs = re.findall(r'_fieldIds\.Add\("([^"]+)",\s*"([^"]+)"\)', code)
 field_keys = [k for k, _ in field_pairs]              # имена контролов
 field_ids = set(v for _, v in field_pairs)            # идентификаторы полей отчёта
-code_pairs = re.findall(r'_codeIds\.Add\("([^"]+)",\s*"([^"]+)"\)', text)
+code_pairs = re.findall(r'_codeIds\.Add\("([^"]+)",\s*"([^"]+)"\)', code)
 for k in sorted(set(field_keys)):
     if k not in controls:
         problems.append('таблица соответствия: контрол %s не объявлен' % k)
@@ -206,6 +227,28 @@ if baseline:
     notes.append('компонентов (Web*) в эталоне: %d, в проверяемом файле: %d'
                  % (sum(1 for v in base_decls.values() if v.startswith('Web')),
                     sum(1 for v in cur_decls.values() if v.startswith('Web'))))
+
+    # ссылки на контролы: в эталоне контрол или имеет обработчик, или используется в теле другого.
+    # Комментарии не учитываем — иначе закомментированные строки дают ложные срабатывания.
+
+    def referenced(src_text, declared):
+        body = strip_comments(src_text)
+        refs = set(re.findall(r'fillFieldListByStatusFlag\(\s*([A-Za-z_]\w*)\s*,', body))
+        refs |= set(re.findall(r'CollectIfChecked\(\s*([A-Za-z_]\w*)\s*,', body))
+        refs |= set(re.findall(r'SetCheckBoxIfExists\(\s*([A-Za-z_]\w*)\s*,', body))
+        for m in re.finditer(r'^\t+Sub\s+([A-Za-z_]\w*)On[A-Za-z0-9_]*\s*;', body, re.M):
+            refs.add(m.group(1))
+        return refs & set(declared)
+
+    base_refs = referenced(base_text, base_decls)
+    cur_refs = referenced(text, cur_decls)
+    for c in sorted(cur_refs - base_refs):
+        problems.append('новая ссылка на контрол %s: в эталонном модуле он не использовался — '
+                        'если компонента нет на форме, дизайнер выдаст «Ошибка сервера»' % c)
+    notes.append('контролов, на которые ссылается код: %d (в эталоне %d)' % (len(cur_refs), len(base_refs)))
+    unused_decl = sorted(c for c, t in cur_decls.items() if t == 'WebCheckBox' and c not in cur_refs)
+    notes.append('объявлено, но не используется в коде: %d%s' % (
+        len(unused_decl), (' — ' + ', '.join(unused_decl)) if unused_decl else ''))
 
 # --- 9. баланс блоков ---
 opens = {k: 0 for k in ('Begin', 'If', 'For', 'While', 'Try', 'Select', 'Property')}
