@@ -432,6 +432,7 @@ __FIELDS__
 	/// </summary>
 	Sub RefreshFieldList;
 	Var
+		analyticSet: Variant;
 __MODESVAR__		i: Integer;
 	Begin
 		If IsNull(fieldList) Then fieldList := New StringList.Create; End If;
@@ -442,7 +443,18 @@ __COLLECT__
 		
 __MODES__
 		
-		SetParamSafe("P_FIELD_LIST", fieldList.Text(", "));
+		// Список выбранных аналитик уходит МАССИВОМ в нижнем регистре: ровно в таком виде его
+		// подставляет в свой текст запрос QRY_PHD_MULT_DATA_COPY1 (параметр ANALYTIC_SET).
+		// Поэтому в отчёте появляются колонки только выбранных полей.
+		analyticSet := analyticSetArray;
+		If IsNull(analyticSet) Then
+			// Пустой список записывать нельзя: SELECT превратится в синтаксически неверный
+			setParamOrRemove("P_FIELD_LIST", "");
+			setParamOrRemove("ANALYTIC_SET", "");
+		Else
+			SetParamSafe("P_FIELD_LIST", analyticSet);
+			SetParamSafe("ANALYTIC_SET", analyticSet);
+		End If;
 		
 		SafeGenerate;
 		If (Not IsNull(TextArea1)) And _lastError.IsEmpty Then TextArea1.Text := Hyperlink.Action; End If;
@@ -526,7 +538,38 @@ __MODES__
 		End If;
 	End Sub setParamOrRemove;
 	
-	/// <summary>Состояния чек-боксов «Поля для вывода» по умолчанию (ТТ, лист «СЭ - поля для вывода»)</summary>
+	/// <summary>
+	/// 	Массив идентификаторов выбранных аналитик в НИЖНЕМ регистре. В таком виде значения
+	/// 	подставляются в текст запроса QRY_PHD_MULT_DATA_COPY1 (параметр ANALYTIC_SET, тип «массив»):
+	/// 	запрос строит список колонок по этому параметру, поэтому невыбранные поля в отчёт не попадают.
+	/// 	Периоды (ZSIU_INDV_*) в массив не входят — это не аналитики запроса, а фиксированные колонки отчёта.
+	/// 	Возвращает Null, если аналитик не выбрано ни одной (пустой SELECT недопустим).
+	/// </summary>
+	Function analyticSetArray: Variant;
+	Var
+		arr: Array;
+		fieldId: String;
+		i, count: Integer;
+	Begin
+		If IsNull(fieldList) Then Return Null; End If;
+		count := 0;
+		For i := 0 To fieldList.Count - 1 Do
+			fieldId := fieldList.Item(i) As String;
+			If Not fieldId.StartsWith("ZSIU_INDV_") Then count := count + 1; End If;
+		End For;
+		If count = 0 Then Return Null; End If;
+		arr := New Variant[count];
+		count := 0;
+		For i := 0 To fieldList.Count - 1 Do
+			fieldId := fieldList.Item(i) As String;
+			If Not fieldId.StartsWith("ZSIU_INDV_") Then
+				arr[count] := String.ToLower(fieldId);
+				count := count + 1;
+			End If;
+		End For;
+		Return arr;
+	End Function analyticSetArray;
+		/// <summary>Состояния чек-боксов «Поля для вывода» по умолчанию (ТТ, лист «СЭ - поля для вывода»)</summary>
 	Sub initOutputDefaults;
 	Begin
 		If Not C_APPLY_DEFAULT_CHECKED Then Return; End If;
