@@ -1,10 +1,24 @@
 # check-webform.py — структурная проверка модуля веб-формы после патча.
-# Запуск: python tools/check-webform.py <модуль.fore>
+# Запуск: python tools/check-webform.py <модуль.fore> [<эталон.fore>]
+#   со вторым аргументом дополнительно проверяется, что состав КОМПОНЕНТОВ не изменился
+#   относительно эталона (правило проекта: правки только в логике, новые компоненты не создаются).
 import io, re, sys
 
 path = sys.argv[1]
+baseline = sys.argv[2] if len(sys.argv) > 2 else None
 text = io.open(path, encoding='utf-8').read().replace('\r\n', '\n')
 lines = text.split('\n')
+
+def declarations(src_text):
+    out, ended = [], False
+    for l in src_text.split('\n'):
+        if re.match(r'^\t(Sub|Function|Property)\b', l):
+            ended = True
+        if not ended:
+            m = re.match(r'^\t([A-Za-z_]\w*)\s*:\s*([A-Za-z_]\w*)\s*;', l)
+            if m:
+                out.append((m.group(1), m.group(2)))
+    return out
 
 # --- разметка: живой код / комментарий / внутри { } ---
 live = [True] * len(lines)
@@ -134,7 +148,28 @@ notes.append('чек-боксов без обработчика <Контрол>
 for c in no_handler:
     notes.append('  ' + c)
 
-# --- 8. баланс блоков ---
+# --- 8. состав компонентов относительно эталона ---
+if baseline:
+    base_text = io.open(baseline, encoding='utf-8').read().replace('\r\n', '\n')
+    base_decls = dict(declarations(base_text))
+    cur_decls = dict(declarations(text))
+    new_items = [(k, v) for k, v in cur_decls.items() if k not in base_decls]
+    lost = [(k, v) for k, v in base_decls.items() if k not in cur_decls]
+    retyped = [(k, base_decls[k], v) for k, v in cur_decls.items() if k in base_decls and base_decls[k] != v]
+    for k, v in new_items:
+        if v.startswith('Web'):
+            problems.append('относительно эталона добавлен КОМПОНЕНТ: %s: %s' % (k, v))
+        else:
+            notes.append('добавлено невизуальное поле: %s: %s' % (k, v))
+    for k, v in lost:
+        problems.append('относительно эталона потеряно объявление: %s: %s' % (k, v))
+    for k, a, b in retyped:
+        problems.append('относительно эталона изменён тип: %s: %s -> %s' % (k, a, b))
+    notes.append('компонентов (Web*) в эталоне: %d, в проверяемом файле: %d'
+                 % (sum(1 for v in base_decls.values() if v.startswith('Web')),
+                    sum(1 for v in cur_decls.values() if v.startswith('Web'))))
+
+# --- 9. баланс блоков ---
 opens = {k: 0 for k in ('Begin', 'If', 'For', 'While', 'Try', 'Select', 'Property')}
 closes = {k: 0 for k in ('End', 'End If', 'End For', 'End While', 'End Try', 'End Select', 'End Property')}
 for i, l in enumerate(lines):
