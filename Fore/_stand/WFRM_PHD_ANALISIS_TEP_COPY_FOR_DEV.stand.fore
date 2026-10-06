@@ -314,19 +314,9 @@ Class ANALIZ_TEP_FORM_ON_SHOW: WebForm
 	Const C_PARAM_ZBUR_BEG = "ZBUR_BEG";
 	Const C_PARAM_ZBUR_END = "ZBUR_END";
 	Const C_PARAM_ZPKR_SUBP = "ZPKR_SUBP";
-	// Значения по умолчанию для СЭ (ТТ, лист «Селекционный экран»)
-	Const C_DEFAULT_TYPE_IND = "0000000001";
-	Const C_ACCESS_SP_GROUP = "PHD_ADMIN";
-	Const C_ACCESS_SP_GROUP_PREFIX = "PHD_CURATOR_";
-	// Суффикс идентификатора поля статуса для режима «Выводить информацию по статусам»
-	Const C_STATUS_FIELD_SUFFIX = "_STAT";
 	
 	_AnalyzTepHyperlink: COpenHyperlink; // CUrlHyperlink
 	_hlink: ITabHyperlink;
-	
-	// --- «Поля для вывода»: таблицы соответствия «имя чек-бокса -> идентификатор поля отчёта» ---
-	_fieldIds: IHashtable;
-	_codeIds: IHashtable;
 	
 	/// <summary>
 	/// 	Гиперссылка
@@ -345,26 +335,48 @@ Class ANALIZ_TEP_FORM_ON_SHOW: WebForm
 	Sub initialization;
 	Begin	
 		MB := MetabaseClass.Active;
-		If IsNull(fieldList) Then fieldList := New StringList.Create; End If;
-		InitOutputFieldIds;
+		If fieldList = Null Then fieldList := New StringList.Create; End If;		
 	End Sub initialization;
 	
-	/// <summary>
-	/// 	Значения по умолчанию СЭ (ТТ, лист «Селекционный экран»): год — текущий, СП — из основной
-	/// 	записи пользователя, тип данных — «План», плюс набор полей вывода по умолчанию.
-	/// </summary>
 	Sub setDefaultDimensionValue;
+	Var
+		Index: Integer;
 	Begin
+		// // Календарь
+		// Index := DimensionExt.GetElementIndexByAttributeValue(D_CALYEAR.DimInstance, "NAME", "2024");
+		// //TextArea1.Lines.Add("Year, index = " + index.ToString);
+		// If Index <> -1 Then D_CALYEAR.Selection.SelectElement(Index, False); End If;
+		// UpdateOpenDefHlinkFromSelection("CALYEAR", D_CALYEAR.Selection, "NAME");
+		// Hyperlink.SetParamValueFromSelection("CALYEAR", D_CALYEAR.Selection, "NAME");
+		// Hyperlink.Generate;
+		
+		// // // Структурное подразделение (СП)
+		// //Index := DimensionExt.GetElementIndexByAttributeValue(D_PLANT.DimInstance, "CODE", getUserSP);
+		// Index := DimensionExt.GetElementIndexByAttributeValue(D_PLANT.DimInstance, "CODE", "0200");
+		// // //TextArea1.Lines.Add("plant, index = " + index.ToString);
+		// If Index <> -1 Then D_PLANT.Selection.SelectElement(Index, False); End If;
+		// UpdateOpenDefHlinkFromSelection("PLANT", D_PLANT.Selection, "CODE");
+		// Hyperlink.SetParamValueFromSelection("PLANT", D_PLANT.Selection, "CODE");
+		// Hyperlink.Generate;
+		
+		// // ТЭП
+		// Index := DimensionExt.GetElementIndexByAttributeValue(D_ZLIB_INDC.DimInstance, "CODE", "IND00000100");
+		// If Index <> -1 Then D_ZLIB_INDC.Selection.SelectElement(Index, False);End If;
+		// UpdateOpenDefHlinkFromSelection("ZLIB_INDC", D_ZLIB_INDC.Selection, "CODE");						
+		// Hyperlink.SetParamValueFromSelection("ZLIB_INDC", D_ZLIB_INDC.Selection, "CODE");
+		// Hyperlink.Generate;
+		
+		// // Тип данных 
+		//Index := DimensionExt.GetElementIndexByAttributeValue(D_ZTYPEIND.DimInstance, "ID", "0000000001");
+		// //TextArea1.Lines.Add("type, index = " + index.ToString);
+		//If Index <> -1 Then D_ZTYPEIND.Selection.SelectElement(Index, False); End If;
+		//UpdateOpenDefHlinkFromSelection("ZTYPEIND", D_ZTYPEIND.Selection, "ID");		
+		//Hyperlink.Generate;
+			
 		initialization;
-		// Год: текущий год
-		setComboSelectionByAttribute(D_CALYEAR, C_PARAM_CALYEAR, "NAME", DateTime.Now.Year.ToString);
-		// СП: из основной записи пользователя
-		setComboSelectionByAttribute(D_PLANT, C_PARAM_PLANT, "CODE", getUserSP);
-		// Тип данных: «План» (ID 0000000001)
-		setComboSelectionByAttribute(D_ZTYPEIND, C_PARAM_ZTYPEIND, "ID", C_DEFAULT_TYPE_IND);
-		// Поля вывода, установленные по умолчанию (ТТ, лист «СЭ - поля для вывода»)
-		initOutputDefaults;
-		RefreshFieldList;
+		addDefaultFieldsToStringList;
+		TextArea1.Lines.Add(Hyperlink.tst);
+		
 	End Sub setDefaultDimensionValue;
 	
 	Private Function getUserSP: String;
@@ -372,28 +384,20 @@ Class ANALIZ_TEP_FORM_ON_SHOW: WebForm
 		userSP: String;
 		User: IMetabaseUser;
 	Begin
-		// СП пользователя из основной записи (атрибут BUS_AREA). Ошибки не должны ронять форму.
-		userSP := "";
-		Try
-			User := MB.LogonSession.User; //Получаем пользователя запустившего отчет
-			If Not IsNull(User) Then
-				userSP := User.Attributes.FindById("BUS_AREA").Value As String; //Получаем значение атрибута "BUS_AREA"
-			End If;
-		Except On E: Exception Do
-			userSP := "";
-		End Try;
+		User := MetabaseClass.Active.LogonSession.User; //Получаем пользователя запустившего отчет
+		userSP := User.Attributes.FindById("BUS_AREA").Value; //Получаем значение атрибута "BUS_AREA"
 		Return userSP;
 	End Function getUserSP;
 	
 	Sub ANALIZ_TEP_FORM_ON_SHOW;
+	Var	
+		openReportTab: ITabSheet;
+		optionReport: IPrxReport;
+		MObj:IMetabaseObject;			
 	Begin
 		_hlink := InitializeHlinkOpenObject(ReportBoxOk.Report, "  Ок  ", C_ANALYZ_TEP_REP_ID);
-		// Создаёт COpenHyperlink и менеджер параметров (геттер свойства Hyperlink)
-		_AnalyzTepHyperlink := Hyperlink;
-		// Значения по умолчанию, набор полей вывода и генерация ссылки
+		
 		setDefaultDimensionValue;
-		// Ограничение выбора СП согласно полномочиям (ТТ, лист «Селекционный экран»)
-		applyPlantAccessRights;
 									
 		//Hyperlink.Generate; вернуть
 		//Hyperlink.DesingCell(ButtonCancel.Color);								
@@ -748,8 +752,7 @@ Class ANALIZ_TEP_FORM_ON_SHOW: WebForm
 	Sub D_ZLIB_INFSOnSelectionChange;
 	Begin
 		p_zlib_infs := D_ZLIB_INFS.Selection.ToVariant;
-		Hyperlink.SetParamValue(C_PARAM_ZLIB_INFS, p_zlib_infs);
-		Hyperlink.Generate;
+		_AnalyzTepHyperlink.SetParamValue(C_PARAM_ZLIB_INFS, p_zlib_infs);
 	End Sub D_ZLIB_INFSOnSelectionChange;
 
 	Sub D_PERIOD_TYPEOnSelectionChange;
@@ -1123,97 +1126,97 @@ Class ANALIZ_TEP_FORM_ON_SHOW: WebForm
 	// Значения ТЭП ---------------------------------------------------------->
 	Sub CB_JANUARYOnChange;
 	Begin
-		fillFieldListByStatusFlag(CB_JANUARY, "ZSIU_INDV_01");
+		
 	End Sub CB_JANUARYOnChange;
 
 	Sub CB_FEBRUARYOnChange;
 	Begin
-		fillFieldListByStatusFlag(CB_FEBRUARY, "ZSIU_INDV_02");
+		
 	End Sub CB_FEBRUARYOnChange;
 
 	Sub CB_MARCHOnChange;
 	Begin
-		fillFieldListByStatusFlag(CB_MARCH, "ZSIU_INDV_03");
+		
 	End Sub CB_MARCHOnChange;
 
 	Sub CB_APRILOnChange;
 	Begin
-		fillFieldListByStatusFlag(CB_APRIL, "ZSIU_INDV_04");
+		
 	End Sub CB_APRILOnChange;
 
 	Sub CB_MAYOnChange;
 	Begin
-		fillFieldListByStatusFlag(CB_MAY, "ZSIU_INDV_05");
+		
 	End Sub CB_MAYOnChange;
 
 	Sub CB_JUNEOnChange;
 	Begin
-		fillFieldListByStatusFlag(CB_JUNE, "ZSIU_INDV_06");
+		
 	End Sub CB_JUNEOnChange;
 
 	Sub CB_JULYOnChange;
 	Begin
-		fillFieldListByStatusFlag(CB_JULY, "ZSIU_INDV_07");
+		
 	End Sub CB_JULYOnChange;
 
 	Sub CB_AUGUSTOnChange;
 	Begin
-		fillFieldListByStatusFlag(CB_AUGUST, "ZSIU_INDV_08");
+		
 	End Sub CB_AUGUSTOnChange;
 
 	Sub CB_SEPTEMBEROnChange;
 	Begin
-		fillFieldListByStatusFlag(CB_SEPTEMBER, "ZSIU_INDV_09");
+		
 	End Sub CB_SEPTEMBEROnChange;
 
 	Sub CB_OCTOBEROnChange;
 	Begin
-		fillFieldListByStatusFlag(CB_OCTOBER, "ZSIU_INDV_10");
+		
 	End Sub CB_OCTOBEROnChange;
 
 	Sub CbNovemberOnChange;
 	Begin
-		fillFieldListByStatusFlag(CB_NOVEMBER, "ZSIU_INDV_11");
+		
 	End Sub CbNovemberOnChange;
 
 	Sub CB_DECEMBEROnChange;
 	Begin
-		fillFieldListByStatusFlag(CB_DECEMBER, "ZSIU_INDV_12");
+		
 	End Sub CB_DECEMBEROnChange;
 
 	Sub CB_FIRST_QUARTEROnChange;
 	Begin
-		fillFieldListByStatusFlag(CB_FIRST_QUARTER, "ZSIU_INDV_Q1");
+		
 	End Sub CB_FIRST_QUARTEROnChange;
 
 	Sub CB_SECOND_QUARTEROnChange;
 	Begin
-		fillFieldListByStatusFlag(CB_SECOND_QUARTER, "ZSIU_INDV_Q2");
+		
 	End Sub CB_SECOND_QUARTEROnChange;
 
 	Sub CbThirdQuarterOnChange;
 	Begin
-		fillFieldListByStatusFlag(CB_THIRD_QUARTER, "ZSIU_INDV_Q3");
+		
 	End Sub CbThirdQuarterOnChange;
 
 	Sub CB_FOURTH_QUARTEROnChange;
 	Begin
-		fillFieldListByStatusFlag(CB_FOURTH_QUARTER, "ZSIU_INDV_Q4");
+		
 	End Sub CB_FOURTH_QUARTEROnChange;
 
 	Sub CB_SIX_MONTHOnChange;
 	Begin
-		fillFieldListByStatusFlag(CB_SIX_MONTH, "ZSIU_INDV_Q6");
+		
 	End Sub CB_SIX_MONTHOnChange;
 
 	Sub CB_NINE_MONTHOnChange;
 	Begin
-		fillFieldListByStatusFlag(CB_NINE_MONTH, "ZSIU_INDV_Q9");
+		
 	End Sub CB_NINE_MONTHOnChange;
 
 	Sub CB_YEAROnChange;
 	Begin
-		fillFieldListByStatusFlag(CB_YEAR, "ZSIU_INDV_Q0");
+		
 	End Sub CB_YEAROnChange;
 	// Значения ТЭП <---------------------------------------------------------
 	
@@ -1270,16 +1273,14 @@ Class ANALIZ_TEP_FORM_ON_SHOW: WebForm
 	Sub D_ZBUR_BEGOnSelectionChange;
 	Begin
 		p_zbur_beg := D_ZBUR_BEG.Selection.ToVariant;
-		Hyperlink.SetParamValue(C_PARAM_ZBUR_BEG, p_zbur_beg);
-		Hyperlink.Generate;		
+		_AnalyzTepHyperlink.SetParamValue(C_PARAM_ZBUR_BEG, p_zbur_beg);		
 		// Нет привязки к параметру
 	End Sub D_ZBUR_BEGOnSelectionChange;
 
 	Sub D_ZBUR_ENDOnSelectionChange;
 	Begin
 		p_zbur_end := D_ZBUR_END.Selection.ToVariant;
-		Hyperlink.SetParamValue(C_PARAM_ZBUR_END, p_zbur_end);
-		Hyperlink.Generate;		
+		_AnalyzTepHyperlink.SetParamValue(C_PARAM_ZBUR_END, p_zbur_end);		
 		// Нет привязки к параметру
 	End Sub D_ZBUR_ENDOnSelectionChange;
 
@@ -1315,8 +1316,7 @@ Class ANALIZ_TEP_FORM_ON_SHOW: WebForm
 	Sub D_ZPKR_SUBPOnSelectionChange;
 	Begin
 		p_zpkr_subp := D_ZPKR_SUBP.Selection.ToVariant;
-		Hyperlink.SetParamValue(C_PARAM_ZPKR_SUBP, p_zpkr_subp);
-		Hyperlink.Generate;
+		_AnalyzTepHyperlink.SetParamValue(C_PARAM_ZPKR_SUBP, p_zpkr_subp);
 		
 		// Нет привязки к параметру
 	End Sub D_ZPKR_SUBPOnSelectionChange;
@@ -1389,22 +1389,133 @@ Class ANALIZ_TEP_FORM_ON_SHOW: WebForm
 		
 	End Sub I_ZINDTXT1OnTextChanged;
 	
-	/// <summary>
-	/// 	Передаёт значение отметки в гиперссылку. Значение пишется в менеджер параметров
-	/// 	(CObjectParamManager), из которого строку действия собирает COpenHyperlink.Generate.
-	/// 	Ручная сборка строки не нужна: Generate всё равно пересобирает её из менеджера параметров.
-	/// </summary>
 	Sub UpdateOpenDefHlinkFromSelection(paramId: String; dimSel: IDimSelection; attrId: String = "");
+	Var
+		paramValue: Variant;
 	Begin
-		If IsNull(dimSel) Then Return; End If;
-		Hyperlink.SetParamValueFromSelection(paramId, dimSel, attrId);
+		paramValue := WebFormsExt.GetDimSelectionAttrValue(dimSel, attrId);
+		UpdateOpenDefHlink(paramId, paramValue);
 	End Sub UpdateOpenDefHlinkFromSelection;
 	
-	/// <summary>
-	/// 	Здесь был ручной разбор строки действия (UpdateOpenDefHlink + 5 вложенных подпрограмм).
-	/// 	Он удалён: COpenHyperlink.Generate пересобирает строку из менеджера параметров и затирает
-	/// 	ручную правку, а сам разбор мог падать на String.SubString(-1) при отсутствующем параметре.
-	/// </summary>
+	Sub UpdateOpenDefHlink(paramId: String; paramValue: Variant);
+	Var
+		hlinkAction, paramValueSubStr: String;
+		paramIndex, paramValueIndex: Integer;
+		
+		Sub InsertParam;
+		Begin
+			// Если это первый параметр - обычная вставка. Если не первый - добавляем перед параметров символ ";"
+			If hlinkAction.Chars(hlinkAction.Length-2) = "(" Then
+				hlinkAction := String.Insert(hlinkAction, hlinkAction.Length-1, String.Format("{0}={1}", paramId, paramValue));
+			Else
+				hlinkAction := String.Insert(hlinkAction, hlinkAction.Length-1, String.Format(";{0}={1}", paramId, paramValue));
+			End If;
+		End Sub InsertParam;
+		
+		Sub UpdateParam;
+		Begin
+			// Удаляем текущее значение параметра и вставляем новое
+			paramValueIndex := hlinkAction.SubString(paramIndex).IndexOf("=") + paramIndex + 1;
+			paramValueSubStr := hlinkAction.SubString(paramValueIndex);
+			
+			With nextParamIndex: paramValueSubStr.IndexOf(";"), endParamsIndex: paramValueSubStr.IndexOf(")") Do
+				// Удаляем текущее значение
+				If nextParamIndex = -1 Then
+					hlinkAction := String.Remove(hlinkAction, paramValueIndex, endParamsIndex);
+				Else
+					hlinkAction := String.Remove(hlinkAction, paramValueIndex, nextParamIndex);
+				End If;
+				
+				// Вставляем новое
+				hlinkAction := String.Insert(hlinkAction, paramValueIndex, String.Format("{0}", paramValue));
+			End With;
+		End Sub UpdateParam;
+		
+		Sub RemoveParam;
+		Begin
+			// Удаляем текущее значение параметра
+			paramValueIndex := hlinkAction.SubString(paramIndex).IndexOf("=") + paramIndex + 1;
+			paramValueSubStr := hlinkAction.SubString(paramValueIndex);
+			
+			With nextParamIndex: paramValueSubStr.IndexOf(";"), endParamsIndex: paramValueSubStr.IndexOf(")") Do
+				// Удаляем текущее значение
+				If nextParamIndex = -1 Then
+					If hlinkAction.Chars(paramIndex - 1) = "(" Then
+						hlinkAction := String.Remove(hlinkAction, paramIndex, paramValueIndex - paramIndex + endParamsIndex);
+					Else
+						hlinkAction := String.Remove(hlinkAction, paramIndex - 1, paramValueIndex - paramIndex + endParamsIndex + 1);
+					End If;
+				Else
+					
+					hlinkAction := String.Remove(hlinkAction, paramIndex, paramValueIndex - paramIndex + nextParamIndex + 1);
+				End If;
+			End With;
+		End Sub RemoveParam;
+		
+		Function GetParamIndex: Integer;
+		Var
+			subStr: String = "";
+			subStrParamIndex: Integer;
+		Begin
+			// Обработка случая, когда в строке есть PARAM1 и PARAM13, например (иденты параметров частично совпадают)
+			subStrParamIndex := hlinkAction.IndexOf(paramId);
+			subStr := hlinkAction.SubString(subStrParamIndex, hlinkAction.SubString(subStrParamIndex).IndexOf("="));
+			
+			While (Not (subStr = paramId)) And (Not (subStrParamIndex = -1)) Do
+				subStrParamIndex := hlinkAction.IndexOf(paramId, subStrParamIndex + 1);
+				subStr := hlinkAction.SubString(subStrParamIndex, hlinkAction.SubString(subStrParamIndex).IndexOf("="));
+			End While;
+			
+			Return subStrParamIndex;
+		End Function GetParamIndex;
+		
+		Sub UpdateArrayToValue;
+		Var
+			i: Integer;
+			paramValueArr: Array;
+		Begin
+			If IsNull(paramValue) Or paramValue.IsEmpty Then
+				Return;
+			End If;
+			
+			If paramValue Is Array Then
+				paramValueArr := paramValue As Array;
+				paramValue := "[";
+				For i := 0 To paramValueArr.Length - 1 Do
+					paramValue := paramValue + paramValueArr[i] + ",";
+				End For;
+				paramValue := String.Remove(paramValue, (paramValue As String).Length - 1);
+				paramValue := paramValue + "]";
+			End If;
+		End Sub UpdateArrayToValue;
+	Begin
+		// В РО изначально лежит Action формата @DEF_FOR_F4
+		hlinkAction := _hlink.Action;
+		
+		// Вставляем скобки для передачи параметров
+		If Not (String.Contains(hlinkAction, "(")) Then
+			hlinkAction := String.Insert(hlinkAction, hlinkAction.Length, "()");
+		End If;
+		
+		// Если параметр - массив, то преобразуем в строку
+		UpdateArrayToValue;
+		
+		// Проверяем, есть ли уже данный параметр в гиперссылке. Если есть - меняем, если нет - вставляем
+		paramIndex := GetParamIndex;
+		If Not (paramIndex = -1) Then
+			// Если пришло пустое значение - чистим параметр из строки
+			If IsNull(paramValue) Or paramValue.IsEmpty Then
+				RemoveParam;
+			Else
+				UpdateParam;
+			End If;
+		Else
+			InsertParam;
+		End If;
+		
+		_hlink.Action := hlinkAction;
+		TextArea1.Lines.Add(hlinkAction);
+	End Sub UpdateOpenDefHlink;
 	
 	Function InitializeHlinkOpenObject(report: IPrxReport; hlinkText, hlinkAction: String): ITabHyperlink;
 	Var
@@ -1438,425 +1549,26 @@ Class ANALIZ_TEP_FORM_ON_SHOW: WebForm
 		fillFieldListByStatusFlag(CB_ZHRGRPMO, "ZHRGRPMO");
 	End Sub CB_ZHRGRPMOOnChange;
 	
-	/// <summary>
-	/// 	Обработчик чек-бокса «Поля для вывода». Идентификатор поля берётся из таблицы
-	/// 	InitOutputFieldIds по имени контрола, поэтому список всегда пересобирается целиком.
-	/// </summary>
 	Sub fillFieldListByStatusFlag(CB: IWebCheckBox; fieldName : String);
 	Begin	
-		If IsNull(CB) Then Return; End If;
-		RefreshFieldList;
+		If CB <> Null Then
+			If CB.Checked Then
+				fieldList.Add(fieldName);
+			Else
+				fieldList.Remove(fieldName);
+			End If;
+			Hyperlink.SetParamValue("P_FIELD_LIST", fieldList.Text(", "));
+			Hyperlink.Generate;
+			TextArea1.Text := Hyperlink.Action;
+		End If;		
 	End Sub fillFieldListByStatusFlag;
 	
-	/// <summary>
-	/// 	Поля, которые выводятся всегда (ТТ, лист «СЭ - поля для вывода»: «установлен по умолчанию»).
-	/// 	Каждое поле добавляется отдельным элементом — иначе снятие чек-бокса не убирает его из списка.
-	/// </summary>
 	Sub addDefaultFieldsToStringList;
 	Begin
-		addFieldToList("CALYEAR");   // Год
-		addFieldToList("PLANT");     // СП
-		addFieldToList("ZLIB_INDC"); // ТЭП
-		addFieldToList("ACT_UNIT");  // Ед.измерения
+		fieldList.Add("CALYEAR,PLANT,ZLIB_INDC");
+		//fieldList.Add("PLANT");
+		//fieldList.Add("ZLIB_INDC");
 	End Sub addDefaultFieldsToStringList;
-
-	Sub CbHigherIndOnChange;
-	Begin
-		fillFieldListByStatusFlag(CbHigherInd, "ZPH_HIGHER");
-	End Sub CbHigherIndOnChange;
-	Sub CB_ACTIVITY_TYPEOnChange;
-	Begin
-		fillFieldListByStatusFlag(CB_ACTIVITY_TYPE, "ACTVTS");
-	End Sub CB_ACTIVITY_TYPEOnChange;
-	Sub CB_IND_TYPEOnChange;
-	Begin
-		fillFieldListByStatusFlag(CB_IND_TYPE, "ID1");
-	End Sub CB_IND_TYPEOnChange;
-	Sub CB_TEP_FORM_OF_SNGOnChange;
-	Begin
-		fillFieldListByStatusFlag(CB_TEP_FORM_OF_SNG, "ZF_NUMB");
-	End Sub CB_TEP_FORM_OF_SNGOnChange;
-	Sub CB_TEP_OWNEROnChange;
-	Begin
-		fillFieldListByStatusFlag(CB_TEP_OWNER, "OWNER");
-	End Sub CB_TEP_OWNEROnChange;
-	Sub CB_FUNCTION_OF_WOKERSOnChange;
-	Begin
-		fillFieldListByStatusFlag(CB_FUNCTION_OF_WOKERS, "ZPH_FUNC");
-	End Sub CB_FUNCTION_OF_WOKERSOnChange;
-	Sub CB_VOLUMEOnChange;
-	Begin
-		fillFieldListByStatusFlag(CB_VOLUME, "ZPH_VOLUME");
-	End Sub CB_VOLUMEOnChange;
-	Sub CB_TRUDOnChange;
-	Begin
-		fillFieldListByStatusFlag(CB_TRUD, "ZPH_TRUD");
-	End Sub CB_TRUDOnChange;
-	Sub CB_COMPARABLE_PRICESOnChange;
-	Begin
-		fillFieldListByStatusFlag(CB_COMPARABLE_PRICES, "ZPH_PRICE_CP");
-	End Sub CB_COMPARABLE_PRICESOnChange;
-	Sub CB_CURRENT_PRICESOnChange;
-	Begin
-		fillFieldListByStatusFlag(CB_CURRENT_PRICES, "ZPH_PRICE_CD");
-	End Sub CB_CURRENT_PRICESOnChange;
-	Sub CB_ACTTYPE2OnChange;
-	Begin
-		fillFieldListByStatusFlag(CB_ACTTYPE2, "ZPH_ACTTYPE2");
-	End Sub CB_ACTTYPE2OnChange;
-	Sub CB_NOVEMBEROnChange;
-	Begin
-		fillFieldListByStatusFlag(CB_NOVEMBER, "ZSIU_INDV_11");
-	End Sub CB_NOVEMBEROnChange;
-	Sub CB_THIRD_QUARTEROnChange;
-	Begin
-		fillFieldListByStatusFlag(CB_THIRD_QUARTER, "ZSIU_INDV_Q3");
-	End Sub CB_THIRD_QUARTEROnChange;
-	Sub CB_DISPLAY_CODE_ANALYTOnChange;
-	Begin
-		RefreshFieldList;
-	End Sub CB_DISPLAY_CODE_ANALYTOnChange;
-	Sub CB_DISPLAY_INFO_BY_STATUSOnChange;
-	Begin
-		RefreshFieldList;
-	End Sub CB_DISPLAY_INFO_BY_STATUSOnChange;
-
-	// ============================================================================================
-	//  «Поля для вывода» — идентификаторы полей отчёта для параметра P_FIELD_LIST
-	//
-	//  Источник: ТТ «Анализ и выгрузка данных ТЭП», лист «Вывод полей в отчете» (колонка «Поле»).
-	//  Идентификаторы, помеченные «уточнить», в ТТ не указаны — приняты по имени поля/контрола;
-	//  при расхождении с отчётом PRX_ANALYSIS_TEP правьте ТОЛЬКО этот метод.
-	//
-	//  Чего пока нет (нужны контролы в дизайнере формы):
-	//    * группа «Значения ТЭП с начала года»  — 19 полей, источник TBL_PHD_FAP_MULT.ZVALUE_SNG;
-	//    * группа «Значения корректировок ТЭП»   — 19 полей, ZSIU_INDV + ZLIB_INFS=KOROUND;
-	//    * «Класс вида оборудования» (ZCLSVOBOR) — есть поле в ТТ, контрола на форме нет;
-	//    * не размечены: CB_ANALYTIC_SET, CB_AREA, CB_ESTIMATED_PRICES, CB_MVP_TEP, CbESO3
-	//      (в ТТ не найдены — уточнить назначение).
-	// ============================================================================================
-	Sub InitOutputFieldIds;
-	Begin
-		If Not IsNull(_fieldIds) Then Return; End If;
-		_fieldIds := New Hashtable.Create;
-		_codeIds := New Hashtable.Create;
-		// --- существующие поля (идентификаторы уже согласованы с отчётом) ---
-		_fieldIds.Add("CB_ACTTYPE", "ACTTYPE");
-		_fieldIds.Add("CB_ACT_UNIT", "ACT_UNIT");
-		_fieldIds.Add("CB_COSTCENTER", "COSTCENTER");
-		_fieldIds.Add("CB_MATERIAL", "MATERIAL");
-		_fieldIds.Add("CB_PERIOD_TYPE", "PERIOD_TYPE");
-		_fieldIds.Add("CB_PLANT", "PLANT");
-		_fieldIds.Add("CB_POSID", "POSID");
-		_fieldIds.Add("CB_PROFIT_CTR", "PROFIT_CTR");
-		_fieldIds.Add("CB_SOLD_TO", "SOLD_TO");
-		_fieldIds.Add("CB_UCVOLTLEVL", "UCVOLTLEVL");
-		_fieldIds.Add("CB_VENDOR", "VENDOR");
-		_fieldIds.Add("CB_ZAVIATYPE", "ZAVIATYPE");
-		_fieldIds.Add("CB_ZBUR_AREA", "ZBUR_AREA");
-		_fieldIds.Add("CB_ZBUR_BEG", "ZBUR_BEG");
-		_fieldIds.Add("CB_ZBUR_END", "ZBUR_END");
-		_fieldIds.Add("CB_ZBUR_LU", "ZBUR_LU");
-		_fieldIds.Add("CB_ZBUR_PLST", "ZBUR_PLST");
-		_fieldIds.Add("CB_ZDEBITOR", "ZDEBITOR");
-		_fieldIds.Add("CB_ZDOGLINK", "ZDOGLINK");
-		_fieldIds.Add("CB_ZEQUI", "ZEQUI");
-		_fieldIds.Add("CB_ZFUNC_LOC", "ZFUNC_LOC");
-		_fieldIds.Add("CB_ZGAZ_TYPE", "ZGAZ_TYPE");
-		_fieldIds.Add("CB_ZGEN_POD", "ZGEN_POD");
-		_fieldIds.Add("CB_ZGEN_ZAK", "ZGEN_ZAK");
-		_fieldIds.Add("CB_ZHRGRPMO", "ZHRGRPMO");
-		_fieldIds.Add("CB_ZINDTXT1", "ZINDTXT1");
-		_fieldIds.Add("CB_ZLIB_INDC", "ZLIB_INDC");
-		_fieldIds.Add("CB_ZLIB_INFS", "ZLIB_INFS");
-		_fieldIds.Add("CB_ZOBJEM", "ZOBJEM");
-		_fieldIds.Add("CB_ZORGUNIT", "ZORGUNIT");
-		_fieldIds.Add("CB_ZPHD_COMM", "ZPHD_COMM");
-		_fieldIds.Add("CB_ZPHD_DOG", "ZPHD_DOG");
-		_fieldIds.Add("CB_ZPHD_GRSR", "ZPHD_GRSR");
-		_fieldIds.Add("CB_ZPHD_IS", "ZPHD_IS");
-		_fieldIds.Add("CB_ZPHD_KON", "ZPHD_KON");
-		_fieldIds.Add("CB_ZPHD_NCH", "ZPHD_NCH");
-		_fieldIds.Add("CB_ZPHD_NOP1", "ZPHD_NOP1");
-		_fieldIds.Add("CB_ZPHD_PHD", "ZPHD_PHD");
-		_fieldIds.Add("CB_ZPHD_PRIZ", "ZPHD_PRIZ");
-		_fieldIds.Add("CB_ZPHD_SK", "ZPHD_SK");
-		_fieldIds.Add("CB_ZPHD_SPR", "ZPHD_SPR");
-		_fieldIds.Add("CB_ZPHD_SR", "ZPHD_SR");
-		_fieldIds.Add("CB_ZPHD_STAT", "ZPHD_STAT");
-		_fieldIds.Add("CB_ZPHD_USL1", "ZPHD_USL1");
-		_fieldIds.Add("CB_ZPH_ESO2", "ZPH_ESO2");
-		_fieldIds.Add("CB_ZPH_OPLST", "ZPH_OPLST");
-		_fieldIds.Add("CB_ZPH_TEHK", "ZPH_TEHK");
-		_fieldIds.Add("CB_ZPH_USR2", "ZPH_USR2");
-		_fieldIds.Add("CB_ZPILOT", "ZPILOT");
-		_fieldIds.Add("CB_ZPKR_SUBP", "ZPKR_SUBP");
-		_fieldIds.Add("CB_ZSHIFR", "ZSHIFR");
-		_fieldIds.Add("CB_ZSIU_FLD", "ZSIU_FLD");
-		_fieldIds.Add("CB_ZSIU_TY", "ZSIU_TY");
-		_fieldIds.Add("CB_ZSKV_KUST", "ZSKV_KUST");
-		_fieldIds.Add("CB_ZSKV_ST", "ZSKV_ST");
-		_fieldIds.Add("CB_ZUCVOLTTR", "ZUCVOLTTR");
-		_fieldIds.Add("CB_Z_CL_NAPR", "Z_CL_NAPR");
-		_fieldIds.Add("CB_Z_SKV_GEO", "Z_SKV_GEO");
-		
-		// --- поля ТТ, для которых обработчиков не было ---
-		_fieldIds.Add("CbHigherInd", "ZPH_HIGHER");             // Вышестоящий ТЭП (⚠ уточнить)
-		_fieldIds.Add("CB_ACTIVITY_TYPE", "ACTVTS");            // Вид деятельности
-		_fieldIds.Add("CB_IND_TYPE", "ID1");                    // Вид показателя
-		_fieldIds.Add("CB_TEP_FORM_OF_SNG", "ZF_NUMB");         // Формы отчётов
-		_fieldIds.Add("CB_TEP_OWNER", "OWNER");                 // Владелец ТЭП
-		_fieldIds.Add("CB_FUNCTION_OF_WOKERS", "ZPH_FUNC");     // Функция/задача (⚠ уточнить)
-		_fieldIds.Add("CB_VOLUME", "ZPH_VOLUME");               // Объёмный (⚠ уточнить)
-		_fieldIds.Add("CB_TRUD", "ZPH_TRUD");                   // Трудоёмкость (⚠ уточнить)
-		_fieldIds.Add("CB_COMPARABLE_PRICES", "ZPH_PRICE_CP");  // В сопоставимых ценах (⚠ уточнить)
-		_fieldIds.Add("CB_CURRENT_PRICES", "ZPH_PRICE_CD");     // В действующих ценах (⚠ уточнить)
-		_fieldIds.Add("CB_ACTTYPE2", "ZPH_ACTTYPE2");           // Вид работ (классификация) (⚠ уточнить)
-		_fieldIds.Add("CB_JANUARY", "ZSIU_INDV_01");            // Январь
-		_fieldIds.Add("CB_FEBRUARY", "ZSIU_INDV_02");           // Февраль
-		_fieldIds.Add("CB_MARCH", "ZSIU_INDV_03");              // Март
-		_fieldIds.Add("CB_APRIL", "ZSIU_INDV_04");              // Апрель
-		_fieldIds.Add("CB_MAY", "ZSIU_INDV_05");                // Май
-		_fieldIds.Add("CB_JUNE", "ZSIU_INDV_06");               // Июнь
-		_fieldIds.Add("CB_JULY", "ZSIU_INDV_07");               // Июль
-		_fieldIds.Add("CB_AUGUST", "ZSIU_INDV_08");             // Август
-		_fieldIds.Add("CB_SEPTEMBER", "ZSIU_INDV_09");          // Сентябрь
-		_fieldIds.Add("CB_OCTOBER", "ZSIU_INDV_10");            // Октябрь
-		_fieldIds.Add("CB_NOVEMBER", "ZSIU_INDV_11");           // Ноябрь
-		_fieldIds.Add("CB_DECEMBER", "ZSIU_INDV_12");           // Декабрь
-		_fieldIds.Add("CB_FIRST_QUARTER", "ZSIU_INDV_Q1");      // I кв.
-		_fieldIds.Add("CB_SECOND_QUARTER", "ZSIU_INDV_Q2");     // II кв.
-		_fieldIds.Add("CB_THIRD_QUARTER", "ZSIU_INDV_Q3");      // III кв.
-		_fieldIds.Add("CB_FOURTH_QUARTER", "ZSIU_INDV_Q4");     // IV кв.
-		_fieldIds.Add("CB_SIX_MONTH", "ZSIU_INDV_Q6");          // 6 мес.
-		_fieldIds.Add("CB_NINE_MONTH", "ZSIU_INDV_Q9");         // 9 мес.
-		_fieldIds.Add("CB_YEAR", "ZSIU_INDV_Q0");               // Год
-		
-		// --- Идентификаторы полей-кодов для режима «Выводить коды аналитик»
-		// (ТТ, лист «Вывод полей в отчете», колонка «Поле» при «Выводить код = да»).
-		// Указываются только там, где код отличается от основного идентификатора поля.
-		_codeIds.Add("CB_PLANT", "SP");
-		_codeIds.Add("CB_SOLD_TO", "KEY");
-		_codeIds.Add("CB_ZPH_USR2", "CODE_ZPH_USR0");
-		_codeIds.Add("CB_PERIOD_TYPE", "PERIOD_TY");
-	End Sub InitOutputFieldIds;
-	
-	/// <summary>
-	/// 	Пересобирает P_FIELD_LIST по состояниям чек-боксов и генерирует гиперссылку.
-	/// 	Единственная точка изменения списка полей: чек-боксы + таблица InitOutputFieldIds.
-	/// </summary>
-	Sub RefreshFieldList;
-	Var
-		components: IWebComponents;
-		component: IWebComponent;
-		cb: IWebCheckBox;
-		codes: String;
-		i, count: Integer;
-	Begin
-		If IsNull(fieldList) Then fieldList := New StringList.Create; End If;
-		fieldList.Clear;
-		addDefaultFieldsToStringList;
-		
-		components := Self.Components;
-		If Not IsNull(components) Then
-			count := components.Count;
-			For i := 0 To count - 1 Do
-				component := components.Item(i);
-				If component Is IWebCheckBox Then
-					cb := component As IWebCheckBox;
-					If cb.Checked Then addFieldId(cb.Name); End If;
-				End If;
-			End For;
-		End If;
-		
-		// Режим «Выводить информацию по статусам»: к выбранным периодам добавляются поля статусов
-		If (Not IsNull(CB_DISPLAY_INFO_BY_STATUS)) And CB_DISPLAY_INFO_BY_STATUS.Checked Then
-			addStatusFields;
-		End If;
-		
-		Hyperlink.SetParamValue("P_FIELD_LIST", fieldList.Text(", "));
-		
-		// Режим «Выводить коды аналитик»: список аналитик, по которым отчёт добавляет коды
-		codes := "";
-		If (Not IsNull(CB_DISPLAY_CODE_ANALYT)) And CB_DISPLAY_CODE_ANALYT.Checked Then
-			codes := codeFieldsText;
-		End If;
-		setParamOrRemove(C_PARAM_P_ANALYTIC_SET, codes);
-		
-		Hyperlink.Generate;
-		If Not IsNull(TextArea1) Then TextArea1.Text := Hyperlink.Action; End If;
-	End Sub RefreshFieldList;
-	
-	/// <summary>Идентификатор поля отчёта по имени чек-бокса (пусто — контрол не размечен)</summary>
-	Function fieldIdByControl(controlName: String): String;
-	Var
-		value: Variant;
-	Begin
-		If IsNull(_fieldIds) Or controlName.IsEmpty Then Return ""; End If;
-		value := _fieldIds.Item(controlName);
-		If IsNull(value) Then Return ""; End If;
-		Return value As String;
-	End Function fieldIdByControl;
-	
-	Sub addFieldId(controlName: String);
-	Var
-		fieldId: String;
-	Begin
-		fieldId := fieldIdByControl(controlName);
-		addFieldToList(fieldId);
-	End Sub addFieldId;
-	
-	/// <summary>Добавляет идентификатор в список полей, если его там ещё нет</summary>
-	Sub addFieldToList(fieldId: String);
-	Begin
-		If IsNull(fieldList) Or fieldId.IsEmpty Then Return; End If;
-		If fieldList.IndexOf(fieldId) = -1 Then fieldList.Add(fieldId); End If;
-	End Sub addFieldToList;
-	
-	/// <summary>Поля статусов для выбранных периодов (режим «Выводить информацию по статусам»)</summary>
-	Sub addStatusFields;
-	Var
-		components: IWebComponents;
-		component: IWebComponent;
-		cb: IWebCheckBox;
-		fieldId: String;
-		i, count: Integer;
-	Begin
-		components := Self.Components;
-		If IsNull(components) Then Return; End If;
-		count := components.Count;
-		For i := 0 To count - 1 Do
-			component := components.Item(i);
-			If component Is IWebCheckBox Then
-				cb := component As IWebCheckBox;
-				If cb.Checked Then
-					fieldId := fieldIdByControl(cb.Name);
-					If fieldId.StartsWith("ZSIU_INDV_") Then
-						addFieldToList(fieldId + C_STATUS_FIELD_SUFFIX);
-					End If;
-				End If;
-			End If;
-		End For;
-	End Sub addStatusFields;
-	
-	/// <summary>Список полей-кодов выбранных аналитик (режим «Выводить коды аналитик»)</summary>
-	Function codeFieldsText: String;
-	Var
-		list: IStringList;
-		components: IWebComponents;
-		component: IWebComponent;
-		cb: IWebCheckBox;
-		codeId: Variant;
-		i, count: Integer;
-	Begin
-		list := New StringList.Create;
-		components := Self.Components;
-		If IsNull(components) Then Return ""; End If;
-		count := components.Count;
-		For i := 0 To count - 1 Do
-			component := components.Item(i);
-			If component Is IWebCheckBox Then
-				cb := component As IWebCheckBox;
-				If cb.Checked Then
-					codeId := _codeIds.Item(cb.Name);
-					If Not IsNull(codeId) Then
-						If list.IndexOf(codeId As String) = -1 Then list.Add(codeId As String); End If;
-					End If;
-				End If;
-			End If;
-		End For;
-		Return list.Text(", ");
-	End Function codeFieldsText;
-	
-	/// <summary>Устанавливает параметр или убирает его из менеджера (пустое значение = убрать)</summary>
-	Sub setParamOrRemove(paramId, value: String);
-	Var
-		params: IHashtable;
-	Begin
-		If IsNull(Hyperlink.ParameterManager) Then Return; End If;
-		params := Hyperlink.ParameterManager.Params;
-		If IsNull(params) Then Return; End If;
-		If value.IsEmpty Then
-			// Пустое значение нельзя писать в параметры: CObjectParamManager присваивает значение как есть
-			If params.Contains(paramId) Then params.Remove(paramId); End If;
-		Else
-			Hyperlink.SetParamValue(paramId, value);
-		End If;
-	End Sub setParamOrRemove;
-	
-	/// <summary>Состояния чек-боксов «Поля для вывода» по умолчанию (ТТ, лист «СЭ - поля для вывода»)</summary>
-	Sub initOutputDefaults;
-	Begin
-		SetCheckBoxIfExists(CB_FIRST_QUARTER, True);
-		SetCheckBoxIfExists(CB_SECOND_QUARTER, True);
-		SetCheckBoxIfExists(CB_SIX_MONTH, True);
-		SetCheckBoxIfExists(CB_THIRD_QUARTER, True);
-		SetCheckBoxIfExists(CB_NINE_MONTH, True);
-		SetCheckBoxIfExists(CB_FOURTH_QUARTER, True);
-		SetCheckBoxIfExists(CB_YEAR, True);
-	End Sub initOutputDefaults;
-	
-	Sub SetCheckBoxIfExists(CB: IWebCheckBox; checked: Boolean);
-	Begin
-		If IsNull(CB) Then Return; End If;
-		CB.Checked := checked;
-	End Sub SetCheckBoxIfExists;
-	
-	/// <summary>Отметка элемента справочника по значению атрибута (значение — в т.ч. из полномочий)</summary>
-	Sub setComboSelectionByAttribute(combo: IWebDimensionCombo; paramId, attrId, value: String);
-	Var
-		index: Integer;
-		sel: IDimSelection;
-	Begin
-		If IsNull(combo) Or value.IsEmpty Then Return; End If;
-		index := DimensionExt.GetElementIndexByAttributeValue(combo.DimInstance, attrId, value);
-		If index = -1 Then Return; End If;
-		sel := combo.DimInstance.CreateSelection;
-		sel.SelectElement(index, False);
-		combo.Selection := sel;
-		Hyperlink.SetParamValueFromSelection(paramId, combo.Selection, attrId);
-	End Sub setComboSelectionByAttribute;
-	
-	/// <summary>
-	/// 	Ограничение на вывод (выбор) СП: PHD_ADMIN и PHD_CURATOR_* выбирают любое СП,
-	/// 	остальным подставляется СП из основной записи пользователя и выбор запрещается.
-	/// </summary>
-	Sub applyPlantAccessRights;
-	Var
-		spCode: String;
-	Begin
-		If IsNull(D_PLANT) Then Return; End If;
-		If isPlantPrivileged Then Return; End If;
-		
-		spCode := getUserSP;
-		If spCode.IsEmpty Then
-			// Полномочий нет и СП не определён — оставляем выбор, иначе форму нельзя заполнить
-			Return;
-		End If;
-		
-		setComboSelectionByAttribute(D_PLANT, C_PARAM_PLANT, "CODE", spCode);
-		D_PLANT.Enabled := False;
-		Hyperlink.Generate;
-	End Sub applyPlantAccessRights;
-	
-	Function isPlantPrivileged: Boolean;
-	Var
-		user: IMetabaseUser;
-		group: ISecuritySubject;
-	Begin
-		user := MB.LogonSession.User;
-		If IsNull(user) Then Return False; End If;
-		If user.IsAdmin Then Return True; End If;
-		
-		For Each group In user.MemberOf Do
-			If Not IsNull(group) Then
-				If group.Name = C_ACCESS_SP_GROUP Then Return True; End If;
-				If group.Name.StartsWith(C_ACCESS_SP_GROUP_PREFIX) Then Return True; End If;
-			End If;
-		End For;
-		
-		Return False;
-	End Function isPlantPrivileged;
 
 End Class ANALIZ_TEP_FORM_ON_SHOW;
 
