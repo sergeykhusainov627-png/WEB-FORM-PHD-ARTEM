@@ -8,7 +8,7 @@
 | `.gitattributes` | 0.8 КБ | `c7cffcbb00a3a905…` | 2026-10-06 12:19 |
 | `.gitignore` | 0.2 КБ | `c6a2e7a5bff6dc76…` | 2026-10-06 12:19 |
 | `docs/ANALIZ-TEP-webform.md` | 48.1 КБ | `785c0a805dec2a3a…` | 2026-10-06 12:16 |
-| `docs/CHANGES-2026-10-06.md` | 9.3 КБ | `603c5af3d2bbd6f4…` | 2026-10-06 12:43 |
+| `docs/CHANGES-2026-10-06.md` | 9.9 КБ | `c38ff2767263cc02…` | 2026-10-06 12:44 |
 | `docs/checks/lint-module.txt` | 2.6 КБ | `4673f295b4d9aef3…` | 2026-10-06 12:42 |
 | `docs/checks/structure-check.txt` | 1.6 КБ | `a8ea50d91dae248c…` | 2026-10-06 12:43 |
 | `docs/PEFX-EXPORT-FINDINGS.md` | 17 КБ | `5f0f9728713a5762…` | 2026-10-06 12:08 |
