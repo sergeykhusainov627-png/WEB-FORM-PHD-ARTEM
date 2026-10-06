@@ -28,7 +28,8 @@
 | `docs/` | ТТ и разборы: `CHANGES-2026-10-06.md` (что изменено и что проверить), `ANALIZ-TEP-webform.md` (разбор кода), `TT-vs-CODE.md` (сверка ТТ ↔ код), `PEFX-EXPORT-FINDINGS.md` (разбор выгрузки окружения), `research/` (справка по WebForms), `checks/` (протоколы проверок) |
 | `docs/tt/` | текстовые дампы листов ТТ, машинная сверка `tt-vs-code2.md`, инвентарь контролов `form-inventory.txt` |
 | `export/full_env_web_form_06102026.pefx` | **выгрузка окружения со стенда** (309 объектов, 78 модулей): полный бэкап окружения формы |
-| `tools/` | `patch-webform.py` (сборка исправленного модуля из эталона), `check-webform.py` (структурная проверка), `form-inventory.js`, `pefx-extract.js`, `pefx-scan.js`, `tt-dump.py`, `tt-vs-code2.py`, `git-backup.ps1`, `backup-offline.ps1` |
+| `tools/` | `patch-webform.py` (сборка исправленного модуля из эталона), `cleanup-unused.py` (удаление неиспользуемых объявлений — предупреждения компилятора), `check-webform.py` (структурная проверка + сверка состава компонентов с эталоном), `form-inventory.js`, `pefx-extract.js`, `pefx-scan.js`, `tt-dump.py`, `tt-vs-code2.py`, `git-backup.ps1`, `backup-offline.ps1` |
+| `docs/parameter-ids-reference.md` | справочник идентификаторов параметров отчёта (в модуле они больше не дублируются константами) |
 | `CHECKSUMS.md` | контрольные суммы файлов на момент снимка |
 
 ## Правила работы с репозиторием

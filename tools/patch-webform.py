@@ -134,7 +134,7 @@ src = sub_once(
 \t\t\tIf Not IsNull(User) Then
 \t\t\t\tuserSP := User.Attributes.FindById("BUS_AREA").Value As String; //Получаем значение атрибута "BUS_AREA"
 \t\t\tEnd If;
-\t\tExcept On E: Exception Do
+\t\tExcept
 \t\t\tuserSP := "";
 \t\tEnd Try;
 \t\tReturn userSP;

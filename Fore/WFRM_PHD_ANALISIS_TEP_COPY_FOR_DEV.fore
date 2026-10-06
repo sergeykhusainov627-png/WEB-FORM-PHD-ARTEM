@@ -258,59 +258,13 @@ Class ANALIZ_TEP_FORM_ON_SHOW: WebForm
 	p_zphd_kon: Variant;
 	p_zphd_spr: Variant;	 	
 	 
-	Const C_BUTTON_OK_ID = "PRX_ANALYZ_TEP_BUTTON_OK";
 	Const C_ANALYZ_TEP_REP_ID = "PRX_ANALYSIS_TEP";
 	// Параметры СЭ регламантного отчета с кнопкой
-	Const C_PARAM_ZLIB_INDC = "ZLIB_INDC";
 	Const C_PARAM_PLANT = "PLANT";
 	Const C_PARAM_CALYEAR = "CALYEAR";
 	Const C_PARAM_ZTYPEIND = "ZTYPEIND";
 	Const C_PARAM_P_ANALYTIC_SET = "P_ANALYTIC_SET";
-	Const C_PARAM_ZPHD_STAT = "ZPHD_STAT";
-	Const C_PARAM_VENDOR = "VENDOR";
-	Const C_PARAM_SOLD_TO = "SOLD_TO";
-	Const C_PARAM_ZHRGRPMO = "ZHRGRPMO";
-	Const C_PARAM_PROFIT_CTR = "PROFIT_CTR";
-	Const C_PARAM_COSTCENTER = "COSTCENTER";
-	Const C_PARAM_ZORGUNIT = "ZORGUNIT";
-	Const C_PARAM_ZPH_USR2 = "ZPH_USR2";
-	Const C_PARAM_ACTTYPE = "ACTTYPE";
-	Const C_PARAM_ZEQUI = "ZEQUI";
-	Const C_PARAM_ZCLSVOBOR = "ZCLSVOBOR";
-	Const C_PARAM_MATERIAL = "MATERIAL";
-	Const C_PARAM_ZFUNC_LOC = "ZFUNC_LOC";
-	Const C_PARAM_ZSIU_FLD = "ZSIU_FLD";
-	Const C_PARAM_POSID = "POSID";
 	Const C_PARAM_ZLIB_INFS = "ZLIB_INFS";
-	Const C_PARAM_PERIOD_TYPE = "PERIOD_TYPE";
-	Const C_PARAM_ZPHD_DOG = "ZPHD_DOG";
-	Const C_PARAM_ZPHD_USL1 = "ZPHD_USL1";
-	Const C_PARAM_ZDEBITOR = "ZDEBITOR";
-	Const C_PARAM_ZPH_ESO2 = "ZPH_ESO2";
-	Const C_PARAM_ZPHD_SK = "ZPHD_SK";
-	Const C_PARAM_UCVOLTLEVL = "UCVOLTLEVL";
-	Const C_PARAM_ZUCVOLTTR = "ZUCVOLTTR";
-	Const C_PARAM_Z_CL_NAPR = "Z_CL_NAPR";
-	Const C_PARAM_ZSIU_TY = "ZSIU_TY";
-	Const C_PARAM_ZDOGLINK = "ZDOGLINK";
-	Const C_PARAM_ZBUR_LU = "ZBUR_LU";
-	Const C_PARAM_ZBUR_AREA = "ZBUR_AREA";
-	Const C_PARAM_ZSKV_KUST = "ZSKV_KUST";
-	Const C_PARAM_Z_SKV_GEO = "Z_SKV_GEO";
-	Const C_PARAM_ZBUR_PLST = "ZBUR_PLST";
-	Const C_PARAM_ZPH_TEHK = "ZPH_TEHK";
-	Const C_PARAM_ZPH_OPLST = "ZPH_OPLST";
-	Const C_PARAM_ZPILOT = "ZPILOT";
-	Const C_PARAM_ZSKV_ST = "ZSKV_ST";
-	Const C_PARAM_ZGEN_POD = "ZGEN_POD";
-	Const C_PARAM_ZGEN_ZAK = "ZGEN_ZAK";
-	Const C_PARAM_ZSHIFR = "ZSHIFR";
-	Const C_PARAM_ZOBJEM = "ZOBJEM";
-	Const C_PARAM_ZPHD_SR = "ZPHD_SR";
-	Const C_PARAM_ZPHD_GRSR = "ZPHD_GRSR";
-	Const C_PARAM_ZGAZ_TYPE = "ZGAZ_TYPE";
-	Const C_PARAM_ZAVIATYPE = "ZAVIATYPE";
-	Const C_PARAM_ZPHD_SPR = "ZPHD_SPR";
 	Const C_PARAM_ZBUR_BEG = "ZBUR_BEG";
 	Const C_PARAM_ZBUR_END = "ZBUR_END";
 	Const C_PARAM_ZPKR_SUBP = "ZPKR_SUBP";
@@ -382,7 +336,7 @@ Class ANALIZ_TEP_FORM_ON_SHOW: WebForm
 			If Not IsNull(User) Then
 				userSP := User.Attributes.FindById("BUS_AREA").Value As String; //Получаем значение атрибута "BUS_AREA"
 			End If;
-		Except On E: Exception Do
+		Except
 			userSP := "";
 		End Try;
 		Return userSP;
@@ -419,8 +373,6 @@ Class ANALIZ_TEP_FORM_ON_SHOW: WebForm
 		link: ITabHyperlink;
 		style: ITabCellStyle;	
 		openReportTab: ITabSheet;
-		optionReport: IPrxReport;
-		myTstPrxSheeet: IPrxSheet;
 	Begin
 		// tst сделал ссылку сам
 		//openReportTab := ReportBoxOk.Report.ActiveSheet As ITabSheet;
@@ -502,22 +454,7 @@ Class ANALIZ_TEP_FORM_ON_SHOW: WebForm
 	End Sub D_CALYEAROnSelectionChange;
 
 	Sub D_PLANTOnSelectionChange;
-	Const
-		C_ATTR_KEY_ID = "KEY";
-		C_ATTR_NAME_ID = "CODE";
-		C_ATTR_PARENT_ID_ID = "PARENT_KEY";
-	Var
-		groupSel: IDimSelection;
-		groupDim: IDimInstance;
-		elemIndex: Integer;
-		path: IStringList; //tst
-		plantDimArray: IDimElementArray;
-		Attr: IDimAttributeInstance;
-		Iter: IDimIterator;
-		index: Integer;
 		
-		tst: Variant;
-		tstArr: Array;
 	Begin
 		//UpdateOpenDefHlinkFromSelection("PLANT", D_PLANT.Selection, "CODE");
 		
@@ -559,9 +496,6 @@ Class ANALIZ_TEP_FORM_ON_SHOW: WebForm
 	Function getCollectionValues(dim: IWebDimensionCombo): StringList;
 	Var
 		dimValuesByAttr: StringList;
-		Iter: IDimIterator;
-		Elems: IDimElements;
-		ElemArr: IDimElementArray;
 		arrValue: Variant;
 		myArray: Array Of Variant;
 		i: Integer;
@@ -605,7 +539,6 @@ Class ANALIZ_TEP_FORM_ON_SHOW: WebForm
 	Function getAttValueByKey(dim: IWebDimensionCombo; key: Variant; attrName: String): Variant;
 	Var
 		attrValue: Variant;
-		index: Integer;
 		Attr: IDimAttributeInstance;
 	Begin
 		Attr := dim.Selection.Dimension.Attributes.FindById(attrName);
