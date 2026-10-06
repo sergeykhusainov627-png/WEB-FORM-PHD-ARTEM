@@ -132,19 +132,7 @@ not_collected = sorted(c for c in field_keys if c not in [c for c, _ in collect]
 for c in not_collected:
     problems.append('чек-бокс %s размечен, но не собирается в RefreshFieldList' % c)
 
-# --- 5б. поля, выводимые без чек-бокса (только те, у которых нет контрола) ---
-const_cb = re.search(r'Const C_FIELDS_WITHOUT_CHECKBOX\s*=\s*"([^"]*)"', text)
-if not const_cb:
-    problems.append('не найдена константа C_FIELDS_WITHOUT_CHECKBOX — безусловные поля не отслеживаются')
-else:
-    listed = [x.strip() for x in const_cb.group(1).split(',') if x.strip()]
-    for f in listed:
-        if f in field_ids:
-            problems.append('C_FIELDS_WITHOUT_CHECKBOX: поле %s управляется чек-боксом — безусловный вывод запрещён' % f)
-    notes.append('полей, выводимых без чек-бокса: %d%s' % (
-        len(listed), (' (' + ', '.join(listed) + ')') if listed else ' — вывод строго по чек-боксам'))
-
-# литеральные добавления полей допустимы только внутри addFieldsWithoutCheckBox (и там их нет)
+# --- 5б. безусловный вывод полей: допустим только для полей без чек-бокса ---
 body_lines, in_sub = set(), False
 for i, l in enumerate(lines, 1):
     if not live[i - 1]:
@@ -157,11 +145,30 @@ for i, l in enumerate(lines, 1):
         continue
     if in_sub:
         body_lines.add(i)
+        for f in re.findall(r'addFieldToList\("([^"]+)"\)', l):
+            if f in field_ids:
+                problems.append('стр.%d: поле %s выводится безусловно, хотя у него есть чек-бокс' % (i, f))
+            else:
+                notes.append('поле без чек-бокса выводится всегда: %s' % f)
+if not body_lines:
+    problems.append('не найден метод addFieldsWithoutCheckBox — безусловные поля не отслеживаются')
 for i, l in enumerate(lines, 1):
     if not live[i - 1] or i in body_lines:
         continue
     if re.search(r'addFieldToList\("\s*[A-Za-z]', l):
         problems.append('стр.%d: поле добавляется в P_FIELD_LIST безусловно — вывод должен зависеть от чек-бокса' % i)
+
+# --- 5в. типы: чтение элементов коллекций (Variant) в переменные String только через As ---
+string_vars = set(re.findall(r'^\t+([A-Za-z_]\w*)\s*:\s*String\s*;', text, re.M))
+for i, l in enumerate(lines, 1):
+    if not live[i - 1]:
+        continue
+    m = re.match(r'^\t+([A-Za-z_]\w*)\s*:=\s*(.+);\s*$', l)
+    if not m or m.group(1) not in string_vars:
+        continue
+    rhs = m.group(2)
+    if '.Item(' in rhs and ' As ' not in rhs:
+        problems.append('стр.%d: результат Item() (Variant) присваивается строке без «As String»' % i)
 
 # --- 6. покрытие чек-боксов идентификаторами ---
 checkboxes = [c for c, t in controls.items() if t == 'WebCheckBox']

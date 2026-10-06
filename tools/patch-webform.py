@@ -105,9 +105,6 @@ src = sub_once(
 	// Отмечать ли чек-боксы «Поля для вывода» по умолчанию (ТТ: Год, СП, ТЭП, Ед.измерения,
 	// I кв., II кв., 6 мес., III кв., 9 мес., IV кв., Год). False — вывод только по выбору пользователя.
 	Const C_APPLY_DEFAULT_CHECKED = True;
-	// Поля, выводимые БЕЗ чек-бокса (через запятую, например "CALYEAR"). Пусто = в отчёт попадают
-	// только отмеченные поля: не отметил — колонки в отчёте нет.
-	Const C_FIELDS_WITHOUT_CHECKBOX = "";
 ''',
     src, 'константы')
 
@@ -210,20 +207,13 @@ src = sub_once(
 src = sub_once(
     r'\tSub addDefaultFieldsToStringList;\n\tBegin\n\t\tfieldList\.Add\("CALYEAR,PLANT,ZLIB_INDC"\);\n\t\t//fieldList\.Add\("PLANT"\);\n\t\t//fieldList\.Add\("ZLIB_INDC"\);\n\tEnd Sub addDefaultFieldsToStringList;',
     '''\t/// <summary>
-\t/// 	Поля, выводимые без чек-бокса (константа C_FIELDS_WITHOUT_CHECKBOX).
-\t/// 	Пусто (по умолчанию) — в P_FIELD_LIST попадают ТОЛЬКО отмеченные поля: если чек-бокс
-\t/// 	не отмечен, в отчёте не будет ни значения, ни колонки.
+\t/// 	Полей, выводимых без чек-бокса, нет: в P_FIELD_LIST попадают ТОЛЬКО отмеченные поля,
+\t/// 	поэтому если чек-бокс не отмечен — в отчёте не будет ни значения, ни колонки.
+\t/// 	Если когда-нибудь понадобится выводить поле, для которого в форме нет чек-бокса,
+\t/// 	добавьте здесь строку вида:  addFieldToList("CALYEAR");   // Год
 \t/// </summary>
 \tSub addFieldsWithoutCheckBox;
-\tVar
-\t\tids: Array;
-\t\ti: Integer;
 \tBegin
-\t\tIf C_FIELDS_WITHOUT_CHECKBOX.IsEmpty Then Return; End If;
-\t\tids := C_FIELDS_WITHOUT_CHECKBOX.Split(",");
-\t\tFor i := 0 To ids.Length - 1 Do
-\t\t\taddFieldToList(String.Replace(ids[i] As String, " ", ""));
-\t\tEnd For;
 \tEnd Sub addFieldsWithoutCheckBox;''',
     src, 'addDefaultFieldsToStringList')
 
@@ -388,7 +378,7 @@ __COLLECT__
 		// count фиксируем заранее: добавляемые поля статусов не должны попасть в этот же перебор
 		count := fieldList.Count;
 		For i := 0 To count - 1 Do
-			fieldId := fieldList.Item(i);
+			fieldId := fieldList.Item(i) As String;
 			If fieldId.StartsWith("ZSIU_INDV_") Then
 				addFieldToList(fieldId + C_STATUS_FIELD_SUFFIX);
 			End If;
@@ -399,13 +389,15 @@ __COLLECT__
 	Function codeFieldsText: String;
 	Var
 		list: IStringList;
+		fieldId: String;
 		codeId: Variant;
 		i, count: Integer;
 	Begin
 		list := New StringList.Create;
 		count := fieldList.Count;
 		For i := 0 To count - 1 Do
-			codeId := _codeIds.Item(fieldList.Item(i));
+			fieldId := fieldList.Item(i) As String;
+			codeId := _codeIds.Item(fieldId);
 			If Not IsNull(codeId) Then
 				If list.IndexOf(codeId As String) = -1 Then list.Add(codeId As String); End If;
 			End If;

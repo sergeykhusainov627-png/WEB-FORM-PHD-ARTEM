@@ -323,9 +323,6 @@ Class ANALIZ_TEP_FORM_ON_SHOW: WebForm
 	// Отмечать ли чек-боксы «Поля для вывода» по умолчанию (ТТ: Год, СП, ТЭП, Ед.измерения,
 	// I кв., II кв., 6 мес., III кв., 9 мес., IV кв., Год). False — вывод только по выбору пользователя.
 	Const C_APPLY_DEFAULT_CHECKED = True;
-	// Поля, выводимые БЕЗ чек-бокса (через запятую, например "CALYEAR"). Пусто = в отчёт попадают
-	// только отмеченные поля: не отметил — колонки в отчёте нет.
-	Const C_FIELDS_WITHOUT_CHECKBOX = "";
 	
 	_AnalyzTepHyperlink: COpenHyperlink; // CUrlHyperlink
 	_hlink: ITabHyperlink;
@@ -1455,20 +1452,13 @@ Class ANALIZ_TEP_FORM_ON_SHOW: WebForm
 	End Sub fillFieldListByStatusFlag;
 	
 	/// <summary>
-	/// 	Поля, выводимые без чек-бокса (константа C_FIELDS_WITHOUT_CHECKBOX).
-	/// 	Пусто (по умолчанию) — в P_FIELD_LIST попадают ТОЛЬКО отмеченные поля: если чек-бокс
-	/// 	не отмечен, в отчёте не будет ни значения, ни колонки.
+	/// 	Полей, выводимых без чек-бокса, нет: в P_FIELD_LIST попадают ТОЛЬКО отмеченные поля,
+	/// 	поэтому если чек-бокс не отмечен — в отчёте не будет ни значения, ни колонки.
+	/// 	Если когда-нибудь понадобится выводить поле, для которого в форме нет чек-бокса,
+	/// 	добавьте здесь строку вида:  addFieldToList("CALYEAR");   // Год
 	/// </summary>
 	Sub addFieldsWithoutCheckBox;
-	Var
-		ids: Array;
-		i: Integer;
 	Begin
-		If C_FIELDS_WITHOUT_CHECKBOX.IsEmpty Then Return; End If;
-		ids := C_FIELDS_WITHOUT_CHECKBOX.Split(",");
-		For i := 0 To ids.Length - 1 Do
-			addFieldToList(String.Replace(ids[i] As String, " ", ""));
-		End For;
 	End Sub addFieldsWithoutCheckBox;
 
 	Sub CbHigherIndOnChange;
@@ -1808,7 +1798,7 @@ Class ANALIZ_TEP_FORM_ON_SHOW: WebForm
 		// count фиксируем заранее: добавляемые поля статусов не должны попасть в этот же перебор
 		count := fieldList.Count;
 		For i := 0 To count - 1 Do
-			fieldId := fieldList.Item(i);
+			fieldId := fieldList.Item(i) As String;
 			If fieldId.StartsWith("ZSIU_INDV_") Then
 				addFieldToList(fieldId + C_STATUS_FIELD_SUFFIX);
 			End If;
@@ -1819,13 +1809,15 @@ Class ANALIZ_TEP_FORM_ON_SHOW: WebForm
 	Function codeFieldsText: String;
 	Var
 		list: IStringList;
+		fieldId: String;
 		codeId: Variant;
 		i, count: Integer;
 	Begin
 		list := New StringList.Create;
 		count := fieldList.Count;
 		For i := 0 To count - 1 Do
-			codeId := _codeIds.Item(fieldList.Item(i));
+			fieldId := fieldList.Item(i) As String;
+			codeId := _codeIds.Item(fieldId);
 			If Not IsNull(codeId) Then
 				If list.IndexOf(codeId As String) = -1 Then list.Add(codeId As String); End If;
 			End If;
