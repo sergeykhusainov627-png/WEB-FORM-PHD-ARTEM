@@ -281,6 +281,8 @@ Class ANALIZ_TEP_FORM_ON_SHOW: WebForm
 	_hlink: ITabHyperlink;
 	
 	// --- «Поля для вывода»: таблицы соответствия «имя чек-бокса -> идентификатор поля отчёта» ---
+	// Текст последней ошибки (диагностика: показывается в TextArea1)	
+	_lastError: String;
 	_fieldIds: IHashtable;
 	_codeIds: IHashtable;
 	
@@ -343,15 +345,20 @@ Class ANALIZ_TEP_FORM_ON_SHOW: WebForm
 	
 	Sub ANALIZ_TEP_FORM_ON_SHOW;
 	Begin
-		_hlink := InitializeHlinkOpenObject(ReportBoxOk.Report, "  Ок  ", C_ANALYZ_TEP_REP_ID);
-		// Создаёт COpenHyperlink и менеджер параметров (геттер свойства Hyperlink)
-		_AnalyzTepHyperlink := Hyperlink;
-		// Значения по умолчанию, набор полей вывода и генерация ссылки
-		setDefaultDimensionValue;
-		// Ограничение выбора СП согласно полномочиям (ТТ, лист «Селекционный экран»)
-		applyPlantAccessRights;
+		Try
+			_hlink := InitializeHlinkOpenObject(ReportBoxOk.Report, "  Ок  ", C_ANALYZ_TEP_REP_ID);
+			// Создаёт COpenHyperlink и менеджер параметров (геттер свойства Hyperlink)
+			_AnalyzTepHyperlink := Hyperlink;
+			// Значения по умолчанию, набор полей вывода и генерация ссылки
+			setDefaultDimensionValue;
+			// Ограничение выбора СП согласно полномочиям (ТТ, лист «Селекционный экран»)
+			applyPlantAccessRights;
+		Except On E: Exception Do
+			// Ошибка инициализации не должна ломать форму: текст ошибки остаётся в TextArea1
+			showError("Ошибка инициализации формы", E);
+		End Try;
 									
-		//Hyperlink.Generate; вернуть
+		//SafeGenerate; вернуть
 		//Hyperlink.DesingCell(ButtonCancel.Color);								
 				
 		//madeLinkForMyselfTst;
@@ -398,7 +405,7 @@ Class ANALIZ_TEP_FORM_ON_SHOW: WebForm
 	{Sub UpdateOpenDefHlink(paramId: String; paramValue: Variant);
 	Begin
 		_AnalyzTepHyperlink.SetParamValue(paramId, paramValue);
-		_AnalyzTepHyperlink.Generate;
+		_AnalyzTepSafeGenerate;
 	End Sub UpdateOpenDefHlink;}
 	
 	{Function InitializeHlinkOpenObject(report: IPrxReport; hlinkText, hlinkAction: String): ITabHyperlink;
@@ -440,14 +447,14 @@ Class ANALIZ_TEP_FORM_ON_SHOW: WebForm
 	Begin
 		UpdateOpenDefHlinkFromSelection(String.ToUpper(paramName), D_CALYEAR.Selection, String.ToUpper(attrControlValue));
 		Hyperlink.SetParamValueFromSelection(String.ToUpper(paramName), D_CALYEAR.Selection, String.ToUpper(attrControlValue));
-		Hyperlink.Generate;
+		SafeGenerate;
 	End Sub UpdateHyperlinkParams;
 
 	Sub D_CALYEAROnSelectionChange;
 	Begin
 		UpdateOpenDefHlinkFromSelection("CALYEAR", D_CALYEAR.Selection, "NAME");
 		Hyperlink.SetParamValueFromSelection("CALYEAR", D_CALYEAR.Selection, "NAME");
-		Hyperlink.Generate;
+		SafeGenerate;
 		
 		//UpdateHyperlinkParams("CALYEAR", D_CALYEAR.Selection, "NAME");
 	End Sub D_CALYEAROnSelectionChange;
@@ -487,7 +494,7 @@ Class ANALIZ_TEP_FORM_ON_SHOW: WebForm
 		
 		UpdateOpenDefHlinkFromSelection("PLANT", D_PLANT.Selection, "CODE");
 		Hyperlink.SetParamValueFromSelection("PLANT", D_PLANT.Selection, "CODE");
-		Hyperlink.Generate;
+		SafeGenerate;
 		
 		//UpdateHyperlinkParams("PLANT", D_PLANT.Selection, "CODE");
 	End Sub D_PLANTOnSelectionChange;
@@ -565,133 +572,133 @@ Class ANALIZ_TEP_FORM_ON_SHOW: WebForm
 		
 		UpdateOpenDefHlinkFromSelection("ZLIB_INDC", D_ZLIB_INDC.Selection, "CODE");
 		Hyperlink.SetParamValueFromSelection("ZLIB_INDC", D_ZLIB_INDC.Selection, "CODE");
-		Hyperlink.Generate;
+		SafeGenerate;
 	End Sub D_ZLIB_INDCOnSelectionChange;
 
 	Sub D_ZTYPEINDOnSelectionChange;
 	Begin	
 		UpdateOpenDefHlinkFromSelection("ZTYPEIND", D_ZTYPEIND.Selection, "ID");
 		Hyperlink.SetParamValueFromSelection("ZTYPEIND", D_ZTYPEIND.Selection, "ID");
-		Hyperlink.Generate;
+		SafeGenerate;
 	End Sub D_ZTYPEINDOnSelectionChange;
 
 	Sub D_ZPHD_STATOnSelectionChange;
 	Begin
 		UpdateOpenDefHlinkFromSelection("ZPHD_STAT", D_ZPHD_STAT.Selection, "ZPHD_STAT");
 		Hyperlink.SetParamValueFromSelection("ZPHD_STAT", D_ZPHD_STAT.Selection, "ZPHD_STAT");
-		Hyperlink.Generate;
+		SafeGenerate;
 	End Sub D_ZPHD_STATOnSelectionChange;
 
 	Sub D_VENDOROnSelectionChange;
 	Begin
 		UpdateOpenDefHlinkFromSelection("VENDOR", D_VENDOR.Selection, "VENDOR");
 		Hyperlink.SetParamValueFromSelection("VENDOR", D_VENDOR.Selection, "VENDOR");
-		Hyperlink.Generate;
+		SafeGenerate;
 	End Sub D_VENDOROnSelectionChange;
 
 	Sub D_SOLD_TOOnSelectionChange;
 	Begin
 		UpdateOpenDefHlinkFromSelection("SOLD_TO", D_SOLD_TO.Selection, "CODE");
 		Hyperlink.SetParamValueFromSelection("SOLD_TO", D_SOLD_TO.Selection, "CODE");
-		Hyperlink.Generate;
+		SafeGenerate;
 	End Sub D_SOLD_TOOnSelectionChange;
 
 	Sub D_ZHRGRPMOOnSelectionChange;
 	Begin
 		UpdateOpenDefHlinkFromSelection("ZHRGRPMO", D_ZHRGRPMO.Selection, "ZHRGRPMO");
 		Hyperlink.SetParamValueFromSelection("ZHRGRPMO", D_ZHRGRPMO.Selection, "ZHRGRPMO");
-		Hyperlink.Generate;
+		SafeGenerate;
 	End Sub D_ZHRGRPMOOnSelectionChange;
 
 	Sub D_PROFIT_CTROnSelectionChange;
 	Begin
 		UpdateOpenDefHlinkFromSelection("PROFIT_CTR", D_PROFIT_CTR.Selection, "PROFIT_CTR");
 		Hyperlink.SetParamValueFromSelection("PROFIT_CTR", D_PROFIT_CTR.Selection, "PROFIT_CTR");
-		Hyperlink.Generate;
+		SafeGenerate;
 	End Sub D_PROFIT_CTROnSelectionChange;
 
 	Sub D_COSTCENTEROnSelectionChange;
 	Begin	
 		UpdateOpenDefHlinkFromSelection("COSTCENTER", D_COSTCENTER.Selection, "COSTCENTER");
 		Hyperlink.SetParamValueFromSelection("COSTCENTER", D_COSTCENTER.Selection, "COSTCENTER");
-		Hyperlink.Generate;
+		SafeGenerate;
 	End Sub D_COSTCENTEROnSelectionChange;
 		
 	Sub D_ZORGUNITOnSelectionChange;
 	Begin
 		UpdateOpenDefHlinkFromSelection("ZORGUNIT", D_ZORGUNIT.Selection, "ZORGU");
 		Hyperlink.SetParamValueFromSelection("ZORGUNIT", D_ZORGUNIT.Selection, "ZORGU");
-		Hyperlink.Generate;
+		SafeGenerate;
 	End Sub D_ZORGUNITOnSelectionChange;
 
 	Sub D_ZPH_USR2OnSelectionChange;
 	Begin
 		UpdateOpenDefHlinkFromSelection("ZPH_USR2", D_ZPH_USR2.Selection, "ZPH_USR2");
 		Hyperlink.SetParamValueFromSelection("ZPH_USR2", D_ZPH_USR2.Selection, "ZPH_USR2");
-		Hyperlink.Generate;
+		SafeGenerate;
 	End Sub D_ZPH_USR2OnSelectionChange;
 
 	Sub D_ACTTYPEOnSelectionChange;
 	Begin
 		UpdateOpenDefHlinkFromSelection("ACTTYPE", D_ACTTYPE.Selection, "ACTTYPE");
 		Hyperlink.SetParamValueFromSelection("ACTTYPE", D_ACTTYPE.Selection, "ACTTYPE");
-		Hyperlink.Generate;
+		SafeGenerate;
 	End Sub D_ACTTYPEOnSelectionChange;
 
 	Sub D_ZEQUIOnSelectionChange;
 	Begin
 		UpdateOpenDefHlinkFromSelection("ZEQUI", D_ZEQUI.Selection, "ZEQUI");
 		Hyperlink.SetParamValueFromSelection("ZEQUI", D_ZEQUI.Selection, "ZEQUI");
-		Hyperlink.Generate;
+		SafeGenerate;
 	End Sub D_ZEQUIOnSelectionChange;
 
 	Sub D_ZCLSVOBOROnSelectionChange;
 	Begin
 		UpdateOpenDefHlinkFromSelection("ZCLSVOBOR", D_ZCLSVOBOR.Selection, "ZCLSVOBOR");
 		Hyperlink.SetParamValueFromSelection("ZCLSVOBOR", D_ZCLSVOBOR.Selection, "ZCLSVOBOR");
-		Hyperlink.Generate;
+		SafeGenerate;
 	End Sub D_ZCLSVOBOROnSelectionChange;
 
 	Sub D_MATERIALOnSelectionChange;
 	Begin
 		UpdateOpenDefHlinkFromSelection("MATERIAL", D_MATERIAL.Selection, "MATERIAL");
 		Hyperlink.SetParamValueFromSelection("MATERIAL", D_MATERIAL.Selection, "MATERIAL");
-		Hyperlink.Generate;
+		SafeGenerate;
 	End Sub D_MATERIALOnSelectionChange;
 
 	Sub D_ZFUNC_LOCOnSelectionChange;
 	Begin
 		UpdateOpenDefHlinkFromSelection("ZFUNC_LOC", D_ZFUNC_LOC.Selection, "ZFUNC_LOC");
 		Hyperlink.SetParamValueFromSelection("ZFUNC_LOC", D_ZFUNC_LOC.Selection, "ZFUNC_LOC");
-		Hyperlink.Generate;
+		SafeGenerate;
 	End Sub D_ZFUNC_LOCOnSelectionChange;
 
 	Sub D_ZSIU_FLDOnSelectionChange;
 	Begin
 		UpdateOpenDefHlinkFromSelection("ZSIU_FLD", D_ZSIU_FLD.Selection, "ZSIU_FLD");
 		Hyperlink.SetParamValueFromSelection("ZSIU_FLD", D_ZSIU_FLD.Selection, "ZSIU_FLD");
-		Hyperlink.Generate;
+		SafeGenerate;
 	End Sub D_ZSIU_FLDOnSelectionChange;
 
 	Sub D_POSIDOnSelectionChange;
 	Begin
 		UpdateOpenDefHlinkFromSelection("POSID", D_POSID.Selection, "POSID");
 		Hyperlink.SetParamValueFromSelection("POSID", D_POSID.Selection, "POSID");
-		Hyperlink.Generate;
+		SafeGenerate;
 	End Sub D_POSIDOnSelectionChange;
 
 	Sub D_ZLIB_INFSOnSelectionChange;
 	Begin
 		p_zlib_infs := D_ZLIB_INFS.Selection.ToVariant;
-		Hyperlink.SetParamValue(C_PARAM_ZLIB_INFS, p_zlib_infs);
-		Hyperlink.Generate;
+		SetParamSafe(C_PARAM_ZLIB_INFS, p_zlib_infs);
+		SafeGenerate;
 	End Sub D_ZLIB_INFSOnSelectionChange;
 
 	Sub D_PERIOD_TYPEOnSelectionChange;
 	Begin
 		UpdateOpenDefHlinkFromSelection("PERIOD_TYPE", D_PERIOD_TYPE.Selection, "ID");
 		Hyperlink.SetParamValueFromSelection("PERIOD_TYPE", D_PERIOD_TYPE.Selection, "ID");
-		Hyperlink.Generate;
+		SafeGenerate;
 	End Sub D_PERIOD_TYPEOnSelectionChange;
 
 	// Энергоснабжение
@@ -699,70 +706,70 @@ Class ANALIZ_TEP_FORM_ON_SHOW: WebForm
 	Begin
 		UpdateOpenDefHlinkFromSelection("ZPHD_DOG", D_ZPHD_DOG.Selection, "ZPHD_DOG");
 		Hyperlink.SetParamValueFromSelection("ZPHD_DOG", D_ZPHD_DOG.Selection, "ZPHD_DOG");
-		Hyperlink.Generate;
+		SafeGenerate;
 	End Sub D_ZPHD_DOGOnSelectionChange;
 
 	Sub D_ZPHD_USL1OnSelectionChange;
 	Begin
 		UpdateOpenDefHlinkFromSelection("ZPHD_USL1", D_ZPHD_USL1.Selection, "CODE");
 		Hyperlink.SetParamValueFromSelection("ZPHD_USL1", D_ZPHD_USL1.Selection, "CODE");
-		Hyperlink.Generate;
+		SafeGenerate;
 	End Sub D_ZPHD_USL1OnSelectionChange;
 
 	Sub D_ZDEBITOROnSelectionChange;
 	Begin
 		UpdateOpenDefHlinkFromSelection("ZDEBITOR", D_ZDEBITOR.Selection, "CODE");
 		Hyperlink.SetParamValueFromSelection("ZDEBITOR", D_ZDEBITOR.Selection, "CODE");
-		Hyperlink.Generate;
+		SafeGenerate;
 	End Sub D_ZDEBITOROnSelectionChange;
 
 	Sub D_ZPH_ESO2OnSelectionChange;
 	Begin
 		UpdateOpenDefHlinkFromSelection("ZPH_ESO2", D_ZPH_ESO2.Selection, "CODE");
 		Hyperlink.SetParamValueFromSelection("ZPH_ESO2", D_ZPH_ESO2.Selection, "CODE");
-		Hyperlink.Generate;
+		SafeGenerate;
 	End Sub D_ZPH_ESO2OnSelectionChange;
 
 	Sub D_ZPHD_SKOnSelectionChange;
 	Begin
 		UpdateOpenDefHlinkFromSelection("ZPHD_SK", D_ZPHD_SK.Selection, "CODE");
 		Hyperlink.SetParamValueFromSelection("ZPHD_SK", D_ZPHD_SK.Selection, "CODE");
-		Hyperlink.Generate;
+		SafeGenerate;
 	End Sub D_ZPHD_SKOnSelectionChange;
 
 	Sub D_UCVOLTLEVLOnSelectionChange;
 	Begin
 		UpdateOpenDefHlinkFromSelection("UCVOLTLEVL", D_UCVOLTLEVL.Selection, "UCVOLTLEVL");
 		Hyperlink.SetParamValueFromSelection("UCVOLTLEVL", D_UCVOLTLEVL.Selection, "UCVOLTLEVL");
-		Hyperlink.Generate;
+		SafeGenerate;
 	End Sub D_UCVOLTLEVLOnSelectionChange;
 
 	Sub D_ZUCVOLTTROnSelectionChange;
 	Begin
 		UpdateOpenDefHlinkFromSelection("ZUCVOLTTR", D_ZUCVOLTTR.Selection, "UCVOLTLEVL");
 		Hyperlink.SetParamValueFromSelection("ZUCVOLTTR", D_ZUCVOLTTR.Selection, "UCVOLTLEVL");
-		Hyperlink.Generate;
+		SafeGenerate;
 	End Sub D_ZUCVOLTTROnSelectionChange;
 
 	Sub D_Z_CL_NAPROnSelectionChange;
 	Begin
 		UpdateOpenDefHlinkFromSelection("Z_CL_NAPR", D_Z_CL_NAPR.Selection, "Z_CL_NAPR");
 		Hyperlink.SetParamValueFromSelection("Z_CL_NAPR", D_Z_CL_NAPR.Selection, "Z_CL_NAPR");
-		Hyperlink.Generate;
+		SafeGenerate;
 	End Sub D_Z_CL_NAPROnSelectionChange;
 
 	Sub D_ZSIU_TYOnSelectionChange;
 	Begin
 		UpdateOpenDefHlinkFromSelection("ZSIU_TY", D_ZSIU_TY.Selection, "ZSIU_TY");
 		Hyperlink.SetParamValueFromSelection("ZSIU_TY", D_ZSIU_TY.Selection, "ZSIU_TY");
-		Hyperlink.Generate;
+		SafeGenerate;
 	End Sub D_ZSIU_TYOnSelectionChange;
 
 	Sub D_ZDOGLINKOnSelectionChange;
 	Begin
 		UpdateOpenDefHlinkFromSelection("ZDOGLINK", D_ZDOGLINK.Selection, "ZDOGLINK");
 		Hyperlink.SetParamValueFromSelection("ZDOGLINK", D_ZDOGLINK.Selection, "ZDOGLINK");
-		Hyperlink.Generate;
+		SafeGenerate;
 	End Sub D_ZDOGLINKOnSelectionChange;
 	
 	Sub TextArea1OnTextChanged;
@@ -1157,64 +1164,64 @@ Class ANALIZ_TEP_FORM_ON_SHOW: WebForm
 	Begin
 		UpdateOpenDefHlinkFromSelection("ZBUR_LU", D_ZBUR_LU.Selection, "CODE");
 		Hyperlink.SetParamValueFromSelection("ZBUR_LU", D_ZBUR_LU.Selection, "CODE");
-		Hyperlink.Generate;
+		SafeGenerate;
 	End Sub D_ZBUR_LUOnSelectionChange;
 
 	Sub D_ZBUR_AREAOnSelectionChange;
 	Begin
 		UpdateOpenDefHlinkFromSelection("ZBUR_AREA", D_ZBUR_AREA.Selection, "ZBUR_AREA");
 		Hyperlink.SetParamValueFromSelection("ZBUR_AREA", D_ZBUR_AREA.Selection, "ZBUR_AREA");
-		Hyperlink.Generate;
+		SafeGenerate;
 	End Sub D_ZBUR_AREAOnSelectionChange;
 
 	Sub D_ZSKV_KUSTOnSelectionChange;
 	Begin
 		UpdateOpenDefHlinkFromSelection("ZSKV_KUST", D_ZSKV_KUST.Selection, "ZSKV_KUST");
 		Hyperlink.SetParamValueFromSelection("ZSKV_KUST", D_ZSKV_KUST.Selection, "ZSKV_KUST");
-		Hyperlink.Generate;
+		SafeGenerate;
 	End Sub D_ZSKV_KUSTOnSelectionChange;
 
 	Sub D_Z_SKV_GEOOnSelectionChange;
 	Begin
 		UpdateOpenDefHlinkFromSelection("Z_SKV_GEO", D_Z_SKV_GEO.Selection, "Z_SKV_GEO");
 		Hyperlink.SetParamValueFromSelection("Z_SKV_GEO", D_Z_SKV_GEO.Selection, "Z_SKV_GEO");
-		Hyperlink.Generate;
+		SafeGenerate;
 	End Sub D_Z_SKV_GEOOnSelectionChange;
 
 	Sub D_ZBUR_PLSTOnSelectionChange;
 	Begin
 		UpdateOpenDefHlinkFromSelection("ZBUR_PLST", D_ZBUR_PLST.Selection, "ZBUR_PLST");
 		Hyperlink.SetParamValueFromSelection("ZBUR_PLST", D_ZBUR_PLST.Selection, "ZBUR_PLST");
-		Hyperlink.Generate;
+		SafeGenerate;
 	End Sub D_ZBUR_PLSTOnSelectionChange;
 
 	Sub D_ZPH_TEHKOnSelectionChange;
 	Begin
 		UpdateOpenDefHlinkFromSelection("ZPH_TEHK", D_ZPH_TEHK.Selection, "CODE");
 		Hyperlink.SetParamValueFromSelection("ZPH_TEHK", D_ZPH_TEHK.Selection, "CODE");
-		Hyperlink.Generate;
+		SafeGenerate;
 	End Sub D_ZPH_TEHKOnSelectionChange;
 
 	Sub D_ZPH_OPLSTOnSelectionChange;
 	Begin
 		UpdateOpenDefHlinkFromSelection("ZPH_OPLST", D_ZPH_OPLST.Selection, "CODE");
 		Hyperlink.SetParamValueFromSelection("ZPH_OPLST", D_ZPH_OPLST.Selection, "CODE");
-		Hyperlink.Generate;
+		SafeGenerate;
 	End Sub D_ZPH_OPLSTOnSelectionChange;
 
 	Sub D_ZBUR_BEGOnSelectionChange;
 	Begin
 		p_zbur_beg := D_ZBUR_BEG.Selection.ToVariant;
-		Hyperlink.SetParamValue(C_PARAM_ZBUR_BEG, p_zbur_beg);
-		Hyperlink.Generate;		
+		SetParamSafe(C_PARAM_ZBUR_BEG, p_zbur_beg);
+		SafeGenerate;		
 		// Нет привязки к параметру
 	End Sub D_ZBUR_BEGOnSelectionChange;
 
 	Sub D_ZBUR_ENDOnSelectionChange;
 	Begin
 		p_zbur_end := D_ZBUR_END.Selection.ToVariant;
-		Hyperlink.SetParamValue(C_PARAM_ZBUR_END, p_zbur_end);
-		Hyperlink.Generate;		
+		SetParamSafe(C_PARAM_ZBUR_END, p_zbur_end);
+		SafeGenerate;		
 		// Нет привязки к параметру
 	End Sub D_ZBUR_ENDOnSelectionChange;
 
@@ -1222,14 +1229,14 @@ Class ANALIZ_TEP_FORM_ON_SHOW: WebForm
 	Begin
 		UpdateOpenDefHlinkFromSelection("ZPILOT", D_ZPILOT.Selection, "CODE");
 		Hyperlink.SetParamValueFromSelection("ZPILOT", D_ZPILOT.Selection, "CODE");
-		Hyperlink.Generate;
+		SafeGenerate;
 	End Sub D_ZPILOTOnSelectionChange;
 
 	Sub D_ZSKV_STOnSelectionChange;
 	Begin
 		UpdateOpenDefHlinkFromSelection("ZSKV_ST", D_ZSKV_ST.Selection, "ZSKV_ST");
 		Hyperlink.SetParamValueFromSelection("ZSKV_ST", D_ZSKV_ST.Selection, "ZSKV_ST");
-		Hyperlink.Generate;
+		SafeGenerate;
 	End Sub D_ZSKV_STOnSelectionChange;
 	
 	//Кап строительство
@@ -1237,21 +1244,21 @@ Class ANALIZ_TEP_FORM_ON_SHOW: WebForm
 	Begin
 		UpdateOpenDefHlinkFromSelection("ZGEN_POD", D_ZGEN_POD.Selection, "CODE");
 		Hyperlink.SetParamValueFromSelection("ZGEN_POD", D_ZGEN_POD.Selection, "CODE");
-		Hyperlink.Generate;
+		SafeGenerate;
 	End Sub D_ZGEN_PODOnSelectionChange;
 
 	Sub D_ZGEN_ZAKOnSelectionChange;
 	Begin
 		UpdateOpenDefHlinkFromSelection("ZGEN_ZAK", D_ZGEN_ZAK.Selection, "CODE");
 		Hyperlink.SetParamValueFromSelection("ZGEN_ZAK", D_ZGEN_ZAK.Selection, "CODE");
-		Hyperlink.Generate;
+		SafeGenerate;
 	End Sub D_ZGEN_ZAKOnSelectionChange;
 
 	Sub D_ZPKR_SUBPOnSelectionChange;
 	Begin
 		p_zpkr_subp := D_ZPKR_SUBP.Selection.ToVariant;
-		Hyperlink.SetParamValue(C_PARAM_ZPKR_SUBP, p_zpkr_subp);
-		Hyperlink.Generate;
+		SetParamSafe(C_PARAM_ZPKR_SUBP, p_zpkr_subp);
+		SafeGenerate;
 		
 		// Нет привязки к параметру
 	End Sub D_ZPKR_SUBPOnSelectionChange;
@@ -1260,7 +1267,7 @@ Class ANALIZ_TEP_FORM_ON_SHOW: WebForm
 	Begin
 		UpdateOpenDefHlinkFromSelection("ZSHIFR", D_ZSHIFR.Selection, "ZSHIFR");
 		Hyperlink.SetParamValueFromSelection("ZSHIFR", D_ZSHIFR.Selection, "ZSHIFR");
-		Hyperlink.Generate;
+		SafeGenerate;
 	End Sub D_ZSHIFROnSelectionChange;
 	
 	//Экология
@@ -1268,21 +1275,21 @@ Class ANALIZ_TEP_FORM_ON_SHOW: WebForm
 	Begin
 		UpdateOpenDefHlinkFromSelection("ZOBJEM", D_ZOBJEM.Selection, "CODE");
 		Hyperlink.SetParamValueFromSelection("ZOBJEM", D_ZOBJEM.Selection, "CODE");
-		Hyperlink.Generate;
+		SafeGenerate;
 	End Sub D_ZOBJEMOnSelectionChange;
 
 	Sub D_ZPHD_SROnSelectionChange;
 	Begin
 		UpdateOpenDefHlinkFromSelection("ZPHD_SR", D_ZPHD_SR.Selection, "ZPHD_SR");
 		Hyperlink.SetParamValueFromSelection("ZPHD_SR", D_ZPHD_SR.Selection, "ZPHD_SR");
-		Hyperlink.Generate;
+		SafeGenerate;
 	End Sub D_ZPHD_SROnSelectionChange;
 
 	Sub D_ZPHD_GRSROnSelectionChange;
 	Begin
 		UpdateOpenDefHlinkFromSelection("ZPHD_GRSR", D_ZPHD_GRSR.Selection, "ZPHD_GRSR");
 		Hyperlink.SetParamValueFromSelection("ZPHD_GRSR", D_ZPHD_GRSR.Selection, "ZPHD_GRSR");
-		Hyperlink.Generate;
+		SafeGenerate;
 	End Sub D_ZPHD_GRSROnSelectionChange;
 
 	//Прочие аналитики
@@ -1290,14 +1297,14 @@ Class ANALIZ_TEP_FORM_ON_SHOW: WebForm
 	Begin	
 		UpdateOpenDefHlinkFromSelection("ZGAZ_TYPE", D_ZGAZ_TYPE.Selection, "CODE");
 		Hyperlink.SetParamValueFromSelection("ZGAZ_TYPE", D_ZGAZ_TYPE.Selection, "CODE");
-		Hyperlink.Generate;
+		SafeGenerate;
 	End Sub D_ZGAZ_TYPEOnSelectionChange;
 
 	Sub D_ZAVIATYPEOnSelectionChange;
 	Begin
 		UpdateOpenDefHlinkFromSelection("ZAVIATYPE", D_ZAVIATYPE.Selection, "ZAVIATYPE");
 		Hyperlink.SetParamValueFromSelection("ZAVIATYPE", D_ZAVIATYPE.Selection, "ZAVIATYPE");
-		Hyperlink.Generate;
+		SafeGenerate;
 	End Sub D_ZAVIATYPEOnSelectionChange;
 
 	Sub D_ZPHD_NCHOnSelectionChange;
@@ -1316,7 +1323,7 @@ Class ANALIZ_TEP_FORM_ON_SHOW: WebForm
 	Begin
 		UpdateOpenDefHlinkFromSelection("ZPHD_SPR", D_ZPHD_SPR.Selection, "ZPHD_SPR");
 		Hyperlink.SetParamValueFromSelection("ZPHD_SPR", D_ZPHD_SPR.Selection, "ZPHD_SPR");
-		Hyperlink.Generate;
+		SafeGenerate;
 	End Sub D_ZPHD_SPROnSelectionChange;
 
 	Sub I_ZINDTXT1OnTextChanged;
@@ -1519,6 +1526,40 @@ Class ANALIZ_TEP_FORM_ON_SHOW: WebForm
 		_codeIds.Add("PERIOD_TYPE", "PERIOD_TY");
 	End Sub InitOutputFieldIds;
 	
+	/// <summary>Показ ошибки на форме: TextArea1 виден пользователю, исключение не всплывает</summary>
+	Sub showError(what: String; E: Exception);
+	Begin
+		_lastError := what + ": " + E.Message;
+		If IsNull(TextArea1) Then Return; End If;
+		TextArea1.Text := _lastError;
+	End Sub showError;
+	
+	/// <summary>
+	/// 	Безопасная генерация гиперссылки. COpenHyperlink.Generate обращается к целевому отчёту
+	/// 	(MbExt.ItemById с strict = True) и к ячейке листа отчёта — при неверном идентификаторе
+	/// 	отчёта или отсутствующем листе это исключение. Раньше оно всплывало из onShow и ломало
+	/// 	форму, теперь текст ошибки остаётся в TextArea1, а форма продолжает работать.
+	/// </summary>
+	Sub SafeGenerate;
+	Begin
+		Try
+			Hyperlink.Generate;
+		Except On E: Exception Do
+			showError("Не удалось сформировать ссылку", E);
+		End Try;
+	End Sub SafeGenerate;
+	
+	/// <summary>Запись параметра гиперссылки с проверкой менеджера параметров</summary>
+	Sub SetParamSafe(paramId: String; value: Variant);
+	Begin
+		Try
+			If IsNull(Hyperlink.ParameterManager) Then Return; End If;
+			Hyperlink.SetParamValue(paramId, value);
+		Except On E: Exception Do
+			showError("Не удалось записать параметр " + paramId, E);
+		End Try;
+	End Sub SetParamSafe;
+	
 	/// <summary>
 	/// 	Пересобирает P_FIELD_LIST по состояниям чек-боксов и генерирует гиперссылку.
 	/// 	Единственная точка изменения списка полей: чек-боксы + таблица InitOutputFieldIds.
@@ -1617,10 +1658,10 @@ Class ANALIZ_TEP_FORM_ON_SHOW: WebForm
 		// CB_DISPLAY_CODE_ANALYTOnChange), раскомментировать строку:
 		// If CB_DISPLAY_CODE_ANALYT.Checked Then setParamOrRemove(C_PARAM_P_ANALYTIC_SET, codeFieldsText); End If;
 		
-		Hyperlink.SetParamValue("P_FIELD_LIST", fieldList.Text(", "));
+		SetParamSafe("P_FIELD_LIST", fieldList.Text(", "));
 		
-		Hyperlink.Generate;
-		If Not IsNull(TextArea1) Then TextArea1.Text := Hyperlink.Action; End If;
+		SafeGenerate;
+		If (Not IsNull(TextArea1)) And _lastError.IsEmpty Then TextArea1.Text := Hyperlink.Action; End If;
 	End Sub RefreshFieldList;
 	
 	/// <summary>Идентификатор поля отчёта по имени чек-бокса (пусто — контрол не размечен)</summary>
@@ -1759,7 +1800,7 @@ Class ANALIZ_TEP_FORM_ON_SHOW: WebForm
 		
 		setComboSelectionByAttribute(D_PLANT, C_PARAM_PLANT, "CODE", spCode);
 		D_PLANT.Enabled := False;
-		Hyperlink.Generate;
+		SafeGenerate;
 	End Sub applyPlantAccessRights;
 	
 	Function isPlantPrivileged: Boolean;

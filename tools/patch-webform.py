@@ -154,6 +154,8 @@ src = sub_once(
     r'(\t_hlink: ITabHyperlink;\n)',
     r'''\1	
 	// --- «Поля для вывода»: таблицы соответствия «имя чек-бокса -> идентификатор поля отчёта» ---
+	// Текст последней ошибки (диагностика: показывается в TextArea1)	
+	_lastError: String;
 	_fieldIds: IHashtable;
 	_codeIds: IHashtable;
 ''',
@@ -234,13 +236,18 @@ src = sub_once(
     r'\tSub ANALIZ_TEP_FORM_ON_SHOW;\n\tVar\s*\n\t\topenReportTab: ITabSheet;\n\t\toptionReport: IPrxReport;\n\t\tMObj:IMetabaseObject;\t\t\t\n\tBegin\n\t\t_hlink := InitializeHlinkOpenObject\(ReportBoxOk\.Report, "  Ок  ", C_ANALYZ_TEP_REP_ID\);\n\t\t\n\t\tsetDefaultDimensionValue;',
     '''\tSub ANALIZ_TEP_FORM_ON_SHOW;
 \tBegin
-\t\t_hlink := InitializeHlinkOpenObject(ReportBoxOk.Report, "  Ок  ", C_ANALYZ_TEP_REP_ID);
-\t\t// Создаёт COpenHyperlink и менеджер параметров (геттер свойства Hyperlink)
-\t\t_AnalyzTepHyperlink := Hyperlink;
-\t\t// Значения по умолчанию, набор полей вывода и генерация ссылки
-\t\tsetDefaultDimensionValue;
-\t\t// Ограничение выбора СП согласно полномочиям (ТТ, лист «Селекционный экран»)
-\t\tapplyPlantAccessRights;''',
+\t\tTry
+\t\t\t_hlink := InitializeHlinkOpenObject(ReportBoxOk.Report, "  Ок  ", C_ANALYZ_TEP_REP_ID);
+\t\t\t// Создаёт COpenHyperlink и менеджер параметров (геттер свойства Hyperlink)
+\t\t\t_AnalyzTepHyperlink := Hyperlink;
+\t\t\t// Значения по умолчанию, набор полей вывода и генерация ссылки
+\t\t\tsetDefaultDimensionValue;
+\t\t\t// Ограничение выбора СП согласно полномочиям (ТТ, лист «Селекционный экран»)
+\t\t\tapplyPlantAccessRights;
+\t\tExcept On E: Exception Do
+\t\t\t// Ошибка инициализации не должна ломать форму: текст ошибки остаётся в TextArea1
+\t\t\tshowError("Ошибка инициализации формы", E);
+\t\tEnd Try;''',
     src, 'onShow (начало)')
 
 # ---------------------------------------------------------------- 7. UpdateOpenDefHlinkFromSelection
@@ -300,7 +307,7 @@ src = sub_once(
 # ---------------------------------------------------------------- 11. прямые вызовы _AnalyzTepHyperlink
 for macro, var in [('ZLIB_INFS', 'p_zlib_infs'), ('ZBUR_BEG', 'p_zbur_beg'), ('ZBUR_END', 'p_zbur_end'), ('ZPKR_SUBP', 'p_zpkr_subp')]:
     old = '_AnalyzTepHyperlink.SetParamValue(C_PARAM_%s, %s);' % (macro, var)
-    new = 'Hyperlink.SetParamValue(C_PARAM_%s, %s);\n\t\tHyperlink.Generate;' % (macro, var)
+    new = 'SetParamSafe(C_PARAM_%s, %s);\n\t\tSafeGenerate;' % (macro, var)
     if old not in src:
         raise SystemExit('НЕ НАЙДЕНО (прямой вызов %s)' % macro)
     src = src.replace(old, new)
@@ -380,6 +387,40 @@ __FIELDS__
 		_codeIds.Add("PERIOD_TYPE", "PERIOD_TY");
 	End Sub InitOutputFieldIds;
 	
+	/// <summary>Показ ошибки на форме: TextArea1 виден пользователю, исключение не всплывает</summary>
+	Sub showError(what: String; E: Exception);
+	Begin
+		_lastError := what + ": " + E.Message;
+		If IsNull(TextArea1) Then Return; End If;
+		TextArea1.Text := _lastError;
+	End Sub showError;
+	
+	/// <summary>
+	/// 	Безопасная генерация гиперссылки. COpenHyperlink.Generate обращается к целевому отчёту
+	/// 	(MbExt.ItemById с strict = True) и к ячейке листа отчёта — при неверном идентификаторе
+	/// 	отчёта или отсутствующем листе это исключение. Раньше оно всплывало из onShow и ломало
+	/// 	форму, теперь текст ошибки остаётся в TextArea1, а форма продолжает работать.
+	/// </summary>
+	Sub SafeGenerate;
+	Begin
+		Try
+			Hyperlink.Generate;
+		Except On E: Exception Do
+			showError("Не удалось сформировать ссылку", E);
+		End Try;
+	End Sub SafeGenerate;
+	
+	/// <summary>Запись параметра гиперссылки с проверкой менеджера параметров</summary>
+	Sub SetParamSafe(paramId: String; value: Variant);
+	Begin
+		Try
+			If IsNull(Hyperlink.ParameterManager) Then Return; End If;
+			Hyperlink.SetParamValue(paramId, value);
+		Except On E: Exception Do
+			showError("Не удалось записать параметр " + paramId, E);
+		End Try;
+	End Sub SetParamSafe;
+	
 	/// <summary>
 	/// 	Пересобирает P_FIELD_LIST по состояниям чек-боксов и генерирует гиперссылку.
 	/// 	Единственная точка изменения списка полей: чек-боксы + таблица InitOutputFieldIds.
@@ -398,10 +439,10 @@ __COLLECT__
 		
 __MODES__
 		
-		Hyperlink.SetParamValue("P_FIELD_LIST", fieldList.Text(", "));
+		SetParamSafe("P_FIELD_LIST", fieldList.Text(", "));
 		
-		Hyperlink.Generate;
-		If Not IsNull(TextArea1) Then TextArea1.Text := Hyperlink.Action; End If;
+		SafeGenerate;
+		If (Not IsNull(TextArea1)) And _lastError.IsEmpty Then TextArea1.Text := Hyperlink.Action; End If;
 	End Sub RefreshFieldList;
 	
 	/// <summary>Идентификатор поля отчёта по имени чек-бокса (пусто — контрол не размечен)</summary>
@@ -531,7 +572,7 @@ __DEFAULTS__
 		
 		setComboSelectionByAttribute(D_PLANT, C_PARAM_PLANT, "CODE", spCode);
 		D_PLANT.Enabled := False;
-		Hyperlink.Generate;
+		SafeGenerate;
 	End Sub applyPlantAccessRights;
 	
 	Function isPlantPrivileged: Boolean;
@@ -553,6 +594,10 @@ __DEFAULTS__
 		Return False;
 	End Function isPlantPrivileged;
 '''.replace('__FIELDS__', pairs_text).replace('__COLLECT__', collect_text).replace('__DEFAULTS__', defaults_text).replace('__MODES__', modes_text).replace('__MODESVAR__', modes_var)
+
+# Все вызовы Hyperlink.Generate в исходных обработчиках идут через безопасную обёртку:
+# при ошибке (например, не найден целевой отчёт) форма продолжает работать, текст — в TextArea1.
+src = src.replace('Hyperlink.Generate;', 'SafeGenerate;')
 
 src = sub_once(r'(\nEnd Class ANALIZ_TEP_FORM_ON_SHOW;)',
                '\n' + '\n'.join(new_subs) + '\n' + HELPERS + r'\1', src, 'вставка обработчиков и справки')

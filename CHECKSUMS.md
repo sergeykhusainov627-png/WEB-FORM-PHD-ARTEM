@@ -1,6 +1,6 @@
 # Контрольные суммы файлов (снимок для бэкапа)
 
-Снято: 2026-10-06 17:53, локальная машина. Полные SHA-256: `Get-FileHash <файл> -Algorithm SHA256`.
+Снято: 2026-10-06 18:20, локальная машина. Полные SHA-256: `Get-FileHash <файл> -Algorithm SHA256`.
 
 | Файл | Размер | SHA-256 (16 симв.) | Изменён |
 |---|---:|---|---|
@@ -8,9 +8,9 @@
 | `.gitattributes` | 0.8 КБ | `c7cffcbb00a3a905…` | 2026-10-06 12:19 |
 | `.gitignore` | 0.2 КБ | `c6a2e7a5bff6dc76…` | 2026-10-06 12:19 |
 | `docs/ANALIZ-TEP-webform.md` | 48.1 КБ | `785c0a805dec2a3a…` | 2026-10-06 12:16 |
-| `docs/CHANGES-2026-10-06.md` | 21.8 КБ | `241024dfcd21012c…` | 2026-10-06 17:53 |
-| `docs/checks/lint-module.txt` | 2.7 КБ | `2bef8e688e471d95…` | 2026-10-06 17:53 |
-| `docs/checks/structure-check.txt` | 4.9 КБ | `ff42beb45d66554e…` | 2026-10-06 17:53 |
+| `docs/CHANGES-2026-10-06.md` | 24.3 КБ | `435bae9773f31fbb…` | 2026-10-06 18:20 |
+| `docs/checks/lint-module.txt` | 2.9 КБ | `8fb0e892cc206332…` | 2026-10-06 18:20 |
+| `docs/checks/structure-check.txt` | 5 КБ | `707c84094c6127c7…` | 2026-10-06 18:20 |
 | `docs/CONTROLS-TO-ADD.md` | 6.9 КБ | `397d4f2e5a09db1c…` | 2026-10-06 17:53 |
 | `docs/parameter-ids-reference.md` | 5.7 КБ | `6e82bff238646d64…` | 2026-10-06 17:45 |
 | `docs/PEFX-EXPORT-FINDINGS.md` | 17 КБ | `5f0f9728713a5762…` | 2026-10-06 12:08 |
@@ -37,14 +37,14 @@
 | `Fore/stand/DimensionExt.fore` | 11 КБ | `ab785c36c97012ea…` | 2026-10-06 12:04 |
 | `Fore/stand/TabExt.fore` | 5.3 КБ | `74743f09fbbb169c…` | 2026-10-06 12:04 |
 | `Fore/stand/WebFormsExt.fore` | 23.9 КБ | `0902ab5e5cea0f20…` | 2026-10-06 12:04 |
-| `Fore/WFRM_PHD_ANALISIS_TEP_COPY_FOR_DEV.fore` | 66.5 КБ | `da7847bcfcac9736…` | 2026-10-06 17:52 |
+| `Fore/WFRM_PHD_ANALISIS_TEP_COPY_FOR_DEV.fore` | 68.2 КБ | `c97db1f8f9606eb6…` | 2026-10-06 18:19 |
 | `README.md` | 9.5 КБ | `41f130a345faa3aa…` | 2026-10-06 17:53 |
 | `tools/backup-offline.ps1` | 3 КБ | `afcb2b057449cfad…` | 2026-10-06 12:25 |
 | `tools/check-webform.py` | 14.4 КБ | `185fa797cc86e86d…` | 2026-10-06 17:52 |
 | `tools/cleanup-unused.py` | 6.2 КБ | `098fda82974003c9…` | 2026-10-06 17:44 |
 | `tools/form-inventory.js` | 8.1 КБ | `5e6aae6e6aaa4ec1…` | 2026-10-06 11:45 |
 | `tools/git-backup.ps1` | 1.9 КБ | `f23fd022be917382…` | 2026-10-06 12:21 |
-| `tools/patch-webform.py` | 33.5 КБ | `18c7e0ecb6443aa3…` | 2026-10-06 17:52 |
+| `tools/patch-webform.py` | 35.8 КБ | `1b1a49447c306d43…` | 2026-10-06 18:19 |
 | `tools/pefx-extract.js` | 5.5 КБ | `7595028d75360825…` | 2026-10-06 12:04 |
 | `tools/pefx-scan.js` | 3.5 КБ | `9873bc3e768b17d3…` | 2026-10-06 12:05 |
 | `tools/tt-dump.py` | 2.3 КБ | `237c5f16fcbd4f3e…` | 2026-10-06 12:13 |
