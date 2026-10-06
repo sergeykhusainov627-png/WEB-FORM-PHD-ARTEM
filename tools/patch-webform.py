@@ -280,13 +280,16 @@ src = sub_once(
 src = sub_once(
     r'\tSub addDefaultFieldsToStringList;\n\tBegin\n\t\tfieldList\.Add\("CALYEAR,PLANT,ZLIB_INDC"\);\n\t\t//fieldList\.Add\("PLANT"\);\n\t\t//fieldList\.Add\("ZLIB_INDC"\);\n\tEnd Sub addDefaultFieldsToStringList;',
     '''\t/// <summary>
-\t/// 	Полей, выводимых без чек-бокса, нет: в P_FIELD_LIST попадают ТОЛЬКО отмеченные поля,
-\t/// 	поэтому если чек-бокс не отмечен — в отчёте не будет ни значения, ни колонки.
-\t/// 	Если когда-нибудь понадобится выводить поле, для которого в форме нет чек-бокса,
-\t/// 	добавьте здесь строку вида:  addFieldToList("CALYEAR");   // Год
+\t/// 	Поля, выводимые без чек-бокса. Сейчас это только «Год»: контрола CB_CALYEAR в форме нет,
+\t/// 	а в ТТ «Год» — поле вывода «по умолчанию» (лист «СЭ - поля для вывода»), поэтому он
+\t/// 	всегда попадает в P_FIELD_LIST. Остальные поля попадают туда ТОЛЬКО если их чек-бокс отмечен:
+\t/// 	не отмечен — поля (и колонки) в отчёте нет.
+\t/// 	Если для «Года» появится чек-бокс — убрать строку ниже, завести поле в InitOutputFieldIds
+\t/// 	и уточнить идентификатор: CALYEAR (как в исходном модуле) или YEAR (как в ТТ).
 \t/// </summary>
 \tSub addFieldsWithoutCheckBox;
 \tBegin
+\t\taddFieldToList("CALYEAR");   // Год
 \tEnd Sub addFieldsWithoutCheckBox;''',
     src, 'addDefaultFieldsToStringList')
 
