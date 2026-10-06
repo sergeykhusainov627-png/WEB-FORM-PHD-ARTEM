@@ -1,6 +1,6 @@
 # Контрольные суммы файлов (снимок для бэкапа)
 
-Снято: 2026-10-06 18:20, локальная машина. Полные SHA-256: `Get-FileHash <файл> -Algorithm SHA256`.
+Снято: 2026-10-06 18:23, локальная машина. Полные SHA-256: `Get-FileHash <файл> -Algorithm SHA256`.
 
 | Файл | Размер | SHA-256 (16 симв.) | Изменён |
 |---|---:|---|---|
@@ -11,9 +11,10 @@
 | `docs/CHANGES-2026-10-06.md` | 24.3 КБ | `435bae9773f31fbb…` | 2026-10-06 18:20 |
 | `docs/checks/lint-module.txt` | 2.9 КБ | `8fb0e892cc206332…` | 2026-10-06 18:20 |
 | `docs/checks/structure-check.txt` | 5 КБ | `707c84094c6127c7…` | 2026-10-06 18:20 |
-| `docs/CONTROLS-TO-ADD.md` | 6.9 КБ | `397d4f2e5a09db1c…` | 2026-10-06 17:53 |
+| `docs/CONTROLS-TO-ADD.md` | 7.3 КБ | `36c952506333e55e…` | 2026-10-06 18:23 |
 | `docs/parameter-ids-reference.md` | 5.7 КБ | `6e82bff238646d64…` | 2026-10-06 17:45 |
 | `docs/PEFX-EXPORT-FINDINGS.md` | 17 КБ | `5f0f9728713a5762…` | 2026-10-06 12:08 |
+| `docs/REPORT-COLUMN-FILTER.md` | 6.2 КБ | `9777770554c25d28…` | 2026-10-06 18:23 |
 | `docs/research/fore-stand-helpers.md` | 57.9 КБ | `15dd629b62420d83…` | 2026-10-06 11:50 |
 | `docs/research/webforms-api-digest.md` | 59.7 КБ | `e3c18903745a811f…` | 2026-10-06 11:50 |
 | `docs/tt/form-inventory.txt` | 17.2 КБ | `3c00469de7e87257…` | 2026-10-06 11:45 |
@@ -38,7 +39,7 @@
 | `Fore/stand/TabExt.fore` | 5.3 КБ | `74743f09fbbb169c…` | 2026-10-06 12:04 |
 | `Fore/stand/WebFormsExt.fore` | 23.9 КБ | `0902ab5e5cea0f20…` | 2026-10-06 12:04 |
 | `Fore/WFRM_PHD_ANALISIS_TEP_COPY_FOR_DEV.fore` | 68.2 КБ | `c97db1f8f9606eb6…` | 2026-10-06 18:19 |
-| `README.md` | 9.5 КБ | `41f130a345faa3aa…` | 2026-10-06 17:53 |
+| `README.md` | 9.7 КБ | `e867a18f4351df3f…` | 2026-10-06 18:23 |
 | `tools/backup-offline.ps1` | 3 КБ | `afcb2b057449cfad…` | 2026-10-06 12:25 |
 | `tools/check-webform.py` | 14.4 КБ | `185fa797cc86e86d…` | 2026-10-06 17:52 |
 | `tools/cleanup-unused.py` | 6.2 КБ | `098fda82974003c9…` | 2026-10-06 17:44 |
