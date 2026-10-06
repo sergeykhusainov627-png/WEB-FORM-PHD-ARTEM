@@ -1449,16 +1449,15 @@ Class ANALIZ_TEP_FORM_ON_SHOW: WebForm
 	End Sub fillFieldListByStatusFlag;
 	
 	/// <summary>
-	/// 	Поля, которые выводятся всегда (ТТ, лист «СЭ - поля для вывода»: «установлен по умолчанию»).
-	/// 	Каждое поле добавляется отдельным элементом — иначе снятие чек-бокса не убирает его из списка.
+	/// 	Поля, для которых в форме НЕТ чек-бокса, — их вывод на СЭ не отключается.
+	/// 	Сейчас это только «Год»: контрола CB_CALYEAR в форме нет. Остальные поля попадают
+	/// 	в P_FIELD_LIST ТОЛЬКО если их чек-бокс отмечен (снимаешь флажок — поле не выводится).
+	/// 	Если для «Года» появится чек-бокс — убрать строку ниже и завести его в InitOutputFieldIds.
 	/// </summary>
-	Sub addDefaultFieldsToStringList;
+	Sub addFieldsWithoutCheckBox;
 	Begin
-		addFieldToList("CALYEAR");   // Год
-		addFieldToList("PLANT");     // СП
-		addFieldToList("ZLIB_INDC"); // ТЭП
-		addFieldToList("ACT_UNIT");  // Ед.измерения
-	End Sub addDefaultFieldsToStringList;
+		addFieldToList("CALYEAR");   // Год — чек-бокса в форме нет
+	End Sub addFieldsWithoutCheckBox;
 
 	Sub CbHigherIndOnChange;
 	Begin
@@ -1653,7 +1652,7 @@ Class ANALIZ_TEP_FORM_ON_SHOW: WebForm
 	Begin
 		If IsNull(fieldList) Then fieldList := New StringList.Create; End If;
 		fieldList.Clear;
-		addDefaultFieldsToStringList;
+		addFieldsWithoutCheckBox;
 		
 		CollectIfChecked(CB_ACTTYPE, "CB_ACTTYPE");
 		CollectIfChecked(CB_ACT_UNIT, "CB_ACT_UNIT");
@@ -1841,6 +1840,11 @@ Class ANALIZ_TEP_FORM_ON_SHOW: WebForm
 	/// <summary>Состояния чек-боксов «Поля для вывода» по умолчанию (ТТ, лист «СЭ - поля для вывода»)</summary>
 	Sub initOutputDefaults;
 	Begin
+		// Основные данные: СП, ТЭП, Ед.измерения (Год выводится всегда — чек-бокса в форме нет)
+		SetCheckBoxIfExists(CB_PLANT, True);
+		SetCheckBoxIfExists(CB_ZLIB_INDC, True);
+		SetCheckBoxIfExists(CB_ACT_UNIT, True);
+		// Значения ТЭП: кварталы, полугодие, 9 месяцев и год
 		SetCheckBoxIfExists(CB_FIRST_QUARTER, True);
 		SetCheckBoxIfExists(CB_SECOND_QUARTER, True);
 		SetCheckBoxIfExists(CB_SIX_MONTH, True);

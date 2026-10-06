@@ -132,6 +132,32 @@ not_collected = sorted(c for c in field_keys if c not in [c for c, _ in collect]
 for c in not_collected:
     problems.append('чек-бокс %s размечен, но не собирается в RefreshFieldList' % c)
 
+# --- 5б. поля без чек-бокса: добавлять безусловно можно только те, у которых контрола нет ---
+NO_CB_FIELDS = {'CALYEAR'}          # «Год» — чек-бокса CB_CALYEAR в форме нет
+body, in_sub = [], False
+for i, l in enumerate(lines, 1):
+    if not live[i - 1]:
+        continue
+    if re.match(r'^\tSub addFieldsWithoutCheckBox;', l):
+        in_sub = True
+        continue
+    if in_sub and re.match(r'^\tEnd Sub addFieldsWithoutCheckBox;', l):
+        in_sub = False
+        continue
+    if in_sub:
+        body.append((i, l))
+if not body:
+    problems.append('не найден метод addFieldsWithoutCheckBox — безусловные поля не отслеживаются')
+for i, l in body:
+    for f in re.findall(r'addFieldToList\("([^"]+)"\)', l):
+        if f not in NO_CB_FIELDS:
+            problems.append('стр.%d: поле %s добавляется в P_FIELD_LIST безусловно, хотя у него есть чек-бокс' % (i, f))
+for i, l in enumerate(lines, 1):
+    if not live[i - 1] or re.match(r'^\t*(Sub|End Sub|//)', l.strip()):
+        continue
+    if 'addFieldToList("' in l and not any(i == j for j, _ in body):
+        problems.append('стр.%d: литеральное добавление поля вне addFieldsWithoutCheckBox — вывод должен зависеть от чек-бокса' % i)
+
 # --- 6. покрытие чек-боксов идентификаторами ---
 checkboxes = [c for c, t in controls.items() if t == 'WebCheckBox']
 mapped = set(field_keys)

@@ -200,20 +200,19 @@ src = sub_once(
 ''',
     src, 'удаление UpdateOpenDefHlink')
 
-# ---------------------------------------------------------------- 9. addDefaultFieldsToStringList
+# ---------------------------------------------------------------- 9. поля без чек-бокса
 src = sub_once(
     r'\tSub addDefaultFieldsToStringList;\n\tBegin\n\t\tfieldList\.Add\("CALYEAR,PLANT,ZLIB_INDC"\);\n\t\t//fieldList\.Add\("PLANT"\);\n\t\t//fieldList\.Add\("ZLIB_INDC"\);\n\tEnd Sub addDefaultFieldsToStringList;',
     '''\t/// <summary>
-\t/// 	Поля, которые выводятся всегда (ТТ, лист «СЭ - поля для вывода»: «установлен по умолчанию»).
-\t/// 	Каждое поле добавляется отдельным элементом — иначе снятие чек-бокса не убирает его из списка.
+\t/// 	Поля, для которых в форме НЕТ чек-бокса, — их вывод на СЭ не отключается.
+\t/// 	Сейчас это только «Год»: контрола CB_CALYEAR в форме нет. Остальные поля попадают
+\t/// 	в P_FIELD_LIST ТОЛЬКО если их чек-бокс отмечен (снимаешь флажок — поле не выводится).
+\t/// 	Если для «Года» появится чек-бокс — убрать строку ниже и завести его в InitOutputFieldIds.
 \t/// </summary>
-\tSub addDefaultFieldsToStringList;
+\tSub addFieldsWithoutCheckBox;
 \tBegin
-\t\taddFieldToList("CALYEAR");   // Год
-\t\taddFieldToList("PLANT");     // СП
-\t\taddFieldToList("ZLIB_INDC"); // ТЭП
-\t\taddFieldToList("ACT_UNIT");  // Ед.измерения
-\tEnd Sub addDefaultFieldsToStringList;''',
+\t\taddFieldToList("CALYEAR");   // Год — чек-бокса в форме нет
+\tEnd Sub addFieldsWithoutCheckBox;''',
     src, 'addDefaultFieldsToStringList')
 
 # ---------------------------------------------------------------- 10. fillFieldListByStatusFlag
@@ -320,7 +319,7 @@ __FIELDS__
 	Begin
 		If IsNull(fieldList) Then fieldList := New StringList.Create; End If;
 		fieldList.Clear;
-		addDefaultFieldsToStringList;
+		addFieldsWithoutCheckBox;
 		
 __COLLECT__
 		
@@ -421,6 +420,11 @@ __COLLECT__
 	/// <summary>Состояния чек-боксов «Поля для вывода» по умолчанию (ТТ, лист «СЭ - поля для вывода»)</summary>
 	Sub initOutputDefaults;
 	Begin
+		// Основные данные: СП, ТЭП, Ед.измерения (Год выводится всегда — чек-бокса в форме нет)
+		SetCheckBoxIfExists(CB_PLANT, True);
+		SetCheckBoxIfExists(CB_ZLIB_INDC, True);
+		SetCheckBoxIfExists(CB_ACT_UNIT, True);
+		// Значения ТЭП: кварталы, полугодие, 9 месяцев и год
 		SetCheckBoxIfExists(CB_FIRST_QUARTER, True);
 		SetCheckBoxIfExists(CB_SECOND_QUARTER, True);
 		SetCheckBoxIfExists(CB_SIX_MONTH, True);
