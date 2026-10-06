@@ -132,9 +132,20 @@ not_collected = sorted(c for c in field_keys if c not in [c for c, _ in collect]
 for c in not_collected:
     problems.append('чек-бокс %s размечен, но не собирается в RefreshFieldList' % c)
 
-# --- 5б. поля без чек-бокса: добавлять безусловно можно только те, у которых контрола нет ---
-NO_CB_FIELDS = {'CALYEAR'}          # «Год» — чек-бокса CB_CALYEAR в форме нет
-body, in_sub = [], False
+# --- 5б. поля, выводимые без чек-бокса (только те, у которых нет контрола) ---
+const_cb = re.search(r'Const C_FIELDS_WITHOUT_CHECKBOX\s*=\s*"([^"]*)"', text)
+if not const_cb:
+    problems.append('не найдена константа C_FIELDS_WITHOUT_CHECKBOX — безусловные поля не отслеживаются')
+else:
+    listed = [x.strip() for x in const_cb.group(1).split(',') if x.strip()]
+    for f in listed:
+        if f in field_ids:
+            problems.append('C_FIELDS_WITHOUT_CHECKBOX: поле %s управляется чек-боксом — безусловный вывод запрещён' % f)
+    notes.append('полей, выводимых без чек-бокса: %d%s' % (
+        len(listed), (' (' + ', '.join(listed) + ')') if listed else ' — вывод строго по чек-боксам'))
+
+# литеральные добавления полей допустимы только внутри addFieldsWithoutCheckBox (и там их нет)
+body_lines, in_sub = set(), False
 for i, l in enumerate(lines, 1):
     if not live[i - 1]:
         continue
@@ -145,18 +156,12 @@ for i, l in enumerate(lines, 1):
         in_sub = False
         continue
     if in_sub:
-        body.append((i, l))
-if not body:
-    problems.append('не найден метод addFieldsWithoutCheckBox — безусловные поля не отслеживаются')
-for i, l in body:
-    for f in re.findall(r'addFieldToList\("([^"]+)"\)', l):
-        if f not in NO_CB_FIELDS:
-            problems.append('стр.%d: поле %s добавляется в P_FIELD_LIST безусловно, хотя у него есть чек-бокс' % (i, f))
+        body_lines.add(i)
 for i, l in enumerate(lines, 1):
-    if not live[i - 1] or re.match(r'^\t*(Sub|End Sub|//)', l.strip()):
+    if not live[i - 1] or i in body_lines:
         continue
-    if 'addFieldToList("' in l and not any(i == j for j, _ in body):
-        problems.append('стр.%d: литеральное добавление поля вне addFieldsWithoutCheckBox — вывод должен зависеть от чек-бокса' % i)
+    if re.search(r'addFieldToList\("\s*[A-Za-z]', l):
+        problems.append('стр.%d: поле добавляется в P_FIELD_LIST безусловно — вывод должен зависеть от чек-бокса' % i)
 
 # --- 6. покрытие чек-боксов идентификаторами ---
 checkboxes = [c for c, t in controls.items() if t == 'WebCheckBox']

@@ -320,6 +320,12 @@ Class ANALIZ_TEP_FORM_ON_SHOW: WebForm
 	Const C_ACCESS_SP_GROUP_PREFIX = "PHD_CURATOR_";
 	// Суффикс идентификатора поля статуса для режима «Выводить информацию по статусам»
 	Const C_STATUS_FIELD_SUFFIX = "_STAT";
+	// Отмечать ли чек-боксы «Поля для вывода» по умолчанию (ТТ: Год, СП, ТЭП, Ед.измерения,
+	// I кв., II кв., 6 мес., III кв., 9 мес., IV кв., Год). False — вывод только по выбору пользователя.
+	Const C_APPLY_DEFAULT_CHECKED = True;
+	// Поля, выводимые БЕЗ чек-бокса (через запятую, например "CALYEAR"). Пусто = в отчёт попадают
+	// только отмеченные поля: не отметил — колонки в отчёте нет.
+	Const C_FIELDS_WITHOUT_CHECKBOX = "";
 	
 	_AnalyzTepHyperlink: COpenHyperlink; // CUrlHyperlink
 	_hlink: ITabHyperlink;
@@ -1449,14 +1455,20 @@ Class ANALIZ_TEP_FORM_ON_SHOW: WebForm
 	End Sub fillFieldListByStatusFlag;
 	
 	/// <summary>
-	/// 	Поля, для которых в форме НЕТ чек-бокса, — их вывод на СЭ не отключается.
-	/// 	Сейчас это только «Год»: контрола CB_CALYEAR в форме нет. Остальные поля попадают
-	/// 	в P_FIELD_LIST ТОЛЬКО если их чек-бокс отмечен (снимаешь флажок — поле не выводится).
-	/// 	Если для «Года» появится чек-бокс — убрать строку ниже и завести его в InitOutputFieldIds.
+	/// 	Поля, выводимые без чек-бокса (константа C_FIELDS_WITHOUT_CHECKBOX).
+	/// 	Пусто (по умолчанию) — в P_FIELD_LIST попадают ТОЛЬКО отмеченные поля: если чек-бокс
+	/// 	не отмечен, в отчёте не будет ни значения, ни колонки.
 	/// </summary>
 	Sub addFieldsWithoutCheckBox;
+	Var
+		ids: Array;
+		i: Integer;
 	Begin
-		addFieldToList("CALYEAR");   // Год — чек-бокса в форме нет
+		If C_FIELDS_WITHOUT_CHECKBOX.IsEmpty Then Return; End If;
+		ids := C_FIELDS_WITHOUT_CHECKBOX.Split(",");
+		For i := 0 To ids.Length - 1 Do
+			addFieldToList(String.Replace(ids[i] As String, " ", ""));
+		End For;
 	End Sub addFieldsWithoutCheckBox;
 
 	Sub CbHigherIndOnChange;
@@ -1840,7 +1852,8 @@ Class ANALIZ_TEP_FORM_ON_SHOW: WebForm
 	/// <summary>Состояния чек-боксов «Поля для вывода» по умолчанию (ТТ, лист «СЭ - поля для вывода»)</summary>
 	Sub initOutputDefaults;
 	Begin
-		// Основные данные: СП, ТЭП, Ед.измерения (Год выводится всегда — чек-бокса в форме нет)
+		If Not C_APPLY_DEFAULT_CHECKED Then Return; End If;
+		// Основные данные: СП, ТЭП, Ед.измерения (Год — без чек-бокса, см. C_FIELDS_WITHOUT_CHECKBOX)
 		SetCheckBoxIfExists(CB_PLANT, True);
 		SetCheckBoxIfExists(CB_ZLIB_INDC, True);
 		SetCheckBoxIfExists(CB_ACT_UNIT, True);
