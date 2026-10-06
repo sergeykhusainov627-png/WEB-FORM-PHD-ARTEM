@@ -1,0 +1,21 @@
+# Правила обработки файлов git.
+# КРИТИЧНО: модули .fore для платформы Форсайт — UTF-8 без BOM + CRLF.
+# Атрибут -text отключает любые преобразования переводов строк и кодировки,
+# чтобы файл в репозитории был байт-в-байт равен файлу со стенда.
+*.fore   -text
+*.mod    binary
+*.pefx   binary
+*.7z     binary
+*.xlsx   binary
+*.png    binary
+*.zip    binary
+
+# Текстовые документы — тоже CRLF (Windows-инструменты), но с нормализацией
+*.md     text eol=crlf
+*.txt    text eol=crlf
+*.sql    text eol=crlf
+
+# Скрипты — LF
+*.js     text eol=lf
+*.py     text eol=lf
+*.ps1    text eol=crlf

@@ -1,0 +1,526 @@
+Public Class WebFormsExt: Object
+	
+	/// <summary>
+	/// Метод для переоткрытия справочника в измерении DimensionCombo или DimensionTree с изменением значения параметра из отметки другого измерения
+	/// </summary>
+	/// <param name="dimComponent">Компонент, в измерении которого переоткрывается справочник. IWebDimensionCombo или IWebDimensionTree</param>
+	/// <param name="paramId">Идентификатор изменяемого параметра</param>
+	/// <param name="paramValueSel">Отметка справочника, из которой извлекается значение параметра</param>
+	/// <param name="valueAttrId">Идентификатор атрибута справочника, из которого извлекается значение параметра. По умолчанию формирует значение по атрибуту-идентификатору</param>
+	Public Shared Sub ReopenDimInstWithParamChangeFromSelection(dimComponent: Variant; paramId: String; paramValueSel: IDimSelection; valueAttrId: String = "");
+	Var
+		paramValue: Variant;
+	Begin
+		If Not ((dimComponent Is IWebDimensionCombo) Or (dimComponent Is IWebDimensionTree)) Then
+			Return;
+		End If;
+		
+		paramValue := GetDimSelectionAttrValue(paramValueSel, valueAttrId);
+		
+		ReopenDimInstWithParamChangeFromValue(dimComponent, paramId, paramValue);
+	End Sub ReopenDimInstWithParamChangeFromSelection;
+	
+	/// <summary>
+	/// Метод для переоткрытия справочника в измерении DimensionCombo или DimensionTree с изменением значения параметра
+	/// </summary>
+	/// <param name="dimComponent">Компонент, в измерении которого переоткрывается справочник. IWebDimensionCombo или IWebDimensionTree</param>
+	/// <param name="paramId">Идентификатор изменяемого параметра</param>
+	/// <param name="paramValue">Значение изменяемого параметра</param>
+	Public Shared Sub ReopenDimInstWithParamChangeFromValue(dimComponent: Variant; paramId: String; paramValue: Variant);
+	Var
+		paramVals: IMetabaseObjectParamValues;
+		param: IMetabaseObjectParamValue;
+	Begin
+		If dimComponent Is IWebDimensionCombo Then
+			paramVals := (dimComponent As IWebDimensionCombo).DimInstance.MetabaseObject.ParamValues;
+		Elseif dimComponent Is IWebDimensionTree Then
+			paramVals := (dimComponent As IWebDimensionTree).DimInstance.MetabaseObject.ParamValues;
+		Else
+			Return;
+		End If;
+		
+		param := paramVals.FindById(paramId);
+		If Not IsNull(param) Then
+			param.Value := paramValue;
+		End If;
+		
+		ReopenDimInstWithParamChangeFromParamValues(dimComponent, paramVals);
+	End Sub ReopenDimInstWithParamChangeFromValue;
+	
+	/// <summary>
+	/// Метод для переоткрытия справочника в измерении DimensionCombo или DimensionTree с изменением значений параметров из готовой коллекции параметров
+	/// </summary>
+	/// <param name="dimComponent">Компонент, в измерении которого переоткрывается справочник</param>
+	/// <param name="paramVals">Коллекция параметров для открытия справочника</param>
+	Public Shared Sub ReopenDimInstWithParamChangeFromParamValues(dimComponent: Variant; paramVals: IMetabaseObjectParamValues);
+	Begin
+		If dimComponent Is IWebDimensionCombo Then
+			ReopenDimComboWithParamChangeFromParamValues(dimComponent As IWebDimensionCombo, paramVals);
+		Elseif dimComponent Is IWebDimensionTree Then
+			ReopenDimTreeWithParamChangeFromParamValues(dimComponent As IWebDimensionTree, paramVals);
+		Else
+			Return;
+		End If;
+	End Sub ReopenDimInstWithParamChangeFromParamValues;
+	
+	/// <summary>
+	/// Метод для переоткрытия справочника в измерении DimensionCombo с изменением значений параметров из готовой коллекции параметров и восстановлением отметки
+	/// </summary>
+	/// <param name="dimCombo">Компонент, в измерении которого переоткрывается справочник</param>
+	/// <param name="paramVals">Коллекция параметров для открытия справочника</param>
+	Private Shared Sub ReopenDimComboWithParamChangeFromParamValues(dimCombo: IWebDimensionCombo; paramVals: IMetabaseObjectParamValues);
+	Var
+		dimObj: IMetabaseObject;
+		savedSelValue: Variant;
+	Begin
+		dimObj := dimCombo.DimInstance.MetabaseObject.Object;
+		
+		With sel: dimCombo.Selection Do
+			If sel.SelectedCount > 0 Then
+				savedSelValue := sel.ToVariant;
+			End If;
+			sel.DeselectAll;
+		End With;
+		
+		dimCombo.DimInstance := Null;
+		dimCombo.Enabled := False;
+		dimObj.FlushInstances;
+		
+		dimCombo.DimInstance := dimObj.Open(paramVals) As IDimInstance;
+		
+		If dimCombo.DimInstance.Elements.Count > 0 Then
+			dimCombo.Enabled := True;
+			
+			// Восстановление отметки, которая была до применения параметра
+			If Not IsNull(savedSelValue) Then
+				dimCombo.Selection.Parse(savedSelValue);
+			End If;
+		Else
+			dimCombo.Enabled := False;
+		End If;
+	End Sub ReopenDimComboWithParamChangeFromParamValues;
+	
+	/// <summary>
+	/// Метод для переоткрытия справочника в измерении DimensionTree с изменением значений параметров из готовой коллекции параметров
+	/// </summary>
+	/// <param name="dimTree">Компонент, в измерении которого переоткрывается справочник</param>
+	/// <param name="paramVals">Коллекция параметров для открытия справочника</param>
+	Private Shared Sub ReopenDimTreeWithParamChangeFromParamValues(dimTree: IWebDimensionTree; paramVals: IMetabaseObjectParamValues);
+	Var
+		dimObj: IMetabaseObject;
+		savedSelValue: Variant;
+	Begin
+		dimObj := dimTree.DimInstance.MetabaseObject.Object;
+		
+		With sel: dimTree.Selection Do
+			If sel.SelectedCount > 0 Then
+				savedSelValue := sel.ToVariant;
+			End If;
+			sel.DeselectAll;
+		End With;
+		
+		dimTree.DimInstance := Null;
+		dimTree.Enabled := False;
+		dimObj.FlushInstances;
+		
+		dimTree.DimInstance := dimObj.Open(paramVals) As IDimInstance;
+		
+		If dimTree.DimInstance.Elements.Count > 0 Then
+			dimTree.Enabled := True;
+			
+			// Восстановление отметки, которая была до применения параметра
+			If Not IsNull(savedSelValue) Then
+				dimTree.Selection.Parse(savedSelValue);
+			End If;
+		Else
+			dimTree.Enabled := False;
+		End If;
+	End Sub ReopenDimTreeWithParamChangeFromParamValues;
+	
+	/// <summary>
+	/// Метод для получения значения атрибута из отметки измерения
+	/// </summary>
+	/// <param name="sel">Отметка измерения справочника</param>
+	/// <param name="attrId">Идентификатор атрибута для получения значения. По умолчанию возвращает значение отметки по атрибуту-идентификатору</param>
+	/// <returns></returns>
+	Public Shared Function GetDimSelectionAttrValue(sel: IDimSelection; attrId: String = ""): Variant;
+	Var
+		attr: IDimAttributeInstance;
+	Begin
+		If sel.SelectedCount > 0 Then
+			If Not attrId.IsEmpty Then
+				attr := sel.Dimension.Attributes.FindById(attrId);
+				
+				If Not IsNull(attr) Then
+					Return sel.AttributeToVariant(attr.Attribute);
+				End If;
+			Else
+				Return sel.ToVariant;
+			End If;
+		End If;
+		
+		Return Null;
+	End Function GetDimSelectionAttrValue;
+	
+	/// <summary>
+	/// Метод для выполнения действия пользовательской кнопки РО из веб-формы
+	/// </summary>
+	/// <param name="report">Реглментный отчет, кнопка которого выполняется. В случае кнопки "Открытие объекта репозитория" передается в команде открываемой веб-форме в качестве аргумента</param>
+	/// <param name="buttonName">Наименование пользовательской кнопки регламентного отчета. В случае кнопки "Открытие объекта репозитория" передается в команде открываемой веб-форме в качестве наименования команды</param>
+	Public Shared Sub InvokeUserButton(report: IPrxReport; buttonName: String);
+	Var
+		repButton: IPrxUserButton;
+		action: IPrxUserButtonActionMethod;
+		cancel: Boolean = False;
+		sheetsKeys: Array Of Integer;
+	Begin
+		If IsNull(report) Then
+			Return;
+		End If;
+		
+		repButton := AppReportExt.GetPrxUserButtonByName(report, buttonName);
+		If IsNull(repButton) Then
+			Return;
+		End If;
+		
+		// Предобработчик
+		InvokeUserButtonBeforeAction(repButton, cancel);
+				
+		If cancel Then
+			Return;
+		End If;
+				
+		// Исполняемый метод
+		Select Case repButton.Type
+			Case PrxUserButtonType.Method:
+				repButton.Action.Invoke;
+			Case PrxUserButtonType.OpenObject:
+				InvokeOpenWfrmUserButtonAction(report, repButton, sheetsKeys, buttonName);
+		End Select;
+				
+		// Постобработчик
+		action := repButton.AfterAction;
+		If Not action.ForeMethod.IsEmpty Then
+			action.Invoke;
+		End If;
+				
+		// Обновление листов
+		// Перенес сюда из метода InvokeOpenWfrmUserButtonAction, т.к. в пользовательских кнопках сначала выполняется постобработик, а потом уже происходит обновление
+		RecalcSheetsUserButtonAction(report, sheetsKeys);
+	End Sub InvokeUserButton;
+	
+	/// <summary>
+	/// Выполнение предобработчика кнопки РО с отображением диалога и выполнениям действия кнопки в зависимости от выбора пользователя
+	/// </summary>
+	/// <param name="repButton">Пользовательская кнопка регламентного отчета</param>
+	/// <param name="cancel">Признак дальнейшего выполнения действия кнопки (исполняемый метод и постобработчик)</param>
+	Public Shared Sub InvokeUserButtonBeforeAction(repButton: IPrxUserButton; Var cancel: Boolean);
+	Var
+		action: IPrxUserButtonActionMethod;
+		beforeActionResult: Array;
+		messageType: Integer;
+		message: String;
+		dialogResult: WebDialogResult;
+	Begin
+		If IsNull(repButton) Then
+			Return;
+		End If;
+		
+		action := repButton.BeforeAction;
+		If Not action.ForeMethod.IsEmpty Then
+			beforeActionResult := action.Invoke;
+			
+			If (Not IsNull(beforeActionResult)) And (beforeActionResult.Length > 0) Then
+				messageType := beforeActionResult[1];
+				message := beforeActionResult[0];
+				
+				If message.IsEmpty Then
+					Return;
+				End If;
+				
+				cancel := True;
+				
+				Select Case messageType
+					Case 0:
+						// Проверяем, что сообщение не пустое, т.к. 0 - значение по умолчанию для Integer (messageType)
+						If message.IsEmpty Then
+							cancel := False;
+						Else
+							dialogResult := ShowMessageBox(message, "Подтверждение", WebMessageBoxButtons.YesNo, WebMessageBoxIcon.Question);
+							If dialogResult = WebDialogResult.Ok Then
+								cancel := False;
+							End If;
+						End If;
+					Case 1:
+						ShowMessageBox(message, "Ошибка", WebMessageBoxButtons.Ok, WebMessageBoxIcon.Error);
+					Case 2:
+						ShowMessageBox(message, "Предупреждение", WebMessageBoxButtons.Ok, WebMessageBoxIcon.Warning);
+					Case 3:
+						ShowMessageBox(message, "Информация", WebMessageBoxButtons.Ok, WebMessageBoxIcon.Information);
+				End Select;
+			End If;
+		End If;
+	End Sub InvokeUserButtonBeforeAction;
+	
+	/// <summary>
+	/// Метод для открытия веб-формы из другой веб-формы по нажатию на пользовательскую кнопку, воспроизводящую кнопку с риббона РО.
+	/// </summary>
+	/// <param name="report">Регламентный отчет, действие кнопки которого выполняется. Передается в команде открываемой веб-форме в качестве аргумента</param>
+	/// <param name="repButton">Пользовательская кнопка РО, действие которой выполняется</param>
+	/// <param name="command">Наименование команды веб-форме</param>
+	/// <returns>Признак, успешно ли выполнено открытие веб-формы</returns>
+	Public Shared Function InvokeOpenWfrmUserButtonAction(report: IPrxReport; repButton: IPrxUserButton; Var sheetsKeys: Array Of Integer; command: String = ""): Boolean;
+	Var
+		action: IPrxUserButtonActionOpenObject;
+		openableObj: IMetabaseObjectDescriptor;
+		openableWfrm: IWebForm;
+	Begin
+		// Открытие объекта
+		If repButton.Action Is IPrxUserButtonActionOpenObject Then
+			action := repButton.Action As IPrxUserButtonActionOpenObject;
+		Else
+			ShowInformation("Указана неверная пользовательская кнопка. Ожидается действие ""Открытие объекта репозитория""");
+			Return False;
+		End If;
+		
+		openableObj := action.ObjectForOpen;
+		
+		If Not (openableObj.ClassId = MetabaseObjectClass.KE_CLASS_WEBFORM) Then
+			ShowInformation("Указан неверный открываемый объект. В качестве объекта для открытия должна быть указана веб-форма");
+			Return False;
+		End If;
+		
+		openableWfrm := openableObj.Open(Null) As IWebForm;
+		openableWfrm.SendCommand(command, report);
+		openableWfrm.ShowModal;
+		
+		// Запись выбранных для обновления листов
+		sheetsKeys := action.SheetsForRefresh;
+		
+		Return True;
+	End Function InvokeOpenWfrmUserButtonAction;
+	
+	/// <summary>
+	/// Обновление листов РО после выполнения действий пользовательской кнопки. Выполняется после постобработчика
+	/// </summary>
+	/// <param name="report">Открытый экземпляр регламентного отчета</param>
+	/// <param name="sheetsKeys">Массив ключей листов, подлежащих обновлению</param>
+	Shared Sub RecalcSheetsUserButtonAction(report: IPrxReport; sheetsKeys: Array Of Integer);
+	Var
+		sheetKey: Integer;
+		sheets: IPrxSheets;
+		sheet: IPrxSheet;
+	Begin
+		// Необходимость обновления листов определется настройкой пользовательской кнопки "Обновлять после закрытия окна" для открытия объекта
+		If Not IsNull(sheetsKeys) Then
+			sheets := report.Sheets;
+			For sheetKey := sheetsKeys.GetLowerBound(1) To sheetsKeys.GetUpperBound(1) Do
+				sheet := sheets.FindByKey(sheetKey);
+				
+				If Not IsNull(sheet) Then
+					sheet.Recalc;
+				Else
+					// Если не указаны листы для обновления, то обновляем активный лист
+					report.ActiveSheet.Recalc;
+										
+					Break;
+				End If;
+			End For;
+		End If;
+	End Sub RecalcSheetsUserButtonAction;
+	
+	/// <summary>
+	/// Метод для открытия модальной веб-формы из родительской веб-формы
+	/// </summary>
+	/// <param name="wFormId">Идентификатор открываемой веб-формы</param>
+	/// <param name="command">Наименование команды, которая будет отправлена веб-форме</param>
+	/// <param name="argument">Аргумент команды</param>
+	/// <param name="namespaceId">Пространство имен (контейнер)</param>
+	/// <returns>Результат закрытия модальной веб-формы, который может быть передан в методе Close</returns>
+	Public Shared Function ShowModalWfrm(wFormId: String; command: String = ""; argument: Variant = Null; namespaceId: String = ""): WebFormResult;
+	Var
+		wFormDesc: IMetabaseObjectDescriptor;
+		wForm: IWebForm;
+	Begin
+		wFormDesc := MbExt.ItemById(wFormId, namespaceId);
+		
+		If IsNull(wFormDesc) Then
+			Return WebFormResult.None;
+		End If;
+		
+		wForm := wFormDesc.Open(Null) As IWebForm;
+		If Not command.IsEmpty Then
+			wForm.SendCommand(command, argument);
+		Else
+			If Not IsNull(argument) Then
+				wForm.SendCommand(wFormId, argument);
+			End If;
+		End If;
+		
+		Return wForm.ShowModal;
+	End Function ShowModalWfrm;
+	
+	/// <summary>
+	/// Метод для открытия веб-формы в новой вкладке из родительской веб-формы
+	/// </summary>
+	/// <param name="wFormId">Идентификатор открываемой веб-формы</param>
+	/// <param name="self_">Экзепляр класса роительской веб-формы</param>
+	/// <param name="command">Наименование команды, которая будет отправлена веб-форме</param>
+	/// <param name="argument">Аргумент команды</param>
+	/// <param name="namespaceId">Пространство имен (контейнер)</param>
+	Public Shared Sub ShowBlankWfrm(wFormId: String; self_: WebForm; command: String = ""; argument: Variant = Null; namespaceId: String = "");
+	Var
+		wFormDesc: IMetabaseObjectDescriptor;
+		data: CTransferingData;
+	Begin
+		wFormDesc := MbExt.ItemById(wFormId, namespaceId);
+		
+		If IsNull(wFormDesc) Then
+			ShowInformation(String.Format("Не найдена веб-форма с идентификатором {0}", wFormId));
+			Return;
+		End If;
+		
+		data := CTransferingData.Instance;
+		If command.IsEmpty Then
+			command := wFormId;
+		End If;
+		
+		data.Add(command, argument);
+		
+		self_.ShowObject(wFormDesc);
+	End Sub ShowBlankWfrm;
+	
+	/// <summary>
+	/// 	Получение значения атрибута из выделенной строки
+	/// </summary>
+	/// <param name="reportBox">Компонент регламентного отчета</param>
+	/// <param name="dimId">Идентификатор измерения, отметка которого извлекается из выделенной строки</param>
+	/// <param name="attrId">Идентификатор атрибута, значение которого извлекается</param>
+	/// <returns>Значение атрибута</returns>
+	Public Shared Function GetReportSelectedRowAttrValue(reportBox: IWebReportBox; dimId, attrId: String;
+		grid: IEaxGrid = Null; needRaiseEx: Boolean = True): Variant;
+	Var
+		value: Variant;
+		reason: String;
+		
+		Sub RaiseEx(msg: String);
+		Begin
+			If needRaiseEx Then
+				ShowInformation(msg); // При попытке вызвать WebMessageBox не из веб-формы возникает ошибка - оставлено, чтобы все сразу не сломать
+			End If;
+		End Sub RaiseEx;
+	Begin
+		value := GetReportSelectedRowAttrValueWithReasonFail(reportBox, dimId, attrId, reason, grid);
+		If IsNull(value) Then
+			RaiseEx(reason);
+		End If;
+		
+		Return value;
+	End Function GetReportSelectedRowAttrValue;
+	
+	/// <summary>
+	/// 	Получение значения атрибута из выделенной строки с причиной провала
+	/// </summary>
+	/// <param name="reportBox">Компонент регламентного отчета</param>
+	/// <param name="dimId">Идентификатор измерения, отметка которого извлекается из выделенной строки</param>
+	/// <param name="attrId">Идентификатор атрибута, значение которого извлекается</param>
+	/// <param name="reason">Причина провала</param>
+	/// <param name="grid">Табличная область</param>
+	/// <returns>Значение атрибута</returns>
+	Public Shared Function GetReportSelectedRowAttrValueWithReasonFail(reportBox: IWebReportBox; dimId, attrId: String; Var reason: String;
+		grid: IEaxGrid = Null): Variant;
+	Var
+		report: IPrxReport;
+		selectionRange, leftHeaderRange: ITabRange;
+		grids: IArrayList;
+		selSet: IDimSelectionSet;
+		sel: IDimSelection;
+	Begin
+		report := reportBox.Report;
+		If IsNull(report) Then
+			Return Null;
+		End If;
+		
+		selectionRange := TabExt.GetSelection(report.ActiveSheet As ITabSheet);
+		If IsNull(selectionRange) Or (selectionRange.Top <> selectionRange.Bottom) Then
+			reason := "Должна быть выбрана одна строка";
+			Return Null;
+		End If;
+		
+		// Поиск грида, область которого пересекается с выделенной областью
+		If IsNull(grid) Then
+			grids := EaxGridExt.GetEaxGridsOfSheet(report);
+			For Each grid In grids Do
+				If TabExt.IsIntersectedRange(grid.Range, selectionRange) Then
+					Break;
+				End If;
+			End For;
+		End If;
+		
+		If IsNull(grid) Or (Not (TabExt.IsIntersectedRange(grid.Range, selectionRange))) Then
+			reason := "Выбранная область находится вне табличных областей";
+			Return Null;
+		End If;
+		
+		leftHeaderRange := grid.SpecificRange(EaxRangeType.LeftHeader);
+		If IsNull(leftHeaderRange) Then
+			reason := "Выбранная область находится вне табличной области";
+			Return Null;
+		End If;
+		
+		selectionRange := grid.TabSheet.Cell(selectionRange.Top, leftHeaderRange.Left);
+		selSet := EaxGridExt.GetCellSelection(grid, selectionRange.Top, selectionRange.Left);
+		If IsNull(selSet) Then
+			reason := "Отсутствует набор отметок по выделенной области";
+			Return Null;
+		End If;
+		
+		sel := selSet.FindById(dimId);
+		If IsNull(sel) Then
+			reason := String.Format("Отсутствует отметка по измерению {0}", dimId);
+			Return Null;
+		End If;
+		
+		Return GetDimSelectionAttrValue(sel, attrId);
+	End Function GetReportSelectedRowAttrValueWithReasonFail;
+	
+	/// <summary>
+	/// 	Отображение информационного сообщения
+	/// </summary>
+	/// <param name="text">Текст информационного сообщения</param>
+	Public Shared Sub ShowInformation(text: String);
+	Begin
+		If text.IsEmpty Then
+			Return;
+		End If;
+		
+		ShowMessageBox(text, "Информация", WebMessageBoxButtons.Ok, WebMessageBoxIcon.Information);
+	End Sub ShowInformation;
+	
+	/// <summary>
+	/// Отображение всплывающего сообщения сообщения
+	/// </summary>
+	/// <param name="text">Текст сообщения</param>
+	/// <param name="title">Заголовок сообщения</param>
+	/// <param name="buttons">Набор кнопок</param>
+	/// <param name="icon">Иконка</param>
+	/// <returns>Результат выбора в кнопках диалога</returns>
+	Public Shared Function ShowMessageBox(text, title: String; buttons: WebMessageBoxButtons; icon: WebMessageBoxIcon): WebDialogResult;
+	Begin
+		Return WebMessageBox.Show(text, "Информация", buttons, icon);
+	End Function ShowMessageBox;
+	
+	Public Shared Sub SetDimComboElementGroup(dimCombo: IWebDimensionCombo; groupId: String);
+	Var
+		groupDesc: IMetabaseObjectDescriptor;
+		group: IDimElementGroup;
+	Begin
+		groupDesc := MbExt.ItemByIdNamespace(groupId, dimCombo.DimInstance.MetabaseObject.Key);
+		
+		If Not IsNull(groupDesc) Then
+			group := groupDesc.Bind As IDimElementGroup;
+			dimCombo.Selection.ElementGroup := group;
+		End If;
+	End Sub SetDimComboElementGroup;
+	
+End Class WebFormsExt;

@@ -1,0 +1,1574 @@
+Var
+	fieldList: IStringList;	
+
+Class ANALIZ_TEP_FORM_ON_SHOW: WebForm
+		
+	TextArea1: WebTextArea;
+	PANEL3: WebPanel;
+	
+	TabControl: WebTabControl;
+	TabControl1: WebTabControl;
+	TabControl2: WebTabControl;
+	
+	TabPage1: WebTabPage;
+	TabPage2: WebTabPage;
+	TabPage3: WebTabPage;
+	TabPage4: WebTabPage;
+	TabPage5: WebTabPage;
+	TabPage6: WebTabPage;
+	TabPage7: WebTabPage;
+	TabPage8: WebTabPage;
+	TabPage9: WebTabPage;
+	TabPage10: WebTabPage;
+	TabPage11: WebTabPage;
+	TabPage12: WebTabPage;
+	TabPage13: WebTabPage;
+	TabPage14: WebTabPage;
+	TabPage15: WebTabPage;
+	TabPage16: WebTabPage;
+	TabPage17: WebTabPage;
+	TabPage18: WebTabPage;
+	
+	DateTimePicker1: WebDateTimePicker;
+	ButtonCancel: WebButton;
+	ReportBoxOk: WebReportBox;
+	ButtonApply: WebButton;
+	
+	DimensionCombo1: WebDimensionCombo;
+	D_ZBUR_BEG: WebDimensionCombo;
+	D_ZBUR_END: WebDimensionCombo;
+	D_ZGEN_ZAK: WebDimensionCombo;
+	D_ZPKR_SUBP: WebDimensionCombo;
+	D_ZPHD_NCH: WebDimensionCombo;
+	D_ZPHD_KON: WebDimensionCombo;
+	DimensionCombo9: WebDimensionCombo;
+	DimensionCombo10: WebDimensionCombo;
+	DimensionCombo11: WebDimensionCombo;
+	
+	I_ZINDTXT1: WebInput;
+	
+	D_ZTYPEIND: WebDimensionCombo;
+	D_PLANT: WebDimensionCombo;
+	D_ZLIB_INDC: WebDimensionCombo;
+	D_CALYEAR: WebDimensionCombo;
+	D_ZPHD_SPR: WebDimensionCombo;
+	D_ZAVIATYPE: WebDimensionCombo;
+	D_ZGAZ_TYPE: WebDimensionCombo;
+	D_ZPHD_GRSR: WebDimensionCombo;
+	D_ZPHD_SR: WebDimensionCombo;
+	D_ZOBJEM: WebDimensionCombo;
+	D_ZSHIFR: WebDimensionCombo;
+	D_ZGEN_POD: WebDimensionCombo;
+	D_ZSKV_ST: WebDimensionCombo;
+	D_ZPILOT: WebDimensionCombo;
+	D_ZPH_OPLST: WebDimensionCombo;
+	D_ZPH_TEHK: WebDimensionCombo;
+	D_ZBUR_PLST: WebDimensionCombo;
+	D_Z_SKV_GEO: WebDimensionCombo;
+	D_ZSKV_KUST: WebDimensionCombo;
+	D_ZBUR_AREA: WebDimensionCombo;
+	D_ZBUR_LU: WebDimensionCombo;
+	D_ZDOGLINK: WebDimensionCombo;
+	D_ZSIU_TY: WebDimensionCombo;
+	D_Z_CL_NAPR: WebDimensionCombo;
+	D_ZUCVOLTTR: WebDimensionCombo;
+	D_UCVOLTLEVL: WebDimensionCombo;
+	D_ZPHD_SK: WebDimensionCombo;
+	D_ZPH_ESO2: WebDimensionCombo;
+	D_ZDEBITOR: WebDimensionCombo;
+	D_ZPHD_USL1: WebDimensionCombo;
+	D_ZPHD_DOG: WebDimensionCombo;
+	D_PERIOD_TYPE: WebDimensionCombo;
+	D_ZLIB_INFS: WebDimensionCombo;
+	D_POSID: WebDimensionCombo;
+	D_ZSIU_FLD: WebDimensionCombo;
+	D_ZFUNC_LOC: WebDimensionCombo;
+	D_MATERIAL: WebDimensionCombo;
+	D_ZCLSVOBOR: WebDimensionCombo;
+	D_ZEQUI: WebDimensionCombo;
+	D_ACTTYPE: WebDimensionCombo;
+	D_ZPH_USR2: WebDimensionCombo;
+	D_ZORGUNIT: WebDimensionCombo;
+	D_COSTCENTER: WebDimensionCombo;
+	D_PROFIT_CTR: WebDimensionCombo;
+	D_ZHRGRPMO: WebDimensionCombo;
+	D_SOLD_TO: WebDimensionCombo;
+	D_VENDOR: WebDimensionCombo;
+	D_ZPHD_STAT: WebDimensionCombo;
+	
+	CB_DISPLAY_CODE_ANALYT: WebCheckBox;
+	CbHigherInd: WebCheckBox;
+	CB_NINE_MONTH: WebCheckBox;
+	CB_YEAR: WebCheckBox;
+	CbESO3: WebCheckBox;
+	CB_AREA: WebCheckBox;
+	CB_ACTIVITY_TYPE: WebCheckBox;
+	CB_TEP_OWNER: WebCheckBox;
+	CB_MVP_TEP: WebCheckBox;
+	CB_FUNCTION_OF_WOKERS: WebCheckBox;
+	CB_IND_TYPE: WebCheckBox;
+	CB_TEP_FORM_OF_SNG: WebCheckBox;
+	CB_VOLUME: WebCheckBox;
+	CB_TRUD: WebCheckBox;
+	CB_COMPARABLE_PRICES: WebCheckBox;
+	CB_CURRENT_PRICES: WebCheckBox;
+	CB_ESTIMATED_PRICES: WebCheckBox;
+	CB_ACTTYPE2: WebCheckBox;
+	CB_ANALYTIC_SET: WebCheckBox;
+	
+	CB_PERIOD_TYPE: WebCheckBox;
+	CB_ZINDTXT1: WebCheckBox;
+	CB_ZSKV_ST: WebCheckBox;
+	CB_ZPILOT: WebCheckBox;
+	CB_ZBUR_END: WebCheckBox;
+	CB_ZBUR_BEG: WebCheckBox;
+	CB_ZPHD_COMM: WebCheckBox;
+	CB_ZPH_OPLST: WebCheckBox;
+	CB_ZPH_TEHK: WebCheckBox;
+	CB_ZBUR_PLST: WebCheckBox;
+	CB_Z_SKV_GEO: WebCheckBox;
+	CB_ZSKV_KUST: WebCheckBox;
+	CB_ZBUR_AREA: WebCheckBox;
+	CB_ZBUR_LU: WebCheckBox;
+	CB_ZPHD_PHD: WebCheckBox;
+	CB_ZPHD_IS: WebCheckBox;
+	CB_ZPHD_PRIZ: WebCheckBox;	
+	CB_ZPHD_NOP1: WebCheckBox;
+	CB_ZPHD_SPR: WebCheckBox;
+	CB_ZPHD_KON: WebCheckBox;
+	CB_ZPHD_NCH: WebCheckBox;
+	CB_ZAVIATYPE: WebCheckBox;
+	CB_ZGAZ_TYPE: WebCheckBox;
+	CB_ZPHD_GRSR: WebCheckBox;
+	CB_ZPHD_SR: WebCheckBox;
+	CB_ZOBJEM: WebCheckBox;
+	CB_ZSHIFR: WebCheckBox;
+	CB_ZPKR_SUBP: WebCheckBox;
+	CB_ZGEN_ZAK: WebCheckBox;
+	CB_ZGEN_POD: WebCheckBox;
+	CB_ZDOGLINK: WebCheckBox;
+	CB_ZSIU_TY: WebCheckBox;
+	CB_Z_CL_NAPR: WebCheckBox;
+	CB_ZUCVOLTTR: WebCheckBox;
+	CB_UCVOLTLEVL: WebCheckBox;
+	CB_ZPHD_SK: WebCheckBox;
+	CB_ZPH_ESO2: WebCheckBox;
+	CB_ZDEBITOR: WebCheckBox;
+	CB_ZPHD_USL1: WebCheckBox;
+	CB_ZPHD_DOG: WebCheckBox;
+	CB_POSID: WebCheckBox;
+	CB_ZSIU_FLD: WebCheckBox;
+	CB_ZFUNC_LOC: WebCheckBox;
+	CB_SIX_MONTH: WebCheckBox;
+	CB_FOURTH_QUARTER: WebCheckBox;
+	CB_THIRD_QUARTER: WebCheckBox;
+	CB_SECOND_QUARTER: WebCheckBox;
+	CB_FIRST_QUARTER: WebCheckBox;
+	CB_DECEMBER: WebCheckBox;
+	CB_NOVEMBER: WebCheckBox;
+	CB_OCTOBER: WebCheckBox;
+	CB_SEPTEMBER: WebCheckBox;
+	CB_AUGUST: WebCheckBox;
+	CB_JULY: WebCheckBox;
+	CB_JUNE: WebCheckBox;
+	CB_MAY: WebCheckBox;
+	CB_APRIL: WebCheckBox;
+	CB_MARCH: WebCheckBox;
+	CB_FEBRUARY: WebCheckBox;
+	CB_JANUARY: WebCheckBox;
+	CB_MATERIAL: WebCheckBox;
+	CB_ZEQUI: WebCheckBox;
+	CB_ACTTYPE: WebCheckBox;
+	CB_ZPH_USR2: WebCheckBox;
+	CB_ZORGUNIT: WebCheckBox;
+	CB_COSTCENTER: WebCheckBox;
+	CB_PROFIT_CTR: WebCheckBox;
+	CB_ZHRGRPMO: WebCheckBox;
+	CB_SOLD_TO: WebCheckBox;
+	CB_VENDOR: WebCheckBox;
+	CB_ACT_UNIT: WebCheckBox;
+	CB_ZLIB_INFS: WebCheckBox;
+	CB_ZLIB_INDC: WebCheckBox;
+	CB_PLANT: WebCheckBox;
+	CB_ZPHD_STAT: WebCheckBox;
+	CB_DISPLAY_INFO_BY_STATUS: WebCheckBox;
+		
+	MB: IMETABASE;
+	hlink: ITabHyperlink;
+	
+	// Значения с основных справочников
+	p_calyear: Variant;
+	p_ztypeind: Variant;
+	p_plant: Variant; 
+	p_zlib_indc: Variant;
+	// Значения с раздела "Основные данные"
+	p_vendor: Variant;
+	p_zphd_stat: Variant;
+	p_sold_to: Variant;
+	p_zhrgrpmo: Variant;
+	p_profit_ctr: Variant;
+	p_costcenter: Variant;
+	p_zorgunit: Variant;
+	p_zph_usr2: Variant;
+	p_acttype: Variant;
+	p_zequi: Variant;
+	p_zclsvobor: Variant;
+	p_material: Variant;
+	p_zfunc_loc: Variant;
+	p_zsiu_fld: Variant;
+	p_posid: Variant;
+	p_zlib_infs: Variant;
+	p_periop_type: Variant;
+	// Значения с раздела "Энергоснабжение"
+	p_zphp_dog: Variant;
+	p_zphp_usl1: Variant;
+	p_zdebitor: Variant;
+	p_zph_eso2: Variant;
+	p_zphd_sk: Variant;
+	p_ucvoltlevl: Variant;
+	p_zucvolttr: Variant;
+	p_z_cl_napr: Variant;
+	p_zsiu_ty: Variant;
+	p_zdoglink: Variant; 
+	// Значения с раздела "Геология и бурение"
+	p_zbur_lu: Variant;
+	p_zbur_area: Variant;
+	p_zskv_kust: Variant;
+	p_z_skv_geo: Variant;
+	p_zbur_plst: Variant;
+	p_zph_tehk: Variant;
+	p_zph_oplst: Variant;
+	p_zbur_beg: Variant;
+	p_zbur_end: Variant;
+	p_zpilot: Variant;
+	p_zskv_st: Variant;
+	// Значения с раздела "Кап. строительство"
+	p_zgen_pod: Variant;
+	p_zgen_zak: Variant;
+	p_zpkr_subp: Variant;
+	p_zshifr: Variant;
+	// Значения с раздела "Экология"
+	p_zobjem: Variant;
+	p_zphd_sr: Variant;
+	p_zphd_grsr: Variant;
+	// Значения с раздела "Прочие аналитики"
+	p_zgaz_type: Variant;
+	p_zaviatype: Variant;
+	p_zphd_nch: Variant;
+	p_zphd_kon: Variant;
+	p_zphd_spr: Variant;	 	
+	 
+	Const C_BUTTON_OK_ID = "PRX_ANALYZ_TEP_BUTTON_OK";
+	Const C_ANALYZ_TEP_REP_ID = "PRX_ANALYSIS_TEP";
+	// Параметры СЭ регламантного отчета с кнопкой
+	Const C_PARAM_ZLIB_INDC = "ZLIB_INDC";
+	Const C_PARAM_PLANT = "PLANT";
+	Const C_PARAM_CALYEAR = "CALYEAR";
+	Const C_PARAM_ZTYPEIND = "ZTYPEIND";
+	Const C_PARAM_P_ANALYTIC_SET = "P_ANALYTIC_SET";
+	Const C_PARAM_ZPHD_STAT = "ZPHD_STAT";
+	Const C_PARAM_VENDOR = "VENDOR";
+	Const C_PARAM_SOLD_TO = "SOLD_TO";
+	Const C_PARAM_ZHRGRPMO = "ZHRGRPMO";
+	Const C_PARAM_PROFIT_CTR = "PROFIT_CTR";
+	Const C_PARAM_COSTCENTER = "COSTCENTER";
+	Const C_PARAM_ZORGUNIT = "ZORGUNIT";
+	Const C_PARAM_ZPH_USR2 = "ZPH_USR2";
+	Const C_PARAM_ACTTYPE = "ACTTYPE";
+	Const C_PARAM_ZEQUI = "ZEQUI";
+	Const C_PARAM_ZCLSVOBOR = "ZCLSVOBOR";
+	Const C_PARAM_MATERIAL = "MATERIAL";
+	Const C_PARAM_ZFUNC_LOC = "ZFUNC_LOC";
+	Const C_PARAM_ZSIU_FLD = "ZSIU_FLD";
+	Const C_PARAM_POSID = "POSID";
+	Const C_PARAM_ZLIB_INFS = "ZLIB_INFS";
+	Const C_PARAM_PERIOD_TYPE = "PERIOD_TYPE";
+	Const C_PARAM_ZPHD_DOG = "ZPHD_DOG";
+	Const C_PARAM_ZPHD_USL1 = "ZPHD_USL1";
+	Const C_PARAM_ZDEBITOR = "ZDEBITOR";
+	Const C_PARAM_ZPH_ESO2 = "ZPH_ESO2";
+	Const C_PARAM_ZPHD_SK = "ZPHD_SK";
+	Const C_PARAM_UCVOLTLEVL = "UCVOLTLEVL";
+	Const C_PARAM_ZUCVOLTTR = "ZUCVOLTTR";
+	Const C_PARAM_Z_CL_NAPR = "Z_CL_NAPR";
+	Const C_PARAM_ZSIU_TY = "ZSIU_TY";
+	Const C_PARAM_ZDOGLINK = "ZDOGLINK";
+	Const C_PARAM_ZBUR_LU = "ZBUR_LU";
+	Const C_PARAM_ZBUR_AREA = "ZBUR_AREA";
+	Const C_PARAM_ZSKV_KUST = "ZSKV_KUST";
+	Const C_PARAM_Z_SKV_GEO = "Z_SKV_GEO";
+	Const C_PARAM_ZBUR_PLST = "ZBUR_PLST";
+	Const C_PARAM_ZPH_TEHK = "ZPH_TEHK";
+	Const C_PARAM_ZPH_OPLST = "ZPH_OPLST";
+	Const C_PARAM_ZPILOT = "ZPILOT";
+	Const C_PARAM_ZSKV_ST = "ZSKV_ST";
+	Const C_PARAM_ZGEN_POD = "ZGEN_POD";
+	Const C_PARAM_ZGEN_ZAK = "ZGEN_ZAK";
+	Const C_PARAM_ZSHIFR = "ZSHIFR";
+	Const C_PARAM_ZOBJEM = "ZOBJEM";
+	Const C_PARAM_ZPHD_SR = "ZPHD_SR";
+	Const C_PARAM_ZPHD_GRSR = "ZPHD_GRSR";
+	Const C_PARAM_ZGAZ_TYPE = "ZGAZ_TYPE";
+	Const C_PARAM_ZAVIATYPE = "ZAVIATYPE";
+	Const C_PARAM_ZPHD_SPR = "ZPHD_SPR";
+	Const C_PARAM_ZBUR_BEG = "ZBUR_BEG";
+	Const C_PARAM_ZBUR_END = "ZBUR_END";
+	Const C_PARAM_ZPKR_SUBP = "ZPKR_SUBP";
+	
+	_AnalyzTepHyperlink: COpenHyperlink; // CUrlHyperlink
+	_hlink: ITabHyperlink;
+	
+	/// <summary>
+	/// 	Гиперссылка
+	/// </summary>
+	Property Hyperlink: COpenHyperlink
+	Get
+	Begin
+		If IsNull(_AnalyzTepHyperlink) Then
+			_AnalyzTepHyperlink := New COpenHyperlink.Create(ReportBoxOk.Report, AppNs.PHD, "Ок");
+			_AnalyzTepHyperlink.InitObject(C_ANALYZ_TEP_REP_ID);
+		End If;	
+		Return _AnalyzTepHyperlink;
+	End Get
+	End Property Hyperlink;
+	
+	Sub initialization;
+	Begin	
+		MB := MetabaseClass.Active;
+		If fieldList = Null Then fieldList := New StringList.Create; End If;		
+	End Sub initialization;
+	
+	Sub setDefaultDimensionValue;
+	Var
+		Index: Integer;
+	Begin
+		// // Календарь
+		// Index := DimensionExt.GetElementIndexByAttributeValue(D_CALYEAR.DimInstance, "NAME", "2024");
+		// //TextArea1.Lines.Add("Year, index = " + index.ToString);
+		// If Index <> -1 Then D_CALYEAR.Selection.SelectElement(Index, False); End If;
+		// UpdateOpenDefHlinkFromSelection("CALYEAR", D_CALYEAR.Selection, "NAME");
+		// Hyperlink.SetParamValueFromSelection("CALYEAR", D_CALYEAR.Selection, "NAME");
+		// Hyperlink.Generate;
+		
+		// // // Структурное подразделение (СП)
+		// //Index := DimensionExt.GetElementIndexByAttributeValue(D_PLANT.DimInstance, "CODE", getUserSP);
+		// Index := DimensionExt.GetElementIndexByAttributeValue(D_PLANT.DimInstance, "CODE", "0200");
+		// // //TextArea1.Lines.Add("plant, index = " + index.ToString);
+		// If Index <> -1 Then D_PLANT.Selection.SelectElement(Index, False); End If;
+		// UpdateOpenDefHlinkFromSelection("PLANT", D_PLANT.Selection, "CODE");
+		// Hyperlink.SetParamValueFromSelection("PLANT", D_PLANT.Selection, "CODE");
+		// Hyperlink.Generate;
+		
+		// // ТЭП
+		// Index := DimensionExt.GetElementIndexByAttributeValue(D_ZLIB_INDC.DimInstance, "CODE", "IND00000100");
+		// If Index <> -1 Then D_ZLIB_INDC.Selection.SelectElement(Index, False);End If;
+		// UpdateOpenDefHlinkFromSelection("ZLIB_INDC", D_ZLIB_INDC.Selection, "CODE");						
+		// Hyperlink.SetParamValueFromSelection("ZLIB_INDC", D_ZLIB_INDC.Selection, "CODE");
+		// Hyperlink.Generate;
+		
+		// // Тип данных 
+		//Index := DimensionExt.GetElementIndexByAttributeValue(D_ZTYPEIND.DimInstance, "ID", "0000000001");
+		// //TextArea1.Lines.Add("type, index = " + index.ToString);
+		//If Index <> -1 Then D_ZTYPEIND.Selection.SelectElement(Index, False); End If;
+		//UpdateOpenDefHlinkFromSelection("ZTYPEIND", D_ZTYPEIND.Selection, "ID");		
+		//Hyperlink.Generate;
+			
+		initialization;
+		addDefaultFieldsToStringList;
+		TextArea1.Lines.Add(Hyperlink.tst);
+		
+	End Sub setDefaultDimensionValue;
+	
+	Private Function getUserSP: String;
+	Var
+		userSP: String;
+		User: IMetabaseUser;
+	Begin
+		User := MetabaseClass.Active.LogonSession.User; //Получаем пользователя запустившего отчет
+		userSP := User.Attributes.FindById("BUS_AREA").Value; //Получаем значение атрибута "BUS_AREA"
+		Return userSP;
+	End Function getUserSP;
+	
+	Sub ANALIZ_TEP_FORM_ON_SHOW;
+	Var	
+		openReportTab: ITabSheet;
+		optionReport: IPrxReport;
+		MObj:IMetabaseObject;			
+	Begin
+		_hlink := InitializeHlinkOpenObject(ReportBoxOk.Report, "  Ок  ", C_ANALYZ_TEP_REP_ID);
+		
+		setDefaultDimensionValue;
+									
+		//Hyperlink.Generate; вернуть
+		//Hyperlink.DesingCell(ButtonCancel.Color);								
+				
+		//madeLinkForMyselfTst;
+		//TextArea1.Text := Hyperlink.Action;
+		
+		// Сбор значений с СЭ 			 
+		//openReportTab := ReportBoxOk.Report.ActiveSheet As ITabSheet;
+		//optionReport := ReportBoxVariant.Report;
+		//br := New GxSolidBrush.Create(Gxcolor.FromKnownColor(GxKnownColor.LightGray));
+		//activeButtonColor := ButtonCancel.Color; //New Gxcolor.CreateRGB(70, 142, 240);
+		//disabledButtonColor := New Gxcolor.CreateRGB(222, 235, 255);
+		//SetOpenRBActivity(False);				
+						
+	End Sub ANALIZ_TEP_FORM_ON_SHOW;
+	
+	Sub madeLinkForMyselfTst;
+	Var
+		link: ITabHyperlink;
+		style: ITabCellStyle;	
+		openReportTab: ITabSheet;
+		optionReport: IPrxReport;
+		myTstPrxSheeet: IPrxSheet;
+	Begin
+		// tst сделал ссылку сам
+		//openReportTab := ReportBoxOk.Report.ActiveSheet As ITabSheet;
+		openReportTab := ReportBoxOk.Report.ActiveSheet.Sheets.FindByName("Лист2") As ITabSheet;		
+		TextArea1.Text := ReportBoxOk.Report.ActiveSheet.Name;
+		
+		
+		style := openReportTab.Cell(0, 0).Style;		
+		link := style.Hyperlink;
+		link.ActionType := TabHyperlinkActionType.OpenObject;
+		link.Action := String.Format("@{0}(PLANT={1};CALYEAR={2};ZLIB_INDC={3})", C_ANALYZ_TEP_REP_ID, "6500", "2026", "IND00005000");	
+		// link.Action := String.Format("@{0}(PLANT={1};CALYEAR={2};ZLIB_INDC={3}; ANALYTIC_SET={4})", 
+		// 																							C_ANALYZ_TEP_REP_ID, 
+		// 																							"6500", 
+		// 																							"2026", 
+		// 																							"IND00005000",
+		// 																							"[CALYEAR,PLANT,ZLIB_INDC,ACT_UNIT,MATERIAL]");	
+		link.Enable := TriState.OnOption;								
+		link.Color := GxColor.FromName("Blue");		
+		openReportTab.Cell(0, 0).Value := "tst";
+		//TextArea1.Text := link.Action;
+	End Sub madeLinkForMyselfTst;	
+	
+	{Sub UpdateOpenDefHlink(paramId: String; paramValue: Variant);
+	Begin
+		_AnalyzTepHyperlink.SetParamValue(paramId, paramValue);
+		_AnalyzTepHyperlink.Generate;
+	End Sub UpdateOpenDefHlink;}
+	
+	{Function InitializeHlinkOpenObject(report: IPrxReport; hlinkText, hlinkAction: String): ITabHyperlink;
+	Var
+		hlinkCell: ITabRange;
+		hlinkCellStyle: ITabCellStyle;
+		hlink: ITabHyperlink; 
+	Begin
+		hlinkCell := (report.ActiveSheet As ITabSheet).Cell(0, 0);
+		
+		// Настройка визуальной составляющей кнопки
+		hlinkCellStyle := hlinkCell.Style;
+		hlinkCellStyle.HorizontalAlignment := TabFormatAlignment.Center;
+		hlinkCellStyle.VerticalAlignment := TabFormatLayout.Center;
+		hlinkCellStyle.BorderColor(TabBorder.All) := ButtonCancel.Color;
+		hlinkCellStyle.BackgroundBrush := New GxSolidBrush.Create(ButtonCancel.Color);
+		hlinkCellStyle.Font.Size := 14;
+		hlinkCellStyle.Font.Name := "Roboto";
+		hlinkCellStyle.Font.Color := GxColor.FromName("White");
+		
+		// Создание гиперссылки
+		TabExt.SetTabHyperlink(hlinkCell, hlinkText, TabHyperlinkActionType.OpenObject, hlinkAction, False);
+		hlink := hlinkCell.Style.Hyperlink;
+		hlink.Underline := TriState.OffOption;
+		hlink.Color := GxColor.FromName("White");
+		
+		Return hlink;
+	End Function InitializeHlinkOpenObject;}
+
+	/// <summary>
+	/// Назначение:
+	/// 	Обновление гиперссылки по параметру
+	/// Входные параметры:
+	/// 	paramName 			- имя параметра 
+	/// 	dimSel 				- выбранные значения из справочника
+	/// 	attrControlValue	- атрибут справочника, управляющий значением
+	/// </summary>
+	Sub UpdateHyperlinkParams(paramName: String; dimSel: IDimSelection; attrControlValue: String);
+	Begin
+		UpdateOpenDefHlinkFromSelection(String.ToUpper(paramName), D_CALYEAR.Selection, String.ToUpper(attrControlValue));
+		Hyperlink.SetParamValueFromSelection(String.ToUpper(paramName), D_CALYEAR.Selection, String.ToUpper(attrControlValue));
+		Hyperlink.Generate;
+	End Sub UpdateHyperlinkParams;
+
+	Sub D_CALYEAROnSelectionChange;
+	Begin
+		UpdateOpenDefHlinkFromSelection("CALYEAR", D_CALYEAR.Selection, "NAME");
+		Hyperlink.SetParamValueFromSelection("CALYEAR", D_CALYEAR.Selection, "NAME");
+		Hyperlink.Generate;
+		
+		//UpdateHyperlinkParams("CALYEAR", D_CALYEAR.Selection, "NAME");
+	End Sub D_CALYEAROnSelectionChange;
+
+	Sub D_PLANTOnSelectionChange;
+	Const
+		C_ATTR_KEY_ID = "KEY";
+		C_ATTR_NAME_ID = "CODE";
+		C_ATTR_PARENT_ID_ID = "PARENT_KEY";
+	Var
+		groupSel: IDimSelection;
+		groupDim: IDimInstance;
+		elemIndex: Integer;
+		path: IStringList; //tst
+		plantDimArray: IDimElementArray;
+		Attr: IDimAttributeInstance;
+		Iter: IDimIterator;
+		index: Integer;
+		
+		tst: Variant;
+		tstArr: Array;
+	Begin
+		//UpdateOpenDefHlinkFromSelection("PLANT", D_PLANT.Selection, "CODE");
+		
+		
+		//tst := D_PLANT.Selection.AttributeToVariant(D_PLANT.DimInstance.Attributes.FindById("CODE").Attribute); // Извлелечение данных из отметки
+	
+		//TextArea1.Text := D_PLANT.Selection.ToString("CODE");
+		
+		//TextArea1.Text := path.Text(",");
+		
+		// path := New StringList.Create;
+		
+		// groupSel := D_PLANT.Selection;
+		// groupDim := groupSel.Dimension;
+		// path.Add(DimensionExt.GetAttributeValueByElementIndex(groupDim, C_ATTR_NAME_ID, elemIndex));
+		// TextArea1.Text := path.Text(",");
+		
+		//DimensionExt.GetAttributeValueByElementId(groupDim, "CODE");
+		
+		//p_plant := D_PLANT.Selection.ToVariant;
+		//getCollectionValues(D_PLANT); // was 
+		// Attr := D_PLANT.Selection.Dimension.Attributes.FindById("KEY");
+		// If Attr <> Null Then
+        //  	index := Attr.LookupDisplayValue(p_plant);
+		// 	 Attr := D_PLANT.Selection.Dimension.Attributes.FindById("CODE");
+			
+			 
+		// 	//TextArea1.Text := index.ToString;
+		// 	 TextArea1.Text := Attr.Value(index);
+   		// End If;		   
+		
+		UpdateOpenDefHlinkFromSelection("PLANT", D_PLANT.Selection, "CODE");
+		Hyperlink.SetParamValueFromSelection("PLANT", D_PLANT.Selection, "CODE");
+		Hyperlink.Generate;
+		
+		//UpdateHyperlinkParams("PLANT", D_PLANT.Selection, "CODE");
+	End Sub D_PLANTOnSelectionChange;
+	
+	Function getCollectionValues(dim: IWebDimensionCombo): StringList;
+	Var
+		dimValuesByAttr: StringList;
+		Iter: IDimIterator;
+		Elems: IDimElements;
+		ElemArr: IDimElementArray;
+		arrValue: Variant;
+		myArray: Array Of Variant;
+		i: Integer;
+	Begin
+		dimValuesByAttr := New StringList.Create;
+		
+		If dim.Selection.MultiSelect Then
+			//TextArea1.Text := (dim.Selection.ToVariant Is Array);
+			
+			If dim.Selection.ToVariant Is Array Then
+				arrValue := dim.Selection.ToVariant;
+				For i:= 0 To myArray.Length -1 do
+					TextArea1.Text := myArray[i] As String;
+				End For;
+			 
+				// ElemArr := (dim.Selection.ToVariant As Array);
+				// Elems := ElemArr.Elements;
+				// Iter := Elems.Iterator;
+				
+				// While Iter.Next Do
+				// 	//Debug.WriteLine(Elems.Name(Iter.Element));
+				// 	TextArea1.Text := Iter.Element.ToString;
+				// End While;
+			End If;
+			
+			// If dim.Selection.SelectedCount = 1 Then
+			// 	TextArea1.Text := dim.Selection.SelectedCount.ToString;
+			// Else
+			// 	TextArea1.Text := dim.Selection.SelectedCount.ToString;
+			// End If;
+			
+			// If dim.Selection.ToVariant Is Array Then
+			// 	//TextArea1.Text := "Это массив";
+			// End If;		
+			
+		End If;
+	
+		Return dimValuesByAttr;
+	End Function getCollectionValues;
+	
+	Function getAttValueByKey(dim: IWebDimensionCombo; key: Variant; attrName: String): Variant;
+	Var
+		attrValue: Variant;
+		index: Integer;
+		Attr: IDimAttributeInstance;
+	Begin
+		Attr := dim.Selection.Dimension.Attributes.FindById(attrName);
+		If Not IsNull(Attr) Then
+			
+		End If;
+		Return attrValue;
+	End Function getAttValueByKey;
+	
+	Sub D_ZLIB_INDCOnSelectionChange;
+	Begin
+		// p_zlib_indc := D_ZLIB_INDC.Selection.ToVariant;
+		// //_AnalyzTepHyperlink.SetParamValue(C_PARAM_ZLIB_INDC, p_zlib_indc); // san
+		
+		// // tst
+		// If _AnalyzTepHyperlink <> Null Then
+		// 	TextArea1.Text := "";
+		// 	TextArea1.Text := p_zlib_indc;
+		// //	_AnalyzTepHyperlink := New COpenHyperlink.Create(ReportBoxOk.Report, AppNs.PHD, "Ок");
+		// 	//PM := _AnalyzTepHyperlink.ParamManager;
+		// 	//TextArea1.Text := _AnalyzTepHyperlink.ParamManager.Params.Count;
+		// Else
+		// 	TextArea1.Text := "0";
+		// End If;
+		
+		UpdateOpenDefHlinkFromSelection("ZLIB_INDC", D_ZLIB_INDC.Selection, "CODE");
+		Hyperlink.SetParamValueFromSelection("ZLIB_INDC", D_ZLIB_INDC.Selection, "CODE");
+		Hyperlink.Generate;
+	End Sub D_ZLIB_INDCOnSelectionChange;
+
+	Sub D_ZTYPEINDOnSelectionChange;
+	Begin	
+		UpdateOpenDefHlinkFromSelection("ZTYPEIND", D_ZTYPEIND.Selection, "ID");
+		Hyperlink.SetParamValueFromSelection("ZTYPEIND", D_ZTYPEIND.Selection, "ID");
+		Hyperlink.Generate;
+	End Sub D_ZTYPEINDOnSelectionChange;
+
+	Sub D_ZPHD_STATOnSelectionChange;
+	Begin
+		UpdateOpenDefHlinkFromSelection("ZPHD_STAT", D_ZPHD_STAT.Selection, "ZPHD_STAT");
+		Hyperlink.SetParamValueFromSelection("ZPHD_STAT", D_ZPHD_STAT.Selection, "ZPHD_STAT");
+		Hyperlink.Generate;
+	End Sub D_ZPHD_STATOnSelectionChange;
+
+	Sub D_VENDOROnSelectionChange;
+	Begin
+		UpdateOpenDefHlinkFromSelection("VENDOR", D_VENDOR.Selection, "VENDOR");
+		Hyperlink.SetParamValueFromSelection("VENDOR", D_VENDOR.Selection, "VENDOR");
+		Hyperlink.Generate;
+	End Sub D_VENDOROnSelectionChange;
+
+	Sub D_SOLD_TOOnSelectionChange;
+	Begin
+		UpdateOpenDefHlinkFromSelection("SOLD_TO", D_SOLD_TO.Selection, "CODE");
+		Hyperlink.SetParamValueFromSelection("SOLD_TO", D_SOLD_TO.Selection, "CODE");
+		Hyperlink.Generate;
+	End Sub D_SOLD_TOOnSelectionChange;
+
+	Sub D_ZHRGRPMOOnSelectionChange;
+	Begin
+		UpdateOpenDefHlinkFromSelection("ZHRGRPMO", D_ZHRGRPMO.Selection, "ZHRGRPMO");
+		Hyperlink.SetParamValueFromSelection("ZHRGRPMO", D_ZHRGRPMO.Selection, "ZHRGRPMO");
+		Hyperlink.Generate;
+	End Sub D_ZHRGRPMOOnSelectionChange;
+
+	Sub D_PROFIT_CTROnSelectionChange;
+	Begin
+		UpdateOpenDefHlinkFromSelection("PROFIT_CTR", D_PROFIT_CTR.Selection, "PROFIT_CTR");
+		Hyperlink.SetParamValueFromSelection("PROFIT_CTR", D_PROFIT_CTR.Selection, "PROFIT_CTR");
+		Hyperlink.Generate;
+	End Sub D_PROFIT_CTROnSelectionChange;
+
+	Sub D_COSTCENTEROnSelectionChange;
+	Begin	
+		UpdateOpenDefHlinkFromSelection("COSTCENTER", D_COSTCENTER.Selection, "COSTCENTER");
+		Hyperlink.SetParamValueFromSelection("COSTCENTER", D_COSTCENTER.Selection, "COSTCENTER");
+		Hyperlink.Generate;
+	End Sub D_COSTCENTEROnSelectionChange;
+		
+	Sub D_ZORGUNITOnSelectionChange;
+	Begin
+		UpdateOpenDefHlinkFromSelection("ZORGUNIT", D_ZORGUNIT.Selection, "ZORGU");
+		Hyperlink.SetParamValueFromSelection("ZORGUNIT", D_ZORGUNIT.Selection, "ZORGU");
+		Hyperlink.Generate;
+	End Sub D_ZORGUNITOnSelectionChange;
+
+	Sub D_ZPH_USR2OnSelectionChange;
+	Begin
+		UpdateOpenDefHlinkFromSelection("ZPH_USR2", D_ZPH_USR2.Selection, "ZPH_USR2");
+		Hyperlink.SetParamValueFromSelection("ZPH_USR2", D_ZPH_USR2.Selection, "ZPH_USR2");
+		Hyperlink.Generate;
+	End Sub D_ZPH_USR2OnSelectionChange;
+
+	Sub D_ACTTYPEOnSelectionChange;
+	Begin
+		UpdateOpenDefHlinkFromSelection("ACTTYPE", D_ACTTYPE.Selection, "ACTTYPE");
+		Hyperlink.SetParamValueFromSelection("ACTTYPE", D_ACTTYPE.Selection, "ACTTYPE");
+		Hyperlink.Generate;
+	End Sub D_ACTTYPEOnSelectionChange;
+
+	Sub D_ZEQUIOnSelectionChange;
+	Begin
+		UpdateOpenDefHlinkFromSelection("ZEQUI", D_ZEQUI.Selection, "ZEQUI");
+		Hyperlink.SetParamValueFromSelection("ZEQUI", D_ZEQUI.Selection, "ZEQUI");
+		Hyperlink.Generate;
+	End Sub D_ZEQUIOnSelectionChange;
+
+	Sub D_ZCLSVOBOROnSelectionChange;
+	Begin
+		UpdateOpenDefHlinkFromSelection("ZCLSVOBOR", D_ZCLSVOBOR.Selection, "ZCLSVOBOR");
+		Hyperlink.SetParamValueFromSelection("ZCLSVOBOR", D_ZCLSVOBOR.Selection, "ZCLSVOBOR");
+		Hyperlink.Generate;
+	End Sub D_ZCLSVOBOROnSelectionChange;
+
+	Sub D_MATERIALOnSelectionChange;
+	Begin
+		UpdateOpenDefHlinkFromSelection("MATERIAL", D_MATERIAL.Selection, "MATERIAL");
+		Hyperlink.SetParamValueFromSelection("MATERIAL", D_MATERIAL.Selection, "MATERIAL");
+		Hyperlink.Generate;
+	End Sub D_MATERIALOnSelectionChange;
+
+	Sub D_ZFUNC_LOCOnSelectionChange;
+	Begin
+		UpdateOpenDefHlinkFromSelection("ZFUNC_LOC", D_ZFUNC_LOC.Selection, "ZFUNC_LOC");
+		Hyperlink.SetParamValueFromSelection("ZFUNC_LOC", D_ZFUNC_LOC.Selection, "ZFUNC_LOC");
+		Hyperlink.Generate;
+	End Sub D_ZFUNC_LOCOnSelectionChange;
+
+	Sub D_ZSIU_FLDOnSelectionChange;
+	Begin
+		UpdateOpenDefHlinkFromSelection("ZSIU_FLD", D_ZSIU_FLD.Selection, "ZSIU_FLD");
+		Hyperlink.SetParamValueFromSelection("ZSIU_FLD", D_ZSIU_FLD.Selection, "ZSIU_FLD");
+		Hyperlink.Generate;
+	End Sub D_ZSIU_FLDOnSelectionChange;
+
+	Sub D_POSIDOnSelectionChange;
+	Begin
+		UpdateOpenDefHlinkFromSelection("POSID", D_POSID.Selection, "POSID");
+		Hyperlink.SetParamValueFromSelection("POSID", D_POSID.Selection, "POSID");
+		Hyperlink.Generate;
+	End Sub D_POSIDOnSelectionChange;
+
+	Sub D_ZLIB_INFSOnSelectionChange;
+	Begin
+		p_zlib_infs := D_ZLIB_INFS.Selection.ToVariant;
+		_AnalyzTepHyperlink.SetParamValue(C_PARAM_ZLIB_INFS, p_zlib_infs);
+	End Sub D_ZLIB_INFSOnSelectionChange;
+
+	Sub D_PERIOD_TYPEOnSelectionChange;
+	Begin
+		UpdateOpenDefHlinkFromSelection("PERIOD_TYPE", D_PERIOD_TYPE.Selection, "ID");
+		Hyperlink.SetParamValueFromSelection("PERIOD_TYPE", D_PERIOD_TYPE.Selection, "ID");
+		Hyperlink.Generate;
+	End Sub D_PERIOD_TYPEOnSelectionChange;
+
+	// Энергоснабжение
+	Sub D_ZPHD_DOGOnSelectionChange;
+	Begin
+		UpdateOpenDefHlinkFromSelection("ZPHD_DOG", D_ZPHD_DOG.Selection, "ZPHD_DOG");
+		Hyperlink.SetParamValueFromSelection("ZPHD_DOG", D_ZPHD_DOG.Selection, "ZPHD_DOG");
+		Hyperlink.Generate;
+	End Sub D_ZPHD_DOGOnSelectionChange;
+
+	Sub D_ZPHD_USL1OnSelectionChange;
+	Begin
+		UpdateOpenDefHlinkFromSelection("ZPHD_USL1", D_ZPHD_USL1.Selection, "CODE");
+		Hyperlink.SetParamValueFromSelection("ZPHD_USL1", D_ZPHD_USL1.Selection, "CODE");
+		Hyperlink.Generate;
+	End Sub D_ZPHD_USL1OnSelectionChange;
+
+	Sub D_ZDEBITOROnSelectionChange;
+	Begin
+		UpdateOpenDefHlinkFromSelection("ZDEBITOR", D_ZDEBITOR.Selection, "CODE");
+		Hyperlink.SetParamValueFromSelection("ZDEBITOR", D_ZDEBITOR.Selection, "CODE");
+		Hyperlink.Generate;
+	End Sub D_ZDEBITOROnSelectionChange;
+
+	Sub D_ZPH_ESO2OnSelectionChange;
+	Begin
+		UpdateOpenDefHlinkFromSelection("ZPH_ESO2", D_ZPH_ESO2.Selection, "CODE");
+		Hyperlink.SetParamValueFromSelection("ZPH_ESO2", D_ZPH_ESO2.Selection, "CODE");
+		Hyperlink.Generate;
+	End Sub D_ZPH_ESO2OnSelectionChange;
+
+	Sub D_ZPHD_SKOnSelectionChange;
+	Begin
+		UpdateOpenDefHlinkFromSelection("ZPHD_SK", D_ZPHD_SK.Selection, "CODE");
+		Hyperlink.SetParamValueFromSelection("ZPHD_SK", D_ZPHD_SK.Selection, "CODE");
+		Hyperlink.Generate;
+	End Sub D_ZPHD_SKOnSelectionChange;
+
+	Sub D_UCVOLTLEVLOnSelectionChange;
+	Begin
+		UpdateOpenDefHlinkFromSelection("UCVOLTLEVL", D_UCVOLTLEVL.Selection, "UCVOLTLEVL");
+		Hyperlink.SetParamValueFromSelection("UCVOLTLEVL", D_UCVOLTLEVL.Selection, "UCVOLTLEVL");
+		Hyperlink.Generate;
+	End Sub D_UCVOLTLEVLOnSelectionChange;
+
+	Sub D_ZUCVOLTTROnSelectionChange;
+	Begin
+		UpdateOpenDefHlinkFromSelection("ZUCVOLTTR", D_ZUCVOLTTR.Selection, "UCVOLTLEVL");
+		Hyperlink.SetParamValueFromSelection("ZUCVOLTTR", D_ZUCVOLTTR.Selection, "UCVOLTLEVL");
+		Hyperlink.Generate;
+	End Sub D_ZUCVOLTTROnSelectionChange;
+
+	Sub D_Z_CL_NAPROnSelectionChange;
+	Begin
+		UpdateOpenDefHlinkFromSelection("Z_CL_NAPR", D_Z_CL_NAPR.Selection, "Z_CL_NAPR");
+		Hyperlink.SetParamValueFromSelection("Z_CL_NAPR", D_Z_CL_NAPR.Selection, "Z_CL_NAPR");
+		Hyperlink.Generate;
+	End Sub D_Z_CL_NAPROnSelectionChange;
+
+	Sub D_ZSIU_TYOnSelectionChange;
+	Begin
+		UpdateOpenDefHlinkFromSelection("ZSIU_TY", D_ZSIU_TY.Selection, "ZSIU_TY");
+		Hyperlink.SetParamValueFromSelection("ZSIU_TY", D_ZSIU_TY.Selection, "ZSIU_TY");
+		Hyperlink.Generate;
+	End Sub D_ZSIU_TYOnSelectionChange;
+
+	Sub D_ZDOGLINKOnSelectionChange;
+	Begin
+		UpdateOpenDefHlinkFromSelection("ZDOGLINK", D_ZDOGLINK.Selection, "ZDOGLINK");
+		Hyperlink.SetParamValueFromSelection("ZDOGLINK", D_ZDOGLINK.Selection, "ZDOGLINK");
+		Hyperlink.Generate;
+	End Sub D_ZDOGLINKOnSelectionChange;
+	
+	Sub TextArea1OnTextChanged;
+	Begin
+
+	End Sub TextArea1OnTextChanged;
+
+	Sub CB_ZPHD_STATOnChange;
+	Begin
+		fillFieldListByStatusFlag(CB_ZPHD_STAT, "ZPHD_STAT");
+	End Sub CB_ZPHD_STATOnChange;
+	
+	Sub CB_PLANTOnChange;
+	Begin
+		fillFieldListByStatusFlag(CB_PLANT, "PLANT");
+	End Sub CB_PLANTOnChange;
+
+	Sub CB_ZLIB_INDCOnChange;
+	Begin
+		fillFieldListByStatusFlag(CB_ZLIB_INDC, "ZLIB_INDC");
+	End Sub CB_ZLIB_INDCOnChange;
+
+	Sub CB_ZLIB_INFSOnChange;
+	Begin
+		fillFieldListByStatusFlag(CB_ZLIB_INFS, "ZLIB_INFS");
+	End Sub CB_ZLIB_INFSOnChange;
+
+	Sub CB_ACT_UNITOnChange;
+	Begin
+		fillFieldListByStatusFlag(CB_ACT_UNIT, "ACT_UNIT");
+	End Sub CB_ACT_UNITOnChange;
+
+	Sub CB_VENDOROnChange;
+	Begin
+		fillFieldListByStatusFlag(CB_VENDOR, "VENDOR");
+	End Sub CB_VENDOROnChange;
+
+	Sub CB_SOLD_TOOnChange;
+	Begin
+		fillFieldListByStatusFlag(CB_SOLD_TO, "SOLD_TO");
+	End Sub CB_SOLD_TOOnChange;
+
+	Sub CB_COSTCENTEROnChange;
+	Begin
+		fillFieldListByStatusFlag(CB_COSTCENTER, "COSTCENTER");
+	End Sub CB_COSTCENTEROnChange;
+
+	Sub CB_ZORGUNITOnChange;
+	Begin
+		fillFieldListByStatusFlag(CB_ZORGUNIT, "ZORGUNIT");
+	End Sub CB_ZORGUNITOnChange;
+
+	Sub CB_ZPH_USR2OnChange;
+	Begin
+		fillFieldListByStatusFlag(CB_ZPH_USR2, "ZPH_USR2");
+	End Sub CB_ZPH_USR2OnChange;
+
+	Sub CB_ACTTYPEOnChange;
+	Begin
+		fillFieldListByStatusFlag(CB_ACTTYPE, "ACTTYPE");
+	End Sub CB_ACTTYPEOnChange;
+
+	Sub CB_ZEQUIOnChange;
+	Begin
+		fillFieldListByStatusFlag(CB_ZEQUI, "ZEQUI");
+	End Sub CB_ZEQUIOnChange;
+
+	Sub CB_MATERIALOnChange;
+	Begin
+		fillFieldListByStatusFlag(CB_MATERIAL, "MATERIAL");
+	End Sub CB_MATERIALOnChange;
+
+	Sub CB_PROFIT_CTROnChange;
+	Begin
+		fillFieldListByStatusFlag(CB_PROFIT_CTR, "PROFIT_CTR");
+	End Sub CB_PROFIT_CTROnChange;
+
+	Sub CB_ZFUNC_LOCOnChange;
+	Begin
+		fillFieldListByStatusFlag(CB_ZFUNC_LOC, "ZFUNC_LOC");
+	End Sub CB_ZFUNC_LOCOnChange;
+
+	Sub CB_ZSIU_FLDOnChange;
+	Begin
+		fillFieldListByStatusFlag(CB_ZSIU_FLD, "ZSIU_FLD");
+	End Sub CB_ZSIU_FLDOnChange;
+
+	Sub CB_PERIOD_TYPEOnChange;
+	Begin
+		fillFieldListByStatusFlag(CB_PERIOD_TYPE, "PERIOD_TYPE");
+	End Sub CB_PERIOD_TYPEOnChange;
+
+	Sub CB_POSIDOnChange;
+	Begin
+		fillFieldListByStatusFlag(CB_POSID, "POSID");
+	End Sub CB_POSIDOnChange;
+
+	Sub CB_ZPHD_DOGOnChange;
+	Begin
+		fillFieldListByStatusFlag(CB_ZPHD_DOG, "ZPHD_DOG");
+	End Sub CB_ZPHD_DOGOnChange;
+
+	Sub CB_ZPHD_USL1OnChange;
+	Begin
+		fillFieldListByStatusFlag(CB_ZPHD_USL1, "ZPHD_USL1");
+	End Sub CB_ZPHD_USL1OnChange;
+
+	Sub CB_ZDEBITOROnChange;
+	Begin
+		fillFieldListByStatusFlag(CB_ZDEBITOR, "ZDEBITOR");
+	End Sub CB_ZDEBITOROnChange;
+
+	Sub CB_ZPH_ESO2OnChange;
+	Begin
+		fillFieldListByStatusFlag(CB_ZPH_ESO2, "ZPH_ESO2");
+	End Sub CB_ZPH_ESO2OnChange;
+
+	Sub CB_ZPHD_SKOnChange;
+	Begin
+		fillFieldListByStatusFlag(CB_ZPHD_SK, "ZPHD_SK");
+	End Sub CB_ZPHD_SKOnChange;
+
+	Sub CB_UCVOLTLEVLOnChange;
+	Begin
+		fillFieldListByStatusFlag(CB_UCVOLTLEVL, "UCVOLTLEVL");
+	End Sub CB_UCVOLTLEVLOnChange;
+
+	Sub CB_ZUCVOLTTROnChange;
+	Begin
+		fillFieldListByStatusFlag(CB_ZUCVOLTTR, "ZUCVOLTTR");
+	End Sub CB_ZUCVOLTTROnChange;
+
+	Sub CB_Z_CL_NAPROnChange;
+	Begin
+		fillFieldListByStatusFlag(CB_Z_CL_NAPR, "Z_CL_NAPR");
+	End Sub CB_Z_CL_NAPROnChange;
+
+	Sub CB_ZSIU_TYOnChange;
+	Begin
+		fillFieldListByStatusFlag(CB_ZSIU_TY, "ZSIU_TY");
+	End Sub CB_ZSIU_TYOnChange;
+
+	Sub CB_ZDOGLINKOnChange;
+	Begin
+		fillFieldListByStatusFlag(CB_ZDOGLINK, "ZDOGLINK");
+	End Sub CB_ZDOGLINKOnChange;
+
+	Sub CB_ZGEN_PODOnChange;
+	Begin
+		fillFieldListByStatusFlag(CB_ZGEN_POD, "ZGEN_POD");
+	End Sub CB_ZGEN_PODOnChange;
+
+	Sub CB_ZGEN_ZAKOnChange;
+	Begin
+		fillFieldListByStatusFlag(CB_ZGEN_ZAK, "ZGEN_ZAK");
+	End Sub CB_ZGEN_ZAKOnChange;
+
+	Sub CB_ZSHIFROnChange;
+	Begin
+		fillFieldListByStatusFlag(CB_ZSHIFR, "ZSHIFR");
+	End Sub CB_ZSHIFROnChange;
+
+	Sub CB_ZOBJEMOnChange;
+	Begin
+		fillFieldListByStatusFlag(CB_ZOBJEM, "ZOBJEM");
+	End Sub CB_ZOBJEMOnChange;
+
+	Sub CB_ZPHD_SROnChange;
+	Begin
+		fillFieldListByStatusFlag(CB_ZPHD_SR, "ZPHD_SR");
+	End Sub CB_ZPHD_SROnChange;
+
+	Sub CB_ZPHD_GRSROnChange;
+	Begin
+		fillFieldListByStatusFlag(CB_ZPHD_GRSR, "ZPHD_GRSR");
+	End Sub CB_ZPHD_GRSROnChange;
+
+	Sub CB_ZGAZ_TYPEOnChange;
+	Begin
+		fillFieldListByStatusFlag(CB_ZGAZ_TYPE, "ZGAZ_TYPE");
+	End Sub CB_ZGAZ_TYPEOnChange;
+
+	Sub CB_ZAVIATYPEOnChange;
+	Begin
+		fillFieldListByStatusFlag(CB_ZAVIATYPE, "ZAVIATYPE");
+	End Sub CB_ZAVIATYPEOnChange;
+
+	Sub CB_ZPHD_NCHOnChange;
+	Begin
+		fillFieldListByStatusFlag(CB_ZPHD_NCH, "ZPHD_NCH");
+	End Sub CB_ZPHD_NCHOnChange;
+
+	Sub CB_ZPHD_KONOnChange;
+	Begin
+		fillFieldListByStatusFlag(CB_ZPHD_KON, "ZPHD_KON");
+	End Sub CB_ZPHD_KONOnChange;
+
+	Sub CB_ZBUR_LUOnChange;
+	Begin
+		fillFieldListByStatusFlag(CB_ZBUR_LU, "ZBUR_LU");
+	End Sub CB_ZBUR_LUOnChange;
+
+	Sub CB_ZBUR_AREAOnChange;
+	Begin
+		fillFieldListByStatusFlag(CB_ZBUR_AREA, "ZBUR_AREA");
+	End Sub CB_ZBUR_AREAOnChange;
+
+	Sub CB_ZSKV_KUSTOnChange;
+	Begin
+		fillFieldListByStatusFlag(CB_ZSKV_KUST, "ZSKV_KUST");
+	End Sub CB_ZSKV_KUSTOnChange;
+
+	Sub CB_Z_SKV_GEOOnChange;
+	Begin
+		fillFieldListByStatusFlag(CB_Z_SKV_GEO, "Z_SKV_GEO");
+	End Sub CB_Z_SKV_GEOOnChange;
+
+	Sub CB_ZBUR_PLSTOnChange;
+	Begin
+		fillFieldListByStatusFlag(CB_ZBUR_PLST, "ZBUR_PLST");
+	End Sub CB_ZBUR_PLSTOnChange;
+
+	Sub CB_ZPH_TEHKOnChange;
+	Begin
+		fillFieldListByStatusFlag(CB_ZPH_TEHK, "ZPH_TEHK");
+	End Sub CB_ZPH_TEHKOnChange;
+
+	Sub CB_ZPH_OPLSTOnChange;
+	Begin
+		fillFieldListByStatusFlag(CB_ZPH_OPLST, "ZPH_OPLST");
+	End Sub CB_ZPH_OPLSTOnChange;
+
+	Sub CB_ZPHD_COMMOnChange;
+	Begin
+		fillFieldListByStatusFlag(CB_ZPHD_COMM, "ZPHD_COMM");
+	End Sub CB_ZPHD_COMMOnChange;
+
+	Sub CB_ZBUR_BEGOnChange;
+	Begin
+		fillFieldListByStatusFlag(CB_ZBUR_BEG, "ZBUR_BEG");
+	End Sub CB_ZBUR_BEGOnChange;
+
+	Sub CB_ZBUR_ENDOnChange;
+	Begin
+		fillFieldListByStatusFlag(CB_ZBUR_END, "ZBUR_END");
+	End Sub CB_ZBUR_ENDOnChange;
+	
+	Sub CB_ZPILOTOnChange;
+	Begin
+		fillFieldListByStatusFlag(CB_ZPILOT, "ZPILOT");
+	End Sub CB_ZPILOTOnChange;
+
+	Sub CB_ZSKV_STOnChange;
+	Begin
+		fillFieldListByStatusFlag(CB_ZSKV_ST, "ZSKV_ST");
+	End Sub CB_ZSKV_STOnChange;
+
+	Sub CB_ZINDTXT1OnChange;
+	Begin
+		fillFieldListByStatusFlag(CB_ZINDTXT1, "ZINDTXT1");
+	End Sub CB_ZINDTXT1OnChange;
+
+	Sub CB_ZPKR_SUBPOnChange;
+	Begin
+		fillFieldListByStatusFlag(CB_ZPKR_SUBP, "ZPKR_SUBP");
+	End Sub CB_ZPKR_SUBPOnChange;
+
+	Sub CB_ZPHD_SPROnChange;
+	Begin
+		fillFieldListByStatusFlag(CB_ZPHD_SPR, "ZPHD_SPR");
+	End Sub CB_ZPHD_SPROnChange;
+
+	Sub CB_ZPHD_NOP1OnChange;
+	Begin
+		fillFieldListByStatusFlag(CB_ZPHD_NOP1, "ZPHD_NOP1");
+	End Sub CB_ZPHD_NOP1OnChange;
+
+	Sub CB_ZPHD_ISOnChange;
+	Begin
+		fillFieldListByStatusFlag(CB_ZPHD_IS, "ZPHD_IS");
+	End Sub CB_ZPHD_ISOnChange;
+
+	Sub CB_ZPHD_PHDOnChange;
+	Begin
+		fillFieldListByStatusFlag(CB_ZPHD_PHD, "ZPHD_PHD");
+	End Sub CB_ZPHD_PHDOnChange;
+
+	Sub CB_ZPHD_PRIZOnChange;
+	Begin
+		fillFieldListByStatusFlag(CB_ZPHD_PRIZ, "ZPHD_PRIZ");
+	End Sub CB_ZPHD_PRIZOnChange;
+
+	// Значения ТЭП ---------------------------------------------------------->
+	Sub CB_JANUARYOnChange;
+	Begin
+		
+	End Sub CB_JANUARYOnChange;
+
+	Sub CB_FEBRUARYOnChange;
+	Begin
+		
+	End Sub CB_FEBRUARYOnChange;
+
+	Sub CB_MARCHOnChange;
+	Begin
+		
+	End Sub CB_MARCHOnChange;
+
+	Sub CB_APRILOnChange;
+	Begin
+		
+	End Sub CB_APRILOnChange;
+
+	Sub CB_MAYOnChange;
+	Begin
+		
+	End Sub CB_MAYOnChange;
+
+	Sub CB_JUNEOnChange;
+	Begin
+		
+	End Sub CB_JUNEOnChange;
+
+	Sub CB_JULYOnChange;
+	Begin
+		
+	End Sub CB_JULYOnChange;
+
+	Sub CB_AUGUSTOnChange;
+	Begin
+		
+	End Sub CB_AUGUSTOnChange;
+
+	Sub CB_SEPTEMBEROnChange;
+	Begin
+		
+	End Sub CB_SEPTEMBEROnChange;
+
+	Sub CB_OCTOBEROnChange;
+	Begin
+		
+	End Sub CB_OCTOBEROnChange;
+
+	Sub CbNovemberOnChange;
+	Begin
+		
+	End Sub CbNovemberOnChange;
+
+	Sub CB_DECEMBEROnChange;
+	Begin
+		
+	End Sub CB_DECEMBEROnChange;
+
+	Sub CB_FIRST_QUARTEROnChange;
+	Begin
+		
+	End Sub CB_FIRST_QUARTEROnChange;
+
+	Sub CB_SECOND_QUARTEROnChange;
+	Begin
+		
+	End Sub CB_SECOND_QUARTEROnChange;
+
+	Sub CbThirdQuarterOnChange;
+	Begin
+		
+	End Sub CbThirdQuarterOnChange;
+
+	Sub CB_FOURTH_QUARTEROnChange;
+	Begin
+		
+	End Sub CB_FOURTH_QUARTEROnChange;
+
+	Sub CB_SIX_MONTHOnChange;
+	Begin
+		
+	End Sub CB_SIX_MONTHOnChange;
+
+	Sub CB_NINE_MONTHOnChange;
+	Begin
+		
+	End Sub CB_NINE_MONTHOnChange;
+
+	Sub CB_YEAROnChange;
+	Begin
+		
+	End Sub CB_YEAROnChange;
+	// Значения ТЭП <---------------------------------------------------------
+	
+	//Геология и бурение
+	Sub D_ZBUR_LUOnSelectionChange;
+	Begin
+		UpdateOpenDefHlinkFromSelection("ZBUR_LU", D_ZBUR_LU.Selection, "CODE");
+		Hyperlink.SetParamValueFromSelection("ZBUR_LU", D_ZBUR_LU.Selection, "CODE");
+		Hyperlink.Generate;
+	End Sub D_ZBUR_LUOnSelectionChange;
+
+	Sub D_ZBUR_AREAOnSelectionChange;
+	Begin
+		UpdateOpenDefHlinkFromSelection("ZBUR_AREA", D_ZBUR_AREA.Selection, "ZBUR_AREA");
+		Hyperlink.SetParamValueFromSelection("ZBUR_AREA", D_ZBUR_AREA.Selection, "ZBUR_AREA");
+		Hyperlink.Generate;
+	End Sub D_ZBUR_AREAOnSelectionChange;
+
+	Sub D_ZSKV_KUSTOnSelectionChange;
+	Begin
+		UpdateOpenDefHlinkFromSelection("ZSKV_KUST", D_ZSKV_KUST.Selection, "ZSKV_KUST");
+		Hyperlink.SetParamValueFromSelection("ZSKV_KUST", D_ZSKV_KUST.Selection, "ZSKV_KUST");
+		Hyperlink.Generate;
+	End Sub D_ZSKV_KUSTOnSelectionChange;
+
+	Sub D_Z_SKV_GEOOnSelectionChange;
+	Begin
+		UpdateOpenDefHlinkFromSelection("Z_SKV_GEO", D_Z_SKV_GEO.Selection, "Z_SKV_GEO");
+		Hyperlink.SetParamValueFromSelection("Z_SKV_GEO", D_Z_SKV_GEO.Selection, "Z_SKV_GEO");
+		Hyperlink.Generate;
+	End Sub D_Z_SKV_GEOOnSelectionChange;
+
+	Sub D_ZBUR_PLSTOnSelectionChange;
+	Begin
+		UpdateOpenDefHlinkFromSelection("ZBUR_PLST", D_ZBUR_PLST.Selection, "ZBUR_PLST");
+		Hyperlink.SetParamValueFromSelection("ZBUR_PLST", D_ZBUR_PLST.Selection, "ZBUR_PLST");
+		Hyperlink.Generate;
+	End Sub D_ZBUR_PLSTOnSelectionChange;
+
+	Sub D_ZPH_TEHKOnSelectionChange;
+	Begin
+		UpdateOpenDefHlinkFromSelection("ZPH_TEHK", D_ZPH_TEHK.Selection, "CODE");
+		Hyperlink.SetParamValueFromSelection("ZPH_TEHK", D_ZPH_TEHK.Selection, "CODE");
+		Hyperlink.Generate;
+	End Sub D_ZPH_TEHKOnSelectionChange;
+
+	Sub D_ZPH_OPLSTOnSelectionChange;
+	Begin
+		UpdateOpenDefHlinkFromSelection("ZPH_OPLST", D_ZPH_OPLST.Selection, "CODE");
+		Hyperlink.SetParamValueFromSelection("ZPH_OPLST", D_ZPH_OPLST.Selection, "CODE");
+		Hyperlink.Generate;
+	End Sub D_ZPH_OPLSTOnSelectionChange;
+
+	Sub D_ZBUR_BEGOnSelectionChange;
+	Begin
+		p_zbur_beg := D_ZBUR_BEG.Selection.ToVariant;
+		_AnalyzTepHyperlink.SetParamValue(C_PARAM_ZBUR_BEG, p_zbur_beg);		
+		// Нет привязки к параметру
+	End Sub D_ZBUR_BEGOnSelectionChange;
+
+	Sub D_ZBUR_ENDOnSelectionChange;
+	Begin
+		p_zbur_end := D_ZBUR_END.Selection.ToVariant;
+		_AnalyzTepHyperlink.SetParamValue(C_PARAM_ZBUR_END, p_zbur_end);		
+		// Нет привязки к параметру
+	End Sub D_ZBUR_ENDOnSelectionChange;
+
+	Sub D_ZPILOTOnSelectionChange;
+	Begin
+		UpdateOpenDefHlinkFromSelection("ZPILOT", D_ZPILOT.Selection, "CODE");
+		Hyperlink.SetParamValueFromSelection("ZPILOT", D_ZPILOT.Selection, "CODE");
+		Hyperlink.Generate;
+	End Sub D_ZPILOTOnSelectionChange;
+
+	Sub D_ZSKV_STOnSelectionChange;
+	Begin
+		UpdateOpenDefHlinkFromSelection("ZSKV_ST", D_ZSKV_ST.Selection, "ZSKV_ST");
+		Hyperlink.SetParamValueFromSelection("ZSKV_ST", D_ZSKV_ST.Selection, "ZSKV_ST");
+		Hyperlink.Generate;
+	End Sub D_ZSKV_STOnSelectionChange;
+	
+	//Кап строительство
+	Sub D_ZGEN_PODOnSelectionChange;
+	Begin
+		UpdateOpenDefHlinkFromSelection("ZGEN_POD", D_ZGEN_POD.Selection, "CODE");
+		Hyperlink.SetParamValueFromSelection("ZGEN_POD", D_ZGEN_POD.Selection, "CODE");
+		Hyperlink.Generate;
+	End Sub D_ZGEN_PODOnSelectionChange;
+
+	Sub D_ZGEN_ZAKOnSelectionChange;
+	Begin
+		UpdateOpenDefHlinkFromSelection("ZGEN_ZAK", D_ZGEN_ZAK.Selection, "CODE");
+		Hyperlink.SetParamValueFromSelection("ZGEN_ZAK", D_ZGEN_ZAK.Selection, "CODE");
+		Hyperlink.Generate;
+	End Sub D_ZGEN_ZAKOnSelectionChange;
+
+	Sub D_ZPKR_SUBPOnSelectionChange;
+	Begin
+		p_zpkr_subp := D_ZPKR_SUBP.Selection.ToVariant;
+		_AnalyzTepHyperlink.SetParamValue(C_PARAM_ZPKR_SUBP, p_zpkr_subp);
+		
+		// Нет привязки к параметру
+	End Sub D_ZPKR_SUBPOnSelectionChange;
+
+	Sub D_ZSHIFROnSelectionChange;
+	Begin
+		UpdateOpenDefHlinkFromSelection("ZSHIFR", D_ZSHIFR.Selection, "ZSHIFR");
+		Hyperlink.SetParamValueFromSelection("ZSHIFR", D_ZSHIFR.Selection, "ZSHIFR");
+		Hyperlink.Generate;
+	End Sub D_ZSHIFROnSelectionChange;
+	
+	//Экология
+	Sub D_ZOBJEMOnSelectionChange;
+	Begin
+		UpdateOpenDefHlinkFromSelection("ZOBJEM", D_ZOBJEM.Selection, "CODE");
+		Hyperlink.SetParamValueFromSelection("ZOBJEM", D_ZOBJEM.Selection, "CODE");
+		Hyperlink.Generate;
+	End Sub D_ZOBJEMOnSelectionChange;
+
+	Sub D_ZPHD_SROnSelectionChange;
+	Begin
+		UpdateOpenDefHlinkFromSelection("ZPHD_SR", D_ZPHD_SR.Selection, "ZPHD_SR");
+		Hyperlink.SetParamValueFromSelection("ZPHD_SR", D_ZPHD_SR.Selection, "ZPHD_SR");
+		Hyperlink.Generate;
+	End Sub D_ZPHD_SROnSelectionChange;
+
+	Sub D_ZPHD_GRSROnSelectionChange;
+	Begin
+		UpdateOpenDefHlinkFromSelection("ZPHD_GRSR", D_ZPHD_GRSR.Selection, "ZPHD_GRSR");
+		Hyperlink.SetParamValueFromSelection("ZPHD_GRSR", D_ZPHD_GRSR.Selection, "ZPHD_GRSR");
+		Hyperlink.Generate;
+	End Sub D_ZPHD_GRSROnSelectionChange;
+
+	//Прочие аналитики
+	Sub D_ZGAZ_TYPEOnSelectionChange;
+	Begin	
+		UpdateOpenDefHlinkFromSelection("ZGAZ_TYPE", D_ZGAZ_TYPE.Selection, "CODE");
+		Hyperlink.SetParamValueFromSelection("ZGAZ_TYPE", D_ZGAZ_TYPE.Selection, "CODE");
+		Hyperlink.Generate;
+	End Sub D_ZGAZ_TYPEOnSelectionChange;
+
+	Sub D_ZAVIATYPEOnSelectionChange;
+	Begin
+		UpdateOpenDefHlinkFromSelection("ZAVIATYPE", D_ZAVIATYPE.Selection, "ZAVIATYPE");
+		Hyperlink.SetParamValueFromSelection("ZAVIATYPE", D_ZAVIATYPE.Selection, "ZAVIATYPE");
+		Hyperlink.Generate;
+	End Sub D_ZAVIATYPEOnSelectionChange;
+
+	Sub D_ZPHD_NCHOnSelectionChange;
+	Begin
+		p_zphd_nch:=D_ZPHD_NCH.Selection.ToVariant;
+		// Нет связи с параметром
+	End Sub D_ZPHD_NCHOnSelectionChange;
+
+	Sub D_ZPHD_KONOnSelectionChange;
+	Begin
+		p_zphd_kon:=D_ZPHD_KON.Selection.ToVariant;
+		// Нет связи с параметром
+	End Sub D_ZPHD_KONOnSelectionChange;
+
+	Sub D_ZPHD_SPROnSelectionChange;
+	Begin
+		UpdateOpenDefHlinkFromSelection("ZPHD_SPR", D_ZPHD_SPR.Selection, "ZPHD_SPR");
+		Hyperlink.SetParamValueFromSelection("ZPHD_SPR", D_ZPHD_SPR.Selection, "ZPHD_SPR");
+		Hyperlink.Generate;
+	End Sub D_ZPHD_SPROnSelectionChange;
+
+	Sub I_ZINDTXT1OnTextChanged;
+	Begin
+		
+	End Sub I_ZINDTXT1OnTextChanged;
+	
+	Sub UpdateOpenDefHlinkFromSelection(paramId: String; dimSel: IDimSelection; attrId: String = "");
+	Var
+		paramValue: Variant;
+	Begin
+		paramValue := WebFormsExt.GetDimSelectionAttrValue(dimSel, attrId);
+		UpdateOpenDefHlink(paramId, paramValue);
+	End Sub UpdateOpenDefHlinkFromSelection;
+	
+	Sub UpdateOpenDefHlink(paramId: String; paramValue: Variant);
+	Var
+		hlinkAction, paramValueSubStr: String;
+		paramIndex, paramValueIndex: Integer;
+		
+		Sub InsertParam;
+		Begin
+			// Если это первый параметр - обычная вставка. Если не первый - добавляем перед параметров символ ";"
+			If hlinkAction.Chars(hlinkAction.Length-2) = "(" Then
+				hlinkAction := String.Insert(hlinkAction, hlinkAction.Length-1, String.Format("{0}={1}", paramId, paramValue));
+			Else
+				hlinkAction := String.Insert(hlinkAction, hlinkAction.Length-1, String.Format(";{0}={1}", paramId, paramValue));
+			End If;
+		End Sub InsertParam;
+		
+		Sub UpdateParam;
+		Begin
+			// Удаляем текущее значение параметра и вставляем новое
+			paramValueIndex := hlinkAction.SubString(paramIndex).IndexOf("=") + paramIndex + 1;
+			paramValueSubStr := hlinkAction.SubString(paramValueIndex);
+			
+			With nextParamIndex: paramValueSubStr.IndexOf(";"), endParamsIndex: paramValueSubStr.IndexOf(")") Do
+				// Удаляем текущее значение
+				If nextParamIndex = -1 Then
+					hlinkAction := String.Remove(hlinkAction, paramValueIndex, endParamsIndex);
+				Else
+					hlinkAction := String.Remove(hlinkAction, paramValueIndex, nextParamIndex);
+				End If;
+				
+				// Вставляем новое
+				hlinkAction := String.Insert(hlinkAction, paramValueIndex, String.Format("{0}", paramValue));
+			End With;
+		End Sub UpdateParam;
+		
+		Sub RemoveParam;
+		Begin
+			// Удаляем текущее значение параметра
+			paramValueIndex := hlinkAction.SubString(paramIndex).IndexOf("=") + paramIndex + 1;
+			paramValueSubStr := hlinkAction.SubString(paramValueIndex);
+			
+			With nextParamIndex: paramValueSubStr.IndexOf(";"), endParamsIndex: paramValueSubStr.IndexOf(")") Do
+				// Удаляем текущее значение
+				If nextParamIndex = -1 Then
+					If hlinkAction.Chars(paramIndex - 1) = "(" Then
+						hlinkAction := String.Remove(hlinkAction, paramIndex, paramValueIndex - paramIndex + endParamsIndex);
+					Else
+						hlinkAction := String.Remove(hlinkAction, paramIndex - 1, paramValueIndex - paramIndex + endParamsIndex + 1);
+					End If;
+				Else
+					
+					hlinkAction := String.Remove(hlinkAction, paramIndex, paramValueIndex - paramIndex + nextParamIndex + 1);
+				End If;
+			End With;
+		End Sub RemoveParam;
+		
+		Function GetParamIndex: Integer;
+		Var
+			subStr: String = "";
+			subStrParamIndex: Integer;
+		Begin
+			// Обработка случая, когда в строке есть PARAM1 и PARAM13, например (иденты параметров частично совпадают)
+			subStrParamIndex := hlinkAction.IndexOf(paramId);
+			subStr := hlinkAction.SubString(subStrParamIndex, hlinkAction.SubString(subStrParamIndex).IndexOf("="));
+			
+			While (Not (subStr = paramId)) And (Not (subStrParamIndex = -1)) Do
+				subStrParamIndex := hlinkAction.IndexOf(paramId, subStrParamIndex + 1);
+				subStr := hlinkAction.SubString(subStrParamIndex, hlinkAction.SubString(subStrParamIndex).IndexOf("="));
+			End While;
+			
+			Return subStrParamIndex;
+		End Function GetParamIndex;
+		
+		Sub UpdateArrayToValue;
+		Var
+			i: Integer;
+			paramValueArr: Array;
+		Begin
+			If IsNull(paramValue) Or paramValue.IsEmpty Then
+				Return;
+			End If;
+			
+			If paramValue Is Array Then
+				paramValueArr := paramValue As Array;
+				paramValue := "[";
+				For i := 0 To paramValueArr.Length - 1 Do
+					paramValue := paramValue + paramValueArr[i] + ",";
+				End For;
+				paramValue := String.Remove(paramValue, (paramValue As String).Length - 1);
+				paramValue := paramValue + "]";
+			End If;
+		End Sub UpdateArrayToValue;
+	Begin
+		// В РО изначально лежит Action формата @DEF_FOR_F4
+		hlinkAction := _hlink.Action;
+		
+		// Вставляем скобки для передачи параметров
+		If Not (String.Contains(hlinkAction, "(")) Then
+			hlinkAction := String.Insert(hlinkAction, hlinkAction.Length, "()");
+		End If;
+		
+		// Если параметр - массив, то преобразуем в строку
+		UpdateArrayToValue;
+		
+		// Проверяем, есть ли уже данный параметр в гиперссылке. Если есть - меняем, если нет - вставляем
+		paramIndex := GetParamIndex;
+		If Not (paramIndex = -1) Then
+			// Если пришло пустое значение - чистим параметр из строки
+			If IsNull(paramValue) Or paramValue.IsEmpty Then
+				RemoveParam;
+			Else
+				UpdateParam;
+			End If;
+		Else
+			InsertParam;
+		End If;
+		
+		_hlink.Action := hlinkAction;
+		TextArea1.Lines.Add(hlinkAction);
+	End Sub UpdateOpenDefHlink;
+	
+	Function InitializeHlinkOpenObject(report: IPrxReport; hlinkText, hlinkAction: String): ITabHyperlink;
+	Var
+		hlinkCell: ITabRange;
+		hlinkCellStyle: ITabCellStyle;
+		hlink: ITabHyperlink;
+	Begin
+		hlinkCell := (report.ActiveSheet As ITabSheet).Cell(0, 0);
+		
+		// Настройка визуальной составляющей кнопки
+		hlinkCellStyle := hlinkCell.Style;
+		hlinkCellStyle.HorizontalAlignment := TabFormatAlignment.Center;
+		hlinkCellStyle.VerticalAlignment := TabFormatLayout.Center;
+		hlinkCellStyle.BorderColor(TabBorder.All) := ButtonCancel.Color;
+		hlinkCellStyle.BackgroundBrush := New GxSolidBrush.Create(ButtonCancel.Color);
+		hlinkCellStyle.Font.Size := 14;
+		hlinkCellStyle.Font.Name := "Roboto";
+		hlinkCellStyle.Font.Color := GxColor.FromName("White");
+		
+		// Создание гиперссылки
+		TabExt.SetTabHyperlink(hlinkCell, hlinkText, TabHyperlinkActionType.OpenObject, hlinkAction, True);
+		hlink := hlinkCell.Style.Hyperlink;
+		hlink.Underline := TriState.OffOption;
+		hlink.Color := GxColor.FromName("White");
+		
+		Return hlink;
+	End Function InitializeHlinkOpenObject;
+
+	Sub CB_ZHRGRPMOOnChange;
+	Begin
+		fillFieldListByStatusFlag(CB_ZHRGRPMO, "ZHRGRPMO");
+	End Sub CB_ZHRGRPMOOnChange;
+	
+	Sub fillFieldListByStatusFlag(CB: IWebCheckBox; fieldName : String);
+	Begin	
+		If CB <> Null Then
+			If CB.Checked Then
+				fieldList.Add(fieldName);
+			Else
+				fieldList.Remove(fieldName);
+			End If;
+			Hyperlink.SetParamValue("P_FIELD_LIST", fieldList.Text(", "));
+			Hyperlink.Generate;
+			TextArea1.Text := Hyperlink.Action;
+		End If;		
+	End Sub fillFieldListByStatusFlag;
+	
+	Sub addDefaultFieldsToStringList;
+	Begin
+		fieldList.Add("CALYEAR,PLANT,ZLIB_INDC");
+		//fieldList.Add("PLANT");
+		//fieldList.Add("ZLIB_INDC");
+	End Sub addDefaultFieldsToStringList;
+
+End Class ANALIZ_TEP_FORM_ON_SHOW;
+

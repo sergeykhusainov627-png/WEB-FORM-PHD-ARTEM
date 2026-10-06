@@ -1,0 +1,40 @@
+/// <summary>
+/// 	Класс гиперссылки для открытия формы ввода с параметрами по ссылке в новой вкладке
+/// </summary>
+Public Class CUrlHyperlink: COpenHyperlink
+	
+	/// <summary>
+	/// 	Генерация гиперссылки
+	/// </summary>
+	Public Sub Generate;
+	Var
+		action: String;
+	Begin
+		action := GetAction;
+		
+		TabExt.SetTabHyperlink(
+								Cell,
+								Cell.Text, //"              Ок             ",
+								TabHyperlinkActionType.OpenURL,
+								action);
+	End Sub Generate;
+	
+	/// <summary>
+	/// 	Возвращает действие открытия формы по ссылке
+	/// </summary>
+	/// <returns>Строка действия для гиперссылки</returns>
+	Function GetAction: String;
+	Var
+		objParams: IMetabaseObjectParamValues;
+		link: String;
+	Begin
+		objParams := ParamManager.GetObjectParamValues;
+		
+		link := LinkBuilder.BuildOpenUrlLink(ParamManager.ObjectDescriptor, objParams);
+		link := String.Replace(link, "app=", "appId=");
+		link := String.Replace(link, "sng", "pvk");
+		
+		Return link;
+	End Function GetAction;
+	
+End Class CUrlHyperlink;

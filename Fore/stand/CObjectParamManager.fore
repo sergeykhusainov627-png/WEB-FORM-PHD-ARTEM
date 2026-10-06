@@ -1,0 +1,100 @@
+Public Class CObjectParamManager: Object
+	
+	Public _params: IHashtable;
+	Public _objectId: String;
+	Public _namespaceId: String;
+	Public _objDesc: IMetabaseObjectDescriptor;
+	Public _objParams: IMetabaseObjectParamValues;
+	
+	/// <summary>
+	/// 	Идентификатор объекта
+	/// </summary>
+	Public Property ObjectId: String
+		Get Begin			
+			Return _objectId;
+		End Get
+	End Property ObjectId;
+	
+	/// <summary>
+	/// 	Идентификатор бизнес-приложения
+	/// </summary>
+	Public Property NamespaceId: String
+		Get Begin			
+			Return _namespaceId;
+		End Get
+	End Property NamespaceId;
+	
+	/// <summary>
+	/// 	 Описание объекта
+	/// </summary>
+	Public Property ObjectDescriptor: IMetabaseObjectDescriptor
+		Get
+		Begin
+			If IsNull(_objDesc) Then
+				_objDesc := MbExt.ItemById(ObjectId, NamespaceId);
+			End If;
+			
+			Return _objDesc;
+		End Get
+	End Property ObjectDescriptor;
+
+	/// <summary>
+	/// 	Параметры
+	/// 		Набор <Идентификатор параметра> - <Значение параметра>
+	/// </summary>
+	Public Property Params: IHashtable
+		Get
+		Begin
+			If IsNull(_params) Then
+				_params := New Hashtable.Create;
+			End If;
+			
+			Return _params;
+		End Get
+	End Property Params;
+	
+	/// <summary>
+	/// 	Конструктор
+	/// </summary>
+	/// <param name="objectId">Идентификатор объекта</param>
+	/// <param name="namespaceId">Идентификатор бизнес-приложения, где лежит объект</param>
+	Public Constructor Create(objectId, namespaceId: String);
+	Begin
+		_objectId := objectId;
+		_namespaceId := namespaceId;
+	End Constructor Create;
+	
+	/// <summary>
+	/// 	Определение объекта с параметрами
+	/// </summary>
+	/// <param name="objDesc">Описание объекта</param>
+	/// <param name="objParams">Параметры объекта</param>
+	Public Function GetObjectParamValues: IMetabaseObjectParamValues;
+	Var
+		objParams: IMetabaseObjectParamValues;
+		paramId: String;
+		value: Variant;
+		paramValue: IMetabaseObjectParamValue;
+	Begin
+		objParams := ObjectDescriptor.Params.CreateEmptyValues;
+		
+		For Each paramId In Params.Keys Do
+			value := Params.Item(paramId);
+			
+			paramValue := objParams.FindById(paramId);
+			If IsNull(paramValue) Then
+				Debug.WriteLine(String.Format("$ Не найден параметр {0} в объекте {1}", paramId, ObjectId));
+				Continue;
+			End If;
+			
+			Try
+				paramValue.Value := value;
+			Except On e: Exception Do
+				Raise New Exception.Create(String.Format("CObjectParamManager.DefineObject: {0}", e.Message));
+			End Try;
+		End For;
+		
+		Return objParams;
+	End Function GetObjectParamValues;
+	
+End Class CObjectParamManager;

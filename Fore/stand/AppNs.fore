@@ -1,0 +1,120 @@
+/// <summary>
+/// 	Перечисление пространств имён проекта
+/// </summary>
+Namespace AppNs
+	Public Const
+		// 	Бюджетирование
+		BUD = "BA_SNG_BUD";
+		// 	Налоги		
+		VN = "BA_NU_VN";		
+		// 	Водный налог - пилот		
+		SNG = "BA_SNG";		
+		// 	ИС УПП		
+		PPM = "BA_PPM";		
+		// 	ИСУФЭМ - ИС финансово-экономической модели стратегического развития		
+		ISUFAM = "BA_ISUFAM";		
+		// 	Котировки		
+		GAZ = "GAZ";		
+		// 	Монитор КС		
+		KS = "BA_MONITOR_KS";		
+		// 	НДПИ
+		NDPI = "BA_NU_NDPI";
+		//	Отчетность ПЭУ
+		PEU = "BA_REPORTS_PEU";
+		//	Отчеты Naumen
+		NAUMEN = "BA_NAUMEN";
+		//	Приложения Приказа №1
+		ORDER_1 = "BA_ORDER_1";
+		//	Система учета газа
+		SUG = "BA_SUG";
+		//	Статистика
+		STAT = "BA_STAT";		
+		// Схема учета затрат
+		CAS = "BA_CAS";
+		//	Управление делами
+		RX = "BA_DIRECTUM_RX";
+		//	Управление расходами
+		NSM = "BA_NSM";
+		//	Формы ввода УУ
+		DOP = "BA_DOP";
+		//	Энергетика
+		ENRG = "BA_ENRG";
+		// ПХД
+		PHD = "BA_PHD";
+		// Ведение ПРЦ
+		PRC = "BA_PRC";
+		// Должностные инструкции
+		UDJD = "BA_UDJD";		
+End Namespace AppNs;
+
+Public Const
+
+/// <summary>
+/// 	Идентификатор пространства имён прикладных инструментов
+/// 	Оставлено для обратной совместимости. Используйте AppNs
+/// </summary>
+EXT_NAMESPACE_ID = "DEVELOPER_ENGINE";
+
+/// <summary>
+/// 	Идентификатор пространства имён Бизнес-приложения
+/// 	Оставлено для обратной совместимости. Используйте AppNs
+/// </summary>
+APP_NAMESPACE_ID = "";
+
+/// <summary>
+/// 	Идентификатор класса "Форма ввода/вывода" базы метаданных
+/// 	IMetabaseObjectDescriptor.ClassId
+/// </summary>
+DATA_ENTRY_FORM_CLASS_ID = 2103041;
+
+/// <summary>
+/// 	Папка "Временные объекты"
+/// </summary>
+TEMP_FOLDER_ID = "FOLDER_TEMP";
+
+/// <summary>
+/// 	Идентификатор группы элементов под справочинком для фильтрации
+/// </summary>	
+FILTER_ELEMENT_GROUP_ID	= "GROUP_FILTER";
+
+/// <summary>
+/// 	Адрес вэб - приложения
+/// </summary>
+APP_WEB_LINK = "https://pvk-forweb-dev.sgc.oil.gas:8210/dba/#/";
+
+/// <summary>
+/// 	Адрес стандартного тонкого клиента
+/// </summary>
+REPO_WEB_LINK = "https://pvk-forweb-dev.sgc.oil.gas:8110/fp10.x/r/#/";
+
+/// <summary>
+/// 	Репозиторий по умолчанию
+/// </summary>
+DEFAULT_REPO = "SNG_METABASE";
+
+{**
+ * Атрибуты субъектов безопасности
+ *}
+ 
+// Идентификатор атрибута пользователя "Электронная почта"
+SSUA_EMAIL = "EMAIL";
+
+// Строки-константы константы
+DOT_DELIMITER = ".";
+SEMICOLON_DELIMITER = ";";
+EMPTY_STR = "";
+
+/// <summary>
+/// 	Справочник "Роли"
+/// </summary>
+C_DICT_ROLES_ID = "RDSD_ROLES";
+//C_DICT_ROLES_KEY = 2172396;
+
+
+/// <summary>
+/// 	Константы соединений
+/// </summary>
+//ID соединения приложения
+BA_APPLICATION_DB_ID      = "APPLICATION_DB";
+//ID соединения к SNG_DB 
+BA_CONNECT_SNG_DB_ID      = "CONNECT_SNG_DB";

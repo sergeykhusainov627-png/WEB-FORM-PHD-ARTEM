@@ -1,0 +1,336 @@
+=== ФАЙЛ: C:\Users\Manya\Downloads\backup.txt
+строк: 1575 | кода: 1157 | // комментариев: 143 | строк в { }-комментариях: 31 | пустых: 244
+строк с TextArea1 (отладочный вывод вживую): 8
+
+=== КОНТРОЛЫ ПО ТИПАМ (всего 239)
+  IMETABASE — 1: MB
+  IStringList — 1: fieldList
+  ITabHyperlink — 2: hlink, _hlink
+  Variant — 54: p_calyear, p_ztypeind, p_plant, p_zlib_indc, p_vendor, p_zphd_stat, p_sold_to, p_zhrgrpmo, p_profit_ctr, p_costcenter, p_zorgunit, p_zph_usr2, p_acttype, p_zequi, p_zclsvobor, p_material, p_zfunc_loc, p_zsiu_fld, p_posid, p_zlib_infs, p_periop_type, p_zphp_dog, p_zphp_usl1, p_zdebitor, p_zph_eso2, p_zphd_sk, p_ucvoltlevl, p_zucvolttr, p_z_cl_napr, p_zsiu_ty, p_zdoglink, p_zbur_lu, p_zbur_area, p_zskv_kust, p_z_skv_geo, p_zbur_plst, p_zph_tehk, p_zph_oplst, p_zbur_beg, p_zbur_end, p_zpilot, p_zskv_st, p_zgen_pod, p_zgen_zak, p_zpkr_subp, p_zshifr, p_zobjem, p_zphd_sr, p_zphd_grsr, p_zgaz_type, p_zaviatype, p_zphd_nch, p_zphd_kon, p_zphd_spr
+  WebButton — 2: ButtonCancel, ButtonApply
+  WebCheckBox — 95: CB_DISPLAY_CODE_ANALYT, CbHigherInd, CB_NINE_MONTH, CB_YEAR, CbESO3, CB_AREA, CB_ACTIVITY_TYPE, CB_TEP_OWNER, CB_MVP_TEP, CB_FUNCTION_OF_WOKERS, CB_IND_TYPE, CB_TEP_FORM_OF_SNG, CB_VOLUME, CB_TRUD, CB_COMPARABLE_PRICES, CB_CURRENT_PRICES, CB_ESTIMATED_PRICES, CB_ACTTYPE2, CB_ANALYTIC_SET, CB_PERIOD_TYPE, CB_ZINDTXT1, CB_ZSKV_ST, CB_ZPILOT, CB_ZBUR_END, CB_ZBUR_BEG, CB_ZPHD_COMM, CB_ZPH_OPLST, CB_ZPH_TEHK, CB_ZBUR_PLST, CB_Z_SKV_GEO, CB_ZSKV_KUST, CB_ZBUR_AREA, CB_ZBUR_LU, CB_ZPHD_PHD, CB_ZPHD_IS, CB_ZPHD_PRIZ, CB_ZPHD_NOP1, CB_ZPHD_SPR, CB_ZPHD_KON, CB_ZPHD_NCH, CB_ZAVIATYPE, CB_ZGAZ_TYPE, CB_ZPHD_GRSR, CB_ZPHD_SR, CB_ZOBJEM, CB_ZSHIFR, CB_ZPKR_SUBP, CB_ZGEN_ZAK, CB_ZGEN_POD, CB_ZDOGLINK, CB_ZSIU_TY, CB_Z_CL_NAPR, CB_ZUCVOLTTR, CB_UCVOLTLEVL, CB_ZPHD_SK, CB_ZPH_ESO2, CB_ZDEBITOR, CB_ZPHD_USL1, CB_ZPHD_DOG, CB_POSID, CB_ZSIU_FLD, CB_ZFUNC_LOC, CB_SIX_MONTH, CB_FOURTH_QUARTER, CB_THIRD_QUARTER, CB_SECOND_QUARTER, CB_FIRST_QUARTER, CB_DECEMBER, CB_NOVEMBER, CB_OCTOBER, CB_SEPTEMBER, CB_AUGUST, CB_JULY, CB_JUNE, CB_MAY, CB_APRIL, CB_MARCH, CB_FEBRUARY, CB_JANUARY, CB_MATERIAL, CB_ZEQUI, CB_ACTTYPE, CB_ZPH_USR2, CB_ZORGUNIT, CB_COSTCENTER, CB_PROFIT_CTR, CB_ZHRGRPMO, CB_SOLD_TO, CB_VENDOR, CB_ACT_UNIT, CB_ZLIB_INFS, CB_ZLIB_INDC, CB_PLANT, CB_ZPHD_STAT, CB_DISPLAY_INFO_BY_STATUS
+  WebDateTimePicker — 1: DateTimePicker1
+  WebDimensionCombo — 58: DimensionCombo1, D_ZBUR_BEG, D_ZBUR_END, D_ZGEN_ZAK, D_ZPKR_SUBP, D_ZPHD_NCH, D_ZPHD_KON, DimensionCombo9, DimensionCombo10, DimensionCombo11, D_ZTYPEIND, D_PLANT, D_ZLIB_INDC, D_CALYEAR, D_ZPHD_SPR, D_ZAVIATYPE, D_ZGAZ_TYPE, D_ZPHD_GRSR, D_ZPHD_SR, D_ZOBJEM, D_ZSHIFR, D_ZGEN_POD, D_ZSKV_ST, D_ZPILOT, D_ZPH_OPLST, D_ZPH_TEHK, D_ZBUR_PLST, D_Z_SKV_GEO, D_ZSKV_KUST, D_ZBUR_AREA, D_ZBUR_LU, D_ZDOGLINK, D_ZSIU_TY, D_Z_CL_NAPR, D_ZUCVOLTTR, D_UCVOLTLEVL, D_ZPHD_SK, D_ZPH_ESO2, D_ZDEBITOR, D_ZPHD_USL1, D_ZPHD_DOG, D_PERIOD_TYPE, D_ZLIB_INFS, D_POSID, D_ZSIU_FLD, D_ZFUNC_LOC, D_MATERIAL, D_ZCLSVOBOR, D_ZEQUI, D_ACTTYPE, D_ZPH_USR2, D_ZORGUNIT, D_COSTCENTER, D_PROFIT_CTR, D_ZHRGRPMO, D_SOLD_TO, D_VENDOR, D_ZPHD_STAT
+  WebInput — 1: I_ZINDTXT1
+  WebPanel — 1: PANEL3
+  WebReportBox — 1: ReportBoxOk
+  WebTabControl — 3: TabControl, TabControl1, TabControl2
+  WebTabPage — 18: TabPage1, TabPage2, TabPage3, TabPage4, TabPage5, TabPage6, TabPage7, TabPage8, TabPage9, TabPage10, TabPage11, TabPage12, TabPage13, TabPage14, TabPage15, TabPage16, TabPage17, TabPage18
+  WebTextArea — 1: TextArea1
+
+=== ОБРАБОТЧИКИ (всего 145: Sub 142, Function 3); пустых: 21
+  ПУСТОЙ: Sub TextArea1OnTextChanged (стр. 836)
+  ПУСТОЙ: Sub CB_JANUARYOnChange (стр. 1127)
+  ПУСТОЙ: Sub CB_FEBRUARYOnChange (стр. 1132)
+  ПУСТОЙ: Sub CB_MARCHOnChange (стр. 1137)
+  ПУСТОЙ: Sub CB_APRILOnChange (стр. 1142)
+  ПУСТОЙ: Sub CB_MAYOnChange (стр. 1147)
+  ПУСТОЙ: Sub CB_JUNEOnChange (стр. 1152)
+  ПУСТОЙ: Sub CB_JULYOnChange (стр. 1157)
+  ПУСТОЙ: Sub CB_AUGUSTOnChange (стр. 1162)
+  ПУСТОЙ: Sub CB_SEPTEMBEROnChange (стр. 1167)
+  ПУСТОЙ: Sub CB_OCTOBEROnChange (стр. 1172)
+  ПУСТОЙ: Sub CbNovemberOnChange (стр. 1177)
+  ПУСТОЙ: Sub CB_DECEMBEROnChange (стр. 1182)
+  ПУСТОЙ: Sub CB_FIRST_QUARTEROnChange (стр. 1187)
+  ПУСТОЙ: Sub CB_SECOND_QUARTEROnChange (стр. 1192)
+  ПУСТОЙ: Sub CbThirdQuarterOnChange (стр. 1197)
+  ПУСТОЙ: Sub CB_FOURTH_QUARTEROnChange (стр. 1202)
+  ПУСТОЙ: Sub CB_SIX_MONTHOnChange (стр. 1207)
+  ПУСТОЙ: Sub CB_NINE_MONTHOnChange (стр. 1212)
+  ПУСТОЙ: Sub CB_YEAROnChange (стр. 1217)
+  ПУСТОЙ: Sub I_ZINDTXT1OnTextChanged (стр. 1387)
+
+=== КОНТРОЛЫ БЕЗ ОБРАБОТЧИКА (108 из 239)
+  IStringList fieldList (стр. 2)
+  WebPanel PANEL3 (стр. 7)
+  WebTabControl TabControl (стр. 9)
+  WebTabControl TabControl1 (стр. 10)
+  WebTabControl TabControl2 (стр. 11)
+  WebTabPage TabPage1 (стр. 13)
+  WebTabPage TabPage2 (стр. 14)
+  WebTabPage TabPage3 (стр. 15)
+  WebTabPage TabPage4 (стр. 16)
+  WebTabPage TabPage5 (стр. 17)
+  WebTabPage TabPage6 (стр. 18)
+  WebTabPage TabPage7 (стр. 19)
+  WebTabPage TabPage8 (стр. 20)
+  WebTabPage TabPage9 (стр. 21)
+  WebTabPage TabPage10 (стр. 22)
+  WebTabPage TabPage11 (стр. 23)
+  WebTabPage TabPage12 (стр. 24)
+  WebTabPage TabPage13 (стр. 25)
+  WebTabPage TabPage14 (стр. 26)
+  WebTabPage TabPage15 (стр. 27)
+  WebTabPage TabPage16 (стр. 28)
+  WebTabPage TabPage17 (стр. 29)
+  WebTabPage TabPage18 (стр. 30)
+  WebDateTimePicker DateTimePicker1 (стр. 32)
+  WebButton ButtonCancel (стр. 33)
+  WebReportBox ReportBoxOk (стр. 34)
+  WebButton ButtonApply (стр. 35)
+  WebDimensionCombo DimensionCombo1 (стр. 37)
+  WebDimensionCombo DimensionCombo9 (стр. 44)
+  WebDimensionCombo DimensionCombo10 (стр. 45)
+  WebDimensionCombo DimensionCombo11 (стр. 46)
+  WebCheckBox CB_DISPLAY_CODE_ANALYT (стр. 99)
+  WebCheckBox CbHigherInd (стр. 100)
+  WebCheckBox CbESO3 (стр. 103)
+  WebCheckBox CB_AREA (стр. 104)
+  WebCheckBox CB_ACTIVITY_TYPE (стр. 105)
+  WebCheckBox CB_TEP_OWNER (стр. 106)
+  WebCheckBox CB_MVP_TEP (стр. 107)
+  WebCheckBox CB_FUNCTION_OF_WOKERS (стр. 108)
+  WebCheckBox CB_IND_TYPE (стр. 109)
+  WebCheckBox CB_TEP_FORM_OF_SNG (стр. 110)
+  WebCheckBox CB_VOLUME (стр. 111)
+  WebCheckBox CB_TRUD (стр. 112)
+  WebCheckBox CB_COMPARABLE_PRICES (стр. 113)
+  WebCheckBox CB_CURRENT_PRICES (стр. 114)
+  WebCheckBox CB_ESTIMATED_PRICES (стр. 115)
+  WebCheckBox CB_ACTTYPE2 (стр. 116)
+  WebCheckBox CB_ANALYTIC_SET (стр. 117)
+  WebCheckBox CB_THIRD_QUARTER (стр. 164)
+  WebCheckBox CB_NOVEMBER (стр. 168)
+  WebCheckBox CB_DISPLAY_INFO_BY_STATUS (стр. 194)
+  IMETABASE MB (стр. 196)
+  ITabHyperlink hlink (стр. 197)
+  Variant p_calyear (стр. 200)
+  Variant p_ztypeind (стр. 201)
+  Variant p_plant (стр. 202)
+  Variant p_zlib_indc (стр. 203)
+  Variant p_vendor (стр. 205)
+  Variant p_zphd_stat (стр. 206)
+  Variant p_sold_to (стр. 207)
+  Variant p_zhrgrpmo (стр. 208)
+  Variant p_profit_ctr (стр. 209)
+  Variant p_costcenter (стр. 210)
+  Variant p_zorgunit (стр. 211)
+  Variant p_zph_usr2 (стр. 212)
+  Variant p_acttype (стр. 213)
+  Variant p_zequi (стр. 214)
+  Variant p_zclsvobor (стр. 215)
+  Variant p_material (стр. 216)
+  Variant p_zfunc_loc (стр. 217)
+  Variant p_zsiu_fld (стр. 218)
+  Variant p_posid (стр. 219)
+  Variant p_zlib_infs (стр. 220)
+  Variant p_periop_type (стр. 221)
+  Variant p_zphp_dog (стр. 223)
+  Variant p_zphp_usl1 (стр. 224)
+  Variant p_zdebitor (стр. 225)
+  Variant p_zph_eso2 (стр. 226)
+  Variant p_zphd_sk (стр. 227)
+  Variant p_ucvoltlevl (стр. 228)
+  Variant p_zucvolttr (стр. 229)
+  Variant p_z_cl_napr (стр. 230)
+  Variant p_zsiu_ty (стр. 231)
+  Variant p_zdoglink (стр. 232)
+  Variant p_zbur_lu (стр. 234)
+  Variant p_zbur_area (стр. 235)
+  Variant p_zskv_kust (стр. 236)
+  Variant p_z_skv_geo (стр. 237)
+  Variant p_zbur_plst (стр. 238)
+  Variant p_zph_tehk (стр. 239)
+  Variant p_zph_oplst (стр. 240)
+  Variant p_zbur_beg (стр. 241)
+  Variant p_zbur_end (стр. 242)
+  Variant p_zpilot (стр. 243)
+  Variant p_zskv_st (стр. 244)
+  Variant p_zgen_pod (стр. 246)
+  Variant p_zgen_zak (стр. 247)
+  Variant p_zpkr_subp (стр. 248)
+  Variant p_zshifr (стр. 249)
+  Variant p_zobjem (стр. 251)
+  Variant p_zphd_sr (стр. 252)
+  Variant p_zphd_grsr (стр. 253)
+  Variant p_zgaz_type (стр. 255)
+  Variant p_zaviatype (стр. 256)
+  Variant p_zphd_nch (стр. 257)
+  Variant p_zphd_kon (стр. 258)
+  Variant p_zphd_spr (стр. 259)
+  ITabHyperlink _hlink (стр. 319)
+
+=== ОБРАБОТЧИКИ БЕЗ КОНТРОЛА (14)
+  Sub initialization (стр. 335)
+  Sub setDefaultDimensionValue (стр. 341)
+  Sub ANALIZ_TEP_FORM_ON_SHOW (стр. 392)
+  Sub madeLinkForMyselfTst (стр. 418)
+  Sub UpdateHyperlinkParams (стр. 489)
+  Function getCollectionValues (стр. 560)
+  Function getAttValueByKey (стр. 606)
+  Sub CbNovemberOnChange (стр. 1177)
+  Sub CbThirdQuarterOnChange (стр. 1197)
+  Sub UpdateOpenDefHlinkFromSelection (стр. 1392)
+  Sub UpdateOpenDefHlink (стр. 1400)
+  Function InitializeHlinkOpenObject (стр. 1520)
+  Sub fillFieldListByStatusFlag (стр. 1552)
+  Sub addDefaultFieldsToStringList (стр. 1566)
+
+=== КОНСТАНТЫ C_PARAM_* (55), использование в ЖИВОМ коде:
+  [ ] C_BUTTON_OK_ID = "PRX_ANALYZ_TEP_BUTTON_OK" — 0
+  [+] C_ANALYZ_TEP_REP_ID = "PRX_ANALYSIS_TEP" — 3
+  [ ] C_PARAM_ZLIB_INDC = "ZLIB_INDC" — 0
+  [ ] C_PARAM_PLANT = "PLANT" — 0
+  [ ] C_PARAM_CALYEAR = "CALYEAR" — 0
+  [ ] C_PARAM_ZTYPEIND = "ZTYPEIND" — 0
+  [ ] C_PARAM_P_ANALYTIC_SET = "P_ANALYTIC_SET" — 0
+  [ ] C_PARAM_ZPHD_STAT = "ZPHD_STAT" — 0
+  [ ] C_PARAM_VENDOR = "VENDOR" — 0
+  [ ] C_PARAM_SOLD_TO = "SOLD_TO" — 0
+  [ ] C_PARAM_ZHRGRPMO = "ZHRGRPMO" — 0
+  [ ] C_PARAM_PROFIT_CTR = "PROFIT_CTR" — 0
+  [ ] C_PARAM_COSTCENTER = "COSTCENTER" — 0
+  [ ] C_PARAM_ZORGUNIT = "ZORGUNIT" — 0
+  [ ] C_PARAM_ZPH_USR2 = "ZPH_USR2" — 0
+  [ ] C_PARAM_ACTTYPE = "ACTTYPE" — 0
+  [ ] C_PARAM_ZEQUI = "ZEQUI" — 0
+  [ ] C_PARAM_ZCLSVOBOR = "ZCLSVOBOR" — 0
+  [ ] C_PARAM_MATERIAL = "MATERIAL" — 0
+  [ ] C_PARAM_ZFUNC_LOC = "ZFUNC_LOC" — 0
+  [ ] C_PARAM_ZSIU_FLD = "ZSIU_FLD" — 0
+  [ ] C_PARAM_POSID = "POSID" — 0
+  [+] C_PARAM_ZLIB_INFS = "ZLIB_INFS" — 1
+  [ ] C_PARAM_PERIOD_TYPE = "PERIOD_TYPE" — 0
+  [ ] C_PARAM_ZPHD_DOG = "ZPHD_DOG" — 0
+  [ ] C_PARAM_ZPHD_USL1 = "ZPHD_USL1" — 0
+  [ ] C_PARAM_ZDEBITOR = "ZDEBITOR" — 0
+  [ ] C_PARAM_ZPH_ESO2 = "ZPH_ESO2" — 0
+  [ ] C_PARAM_ZPHD_SK = "ZPHD_SK" — 0
+  [ ] C_PARAM_UCVOLTLEVL = "UCVOLTLEVL" — 0
+  [ ] C_PARAM_ZUCVOLTTR = "ZUCVOLTTR" — 0
+  [ ] C_PARAM_Z_CL_NAPR = "Z_CL_NAPR" — 0
+  [ ] C_PARAM_ZSIU_TY = "ZSIU_TY" — 0
+  [ ] C_PARAM_ZDOGLINK = "ZDOGLINK" — 0
+  [ ] C_PARAM_ZBUR_LU = "ZBUR_LU" — 0
+  [ ] C_PARAM_ZBUR_AREA = "ZBUR_AREA" — 0
+  [ ] C_PARAM_ZSKV_KUST = "ZSKV_KUST" — 0
+  [ ] C_PARAM_Z_SKV_GEO = "Z_SKV_GEO" — 0
+  [ ] C_PARAM_ZBUR_PLST = "ZBUR_PLST" — 0
+  [ ] C_PARAM_ZPH_TEHK = "ZPH_TEHK" — 0
+  [ ] C_PARAM_ZPH_OPLST = "ZPH_OPLST" — 0
+  [ ] C_PARAM_ZPILOT = "ZPILOT" — 0
+  [ ] C_PARAM_ZSKV_ST = "ZSKV_ST" — 0
+  [ ] C_PARAM_ZGEN_POD = "ZGEN_POD" — 0
+  [ ] C_PARAM_ZGEN_ZAK = "ZGEN_ZAK" — 0
+  [ ] C_PARAM_ZSHIFR = "ZSHIFR" — 0
+  [ ] C_PARAM_ZOBJEM = "ZOBJEM" — 0
+  [ ] C_PARAM_ZPHD_SR = "ZPHD_SR" — 0
+  [ ] C_PARAM_ZPHD_GRSR = "ZPHD_GRSR" — 0
+  [ ] C_PARAM_ZGAZ_TYPE = "ZGAZ_TYPE" — 0
+  [ ] C_PARAM_ZAVIATYPE = "ZAVIATYPE" — 0
+  [ ] C_PARAM_ZPHD_SPR = "ZPHD_SPR" — 0
+  [+] C_PARAM_ZBUR_BEG = "ZBUR_BEG" — 1
+  [+] C_PARAM_ZBUR_END = "ZBUR_END" — 1
+  [+] C_PARAM_ZPKR_SUBP = "ZPKR_SUBP" — 1
+
+=== ПАРАМЕТРЫ, РЕАЛЬНО УХОДЯЩИЕ В ГИПЕРССЫЛКУ (53)
+  ACTTYPE        ← UPD@705, SetParamsFromSel@706
+  CALYEAR        ← UPD@498, SetParamsFromSel@499
+  COSTCENTER     ← UPD@684, SetParamsFromSel@685
+  MATERIAL       ← UPD@726, SetParamsFromSel@727
+  PERIOD_TYPE    ← UPD@760, SetParamsFromSel@761
+  PLANT          ← UPD@553, SetParamsFromSel@554
+  POSID          ← UPD@747, SetParamsFromSel@748
+  PROFIT_CTR     ← UPD@677, SetParamsFromSel@678
+  P_FIELD_LIST   ← SetParamValue@1560
+  SOLD_TO        ← UPD@663, SetParamsFromSel@664
+  UCVOLTLEVL     ← UPD@803, SetParamsFromSel@804
+  VENDOR         ← UPD@656, SetParamsFromSel@657
+  ZAVIATYPE      ← UPD@1363, SetParamsFromSel@1364
+  ZBUR_AREA      ← UPD@1233, SetParamsFromSel@1234
+  ZBUR_BEG       ← SetParamValue@1276
+  ZBUR_END       ← SetParamValue@1283
+  ZBUR_LU        ← UPD@1226, SetParamsFromSel@1227
+  ZBUR_PLST      ← UPD@1254, SetParamsFromSel@1255
+  ZCLSVOBOR      ← UPD@719, SetParamsFromSel@720
+  ZDEBITOR       ← UPD@782, SetParamsFromSel@783
+  ZDOGLINK       ← UPD@831, SetParamsFromSel@832
+  ZEQUI          ← UPD@712, SetParamsFromSel@713
+  ZFUNC_LOC      ← UPD@733, SetParamsFromSel@734
+  ZGAZ_TYPE      ← UPD@1356, SetParamsFromSel@1357
+  ZGEN_POD       ← UPD@1304, SetParamsFromSel@1305
+  ZGEN_ZAK       ← UPD@1311, SetParamsFromSel@1312
+  ZHRGRPMO       ← UPD@670, SetParamsFromSel@671
+  ZLIB_INDC      ← UPD@635, SetParamsFromSel@636
+  ZLIB_INFS      ← SetParamValue@755
+  ZOBJEM         ← UPD@1334, SetParamsFromSel@1335
+  ZORGUNIT       ← UPD@691, SetParamsFromSel@692
+  ZPHD_DOG       ← UPD@768, SetParamsFromSel@769
+  ZPHD_GRSR      ← UPD@1348, SetParamsFromSel@1349
+  ZPHD_SK        ← UPD@796, SetParamsFromSel@797
+  ZPHD_SPR       ← UPD@1382, SetParamsFromSel@1383
+  ZPHD_SR        ← UPD@1341, SetParamsFromSel@1342
+  ZPHD_STAT      ← UPD@649, SetParamsFromSel@650
+  ZPHD_USL1      ← UPD@775, SetParamsFromSel@776
+  ZPH_ESO2       ← UPD@789, SetParamsFromSel@790
+  ZPH_OPLST      ← UPD@1268, SetParamsFromSel@1269
+  ZPH_TEHK       ← UPD@1261, SetParamsFromSel@1262
+  ZPH_USR2       ← UPD@698, SetParamsFromSel@699
+  ZPILOT         ← UPD@1289, SetParamsFromSel@1290
+  ZPKR_SUBP      ← SetParamValue@1319
+  ZSHIFR         ← UPD@1326, SetParamsFromSel@1327
+  ZSIU_FLD       ← UPD@740, SetParamsFromSel@741
+  ZSIU_TY        ← UPD@824, SetParamsFromSel@825
+  ZSKV_KUST      ← UPD@1240, SetParamsFromSel@1241
+  ZSKV_ST        ← UPD@1296, SetParamsFromSel@1297
+  ZTYPEIND       ← UPD@642, SetParamsFromSel@643
+  ZUCVOLTTR      ← UPD@810, SetParamsFromSel@811
+  Z_CL_NAPR      ← UPD@817, SetParamsFromSel@818
+  Z_SKV_GEO      ← UPD@1247, SetParamsFromSel@1248
+
+=== ПОЛЯ p_* (всего 54): присваиваний / чтений в живом коде
+  p_calyear          := 0   чтений: 1
+  p_ztypeind         := 0   чтений: 1
+  p_plant            := 0   чтений: 1
+  p_zlib_indc        := 0   чтений: 1
+  p_vendor           := 0   чтений: 1
+  p_zphd_stat        := 0   чтений: 1
+  p_sold_to          := 0   чтений: 1
+  p_zhrgrpmo         := 0   чтений: 1
+  p_profit_ctr       := 0   чтений: 1
+  p_costcenter       := 0   чтений: 1
+  p_zorgunit         := 0   чтений: 1
+  p_zph_usr2         := 0   чтений: 1
+  p_acttype          := 0   чтений: 1
+  p_zequi            := 0   чтений: 1
+  p_zclsvobor        := 0   чтений: 1
+  p_material         := 0   чтений: 1
+  p_zfunc_loc        := 0   чтений: 1
+  p_zsiu_fld         := 0   чтений: 1
+  p_posid            := 0   чтений: 1
+  p_zlib_infs        := 1   чтений: 2
+  p_periop_type      := 0   чтений: 1
+  p_zphp_dog         := 0   чтений: 1
+  p_zphp_usl1        := 0   чтений: 1
+  p_zdebitor         := 0   чтений: 1
+  p_zph_eso2         := 0   чтений: 1
+  p_zphd_sk          := 0   чтений: 1
+  p_ucvoltlevl       := 0   чтений: 1
+  p_zucvolttr        := 0   чтений: 1
+  p_z_cl_napr        := 0   чтений: 1
+  p_zsiu_ty          := 0   чтений: 1
+  p_zdoglink         := 0   чтений: 1
+  p_zbur_lu          := 0   чтений: 1
+  p_zbur_area        := 0   чтений: 1
+  p_zskv_kust        := 0   чтений: 1
+  p_z_skv_geo        := 0   чтений: 1
+  p_zbur_plst        := 0   чтений: 1
+  p_zph_tehk         := 0   чтений: 1
+  p_zph_oplst        := 0   чтений: 1
+  p_zbur_beg         := 1   чтений: 2
+  p_zbur_end         := 1   чтений: 2
+  p_zpilot           := 0   чтений: 1
+  p_zskv_st          := 0   чтений: 1
+  p_zgen_pod         := 0   чтений: 1
+  p_zgen_zak         := 0   чтений: 1
+  p_zpkr_subp        := 1   чтений: 2
+  p_zshifr           := 0   чтений: 1
+  p_zobjem           := 0   чтений: 1
+  p_zphd_sr          := 0   чтений: 1
+  p_zphd_grsr        := 0   чтений: 1
+  p_zgaz_type        := 0   чтений: 1
+  p_zaviatype        := 0   чтений: 1
+  p_zphd_nch         := 1   чтений: 1
+  p_zphd_kon         := 1   чтений: 1
+  p_zphd_spr         := 0   чтений: 1

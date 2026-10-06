@@ -1,0 +1,149 @@
+Public Class TabExt: Object
+		
+	/// <summary>
+	/// 	Получение выделенной области листа
+	/// </summary>
+	Public Shared Function GetSelection(sheet: ITabSheet): ITabRange;
+	Var		
+		selection: ITabSelection;
+	Begin		
+		If Not IsNull(sheet) Then
+			selection := sheet.View.Selection;
+			If Not IsNull(selection) Then
+				Return selection.Range;
+			End If;					
+		End If;
+		
+		Return Null;
+	End Function GetSelection;
+		
+	/// <summary>
+	/// 	Получение выделенной ячейки
+	/// </summary>
+	Public Shared Function GetSelectionCell(sheet: ITabSheet): ITabRange;
+	Var
+		cell: ITabRange;
+	Begin
+		cell := GetSelection(sheet);
+		If Not IsNull(cell) Then
+			cell := ToPartRange(cell);
+			cell := cell.Part(0);
+			If cell.IsCell Then
+				Return cell;
+			End If;
+			
+			Return sheet.Cell(cell.Top, cell.Left);
+		End If;
+		
+		Return Null;
+	End Function GetSelectionCell;	
+		
+	/// <summary>
+	/// 	Начать обновление листа
+	/// </summary>
+	Public Shared Sub BeginUpdate(tabSheet: ITabSheet; Var eventGroups: TabViewEventGroups);
+	Begin
+		eventGroups := tabSheet.EventMask;
+		tabSheet.BeginUpdate;	
+		tabSheet.UndoRedo.Enabled := False;
+		tabSheet.EventMask := TabViewEventGroups.ClickEvents; // При этом IEaxObject.RefreshHidden не обновляет ОД. Нужно заисследовать	
+	End Sub BeginUpdate;
+		
+	/// <summary>
+	/// 	Закончить обновление листа
+	/// </summary>
+	Public Shared Sub EndUpdate(tabSheet: ITabSheet; eventGroups: TabViewEventGroups = TabViewEventGroups.AllEvents; enableUndoRedo: Boolean = True);
+	Begin		
+		tabSheet.EventMask := eventGroups;	
+		tabSheet.UndoRedo.Enabled := enableUndoRedo;	
+		tabSheet.EndUpdate;
+	End Sub EndUpdate;
+	
+	/// <summary>
+	/// 	Преобразовать диапазон в разделенный на части
+	/// 	Сделано для универсальности, чтобы свойство ITabRange.PartCount всегда было > 0
+	/// </summary>
+	Public Shared Function ToPartRange(range: ITabRange): ITabRange;
+	Begin
+		Return range.PartCount > 0 ? range : range.Combine(range, TabRangeCombineMode.And_);
+	End Function ToPartRange;
+	
+	/// <summary>
+	/// 	Получить внешнюю границу диапазона
+	/// 	Применяется для составных диапазонов
+	/// </summary>
+	Public Shared Function ToOuterRange(range: ITabRange): ITabRange;
+	Begin
+		Return range.TabSheet.Cells(range.Top, range.Left, range.Bottom, range.Right)			
+	End Function ToOuterRange;
+	
+	// 
+	/// <summary>
+	/// 	Проверка пересечения одного диапазона другим
+	/// </summary>
+	Public Shared Function IsIntersectedRange(range1: ITabRange; range2: ITabRange): Boolean;
+	Var
+		combinedRange: ITabRange;
+	Begin
+		combinedRange := range1.Combine(range2, TabRangeCombineMode.And_);
+		
+		Return Not IsNull(combinedRange) And (combinedRange.Count > 0);
+	End Function IsIntersectedRange;
+	
+	/// <summary>
+	/// 	Получить координаты ячейки относительно области. Ячейка должна находиться внутри области
+	/// 	@range - диапазон, относительно которого определяются координаты
+	/// 	@row - индекс строки 
+	/// 	@column - индекс столбца
+	/// </summary>
+	Public Shared Sub GetRelativeCellCoords(range: ITabRange; Var row: Integer; Var column: Integer);
+	Var
+		cell: ITabRange;
+	Begin
+		If Not IsNull(range) And (row > -1) And (column > -1) Then				
+			cell := range.TabSheet.Cell(row, column);
+			If IsIntersectedRange(range, cell) Then
+				row := row - range.Top;
+				column := column - range.Left;	
+				
+				Return;				
+			End If;			
+		End If;	
+		
+		row := -1;
+		column := -1;
+	End Sub GetRelativeCellCoords;
+	
+	/// <summary>
+	///  	Создать ссылку на открытие объекта репозитория с параметрами
+	/// 	cell - ячейка в которой будет создана ссылка
+	/// 	action - ссылка (команда), выполняемая при клике на гиперссылке. Для генерации использовать сборку ASSM_APP_WEB_TOOLS
+	/// 	actionType - перечисление TabHyperlinkActionType содержит типы действий, выполняемого при щелчке по гиперссылке
+	/// </summary>
+	Public Shared Sub SetTabHyperlink(cell: ITabRange; linkText: String; actionType: TabHyperlinkActionType; action: String; showModal: Boolean = False);
+	Var	
+		link: ITabHyperlink;	
+		style: ITabCellStyle;	
+	Begin			
+		style := cell.Style;		
+		style.VerticalAlignment := TabFormatLayout.Center;
+		style.Locked := TriState.OnOption;
+	
+		link := style.Hyperlink;			
+
+		link.Action := action;
+		link.ActionType := actionType;
+		link.Enable := TriState.OnOption;
+		link.Active := TriState.OnOption;
+		link.SeparateLinkText := TriState.OnOption;
+		link.Text := linkText;
+		link.Target := showModal ? TabHyperlinkTarget.Parent : TabHyperlinkTarget.Blank;
+		If link.Underline = TriState.Undefined Then
+			link.Underline := TriState.OnOption;
+		End If;	
+		If link.UseGlobalSettings = TriState.Undefined Then
+			link.UseGlobalSettings := TriState.OnOption;		
+		End If;			
+	End Sub SetTabHyperlink;
+	
+End Class TabExt;

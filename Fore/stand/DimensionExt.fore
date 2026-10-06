@@ -1,0 +1,244 @@
+Public Enum AttributeDataKind
+	Value, 			// Значение атрибута, которое лежит в таблице, являющейся источником данных справочника	
+	DisplayValue 	// Отображаемое значение атрибута	
+End Enum AttributeDataKind;
+
+Public Class DimensionExt: Object
+			
+	/// <summary>
+	/// 	Получить модель измерения
+	/// </summary>
+	Public Shared Function GetModel(key: integer): IDimensionModel;
+	Var
+		mbObject: IMetabaseObject;
+	Begin
+		mbObject := MbExt.Setup(key);		
+		
+		Return (mbObject Is IDimensionModel) ? mbObject As IDimensionModel : Null;
+	End Function GetModel;
+		
+	/// <summary>
+	/// 	Получить экземпляр измерения
+	/// </summary>
+	Public Shared Function Open(descriptor: IMetabaseObjectDescriptor; Paramarray paramValues: Array): IDimInstance;
+	Var
+		mbObject: IMetabaseObjectInstance;
+		values: IMetabaseObjectParamValues;
+	Begin
+		If Not IsNull(descriptor) Then
+			Select Case descriptor.ClassId
+				Case 
+					MetabaseObjectClass.KE_CLASS_STDDIM,						// Табличный справочник.
+					MetabaseObjectClass.KE_CLASS_CLNDIM,						// Календарный справочник.
+					MetabaseObjectClass.KE_CLASS_USERDIM,						// Вычисляемый справочник.
+					MetabaseObjectClass.KE_CLASS_CUSTOMDIM,						// Конструируемый справочник.
+					MetabaseObjectClass.KE_CLASS_ADOMDDIM,						// Справочник ADOMD.
+					MetabaseObjectClass.KE_CLASS_MSSCENARIODIM, // Сценарный справочник моделирования.
+					MetabaseObjectClass.KE_CLASS_AUTOCUBEUNITSDIM,				// Справочник единиц измерения.
+					MetabaseObjectClass.KE_CLASS_RUBRICATORREVISIONSDIM,		// Справочник ревизий в базе данных временных рядов.
+					MetabaseObjectClass.KE_CLASS_COMPOUNDDIM,					// Составной справочник.
+					MetabaseObjectClass.KE_CLASS_COMPOUNDCLNDIM,				// Составной календарный справочник.
+					MetabaseObjectClass.KE_CLASS_VALIDATIONDIM,					// Справочник валидаций в базе данных временных рядов.
+					MetabaseObjectClass.KE_CLASS_RUBRICATORCALENDARLEVELSDIM,	// Календарное измерение базы данных временных рядов.
+					MetabaseObjectClass.KE_CLASS_SOURCEANDFIELDDIM,				// Справочник источников и полей.
+					MetabaseObjectClass.KE_CLASS_NUMSROWSDIM,					// Справочник номеров строк.
+					MetabaseObjectClass.KE_CLASS_ATTRIBUTESDIM,					// Справочник атрибутов базы данных временных рядов.
+					MetabaseObjectClass.KE_CLASS_VIRTUALDIM,					// Виртуальное измерение для строк/столбцов таблицы.
+					MetabaseObjectClass.KE_CLASS_METADICTIONARYRDS,				// Табличный справочник НСИ.
+					MetabaseObjectClass.KE_CLASS_METADICTIONARYCOMPRDS,			// Составной табличный справочник НСИ.
+					MetabaseObjectClass.KE_CLASS_RDS_DICTIONARY, // Справочник НСИ.
+					MetabaseObjectClass.KE_CLASS_RDS_COMPDICTIONARY:			// Составной справочник НСИ.	
+				Else
+					Raise New CInvalidObjectTypeException.Create(descriptor.Id);
+			End Select;
+			values := mbExt.SetParamValues(descriptor, paramValues);
+			mbObject := descriptor.Open(values);		
+		End If;		
+		
+		Return (mbObject Is IDimInstance) ? mbObject As IDimInstance : Null;
+	End Function Open;
+	
+	/// <summary>
+	/// 	Метод возвращает индекс первого найденного элемента, имеющего указанное значение атрибута.
+	/// 	Если значение не найдено, метод возвращает «-1».
+	/// 	Значение, указываемое в параметре Value, чувствительно к регистру символов. Поиск осуществляется только по полномузначению.
+	/// </summary>
+	Public Shared Function GetElementIndexByAttributeValue(dimension: IDimInstance; attributeId: String; value: Variant): Integer;
+	Var
+		attribute: IDimAttributeInstance;
+	Begin
+		attribute := dimension.Attributes.FindById(attributeId);
+		If Not IsNull(attribute) Then
+			Return attribute.LookupValue(value);
+		End If;
+		
+		Return -1;
+	End Function GetElementIndexByAttributeValue;
+	
+	/// <summary>
+	/// 	Метод возвращает индекс элемента, если индекс уникальный. Либо IDimElementArray, если индекс неуникальный.
+	/// 	Если значение/я не найдено, метод возвращает «-1», либо пустой массив в зависимости от типа индекса
+	/// 	level - уровень элементов, в котором производится поиск. -1 - уровень не учитывается
+	/// 	values - массив значений (Array of Variant), равный количеству атрибутов. Либо, если атрибут в индексе только один, просто значение.
+	/// </summary>
+	Public Shared Function GetElementIndexByDimIndex(dimension: IDimInstance; dimIndexId: String; values: Variant; level: Integer = -1): Variant;
+	Var
+		index: IDimIndexInstance;
+		lookup: IDimIndexInstanceLookup;
+	Begin
+		index := dimension.Indexes.FindById(dimIndexId);
+		If IsNull(index) Then
+			Raise New DimensionIndexNotFoundException.Create(dimension.Ident, dimIndexId);
+		End If;
+		
+		lookup := index.CreateDimIndexLookup;
+		lookup.Level := level;
+		lookup.SetIndexAttributesValues(values);
+		
+		Return index.Index.Unique ? lookup.LookUpFirst : lookup.LookUp;
+	End Function GetElementIndexByDimIndex;
+		
+	/// <summary>
+	/// 	Получить значение атрибута по индексу элемента
+	/// </summary>
+	Public Shared Function GetAttributeValueByElementIndex(dimension: IDimInstance; attributeId: string; elementIndex: integer; dataKind: AttributeDataKind = AttributeDataKind.Value): Variant;
+	Var
+		attribute: IDimAttributeInstance;
+	Begin
+		attribute := dimension.Attributes.FindById(attributeId);
+		If Not IsNull(attribute) And (elementIndex > -1) Then
+			If dataKind = AttributeDataKind.DisplayValue Then
+				Return dimension.Elements.DisplayAttributeValueO(elementIndex, attribute);
+			Elseif dataKind = AttributeDataKind.Value Then
+				Return dimension.Elements.AttributeValueO(elementIndex, attribute);	
+			End If;					
+		End If;
+
+		Return Null;
+	End Function GetAttributeValueByElementIndex;
+		
+	/// <summary>
+	/// 	Получить значение атрибута по идентификатору элемента
+	/// </summary>
+	Public Shared Function GetAttributeValueByElementId(dimension: IDimInstance; attributeId: string; elementId: string; dataKind: AttributeDataKind = AttributeDataKind.Value): Variant;
+	Var
+		elementIndex: integer;
+	Begin
+		elementIndex := dimension.Elements.FindById(elementId);
+				
+		Return GetAttributeValueByElementIndex(dimension, attributeId, elementIndex, dataKind);
+	End Function GetAttributeValueByElementId;
+		
+	/// <summary>
+	/// 	Получить модель источника альтернативной иерархии
+	/// </summary>
+	Public Shared Function GetHierarchySource(hierarchies: IDimHierarchies; sourceDimensionId: string): IDimensionModel;
+	Var
+		hierarchy: IDimHierarchy;
+		i: integer;
+	Begin
+		If Not IsNull(hierarchies) Then
+			For i := 0 To hierarchies.Count - 1 Do
+				hierarchy := hierarchies.Item(i);
+				If MbExt.Parse(hierarchy.Source).Id = sourceDimensionId Then
+					Return hierarchy.Source;
+				End If;
+			End For;
+		End If;			
+		
+		Return Null;
+	End Function GetHierarchySource;
+		
+	/// <summary>
+	/// 	Создание объекта для поиска элементов по условиям
+	/// </summary>
+	Public Shared Function CreateDimOrmCondition(model: IDimensionModel): IDimOrmCondition;
+	Var
+		ormManager: IDimOrmManager;	
+		dimOrm: IDimOrmClass;	
+	Begin
+		ormManager := New DimOrmManager.Create;	
+		dimOrm := ormManager.CreateClass(model);
+		Return dimOrm.CreateCondition;
+	End Function CreateDimOrmCondition;
+			
+	/// <summary>
+	/// 	Получить источники составного измерения
+	/// </summary>
+	Public Shared Function GetCompoundDimSources(compoundDimension: IDimInstance): ICompoundDimensionSources;
+	Var
+		compoundDim: ICompoundDimension;
+	Begin
+		If Not (compoundDimension Is ICompoundDimensionInstance) Then
+			Return Null;
+		End If;		
+		compoundDim := compoundDimension.Dimension As ICompoundDimension;
+		
+		Return compoundDim.Sources;
+	End Function GetCompoundDimSources;
+	
+	/// <summary>
+	/// 	Поиск элемента по идентификатору
+	/// 	@dimension - открытый экземпляр справочника
+	/// 	@id - идентификатор элемента
+	/// </summary>
+	Public Shared Function FindDimensionElement(dimension: IDimInstance; id: String): Integer;
+	Var index: Integer;
+	Begin
+		index := dimension.Elements.FindById(id);
+		If index < 0 Then
+			Raise New CNotFoundElementException.Create(id, dimension.Ident);
+		End If;
+		Return index;
+	End Function FindDimensionElement;
+	
+	/// <summary>
+	/// 	Поиск атрибута измерения по идентификатору
+	/// 	@dimension - открытое измерение
+	/// 	@id - идентификатор атрибута
+	/// 	@types - допустимые типы значений
+	/// </summary>
+	Public Shared Function FindDimensionAttribute(dimension: IDimInstance; id: String; Paramarray types: Array Of DbDataType): IDimAttributeInstance;
+	Var attr: IDimAttributeInstance;
+	Begin
+		attr := dimension.Attributes.FindById(id);
+		If attr = Null Then
+			Raise New CNotFoundAttributeException.Create(id, dimension.Ident);
+		End If;
+		If Not IsNull(types) And (types.IndexOf(attr.Attribute.DataType) < 0) Then
+			Raise New CInvalidAttributeTypeException.Create(id, dimension.Ident);
+		End If;
+		Return attr;
+	End Function FindDimensionAttribute;
+
+	Public Shared Function GetSearchFieldsStr(srcDimInstance : IDimInstance; uniqueIndexId : string):string;
+	Var i : integer;
+		res : string;
+	Begin 		
+		With indAttrs: srcDimInstance.Indexes.FindById(uniqueIndexId).Index.Attributes Do
+			For i:= 0 To indAttrs.Count-1 Do  
+				res := res + (res.IsEmpty ? EMPTY_STR : SEMICOLON_DELIMITER) + indAttrs.Item(i).Id;
+			End For;
+		End With;
+		
+		Return res;
+	End Function GetSearchFieldsStr; 
+	
+	Public Shared Function GetSearchValues(dimInstance : IDimInstance; uniqueIndexId : string; values : IHashTable):IArrayList;
+	Var i : integer;
+		res : IArrayList;
+	Begin 
+		res := New ArrayList.Create;			
+		
+		If Not isNull(values) Then
+			With indAttrs: dimInstance.Indexes.FindById(uniqueIndexId).Index.Attributes Do
+				For i:= 0 To indAttrs.Count-1 Do  
+					res.Add(values.Item(indAttrs.Item(i).Id));
+				End For;
+			End With;
+		End If;			
+		
+		Return res;
+	End Function GetSearchValues;		
+	
+End Class DimensionExt;

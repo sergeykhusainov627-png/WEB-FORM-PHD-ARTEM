@@ -1,0 +1,144 @@
+R1: [A1] Перечень полей отчета
+R3: [A3] Поле отчета | [B3] Условие вывода | [C3] Если "Выводить коды аналитик"   НЕ установлен | [D3] Если "Выводить коды аналитик"   НЕ установлен | [E3] Выводить код если "Выводить коды аналитик"установлен | [F3] Выводить код если "Выводить коды аналитик"установлен | [G3] Выводить код если "Выводить коды аналитик"установлен
+R4: [A4] Поле отчета | [B4] Условие вывода | [C4] источник | [D4] поле | [E4] да/нет | [F4] Источник | [G4] Поле
+R5: [A5] Год | [B5] Год на СЭ; установлен в разделе "Поля для вывода" | [C5] TBL_PHD_FAP_MULT | [D5] YEAR | [E5] нет
+R6: [A6] СП | [B6] СП на СЭ; установлен в разделе "Поля для вывода" | [C6] RDSD_PLANT | [D6] TXTMD | [E6] да | [F6] TBL_PHD_FAP_MULT | [G6] SP
+R7: [A7] ТЭП | [B7] ТЭП на СЭ; установлен в разделе "Поля для вывода" | [C7] DICT_PHD_LEFT | [D7] ZLIB_INDC | [E7] нет
+R8: [A8] Наименование ТЭП | [B8] всегда, если установлен ТЭП в разделе "Поля для вывода" | [C8] RDSD_INDS | [D8] SNAME | [E8] нет
+R9: [A9] Ед.измерения | [B9] если установлен в разделе "Поля для вывода" | [C9] DICT_PHD_LEFT | [D9] ACT_UNIT | [E9] нет
+R10: [A10] Поставщик | [B10] если установлен в разделе "Поля для вывода" | [C10] RDSD_VENDOR | [D10] TXTMD | [E10] да | [F10] DICT_PHD_LEFT | [G10] VENDOR
+R11: [A11] Заказчик | [B11] если установлен в разделе "Поля для вывода" | [C11] RDSD_SOLDTO | [D11] NAME | [E11] да | [F11] DICT_PHD_LEFT | [G11] KEY
+R12: [A12] Регион | [B12] если установлен в разделе "Поля для вывода" | [C12] RDSD_ZHRGRPMO | [D12] NAME | [E12] да | [F12] DICT_PHD_LEFT | [G12] ZHRGRPMO
+R13: [A13] Вид производства | [B13] если установлен в разделе "Поля для вывода" | [C13] RDSD_PROFIT_CTR | [D13] NAME | [E13] да | [F13] DICT_PHD_LEFT | [G13] PROFIT_CTR
+R14: [A14] МВЗ | [B14] если установлен в разделе "Поля для вывода" | [C14] DICT_PHD_LEFT | [D14] COSTCENTER | [E14] нет | [F14] DICT_PHD_LEFT
+R15: [A15] Орг.единица | [B15] если установлен в разделе "Поля для вывода" | [C15] RDSD_ZORGU | [D15] NAME | [E15] да | [F15] DICT_PHD_LEFT | [G15] ZORGU
+R16: [A16] Рабочее место исполнителя | [B16] если установлен в разделе "Поля для вывода" | [C16] RDSD_ZPH_USR0 | [D16] NAME | [E16] да | [F16] DICT_PHD_LEFT | [G16] CODE_ZPH_USR0
+R17: [A17] Вид работ | [B17] если установлен в разделе "Поля для вывода" | [C17] RDSD_ACTTYPE | [D17] NAME | [E17] да | [F17] DICT_PHD_LEFT | [G17] ACTTYPE
+R18: [A18] Единица оборудования | [B18] если установлен в разделе "Поля для вывода" | [C18] RDSD_ZEQUI | [D18] NAME | [E18] да | [F18] DICT_PHD_LEFT | [G18] ZEQUI
+R19: [A19] Класс вида оборудования | [B19] если установлен в разделе "Поля для вывода" | [C19] RDSD_ZCLSVOBOR | [D19] NAME | [E19] да | [F19] DICT_PHD_LEFT | [G19] ZCLSVOBOR
+R20: [A20] Материал | [B20] если установлен в разделе "Поля для вывода" | [C20] RDSD_MATERIAL | [D20] NAME | [E20] да | [F20] DICT_PHD_LEFT | [G20] MATERIAL
+R21: [A21] Тех.место | [B21] если установлен в разделе "Поля для вывода" | [C21] RDSD_ZFUNC_LOC | [D21] NAME | [E21] да | [F21] DICT_PHD_LEFT | [G21] ZFUNC_LOC
+R22: [A22] Месторождение | [B22] если установлен в разделе "Поля для вывода" | [C22] RDSD_ZSIU_FLD | [D22] NAME | [E22] да | [F22] DICT_PHD_LEFT | [G22] ZSIU_FLD
+R23: [A23] СПП | [B23] если установлен в разделе "Поля для вывода" | [C23] RDSD_POSID | [D23] NAME | [E23] да | [F23] DICT_PHD_LEFT | [G23] POSID
+R24: [A24] ИАС | [B24] если установлен в разделе "Поля для вывода" | [C24] RDSD_INFOSYSTEM | [D24] NAME | [E24] да | [F24] DICT_PHD_LEFT | [G24] ZLIB_INFS
+R25: [A25] Тип периода | [B25] если установлен в разделе "Поля для вывода" | [C25] DIC_TYPE_PERIOD | [D25] NAME | [E25] да | [F25] DICT_PHD_LEFT | [G25] PERIOD_TY
+R26: [A26] Договор | [B26] если установлен в разделе "Поля для вывода" | [C26] DICT_PHD_LEFT | [D26] ZPHD_DOG | [E26] нет
+R27: [A27] Потребитель | [B27] если установлен в разделе "Поля для вывода" | [C27] SHORTCUT_TO_RDSD_SOLDTO_3 | [D27] NAME | [E27] да | [F27] DICT_PHD_LEFT | [G27] ZPHD_USL1
+R28: [A28] ЭСО физ | [B28] если установлен в разделе "Поля для вывода" | [C28] SHORTCUT_TO_RDSD_SOLDTO | [D28] NAME | [E28] да | [F28] DICT_PHD_LEFT | [G28] ZDEBITOR
+R29: [A29] Эсо физ (даль) | [B29] если установлен в разделе "Поля для вывода" | [C29] SHORTCUT_TO_RDSD_SOLDTO_2 | [D29] NAME | [E29] да | [F29] DICT_PHD_LEFT | [G29] ZPH_ESO2
+R30: [A30] ЭСО покуп | [B30] если установлен в разделе "Поля для вывода" | [C30] SHORTCUT_TO_RDSD_SOLDTO_4 | [D30] NAME | [E30] да | [F30] DICT_PHD_LEFT | [G30] ZPH_EPOK
+R31: [A31] Сетевая компания | [B31] если установлен в разделе "Поля для вывода" | [C31] SHORTCUT_TO_RDSD_SOLDTO_5 | [D31] NAME | [E31] да | [F31] DICT_PHD_LEFT | [G31] ZPHD_SK
+R32: [A32] Ур.напр. | [B32] если установлен в разделе "Поля для вывода" | [C32] RDSD_UCVOLTLEVL | [D32] NAME | [E32] да | [F32] DICT_PHD_LEFT | [G32] UCVOLTLEVL
+R33: [A33] Ур.напр.продаж | [B33] если установлен в разделе "Поля для вывода" | [C33] SHORTCUT_TO_RDSD_UCVOLTLEVL | [D33] NAME | [E33] да | [F33] DICT_PHD_LEFT | [G33] ZUCVOLTTR
+R34: [A34] Класс напр. | [B34] если установлен в разделе "Поля для вывода" | [C34] RDSD_Z_CL_NAPR | [D34] NAME | [E34] да | [F34] DICT_PHD_LEFT | [G34] Z_CL_NAPR
+R35: [A35] Тип тарифов | [B35] если установлен в разделе "Поля для вывода" | [C35] RDSD_ZSIU_TY | [D35] NAME | [E35] да | [F35] DICT_PHD_LEFT | [G35] ZSIU_TY
+R36: [A36] Договор по воде | [B36] если установлен в разделе "Поля для вывода" | [C36] DICT_PHD_LEFT | [D36] ZDOGLINK | [E36] нет
+R37: [A37] Участок недр | [B37] если установлен в разделе "Поля для вывода" | [C37] RDSD_ZBUR_LU | [D37] NAME | [E37] да | [F37] DICT_PHD_LEFT | [G37] ZBUR_LU
+R38: [A38] Пощадь бурения | [B38] если установлен в разделе "Поля для вывода" | [C38] RDSD_ZBUR_AREA | [D38] NAME | [E38] да | [F38] DICT_PHD_LEFT | [G38] ZBUR_AREA
+R39: [A39] Куст | [B39] если установлен в разделе "Поля для вывода" | [C39] DICT_PHD_LEFT | [D39] ZKUST | [E39] да | [F39] DICT_PHD_LEFT | [G39] ZSKV_KUST
+R40: [A40] Скважина (геол.ном) | [B40] если установлен в разделе "Поля для вывода" | [C40] DICT_PHD_LEFT | [D40] Z_SKV_GEO | [E40] нет
+R41: [A41] Пласт | [B41] если установлен в разделе "Поля для вывода" | [C41] RDSD_ZBUR_PLST | [D41] ZBUR_PLST | [E41] да | [F41] DICT_PHD_LEFT | [G41] ZBUR_PLST
+R42: [A42] Технология отбора керна | [B42] если установлен в разделе "Поля для вывода" | [C42] RDSD_ZPH_TEHK | [D42] NAME | [F42] DICT_PHD_LEFT | [G42] ZPH_TEHK
+R43: [A43] Струк. особенности пласта | [B43] если установлен в разделе "Поля для вывода" | [C43] RDSD_PH_OPLST | [D43] NAME | [F43] DICT_PHD_LEFT | [G43] ZPH_OPLST
+R44: [A44] Мероприятие | [B44] если установлен в разделе "Поля для вывода" | [C44] DICT_PHD_LEFT | [D44] ZPHD_COMM | [E44] да | [F44] DICT_PHD_LEFT | [G44] ZPHD_COMM
+R45: [A45] Дата начала бурения | [B45] если установлен в разделе "Поля для вывода" | [C45] DICT_PHD_LEFT | [D45] ZBUR_BEG | [E45] нет
+R46: [A46] Дата окончания бурения | [B46] если установлен в разделе "Поля для вывода" | [C46] DICT_PHD_LEFT | [D46] ZBUR_END | [E46] нет
+R47: [A47] Пилотный ствол | [B47] если установлен в разделе "Поля для вывода" | [C47] DICT_PHD_LEFT | [D47] ZPILOT | [E47] нет
+R48: [A48] Состояние скважины | [B48] если установлен в разделе "Поля для вывода" | [C48] RDSD_ZSKV_ST | [D48] NAME | [F48] DICT_PHD_LEFT | [G48] ZSKV_ST
+R49: [A49] Примечание | [B49] если установлен в разделе "Поля для вывода" | [C49] DICT_PHD_LEFT | [D49] ZINDTXT1 | [E49] нет
+R50: [A50] Ген.подрядчик | [B50] если установлен в разделе "Поля для вывода" | [C50] SHORTCUT_TO_RDSD_SOLDTO_7 | [D50] NAME | [E50] да | [F50] DICT_PHD_LEFT | [G50] ZGEN_POD
+R51: [A51] Ген.заказчик | [B51] если установлен в разделе "Поля для вывода" | [C51] SHORTCUT_TO_RDSD_SOLDTO_6 | [D51] NAME | [E51] да | [F51] DICT_PHD_LEFT | [G51] ZGEN_ZAK
+R52: [A52] Субподрядчик | [B52] если установлен в разделе "Поля для вывода" | [C52] SHORTCUT_TO_RDSD_SOLDTO_8 | [D52] NAME | [E52] да | [F52] DICT_PHD_LEFT | [G52] ZPKR_SUBP
+R53: [A53] Шифр проекта стройки | [B53] если установлен в разделе "Поля для вывода" | [C53] RDSD_ZSHIFR | [D53] NAME | [E53] нет | [F53] DICT_PHD_LEFT | [G53] ZSHIFR
+R54: [A54] Номер объекта ЭМ | [B54] если установлен в разделе "Поля для вывода" | [C54] RDSD_ZOBJEM | [D54] NAME | [E54] нет | [F54] DICT_PHD_LEFT | [G54] ZOBJEM
+R55: [A55] Объект исследования | [B55] если установлен в разделе "Поля для вывода" | [C55] RDSD_ZPHD_SR | [D55] NAME | [E55] да | [F55] DICT_PHD_LEFT | [G55] ZPHD_SR
+R56: [A56] Группировка сред ЭМ | [B56] если установлен в разделе "Поля для вывода" | [C56] RDSD_ZPHD_GRSR | [D56] NAME | [E56] да | [F56] DICT_PHD_LEFT | [G56] ZPHD_GRSR
+R57: [A57] Вид газа | [B57] если установлен в разделе "Поля для вывода" | [C57] RDSD_ZGAZ_TYPE | [D57] NAME | [E57] да | [F57] DICT_PHD_LEFT | [G57] ZGAZ_TYPE
+R58: [A58] Тип воздушного судна | [B58] если установлен в разделе "Поля для вывода" | [C58] RDSD_ZAVIATYPE | [D58] NAME | [E58] да | [F58] DICT_PHD_LEFT | [G58] ZAVIATYPE
+R59: [A59] Дата ввода скв. в экспл. | [B59] если установлен в разделе "Поля для вывода" | [C59] DICT_PHD_LEFT | [D59] ZPHD_NCH | [E59] нет
+R60: [A60] Дата проведения ГТМ | [B60] если установлен в разделе "Поля для вывода" | [C60] DICT_PHD_LEFT | [D60] ZPHD_KON | [E60] нет
+R61: [A61] ГТМ (Универсальный справочник) | [B61] если установлен в разделе "Поля для вывода" | [C61] RDSD_ZPHD_SPR | [D61] NAME, по ZPHD_NOP1 при ZPHD_SPR = GTM_SKV | [E61] да | [F61] DICT_PHD_LEFT | [G61] ZPHD_NOP1 при ZPHD_SPR = GTM_SKV
+R62: [A62] Вид деятельности | [B62] если установлен в разделе "Поля для вывода" | [C62] RDSD_ACTVTS | [D62] SNAME | [E62] да | [F62] RDSD_INDS | [G62] ACTVTS | [H62] см. лист Выбор атрибутов ТЭП
+R63: [A63] Вид показателя | [B63] если установлен в разделе "Поля для вывода" | [C63] DICT_PHD_GROUPS | [D63] NAME | [E63] да | [F63] TBL_IDLNK | [G63] ID1 | [H63] см. лист Выбор атрибутов ТЭП
+R64: [A64] Формы  отчетов | [B64] если установлен в разделе "Поля для вывода" | [C64] TBL_ZIDNFORM | [D64] ZF_NUMB | [E64] нет | [H64] см. лист Выбор атрибутов ТЭП
+R65: [A65] ТЭП-источник | [B65] если установлен в разделе "Поля для вывода" | [C65] TBL_ZIDNFORM | [D65] ZF_NUMB | [E65] нет | [H65] см. лист Выбор атрибутов ТЭП
+R66: [A66] Наименование ТЭП-источника | [B66] если установлен в разделе "Поля для вывода" | [C66] RDSD_INDS | [D66] SNAME | [E66] нет | [H66] см. лист Выбор атрибутов ТЭП
+R67: [A67] Владелец ТЭП | [B67] если установлен в разделе "Поля для вывода" | [C67] RDSD_OWNERS | [D67] SHORT_NAME | [E67] да | [F67] RDSD_INDS | [G67] OWNER | [H67] см. лист Выбор атрибутов ТЭП
+R68: [A68] Исключение из приказа | [B68] если установлен в разделе "Поля для вывода" | [C68] DICT_PHD_LEFT | [D68] ZPHD_IS | [H68] см. лист Выбор атрибутов ТЭП
+R69: [A69] Источник данных | [B69] если установлен в разделе "Поля для вывода" | [C69] DICT_PHD_LEFT | [D69] ZLIB_INFS | [H69] см. лист Выбор атрибутов ТЭП
+R70: [A70] Январь | [B70] выбран в разделе "Поля для вывода" | [C70] TBL_PHD_FAP_MULT | [D70] ZSIU_INDV при  QUARTER = 1 CALMONTH =  01
+R71: [A71] Февраль | [B71] выбран в разделе "Поля для вывода" | [C71] TBL_PHD_FAP_MULT | [D71] ZSIU_INDV при  QUARTER = 1 CALMONTH =  02
+R72: [A72] Март | [B72] выбран в разделе "Поля для вывода" | [C72] TBL_PHD_FAP_MULT | [D72] ZSIU_INDV при  QUARTER = 1 CALMONTH =  03
+R73: [A73] Апрель | [B73] выбран в разделе "Поля для вывода" | [C73] TBL_PHD_FAP_MULT | [D73] ZSIU_INDV при  QUARTER = 2 CALMONTH =  04
+R74: [A74] Май | [B74] выбран в разделе "Поля для вывода" | [C74] TBL_PHD_FAP_MULT | [D74] ZSIU_INDV при  QUARTER = 2 CALMONTH =  05
+R75: [A75] Июнь | [B75] выбран в разделе "Поля для вывода" | [C75] TBL_PHD_FAP_MULT | [D75] ZSIU_INDV при  QUARTER = 2 CALMONTH =  06
+R76: [A76] Июль | [B76] выбран в разделе "Поля для вывода" | [C76] TBL_PHD_FAP_MULT | [D76] ZSIU_INDV при  QUARTER = 3 CALMONTH =  07
+R77: [A77] Август | [B77] выбран в разделе "Поля для вывода" | [C77] TBL_PHD_FAP_MULT | [D77] ZSIU_INDV при  QUARTER = 3 CALMONTH =  08
+R78: [A78] Сентябрь | [B78] выбран в разделе "Поля для вывода" | [C78] TBL_PHD_FAP_MULT | [D78] ZSIU_INDV при  QUARTER = 3 CALMONTH =  09
+R79: [A79] Октябрь | [B79] выбран в разделе "Поля для вывода" | [C79] TBL_PHD_FAP_MULT | [D79] ZSIU_INDV при  QUARTER = 4 CALMONTH =  10
+R80: [A80] Ноябрь | [B80] выбран в разделе "Поля для вывода" | [C80] TBL_PHD_FAP_MULT | [D80] ZSIU_INDV при  QUARTER = 4 CALMONTH =  11
+R81: [A81] Декабрь | [B81] выбран в разделе "Поля для вывода" | [C81] TBL_PHD_FAP_MULT | [D81] ZSIU_INDV при  QUARTER = 4 CALMONTH =  12
+R82: [A82] I кв. | [B82] выбран в разделе "Поля для вывода" | [C82] TBL_PHD_FAP_MULT | [D82] ZSIU_INDV при  QUARTER = 1 CALMONTH =  00
+R83: [A83] II кв. | [B83] выбран в разделе "Поля для вывода" | [C83] TBL_PHD_FAP_MULT | [D83] ZSIU_INDV при  QUARTER = 2 CALMONTH =  00
+R84: [A84] 6 мес. | [B84] выбран в разделе "Поля для вывода" | [C84] TBL_PHD_FAP_MULT | [D84] ZSIU_INDV при  QUARTER = 6 CALMONTH =  00
+R85: [A85] III кв. | [B85] выбран в разделе "Поля для вывода" | [C85] TBL_PHD_FAP_MULT | [D85] ZSIU_INDV при  QUARTER = 3 CALMONTH =  00
+R86: [A86] 9 мес. | [B86] выбран в разделе "Поля для вывода" | [C86] TBL_PHD_FAP_MULT | [D86] ZSIU_INDV при  QUARTER = 9 CALMONTH =  00
+R87: [A87] IV кв. | [B87] выбран в разделе "Поля для вывода" | [C87] TBL_PHD_FAP_MULT | [D87] ZSIU_INDV при  QUARTER = 4 CALMONTH =  00
+R88: [A88] Год | [B88] выбран в разделе "Поля для вывода" | [C88] TBL_PHD_FAP_MULT | [D88] ZSIU_INDV при  QUARTER = 0 CALMONTH =  00
+R89: [A89] Январь. С нач.года | [B89] выбран в разделе "Поля для вывода" | [C89] TBL_PHD_FAP_MULT | [D89] ZVALUE_SNG при  QUARTER = 1 CALMONTH =  01
+R90: [A90] Февраль. С нач.года | [B90] выбран в разделе "Поля для вывода" | [C90] TBL_PHD_FAP_MULT | [D90] ZVALUE_SNG при  QUARTER = 1 CALMONTH =  02
+R91: [A91] Март. С нач.года | [B91] выбран в разделе "Поля для вывода" | [C91] TBL_PHD_FAP_MULT | [D91] ZVALUE_SNG при  QUARTER = 1 CALMONTH =  03
+R92: [A92] Апрель. С нач.года | [B92] выбран в разделе "Поля для вывода" | [C92] TBL_PHD_FAP_MULT | [D92] ZVALUE_SNG при  QUARTER = 2 CALMONTH =  04
+R93: [A93] Май. С нач. года | [B93] выбран в разделе "Поля для вывода" | [C93] TBL_PHD_FAP_MULT | [D93] ZVALUE_SNG при  QUARTER = 2 CALMONTH =  05
+R94: [A94] Июнь. С нач.года | [B94] выбран в разделе "Поля для вывода" | [C94] TBL_PHD_FAP_MULT | [D94] ZVALUE_SNG при  QUARTER = 2 CALMONTH =  06
+R95: [A95] Июль. С нач.года | [B95] выбран в разделе "Поля для вывода" | [C95] TBL_PHD_FAP_MULT | [D95] ZVALUE_SNG при  QUARTER = 3 CALMONTH =  07
+R96: [A96] Август. С нач.года | [B96] выбран в разделе "Поля для вывода" | [C96] TBL_PHD_FAP_MULT | [D96] ZVALUE_SNG при  QUARTER = 3 CALMONTH =  08
+R97: [A97] Сентябрь. С нач.года | [B97] выбран в разделе "Поля для вывода" | [C97] TBL_PHD_FAP_MULT | [D97] ZVALUE_SNG при  QUARTER = 3 CALMONTH =  09
+R98: [A98] Октябрь. С нач. года | [B98] выбран в разделе "Поля для вывода" | [C98] TBL_PHD_FAP_MULT | [D98] ZVALUE_SNG при  QUARTER = 4 CALMONTH =  10
+R99: [A99] Ноябрь. С нач. года | [B99] выбран в разделе "Поля для вывода" | [C99] TBL_PHD_FAP_MULT | [D99] ZVALUE_SNG при  QUARTER = 4 CALMONTH =  11
+R100: [A100] Декабрь.С нач. года | [B100] выбран в разделе "Поля для вывода" | [C100] TBL_PHD_FAP_MULT | [D100] ZVALUE_SNG при  QUARTER = 4 CALMONTH =  12
+R101: [A101] I кв.С нач. года | [B101] выбран в разделе "Поля для вывода" | [C101] TBL_PHD_FAP_MULT | [D101] ZVALUE_SNG при  QUARTER = 1 CALMONTH =  00
+R102: [A102] II кв.С нач. года | [B102] выбран в разделе "Поля для вывода" | [C102] TBL_PHD_FAP_MULT | [D102] ZVALUE_SNG при  QUARTER = 2 CALMONTH =  00
+R103: [A103] 6 мес.С нач. года | [B103] выбран в разделе "Поля для вывода" | [C103] TBL_PHD_FAP_MULT | [D103] ZVALUE_SNG при  QUARTER = 6 CALMONTH =  00
+R104: [A104] III кв.С нач. года | [B104] выбран в разделе "Поля для вывода" | [C104] TBL_PHD_FAP_MULT | [D104] ZVALUE_SNG при  QUARTER = 3 CALMONTH =  00
+R105: [A105] 9 мес.С нач. года | [B105] выбран в разделе "Поля для вывода" | [C105] TBL_PHD_FAP_MULT | [D105] ZVALUE_SNG при  QUARTER = 9 CALMONTH =  00
+R106: [A106] IV кв.С нач. года | [B106] выбран в разделе "Поля для вывода" | [C106] TBL_PHD_FAP_MULT | [D106] ZVALUE_SNG при  QUARTER = 4 CALMONTH =  00
+R107: [A107] Год. С нач. года | [B107] выбран в разделе "Поля для вывода" | [C107] TBL_PHD_FAP_MULT | [D107] ZVALUE_SNG при  QUARTER = 0 CALMONTH =  00
+R108: [A108] Январь. Коррект. | [B108] выбран в разделе "Поля для вывода" | [C108] TBL_PHD_FAP_MULT | [D108] ZSIU_INDV при  QUARTER = 1 CALMONTH =  01  ZLIB_INFS=KOROUND
+R109: [A109] Февраль.  Коррект. | [B109] выбран в разделе "Поля для вывода" | [C109] TBL_PHD_FAP_MULT | [D109] ZSIU_INDV при  QUARTER = 1 CALMONTH =  02  ZLIB_INFS=KOROUND
+R110: [A110] Март. Коррект. | [B110] выбран в разделе "Поля для вывода" | [C110] TBL_PHD_FAP_MULT | [D110] ZSIU_INDV при  QUARTER = 1 CALMONTH =  03  ZLIB_INFS=KOROUND
+R111: [A111] Апрель. Коррект. | [B111] выбран в разделе "Поля для вывода" | [C111] TBL_PHD_FAP_MULT | [D111] ZSIU_INDV при  QUARTER = 2 CALMONTH =  04  ZLIB_INFS=KOROUND
+R112: [A112] Май. Коррект. | [B112] выбран в разделе "Поля для вывода" | [C112] TBL_PHD_FAP_MULT | [D112] ZSIU_INDV при  QUARTER = 2 CALMONTH =  05  ZLIB_INFS=KOROUND
+R113: [A113] Июнь. Коррект. | [B113] выбран в разделе "Поля для вывода" | [C113] TBL_PHD_FAP_MULT | [D113] ZSIU_INDV при  QUARTER = 2 CALMONTH =  06  ZLIB_INFS=KOROUND
+R114: [A114] Июль. Коррект. | [B114] выбран в разделе "Поля для вывода" | [C114] TBL_PHD_FAP_MULT | [D114] ZSIU_INDV при  QUARTER = 3 CALMONTH =  07  ZLIB_INFS=KOROUND
+R115: [A115] Август.Коррект. | [B115] выбран в разделе "Поля для вывода" | [C115] TBL_PHD_FAP_MULT | [D115] ZSIU_INDV при  QUARTER = 3 CALMONTH =  08  ZLIB_INFS=KOROUND
+R116: [A116] Сентябрь. Коррект. | [B116] выбран в разделе "Поля для вывода" | [C116] TBL_PHD_FAP_MULT | [D116] ZSIU_INDV при  QUARTER = 3 CALMONTH =  09  ZLIB_INFS=KOROUND
+R117: [A117] Октябрь. Коррект. | [B117] выбран в разделе "Поля для вывода" | [C117] TBL_PHD_FAP_MULT | [D117] ZSIU_INDV при  QUARTER = 4 CALMONTH =  10  ZLIB_INFS=KOROUND
+R118: [A118] Ноябрь. Коррект. | [B118] выбран в разделе "Поля для вывода" | [C118] TBL_PHD_FAP_MULT | [D118] ZSIU_INDV при  QUARTER = 4 CALMONTH =  11  ZLIB_INFS=KOROUND
+R119: [A119] Декабрь.Коррект. | [B119] выбран в разделе "Поля для вывода" | [C119] TBL_PHD_FAP_MULT | [D119] ZSIU_INDV при  QUARTER = 4 CALMONTH =  12  ZLIB_INFS=KOROUND
+R120: [A120] I кв.Коррект. | [B120] выбран в разделе "Поля для вывода" | [C120] TBL_PHD_FAP_MULT | [D120] ZSIU_INDV при  QUARTER = 1 CALMONTH =  00  ZLIB_INFS=KOROUND
+R121: [A121] II кв.Коррект. | [B121] выбран в разделе "Поля для вывода" | [C121] TBL_PHD_FAP_MULT | [D121] ZSIU_INDV при  QUARTER = 2 CALMONTH =  00  ZLIB_INFS=KOROUND
+R122: [A122] 6 мес.Коррект. | [B122] выбран в разделе "Поля для вывода" | [C122] TBL_PHD_FAP_MULT | [D122] ZSIU_INDV при  QUARTER = 6 CALMONTH =  00  ZLIB_INFS=KOROUND
+R123: [A123] III кв.Коррект. | [B123] выбран в разделе "Поля для вывода" | [C123] TBL_PHD_FAP_MULT | [D123] ZSIU_INDV при  QUARTER = 3 CALMONTH =  00  ZLIB_INFS=KOROUND
+R124: [A124] 9 мес.Коррект. | [B124] выбран в разделе "Поля для вывода" | [C124] TBL_PHD_FAP_MULT | [D124] ZSIU_INDV при  QUARTER = 9 CALMONTH =  00  ZLIB_INFS=KOROUND
+R125: [A125] IV кв.Коррект. | [B125] выбран в разделе "Поля для вывода" | [C125] TBL_PHD_FAP_MULT | [D125] ZSIU_INDV при  QUARTER = 4 CALMONTH =  00  ZLIB_INFS=KOROUND
+R126: [A126] Год. Коррект. | [B126] выбран в разделе "Поля для вывода" | [C126] TBL_PHD_FAP_MULT | [D126] ZSIU_INDV при  QUARTER = 0 CALMONTH =  00  ZLIB_INFS=KOROUND
+R127: [A127] Январь. Статус | [B127] установлен чек-бокс "Выводить информацию по статусам" | [C127] TBL_PHD_FAP_MULT | [D127] ZPHD_STAT при  QUARTER = 1 CALMONTH =  01
+R128: [A128] Февраль.  Статус | [B128] установлен чек-бокс "Выводить информацию по статусам" | [C128] TBL_PHD_FAP_MULT | [D128] ZPHD_STAT при  QUARTER = 1 CALMONTH =  02
+R129: [A129] Март. Статус | [B129] установлен чек-бокс "Выводить информацию по статусам" | [C129] TBL_PHD_FAP_MULT | [D129] ZPHD_STAT при  QUARTER = 1 CALMONTH =  03
+R130: [A130] Апрель. Статус | [B130] установлен чек-бокс "Выводить информацию по статусам" | [C130] TBL_PHD_FAP_MULT | [D130] ZPHD_STAT при  QUARTER = 2 CALMONTH =  04
+R131: [A131] Май. Статус | [B131] установлен чек-бокс "Выводить информацию по статусам" | [C131] TBL_PHD_FAP_MULT | [D131] ZPHD_STAT при  QUARTER = 2 CALMONTH =  05
+R132: [A132] Июнь. Статус | [B132] установлен чек-бокс "Выводить информацию по статусам" | [C132] TBL_PHD_FAP_MULT | [D132] ZPHD_STAT при  QUARTER = 2 CALMONTH =  06
+R133: [A133] Июль. Статус | [B133] установлен чек-бокс "Выводить информацию по статусам" | [C133] TBL_PHD_FAP_MULT | [D133] ZPHD_STAT при  QUARTER = 3 CALMONTH =  07
+R134: [A134] Август.Статус | [B134] установлен чек-бокс "Выводить информацию по статусам" | [C134] TBL_PHD_FAP_MULT | [D134] ZPHD_STAT при  QUARTER = 3 CALMONTH =  08
+R135: [A135] Сентябрь. Статус | [B135] установлен чек-бокс "Выводить информацию по статусам" | [C135] TBL_PHD_FAP_MULT | [D135] ZPHD_STAT при  QUARTER = 3 CALMONTH =  09
+R136: [A136] Октябрь.Статус | [B136] установлен чек-бокс "Выводить информацию по статусам" | [C136] TBL_PHD_FAP_MULT | [D136] ZPHD_STAT при  QUARTER = 4 CALMONTH =  10
+R137: [A137] Ноябрь. Статус | [B137] установлен чек-бокс "Выводить информацию по статусам" | [C137] TBL_PHD_FAP_MULT | [D137] ZPHD_STAT при  QUARTER = 4 CALMONTH =  11
+R138: [A138] Декабрь.Статус | [B138] установлен чек-бокс "Выводить информацию по статусам" | [C138] TBL_PHD_FAP_MULT | [D138] ZPHD_STAT при  QUARTER = 4 CALMONTH =  12
+R139: [A139] I кв.Статус | [B139] установлен чек-бокс "Выводить информацию по статусам" | [C139] TBL_PHD_FAP_MULT | [D139] ZPHD_STAT при  QUARTER = 1 CALMONTH =  00
+R140: [A140] II кв.Статус | [B140] установлен чек-бокс "Выводить информацию по статусам" | [C140] TBL_PHD_FAP_MULT | [D140] ZPHD_STAT при  QUARTER = 2 CALMONTH =  00
+R141: [A141] 6 мес.Статус | [B141] установлен чек-бокс "Выводить информацию по статусам" | [C141] TBL_PHD_FAP_MULT | [D141] ZPHD_STAT при  QUARTER = 6 CALMONTH =  00
+R142: [A142] III кв.Статус | [B142] установлен чек-бокс "Выводить информацию по статусам" | [C142] TBL_PHD_FAP_MULT | [D142] ZPHD_STAT при  QUARTER = 3 CALMONTH =  00
+R143: [A143] 9 мес.Статус | [B143] установлен чек-бокс "Выводить информацию по статусам" | [C143] TBL_PHD_FAP_MULT | [D143] ZPHD_STAT при  QUARTER = 9 CALMONTH =  00
+R144: [A144] IV кв.Статус | [B144] установлен чек-бокс "Выводить информацию по статусам" | [C144] TBL_PHD_FAP_MULT | [D144] ZPHD_STAT при  QUARTER = 4 CALMONTH =  00
+R145: [A145] Год. Статус | [B145] установлен чек-бокс "Выводить информацию по статусам" | [C145] TBL_PHD_FAP_MULT | [D145] ZPHD_STAT при  QUARTER = 0 CALMONTH =  00

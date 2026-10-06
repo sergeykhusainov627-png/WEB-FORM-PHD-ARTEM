@@ -1,0 +1,464 @@
+/// <summary>
+/// 	Тип объекта в конструкторе бизнес-приложений. 
+/// 	Определяется перед параметром key (кроме Login и Navigator)
+/// </summary>
+Public Enum NavigationObjectType
+	Login, // Регистрация для входа в систему;
+	Navigator, // Навигатор объектов;
+	Agreement, // Процесс;
+	DataEntryForm, // Форма ввода/вывода;
+	Elt, // Алгоритм расчёта показателей;
+	Dashboard, // Аналитическая панель;
+	TaskEtl, // Задачи ETL;
+	Express, // Экспресс-отчёт;
+	Dictionary, // Справочник НСИ и табличный справочник НСИ;
+	Report, // Регламентный отчёт;
+	Wsp, // Рабочее пространство.
+	Obj	// Объект репо. Используется в ФАП 10
+End Enum NavigationObjectType;
+
+Public Enum NavigationOpenMode
+	Undefined = -1, // Не задано
+	Edit, // По умолчанию. Открытие объекта на редактирование.
+	View // Открытие объекта на просмотр;
+End Enum NavigationOpenMode;
+
+/// <summary>
+/// 	Параметры адреса, указываемые через "&"
+/// </summary>
+Public Class NavigationParams: Object
+	Public Const P_REPO = "repo"; // Идентификатор репозитория. Необязательный параметр.
+	Public Const P_APP = "app"; // Идентификатор бизнес-приложения. Необязательный параметр.
+	Public Const P_KEY = "key"; // Ключ объекта. Обязательный параметр.
+	Public Const P_MODE = "mode"; // Вариант открытия объекта. Необязательный параметр.
+	Public Const P_ENTRY = "entry"; // Ключ уравнения модели. Необязательный параметр.
+	Public Const P_PARAMS = "params"; // Параметры объекта. Необязательный параметр.
+End Class NavigationParams;
+
+Public Interface INavigationLinkBuilder
+	Public Property OpenObjectType: NavigationObjectType Get Set End Property OpenObjectType;		
+	Public Property LinkParams: INavigationLinkParams Get End Property LinkParams;
+	Public Function BuildOpenUrlLink(metaObject: IMetabaseObjectDescriptor = Null; paramValues: IMetabaseObjectParamValues = Null): String;
+	Public Function BuildOpenObjectLink(metaObject: IMetabaseObjectDescriptor = Null; paramValues: IMetabaseObjectParamValues = Null): String;	
+End Interface INavigationLinkBuilder;
+
+// http://ppinfo.fsight.ru/rc/ru/mergedProjects/Setup/UiWebSetup/03_Setup_Web/Opening_Web_Application.htm
+Public Class CNavigationLinkBuilder: Object, INavigationLinkBuilder
+	_webAppUrl: String;
+	_openObjectType: NavigationObjectType;
+	_linkParams: INavigationLinkParams;
+	_metabaseObject: IMetabaseObjectDescriptor;
+	
+	Public Constructor Create(webAppUrl: String = APP_WEB_LINK); 
+	Begin
+		_webAppUrl := PrepareAppUrl(webAppUrl);
+		_linkParams := New CNavigationLinkParams.Create;
+		_openObjectType := NavigationObjectType.DataEntryForm;		
+	End Constructor Create;
+	
+	Public Property OpenObjectType: NavigationObjectType
+		Get
+		Begin
+			Return _openObjectType;
+		End Get
+		Set
+		Begin
+			_openObjectType := value;
+		End Set
+	End Property OpenObjectType;
+		
+	Public Property LinkParams: INavigationLinkParams
+		Get
+		Begin
+			Return _linkParams;
+		End Get		
+	End Property LinkParams;
+
+	Property MetabaseObject: IMetabaseObjectDescriptor
+		Get
+		Begin
+			If IsNull(_metabaseObject) Then
+				If Not LinkParams.Key.IsEmpty Then
+					_metabaseObject := MetabaseClass.Active.Item(CultureExt.UI.ParseInteger(LinkParams.Key));
+				End If;			
+			End If;		
+			
+			Return _metabaseObject;	
+		End Get
+	End Property MetabaseObject;
+	
+	Public Function BuildOpenUrlLink(metaObject: IMetabaseObjectDescriptor = Null; paramValues: IMetabaseObjectParamValues = Null): String;
+	Var
+		objectId, link, paramId: String;
+	Begin
+		If IsNull(metaObject) And IsNull(MetabaseObject) And (OpenObjectType <> NavigationObjectType.Login) Then
+			Raise New Exception.Create("Не указан открываемый объект");
+		End If;					
+		
+		link := _webAppUrl;
+		If OpenObjectType = NavigationObjectType.Obj Then
+			link := String.Concat(link, "app/");
+		End If;
+		
+		link := String.Concat(link, ObjectTypeToLinkParam(OpenObjectType));		
+		Select Case OpenObjectType
+			Case NavigationObjectType.Navigator:
+				objectId := ComposeNavigatorObjectId(IfNull(metaObject, MetabaseObject));
+				If objectId.IsEmpty Then
+					Return "";
+				End If;
+				
+				link := String.Concat(link, objectId);
+			Case NavigationObjectType.Login:
+			Else
+				link := String.Format("{0}?{1}={2}", link, NavigationParams.P_KEY, (IfNull(metaObject, MetabaseObject) As IMetabaseObjectDescriptor).Key);
+		End Select;
+		
+		For Each paramId In LinkParams.Keys Do
+			If paramId = NavigationParams.P_KEY Then
+				Continue;
+			End If;
+			
+			If paramId = NavigationParams.P_REPO Then
+				If (OpenObjectType <> NavigationObjectType.Login) And (OpenObjectType <> NavigationObjectType.Navigator) And (OpenObjectType <> NavigationObjectType.Obj) Then
+					Continue;
+				End If;
+			End If;
+			
+			If (paramId = NavigationParams.P_PARAMS) And Not IsNull(paramValues) Then
+				Continue;
+			End If;
+			
+			link := String.Format("{0}{1}{2}={3}", link, LinkParams.IsMandatory(paramId) ? "?" : "&", paramId, LinkParams.Value(paramId));			
+		End For;
+		
+		If Not IsNull(paramValues) Then
+			link := String.Format("{0}{1}", link, ComposeParamsLink(TabHyperlinkActionType.OpenURL, paramValues));		
+		End If;
+		
+		Return link;
+	End Function BuildOpenUrlLink;
+	
+	Public Function BuildOpenObjectLink(metaObject: IMetabaseObjectDescriptor = Null; paramValues: IMetabaseObjectParamValues = Null): String;
+	Var
+		link: String;	
+	Begin
+		If IsNull(metaObject) And IsNull(MetabaseObject) Then
+			Raise New Exception.Create("Не указан открываемый объект");
+		End If;					
+		
+		link := String.Format("@{0}", (IfNull(metaObject, MetabaseObject) As IMetabaseObjectDescriptor).Id);
+		link := String.Concat(link, IsNull(paramValues) ? LinkParams.Params : ComposeParamsLink(TabHyperlinkActionType.OpenObject, paramValues));		
+		
+		Return link;
+	End Function BuildOpenObjectLink;	
+	
+	Function ObjectTypeToLinkParam(objectType: NavigationObjectType): String;
+	Begin
+		Select Case objectType
+			Case NavigationObjectType.Agreement:
+				Return "agreement";
+			Case NavigationObjectType.Dashboard:
+				Return "dashboard";
+			Case NavigationObjectType.DataEntryForm:
+				Return "dataentryform";
+			Case NavigationObjectType.Dictionary:
+				Return "dictionary";
+			Case NavigationObjectType.Elt:
+				Return "elt";
+			Case NavigationObjectType.Express:
+				Return "express";			
+			Case NavigationObjectType.Login:
+				Return "login";
+			Case NavigationObjectType.Navigator:
+				Return "navigator";
+			Case NavigationObjectType.Report:
+				Return "report";
+			Case NavigationObjectType.TaskEtl:
+				Return "tasketl";	
+			Case NavigationObjectType.Wsp:
+				Return "wsp";	
+			Case NavigationObjectType.Obj:
+				Return "obj";	
+		End Select;
+	End Function ObjectTypeToLinkParam;
+	
+	Function PrepareAppUrl(url: String): String;
+	Begin
+		If Not url.EndsWith("/") Then
+			url := String.Concat(url, "/");
+		End If;
+		
+		If Not (url.IndexOf("#", url.Length - 2) > -1) Then			
+			url := String.Concat(url, "#/");
+		End If;
+		
+		Return url;
+	End Function PrepareAppUrl;	
+	
+	Function ComposeParamsLink(actionType: TabHyperlinkActionType; paramValues: IMetabaseObjectParamValues): String;
+		Function BuildParamString: String;
+			Function ComposeParamTransferValue(value: Variant): String;
+			Var
+				values: array;
+				i: Integer;
+				result: String;
+			Begin
+				If value Is Array Then
+					values := value As Array;
+					For i := 0 To values.Length - 1 Do
+						result := result + CultureExt.FormatVariant(values[i]) + ",";
+					End For;
+					
+					If result.EndsWith(",") Then
+						result := String.Remove(result, result.Length - 1);
+					End If;
+					
+					result := String.Format("[{0}]", result);		
+				Else	
+					result := CultureExt.FormatVariant(value);	
+				End If;
+				
+				Return result;
+			End Function ComposeParamTransferValue;
+		Var
+			result: String;
+			value: IMetabaseObjectParamValue;
+			dimCombo: IBindingDimCombo;
+			jsonDoc: IJsonDocument;
+			paramJSON: IJsonObjectBuilder;
+		Begin			
+			If actionType <> TabHyperlinkActionType.OpenObject Then
+				jsonDoc := New JsonDocument.Create;
+				paramJSON := New JsonObjectBuilder.Create;
+			End If;
+			
+			For Each value In paramValues Do			
+				dimCombo := BindingExt.GetDimCombo(value.Binding.AsString);			
+				If IsNull(dimCombo) Then
+					Continue;
+				End If;
+				
+				If IsNull(value.Value) Or (value.IsArray And ((value.Value As Array).Length < 1)) Then
+					Continue;
+				End If;
+				
+				If actionType = TabHyperlinkActionType.OpenObject Then
+					result := result + value.Id + "=" + ComposeParamTransferValue(value.Value) + ";";
+				Else
+					If value.IsArray Then				
+						paramJSON.AddArray(value.Id, value.Value As Array);
+					Else
+						Select Case value.Value.VarType
+							Case ForeVariantType.Integer, ForeVariantType.Int64:
+								paramJSON.AddInteger(value.Id, value.Value);
+							Case ForeVariantType.String:
+								paramJSON.AddString(value.Id, value.Value);	
+							Case ForeVariantType.Double:
+								paramJSON.AddDouble(value.Id, value.Value);		
+							Case ForeVariantType.Boolean:	
+								paramJSON.AddBoolean(value.Id, value.Value);		
+							Else
+								paramJSON.AddNull(value.Id);			
+						End Select;								
+					End If;
+				End If;			
+			End For;
+			
+			If actionType = TabHyperlinkActionType.OpenObject Then
+				If result.EndsWith(";") Then
+					result := string.Remove(result, result.Length - 1);
+					result := String.Format("({0})", result);	 
+				End If;	
+			Else
+				jsonDoc.Root := paramJSON.Build;
+			End If;
+			
+			If Not IsNull(jsonDoc) Then
+				If jsonDoc.Root.Count > 0 Then
+					result := String.Concat("&params=", jsonDoc.WriteToString(JsonFormatOptions.UnIndented));					
+				End If;				
+			End If;			
+					
+			Return result;
+		End Function BuildParamString;				
+	Begin
+		If IsNull(paramValues) Then
+			Return "";
+		End If;			
+		
+		Return BuildParamString;
+	End Function ComposeParamsLink;
+	
+	Function ComposeNavigatorObjectId(metaObject: IMetabaseObjectDescriptor): String;
+	Var
+		parent: IMetabaseObjectDescriptor;
+		path: String;
+	Begin		
+		parent := metaObject.Parent;
+		If Not IsNull(parent) Then
+			path := "object;ident=" + metaObject.Id;
+			While parent.Id <> GlobalConst.IDENT_FLD_INNER_FUN Do
+				path := String.Concat(parent.Id + "/", path);
+				parent := parent.Parent;
+				If parent = Null Then
+					path := "";
+					Break;
+				End If;	
+			End While;					
+			
+			path := String.Concat("/", path);
+		End If;
+		
+		Return path;
+	End Function ComposeNavigatorObjectId;
+End Class CNavigationLinkBuilder;
+
+Public Interface INavigationLinkParams
+	Public Property Repo: String Get Set End Property Repo;	
+	Public Property App: String Get Set End Property App;
+	Public Property Key: String Get Set End Property Key;	
+	Public Property Mode: NavigationOpenMode Get Set End Property Mode;
+	Public Property Entry: String Get Set End Property entry;	
+	Public Property Params: String Get Set End Property Params;
+	Public Property Value(id: String): String Get End Property Value;
+	Public Property Keys: ICollection Get End Property Keys;
+	Public Function IsMandatory(id: String): Boolean;
+End Interface INavigationLinkParams;
+
+Public Class CNavigationLinkParams: Object, INavigationLinkParams
+	_values: IStringMap;
+	
+	Public Property Repo: String
+		Get
+		Begin
+			Return Value(NavigationParams.P_REPO);
+		End Get
+		Set
+		Begin
+			_values(NavigationParams.P_REPO) := value;
+		End Set
+	End Property Repo;
+	
+	Public Property App: String
+		Get
+		Begin
+			Return Value(NavigationParams.P_APP);
+		End Get
+		Set
+		Begin
+			_values(NavigationParams.P_APP) := value;
+		End Set
+	End Property App;
+
+	Public Property Key: String
+		Get
+		Begin
+			Return Value(NavigationParams.P_KEY);
+		End Get
+		Set
+		Begin
+			_values(NavigationParams.P_KEY) := value;
+		End Set
+	End Property Key;
+	
+	Public Property Mode: NavigationOpenMode
+		Get
+		Begin			
+			Return ParseNavigationOpenMode(Value(NavigationParams.P_MODE));
+		End Get
+		Set
+		Begin			
+			_values(NavigationParams.P_MODE) := NavigationOpenModeToLinkParam(value);
+		End Set
+	End Property Mode;
+
+	Public Property Entry: String
+		Get
+		Begin
+			Return Value(NavigationParams.P_ENTRY);
+		End Get
+		Set
+		Begin
+			_values(NavigationParams.P_ENTRY) := value;
+		End Set
+	End Property entry;
+	
+	Public Property Params: String
+		Get
+		Begin
+			Return Value(NavigationParams.P_PARAMS);
+		End Get
+		Set
+		Begin
+			_values(NavigationParams.P_PARAMS) := value;
+		End Set
+	End Property Params;
+	
+	Public Property Keys: ICollection
+		Get
+		Begin
+			Return _values.Keys;
+		End Get		
+	End Property Keys;
+	
+	Public Property Value(id: String): String
+		Get
+		Begin
+			Return _getValue(id);
+		End Get		
+	End Property Value;
+	
+	Public Function IsMandatory(id: String): Boolean;
+	Begin
+		Return (id = NavigationParams.P_KEY) //Or (id = NavigationParams.P_REPO);
+	End Function IsMandatory;
+	
+	Public Constructor Create;
+	Begin
+		_values := New StringMap.Create;
+	End Constructor Create;
+	
+	Function _getValue(id: String): String;
+	Begin
+		If _values.ContainsKey(id) Then
+			Return _values(id);
+		End If;
+		
+		Return "";
+	End Function _getValue;
+	
+	Function NavigationOpenModeToLinkParam(openMode: NavigationOpenMode): String;
+	Begin
+		Select Case openMode
+			Case NavigationOpenMode.Edit:
+				Return "edit";
+			Case NavigationOpenMode.View:
+				Return "view";
+			Else Return "";
+		End Select;		
+	End Function NavigationOpenModeToLinkParam;
+	
+	Function ParseNavigationOpenMode(mode: String): NavigationOpenMode;
+	Begin
+		Select Case String.ToLower(mode)
+			Case "edit":
+				Return NavigationOpenMode.Edit;
+			Case "view":
+				Return NavigationOpenMode.View;
+			Else Return NavigationOpenMode.Undefined;	
+		End Select;
+	End Function ParseNavigationOpenMode;
+End Class CNavigationLinkParams;
+
+//Sub main;
+//Var
+//	builder: INavigationLinkBuilder;
+//	link: String;
+//Begin
+//	builder := New CNavigationLinkBuilder.Create;
+//	builder.LinkParams.Key := "2176";
+//	builder.OpenObjectType := NavigationObjectType.Navigator;
+//	link := builder.BuildOpenObjectLink;
+//	link := builder.BuildOpenUrlLink;
+//End Sub main;

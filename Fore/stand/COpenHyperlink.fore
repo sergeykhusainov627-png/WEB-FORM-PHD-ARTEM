@@ -1,0 +1,253 @@
+/// <summary>
+/// 	Класс гиперссылки для открытия объекта с параметрами
+/// </summary>
+Public Class COpenHyperlink: Object
+	
+	Private _hlinkReport: IPrxReport;
+	Private _namespaceId: String;
+	Private _cell: ITabRange;
+	Private _linkBuilder: CAppNavigationLinkBuilder;
+	Private _paramManager: CObjectParamManager;
+	Public tst: String;
+	
+	Private _activeColor: IGxColor;
+	Private _disabledColor: IGxColor;
+	
+	/// <summary>
+	/// 	Генератор ссылки объекта с параметрами
+	/// </summary>
+	Protected Property LinkBuilder: CAppNavigationLinkBuilder
+		Get Begin
+			If IsNull(_linkBuilder) Then
+				_linkBuilder := New CAppNavigationLinkBuilder.Create;
+				_linkBuilder.LinkParams.App := ParamManager.NamespaceId;
+				_linkBuilder.OpenObjectType := NavigationObjectType.Obj;
+			End If;
+			
+			Return _linkBuilder;
+		End Get
+	End Property LinkBuilder;
+	
+	/// <summary>
+	/// 	Отчет с гиперссылкой
+	/// </summary>
+	Property HyperlinkReport: IPrxReport
+		Get Begin
+			Return _hlinkReport;
+		End Get
+	End Property HyperlinkReport;
+	
+	/// <summary>
+	/// 	Идентификатор бизнес-приложения
+	/// </summary>
+	Property NamespaceId: String
+		Get Begin			
+			Return _namespaceId;
+		End Get
+	End Property NamespaceId;
+	
+	/// <summary>
+	/// 	Ячейка гиперссылки
+	/// </summary>
+	Protected Property Cell: ITabRange
+		Get Begin
+			If IsNull(_cell) Then
+				_cell := (HyperlinkReport.ActiveSheet As IPrxTable).TabSheet.Cell(C_HYPERLINK_ROW, C_HYPERLINK_COLUMN);
+			End If;
+			
+			Return _cell;
+		End Get
+	End Property Cell;
+	
+	/// <summary>
+	/// 	Ячейка гиперссылки
+	/// </summary>
+	Protected Property ParamManager: CObjectParamManager
+		Get Begin
+			Return _paramManager;
+		End Get
+	End Property ParamManager;
+
+	/// <summary>
+	/// 	Действие гиперссылки
+	/// </summary>
+	Public Property Action: String
+		Get Begin
+			Return Cell.Style.Hyperlink.Action;
+		End Get
+	End Property Action;
+	
+	/// <summary>
+	/// 	Менеджер параметров объекта
+	/// </summary>
+	Public Property ParameterManager: CObjectParamManager
+		Get Begin
+			Return _paramManager;
+		End Get
+	End Property ParameterManager;
+	
+	/// <summary>
+	/// 	Цвет ячейки активной гиперссылки
+	/// </summary>
+	Public Property ActiveColor: IGxColor
+		Get
+		Begin
+			If IsNull(_activeColor) Then
+				_activeColor := Gxcolor.FromKnownColor(GxKnownColor.Blue)
+			End If;
+			
+			Return _activeColor;
+		End Get
+		Set Begin
+			_activeColor := value
+		End Set
+	End Property ActiveColor;
+	
+	/// <summary>
+	/// 	Цвет ячейки неактивной гиперссылки
+	/// </summary>
+	Public Property DisabledColor: IGxColor
+		Get
+		Begin
+			If IsNull(_disabledColor) Then
+				_disabledColor := Gxcolor.FromKnownColor(GxKnownColor.LightGray);
+			End If;
+			
+			Return _disabledColor;
+		End Get
+		Set Begin
+			_disabledColor := value
+		End Set
+	End Property DisabledColor;
+	
+	/// <summary>
+	/// 	Конструктор
+	/// </summary>
+	/// <param name="hlinkReport">Отчет с гиперссылкой открытия формы ввода</param>
+	/// <param name="namespaceId">Идентификатор бизнес-приложения</param>
+	/// <param name="linkText">Текст гиперссылки</param>
+	Public Constructor Create(hlinkReport: IPrxReport; namespaceId: String; linkText: String = "");
+	Begin
+		_hlinkReport := hlinkReport;
+		_namespaceId := namespaceId;
+		If Not linkText.IsEmpty Then
+			Cell.Text := linkText;
+		End If;
+	End Constructor Create;
+	
+	/// <summary>
+	/// 	Измение активности гиперссылки и цвета ячейки
+	/// </summary>
+	/// <param name="isActive">Признак активности</param>
+	Public Sub Enable(isActive: Boolean);
+	Var
+		color: IGxColor;
+		hlinkCellStyle: ITabCellStyle;
+	Begin
+		color := isActive ? ActiveColor : DisabledColor;
+		
+		hlinkCellStyle := Cell.Style;
+		hlinkCellStyle.BorderColor(TabBorder.All) := color;
+		hlinkCellStyle.BackgroundBrush := New GxSolidBrush.Create(color);
+		
+		hlinkCellStyle.Hyperlink.Enable := isActive ? TriState.OnOption : TriState.OffOption;
+	End Sub Enable;
+	
+	/// <summary>
+	/// 	Установка значения параметра
+	/// </summary>
+	/// <param name="paramId">Идентификатор параметра</param>
+	/// <param name="dimSelection">Отметка в справочнике - значения параметра</param>
+	/// <param name="attrId">Идентификатор атрибута, определяющего значения параметра. По умолчанию - ключ</param>
+	Public Sub SetParamValueFromSelection(paramId: String; dimSelection: IDimSelection; attrId: String = C_KEY_ATTR_ID);
+	Var
+		attribute: IDimAttributeInstance;
+		value: Variant;
+	Begin
+		If IsNull(ParameterManager) Then
+			Return;
+		End If;
+		
+		attribute := dimSelection.Dimension.Attributes.FindById(attrId);
+		If IsNull(attribute) Then
+			Return;
+		End If;
+		
+		value := dimSelection.AttributeToVariant(attribute.Attribute);
+
+		ParameterManager.Params.Add(paramId, value);
+	End Sub SetParamValueFromSelection;
+	
+	/// <summary>
+	/// 	Установка значения параметра
+	/// </summary>
+	/// <param name="paramId">Идентификатор параметра</param>
+	/// <param name="value">Значение параметра</param>
+	Public Sub SetParamValue(paramId: String; value: Variant);
+	Begin
+		ParamManager.Params.Add(paramId, value);
+	End Sub SetParamValue;
+	
+	/// <summary>
+	/// 	 Инициализация объекта для открытия
+	/// </summary>
+	/// <param name="objectId">Идентификатор объекта</param>
+	Public Sub InitObject(objectId: String);
+	Begin
+		_paramManager := New CObjectParamManager.Create(objectId, NamespaceId);
+	End Sub InitObject;
+	
+	/// <summary>
+	/// 	Генерация гиперссылки
+	/// </summary>
+	Public Sub Generate;
+	Var
+		action: String;
+	Begin
+		action := GetAction;
+		TabExt.SetTabHyperlink(
+								Cell,
+								Cell.Text, //"              Ок             ",
+								TabHyperlinkActionType.OpenObject,
+								action,
+								True);
+		tst := action;
+	End Sub Generate;
+	
+	/// <summary>
+	/// 	Возвращает действие открытия формы для гиперссылки
+	/// </summary>
+	/// <returns>Строка действия для гиперссылки</returns>
+	Function GetAction: String;
+	Var
+		objParams: IMetabaseObjectParamValues;
+	Begin
+		objParams := ParamManager.GetObjectParamValues;
+		
+		Return LinkBuilder.BuildOpenObjectLink(ParamManager.ObjectDescriptor, objParams);
+	End Function GetAction;
+	
+	/// <summary>
+	/// 	Оформляет ячейку для гиперссылки
+	/// </summary>
+	/// <param name="cellColor">Цвет ячейки (кнопки)</param>
+	Public Sub DesingCell(cellColor: IGxColor);
+	Var
+		hlinkCellStyle: ITabCellStyle;
+		hyperlink: ITabHyperlink;
+	Begin
+		hlinkCellStyle := Cell.Style;
+		hlinkCellStyle.HorizontalAlignment := TabFormatAlignment.Center;
+		hlinkCellStyle.VerticalAlignment := TabFormatLayout.Center;
+		hlinkCellStyle.BorderColor(TabBorder.All) := cellColor;
+		hlinkCellStyle.BackgroundBrush := New GxSolidBrush.Create(cellColor);
+		hlinkCellStyle.Font.Size := 14;
+		hlinkCellStyle.Font.Name := "Roboto";
+		hlinkCellStyle.Font.Color := GxColor.FromName("White");
+		
+		hyperlink := hlinkCellStyle.Hyperlink;
+		hyperlink.Underline := TriState.OffOption;
+		hyperlink.Color := GxColor.FromName("White");
+	End Sub DesingCell;
+	
+End Class COpenHyperlink;

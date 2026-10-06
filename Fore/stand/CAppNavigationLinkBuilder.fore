@@ -1,0 +1,102 @@
+/// <summary>
+/// 	Расширение генератора гиперссылок
+/// </summary>
+Public Class CAppNavigationLinkBuilder: CNavigationLinkBuilder
+	
+	Function ComposeParamsLink(actionType: TabHyperlinkActionType; paramValues: IMetabaseObjectParamValues): String;
+		Function BuildParamString: String;
+			Function ComposeParamTransferValue(value: Variant): String;
+			Var
+				values: array;
+				i: Integer;
+				result: String;
+			Begin
+				If value Is Array Then
+					values := value As Array;
+					For i := 0 To values.Length - 1 Do
+						result := result + CultureExt.FormatVariant(values[i]) + ",";
+					End For;
+					
+					If result.EndsWith(",") Then
+						result := String.Remove(result, result.Length - 1);
+					End If;
+					
+					result := String.Format("[{0}]", result);		
+				Else	
+					result := CultureExt.FormatVariant(value);	
+				End If;
+				
+				Return result;
+			End Function ComposeParamTransferValue;
+		Var
+			result: String;
+			value: IMetabaseObjectParamValue;
+			dimCombo: IBindingDimCombo;
+			jsonDoc: IJsonDocument;
+			paramJSON: IJsonObjectBuilder;
+		Begin			
+			If actionType <> TabHyperlinkActionType.OpenObject Then
+				jsonDoc := New JsonDocument.Create;
+				paramJSON := New JsonObjectBuilder.Create;
+			End If;
+			
+			For Each value In paramValues Do			
+				//dimCombo := BindingExt.GetDimCombo(value.Binding.AsString);			
+				//If IsNull(dimCombo) Then
+				//	Continue;
+				//End If;
+				
+				If IsNull(value.Value) Or (value.IsArray And ((value.Value As Array).Length < 1)) Then
+					Continue;
+				End If;
+				
+				If actionType = TabHyperlinkActionType.OpenObject Then
+					result := result + value.Id + "=" + ComposeParamTransferValue(value.Value) + ";";
+				Else
+					If value.IsArray Then				
+						paramJSON.AddArray(value.Id, value.Value As Array);
+					Else
+						Select Case value.Value.VarType
+							Case ForeVariantType.Integer, ForeVariantType.Int64:
+								paramJSON.AddInteger(value.Id, value.Value);
+							Case ForeVariantType.String:
+								paramJSON.AddString(value.Id, value.Value);
+							Case ForeVariantType.Double:
+								paramJSON.AddDouble(value.Id, value.Value);
+							Case ForeVariantType.Boolean:	
+								paramJSON.AddBoolean(value.Id, value.Value);
+							Case ForeVariantType.Date:
+								paramJSON.AddString(value.Id, value.Value As String);
+							Else
+								paramJSON.AddNull(value.Id);	
+						End Select;								
+					End If;
+				End If;			
+			End For;
+			
+			If actionType = TabHyperlinkActionType.OpenObject Then
+				If result.EndsWith(";") Then
+					result := string.Remove(result, result.Length - 1);
+					result := String.Format("({0})", result);	 
+				End If;	
+			Else
+				jsonDoc.Root := paramJSON.Build;
+			End If;
+			
+			If Not IsNull(jsonDoc) Then
+				If jsonDoc.Root.Count > 0 Then
+					result := String.Concat("&params=", jsonDoc.WriteToString(JsonFormatOptions.UnIndented));					
+				End If;				
+			End If;			
+					
+			Return result;
+		End Function BuildParamString;				
+	Begin
+		If IsNull(paramValues) Then
+			Return "";
+		End If;			
+		
+		Return BuildParamString;
+	End Function ComposeParamsLink;
+	
+End Class CAppNavigationLinkBuilder;
