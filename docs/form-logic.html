@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="ru"><head><meta charset="utf-8">
+<title>Логика веб-формы «Анализ значений ТЭП»</title>
+<style>
+ * { box-sizing: border-box; }
+ body { margin:0; padding:22px 26px 26px; background:#f4f7fb; color:#17212b;
+        font-family:"Segoe UI", Arial, sans-serif; width:1720px; }
+ h1 { font-size:21px; margin:0 0 2px; }
+ .sub { color:#5b6875; font-size:12.5px; margin-bottom:16px; }
+ .row { display:flex; gap:14px; align-items:stretch; }
+ .arrow { align-self:center; color:#3f8fd4; font-size:34px; line-height:1; padding:0 2px; }
+ .col { flex:1; display:flex; flex-direction:column; gap:10px; }
+ .box { background:#fff; border:2px solid #c7d8e8; border-radius:10px; padding:0 0 10px; overflow:hidden; }
+ .box > .hd { background:#e8f2fb; border-bottom:2px solid #c7d8e8; padding:7px 12px; font-weight:600; font-size:13.5px; }
+ .box .bd { padding:10px 12px 0; }
+ .sub-box { border:1px dashed #b9cee0; border-radius:8px; padding:8px 10px; margin:0 0 8px; background:#fbfdff; }
+ .sub-box .t { font-weight:600; font-size:12.5px; margin-bottom:5px; color:#1b3a55; }
+ .li { font-size:12px; line-height:1.5; margin:2px 0; }
+ .chip { font-family:Consolas, monospace; font-size:11.5px; background:#eef4fa; border:1px solid #d6e3ef;
+         border-radius:4px; padding:0 4px; color:#1d4e79; white-space:nowrap; }
+ .num { display:inline-block; width:16px; height:16px; border-radius:50%; background:#3f8fd4; color:#fff;
+        font-size:11px; text-align:center; line-height:16px; margin-right:5px; font-weight:600; }
+ .mono { font-family:Consolas, monospace; font-size:11.5px; color:#1d4e79; }
+ .cmd { background:#f2f7fc; border:1px solid #d6e3ef; border-radius:5px; padding:4px 7px; margin:3px 0;
+        font-family:Consolas, monospace; font-size:11px; color:#123; }
+ .flow { font-size:12px; color:#3f8fd4; text-align:center; margin:-4px 0 4px; }
+ .notes { margin-top:14px; background:#fff8e8; border:2px solid #f0d29b; border-radius:10px; padding:10px 14px; }
+ .notes b { font-size:13px; } .notes ul { margin:6px 0 0 18px; padding:0; }
+ .notes li { font-size:12px; line-height:1.55; }
+ .green { color:#1c7d3f; } .red { color:#b3261e; } .grey { color:#7b8794; }
+ .legend { display:flex; gap:18px; font-size:12px; margin-top:8px; }
+</style></head><body>
+
+<h1>Логика веб-формы «Анализ значений ТЭП (копия для доработок)»</h1>
+<div class="sub">Модуль <span class="chip">BA_PHD.WFRM_PHD_ANALISIS_TEP_COPY_FOR_DEV</span> · отчёт
+<span class="chip">PRX_ANALYSIS_TEP</span> · источник данных <span class="chip">QRY_PHD_MULT_DATA_COPY1</span> ·
+схема отражает текущее состояние кода</div>
+
+<div class="row">
+
+  <!-- 1. КЛИЕНТ -->
+  <div class="col" style="flex:0 0 430px">
+    <div class="box" style="flex:1">
+      <div class="hd">1. Веб-клиент: что видит пользователь</div>
+      <div class="bd">
+        <div class="sub-box"><div class="t">Шапка формы</div>
+          <div class="li">Фильтры-справочники: Год <span class="chip">D_CALYEAR</span>,
+            СП <span class="chip">D_PLANT</span>, ТЭП <span class="chip">D_ZLIB_INDC</span>,
+            Тип данных <span class="chip">D_ZTYPEIND</span></div>
+          <div class="li">Чек-боксы режимов: «Выводить коды аналитик»
+            <span class="chip">CB_DISPLAY_CODE_ANALYT</span>, «Выводить информацию по статусам»
+            <span class="chip">CB_DISPLAY_INFO_BY_STATUS</span></div>
+          <div class="li">Кнопки «Применить» <span class="chip">ButtonApply</span> / «Отменить»
+            <span class="chip">ButtonCancel</span>, журнал <span class="chip">TextArea1</span>,
+            календарь <span class="chip">DateTimePicker1</span></div>
+        </div>
+        <div class="sub-box"><div class="t">Две вкладки режима</div>
+          <div class="li"><b>Условия выборки</b> — фильтры: 54 комбо <span class="chip">D_*</span>
+            (по справочникам) + ручной ввод <span class="chip">I_ZINDTXT1</span></div>
+          <div class="li"><b>Поля для вывода</b> — 95 чек-боксов <span class="chip">CB_*</span>
+            по разделам (Основные данные, Значения ТЭП, Энергоснабжение, Геология и бурение,
+            Кап.строительство, Экология, Прочие аналитики, Данные показателя, Данные расчета)</div>
+        </div>
+        <div class="sub-box" style="border-style:solid;background:#f7fbf7;border-color:#bfe0c6">
+          <div class="t">Действия пользователя</div>
+          <div class="li">выбрал значение в комбо → <b>мгновенно</b> меняется ссылка на отчёт</div>
+          <div class="li">поставил/снял чек-бокс «Поля для вывода» → <b>пересобирается</b> список полей</div>
+          <div class="li">нажал «Применить» → открывается отчёт по сформированной ссылке</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="arrow">➜</div>
+
+  <!-- 2. МОДУЛЬ -->
+  <div class="col" style="flex:1 1 700px">
+    <div class="box" style="flex:1">
+      <div class="hd">2. Модуль формы (Fore): вся логика</div>
+      <div class="bd">
+
+        <div class="sub-box"><div class="t"><span class="num">1</span>Открытие формы —
+          <span class="mono">ANALIZ_TEP_FORM_ON_SHOW</span> (всё в Try/Except — ошибка не ломает форму)</div>
+          <div class="cmd">InitializeHlinkOpenObject(ReportBoxOk.Report, …) → Hyperlink (COpenHyperlink + менеджер параметров)</div>
+          <div class="cmd">setDefaultDimensionValue → Год = текущий, СП = СП пользователя, ТЭП = «План»</div>
+          <div class="cmd">applyPlantAccessRights → PHD_ADMIN / PHD_CURATOR_* выбирают любое СП, остальным СП блокируется</div>
+          <div class="cmd">RefreshFieldList → собрать список полей и сгенерировать ссылку</div>
+          <div class="flow">▼</div>
+        </div>
+
+        <div class="sub-box"><div class="t"><span class="num">2</span>Комбо-фильтр:
+          <span class="mono">D_XOnSelectionChange</span></div>
+          <div class="cmd">SetParamValueFromSelection("PARAM", D_X.Selection, "АТРИБУТ")  → параметр в менеджер</div>
+          <div class="cmd">SafeGenerate → COpenHyperlink.Generate → строка @PRX_ANALYSIS_TEP(…)</div>
+        </div>
+
+        <div class="sub-box"><div class="t"><span class="num">3</span>Чек-бокс «Поля для вывода»:
+          <span class="mono">CB_XOnChange</span></div>
+          <div class="cmd">fillFieldListByStatusFlag(CB_X, "ПОЛЕ") → RefreshFieldList</div>
+          <div class="li grey">обработчик — только «триггер»: он не собирает имена сам, а запускает пересборку</div>
+        </div>
+
+        <div class="sub-box" style="border-style:solid;border-color:#8fb8dc;background:#f4f9ff">
+          <div class="t"><span class="num">4</span>Ядро логики — <span class="mono">RefreshFieldList</span>
+            (собирает список заново при каждом изменении)</div>
+          <div class="cmd">1) addFieldsWithoutCheckBox → «Год» (CALYEAR) всегда: чек-бокса для него нет</div>
+          <div class="cmd">2) CollectIfChecked(CB_X, "CB_X") × 75 → fieldIdByControl → таблица _fieldIds (88 строк)
+            → addFieldToList  <span class="grey">// отмечен — попал в список, снят — нет</span></div>
+          <div class="cmd">3) режим кодов: P_ANALYTIC_SET ← список полей-кодов выбранных аналитик</div>
+          <div class="cmd">4) режим статусов: к выбранным периодам добавляются поля &lt;период&gt;_STAT</div>
+          <div class="cmd">5) analyticSetArray → МАССИВ идентификаторов в нижнем регистре
+            [calyear, plant, zlib_inc, …] <span class="grey">// без периодов ZSIU_INDV_*</span></div>
+          <div class="cmd">6) SetParamSafe("P_FIELD_LIST", массив) и SetParamSafe("ANALYTIC_SET", массив)</div>
+          <div class="cmd">7) SafeGenerate → ссылка перегенерирована из менеджера параметров</div>
+        </div>
+
+        <div class="sub-box"><div class="t"><span class="num">5</span>Сервисный слой (защита и диагностика)</div>
+          <div class="li"><span class="chip">SafeGenerate</span>, <span class="chip">SetParamSafe</span> —
+            Try/Except: не найден отчёт/лист, пустой менеджер — форма продолжает работать</div>
+          <div class="li"><span class="chip">_lastError</span> → <span class="chip">TextArea1</span> —
+            текст ошибки виден прямо на форме</div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <div class="arrow">➜</div>
+
+  <!-- 3. ОТЧЁТ -->
+  <div class="col" style="flex:0 0 470px">
+    <div class="box" style="flex:1">
+      <div class="hd">3. Отчёт и данные</div>
+      <div class="bd">
+        <div class="sub-box"><div class="t">Гиперссылка (её и открывает «Применить»)</div>
+          <div class="cmd" style="white-space:normal">@PRX_ANALYSIS_TEP(PLANT=…;CALYEAR=…;ZLIB_INFS=…;
+            P_FIELD_LIST=[calyear,plant,zlib_inc,act_unit])</div>
+        </div>
+        <div class="sub-box"><div class="t">Отчёт <span class="chip">PRX_ANALYSIS_TEP</span></div>
+          <div class="li">источник данных — запрос <span class="chip">QRY_PHD_MULT_DATA_COPY1</span></div>
+          <div class="li grey">параметры отчёта → параметры запроса (сопоставление в дизайнере отчёта;
+            в отчёте ещё не сопоставлены <span class="chip">ANALYTIC_SET</span>,
+            <span class="chip">ZTYPEIND</span>, <span class="chip">ZGEN_POD</span>)</div>
+        </div>
+        <div class="sub-box" style="border-style:solid;border-color:#8fb8dc;background:#f4f9ff">
+          <div class="t">Запрос: из чего получаются столбцы</div>
+          <div class="cmd" style="white-space:normal">SELECT :ANALYTIC_SET, «Январь» … «Год»
+            FROM VIEW_PHD_MULT_LEFT
+            WHERE (ZPHD_STAT IN (:ZPHD_STAT) OR COALESCE(:ZPHD_STAT,'')='') AND …
+            GROUP BY :ANALYTIC_SET, zlib_indc, calyear, plant</div>
+          <div class="li"><span class="green">✔ аналитика в списке</span> → отдельный столбец со своими значениями</div>
+          <div class="li"><span class="green">✔ аналитики нет в списке</span> → по ней не режем: значения суммируются</div>
+          <div class="li"><span class="chip">:PARAM</span> — фильтры из «Условий выборки»;
+            пустой параметр = условие не применяется</div>
+        </div>
+        <div class="sub-box"><div class="t">Результат для пользователя</div>
+          <div class="li">отмечен чек-бокс → появился столбец; снял → столбца нет, данные сложились</div>
+          <div class="li">имена столбцов и коды — задача отчёта (пункты 2 и 4 ТЗ)</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<div class="notes">
+  <b>Правила и тонкости, которые видны из схемы</b>
+  <ul>
+    <li><b>Почему ссылки только на «подтверждённые» контролы.</b> Если модуль ссылается на компонент,
+      которого нет на форме, дизайнер формы падает с «Ошибка сервера». Поэтому контролы без обработчиков
+      в исходном модуле (20 штук) сейчас не собираются: у них нет строки в таблице
+      <span class="chip">_fieldIds</span>, строки <span class="chip">CollectIfChecked</span> и обработчика.
+      После подтверждения по экранам их включаем (по 3 строки на контрол).</li>
+    <li><b>Один сборщик на всю форму.</b> Отдельного «сборщика имён» на каждый чек-бокс не нужно:
+      <span class="chip">RefreshFieldList</span> пересобирает список целиком, проходя все контролы;
+      обработчик чек-бокса — только триггер пересборки.</li>
+    <li><b>Почему «Год» уходит всегда.</b> В ТЗ это поле вывода «по умолчанию», но чек-бокса для него
+      на форме нет — поэтому он добавляется в список безусловно
+      (<span class="chip">addFieldsWithoutCheckBox</span>).</li>
+    <li><b>Почему периоды не уходят в список полей.</b> Идентификаторов <span class="chip">ZSIU_INDV_*</span>
+      в запросе нет (месяцы и кварталы в нём — фиксированные столбцы), поэтому в
+      <span class="chip">ANALYTIC_SET</span> они не попадают — иначе SQL сломался бы.</li>
+    <li><b>До отчёта доходит только объявленное.</b> Платформа молча отбрасывает параметры, которых нет
+      у объекта: поэтому <span class="chip">P_FIELD_LIST</span> работает лишь после сопоставления
+      с <span class="chip">ANALYTIC_SET</span> в отчёте.</li>
+    <li><b>Не реализовано:</b> обработчики кнопок «Применить»/«Отменить»
+      (<span class="chip">ButtonApply</span>, <span class="chip">ButtonCancel</span>) — сейчас они
+      ничего не делают; открытие отчёта идёт по гиперссылке.</li>
+  </ul>
+  <div class="legend">
+    <span><span class="green">✔</span> работает</span>
+    <span><span class="red">✖</span> требует правки в отчёте/запросе</span>
+    <span><span class="grey">▨</span> выключено до подтверждения контролов</span>
+  </div>
+</div>
+
+</body></html>

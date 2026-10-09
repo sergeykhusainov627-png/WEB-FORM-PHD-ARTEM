@@ -1,6 +1,6 @@
 # Контрольные суммы файлов (снимок для бэкапа)
 
-Снято: 2026-10-09 10:47, локальная машина. Полные SHA-256: `Get-FileHash <файл> -Algorithm SHA256`.
+Снято: 2026-10-09 17:37, локальная машина. Полные SHA-256: `Get-FileHash <файл> -Algorithm SHA256`.
 
 | Файл | Размер | SHA-256 (16 симв.) | Изменён |
 |---|---:|---|---|
@@ -15,6 +15,8 @@
 | `docs/CONTROLS-TO-ADD.md` | 7.3 КБ | `c6749ca4ae5e2c3c…` | 2026-10-06 18:25 |
 | `docs/form-layout.html` | 55.4 КБ | `ecf2be51a00e3519…` | 2026-10-09 10:47 |
 | `docs/form-layout.png` | 999.6 КБ | `a17b94503c75a21d…` | 2026-10-09 10:47 |
+| `docs/form-logic.html` | 15.1 КБ | `7431667cedc55c45…` | 2026-10-09 17:36 |
+| `docs/form-logic.png` | 261.6 КБ | `7b5938f8b939595f…` | 2026-10-09 17:36 |
 | `docs/parameter-ids-reference.md` | 5.7 КБ | `6e82bff238646d64…` | 2026-10-06 17:45 |
 | `docs/PEFX-EXPORT-FINDINGS.md` | 17 КБ | `5f0f9728713a5762…` | 2026-10-06 12:08 |
 | `docs/PLAN-TZ-2026-10-09.md` | 8 КБ | `665bedb8b18e6108…` | 2026-10-09 10:33 |
@@ -43,7 +45,7 @@
 | `Fore/stand/TabExt.fore` | 5.3 КБ | `74743f09fbbb169c…` | 2026-10-06 12:04 |
 | `Fore/stand/WebFormsExt.fore` | 23.9 КБ | `0902ab5e5cea0f20…` | 2026-10-06 12:04 |
 | `Fore/WFRM_PHD_ANALISIS_TEP_COPY_FOR_DEV.fore` | 71.2 КБ | `7a68757968e832fa…` | 2026-10-09 10:33 |
-| `README.md` | 9.7 КБ | `e867a18f4351df3f…` | 2026-10-06 18:23 |
+| `README.md` | 9.9 КБ | `f95d7f9184416280…` | 2026-10-09 17:37 |
 | `tools/backup-offline.ps1` | 3 КБ | `afcb2b057449cfad…` | 2026-10-06 12:25 |
 | `tools/check-webform.py` | 14.4 КБ | `185fa797cc86e86d…` | 2026-10-06 17:52 |
 | `tools/cleanup-unused.py` | 6.2 КБ | `098fda82974003c9…` | 2026-10-06 17:44 |
