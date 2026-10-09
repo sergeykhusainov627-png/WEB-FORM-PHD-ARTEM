@@ -1,6 +1,6 @@
 # Контрольные суммы файлов (снимок для бэкапа)
 
-Снято: 2026-10-09 10:33, локальная машина. Полные SHA-256: `Get-FileHash <файл> -Algorithm SHA256`.
+Снято: 2026-10-09 10:47, локальная машина. Полные SHA-256: `Get-FileHash <файл> -Algorithm SHA256`.
 
 | Файл | Размер | SHA-256 (16 симв.) | Изменён |
 |---|---:|---|---|
@@ -13,6 +13,8 @@
 | `docs/checks/lint-module.txt` | 3.1 КБ | `8949b9c34f7a3afd…` | 2026-10-09 10:33 |
 | `docs/checks/structure-check.txt` | 5.1 КБ | `df5e361e66d6758b…` | 2026-10-09 10:33 |
 | `docs/CONTROLS-TO-ADD.md` | 7.3 КБ | `c6749ca4ae5e2c3c…` | 2026-10-06 18:25 |
+| `docs/form-layout.html` | 55.4 КБ | `ecf2be51a00e3519…` | 2026-10-09 10:47 |
+| `docs/form-layout.png` | 999.6 КБ | `a17b94503c75a21d…` | 2026-10-09 10:47 |
 | `docs/parameter-ids-reference.md` | 5.7 КБ | `6e82bff238646d64…` | 2026-10-06 17:45 |
 | `docs/PEFX-EXPORT-FINDINGS.md` | 17 КБ | `5f0f9728713a5762…` | 2026-10-06 12:08 |
 | `docs/PLAN-TZ-2026-10-09.md` | 8 КБ | `665bedb8b18e6108…` | 2026-10-09 10:33 |
@@ -48,6 +50,7 @@
 | `tools/extract-query-sql.py` | 1 КБ | `b2e254fc89cfc5fb…` | 2026-10-06 18:42 |
 | `tools/form-inventory.js` | 8.1 КБ | `5e6aae6e6aaa4ec1…` | 2026-10-06 11:45 |
 | `tools/git-backup.ps1` | 1.9 КБ | `f23fd022be917382…` | 2026-10-06 12:21 |
+| `tools/make-form-layout.py` | 33.7 КБ | `6bcc674c013575bc…` | 2026-10-09 10:47 |
 | `tools/patch-webform.py` | 40.4 КБ | `efa27aaaf704f90d…` | 2026-10-09 10:33 |
 | `tools/pefx-extract.js` | 5.5 КБ | `7595028d75360825…` | 2026-10-06 12:04 |
 | `tools/pefx-scan.js` | 3.5 КБ | `9873bc3e768b17d3…` | 2026-10-06 12:05 |

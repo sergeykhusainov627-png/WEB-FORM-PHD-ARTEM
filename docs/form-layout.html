@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="ru"><head><meta charset="utf-8">
+<title>Макет веб-формы «Анализ значений ТЭП (копия для доработок)»</title>
+<style>
+ body { font-family: Segoe UI, Arial, sans-serif; margin: 0; padding: 24px; background:#f5f7fb; color:#1b2430; }
+ h1 { font-size: 20px; margin: 0 0 4px; } h2 { font-size: 16px; margin: 28px 0 8px; }
+ h3 { font-size: 14px; margin: 18px 0 6px; } .cnt { color:#7b8794; font-weight:400; font-size:12px; }
+ .sub { color:#5b6875; font-size: 13px; margin-bottom: 16px; }
+ .frame { background:#dff1fb; border:1px solid #9dc7e0; border-radius:6px; padding:14px; max-width:1180px; }
+ .top { display:flex; gap:24px; } .col { flex:1; }
+ .field { display:flex; align-items:center; gap:8px; margin:6px 0; }
+ .lbl { width:190px; color:#3b4a5a; font-size:13px; }
+ .combo { flex:1; background:#fff; border:1px solid #c7d3de; border-radius:4px; height:26px; line-height:26px;
+           padding:0 8px; color:#9aa7b4; font-size:13px; position:relative; }
+ .combo:after { content:"▾"; position:absolute; right:8px; color:#7b8794; }
+ .chk { display:flex; align-items:center; gap:8px; margin:6px 0; font-size:13px; color:#3b4a5a; }
+ .box { width:14px; height:14px; border:1px solid #7b8794; border-radius:3px; background:#fff; display:inline-block; }
+ .btn { display:inline-block; background:#3f8fd4; color:#fff; border-radius:4px; padding:8px 26px; font-size:13px; margin:4px 0; }
+ .btn.sec { background:#4f9fe0; }
+ .tabs { display:flex; gap:2px; margin:14px 0 0; }
+ .tab { padding:8px 18px; background:#cfe6f5; border:1px solid #9dc7e0; border-bottom:none; border-radius:6px 6px 0 0; font-size:13px; }
+ .tab.on { background:#fff; font-weight:600; }
+ .tabs2 { display:flex; gap:2px; margin:0 0 10px; }
+ .tab2 { padding:7px 16px; background:#e8f2fa; border:1px solid #b8d4e8; border-radius:4px 4px 0 0; font-size:13px; }
+ .tab2.on { background:#fff; border-bottom-color:#fff; font-weight:600; }
+ .scope { background:#fff; border:1px solid #9dc7e0; border-radius:0 6px 6px 6px; padding:14px; }
+ table.grid { border-collapse:collapse; width:100%; background:#fff; font-size:12.5px; }
+ table.grid th, table.grid td { border:1px solid #dde5ee; padding:5px 8px; text-align:left; vertical-align:top; }
+ table.grid th { background:#eef4fa; font-weight:600; }
+ td.ctl { font-family: Consolas, monospace; color:#1d4e79; }
+ tr.ok td.st { color:#1c7d3f; } tr.declared td.st { color:#a8720b; }
+ tr.missing td.st { color:#b3261e; } tr.missing td.ctl { color:#b3261e; }
+ td.note { color:#5b6875; }
+ .legend span { display:inline-block; margin-right:14px; font-size:12.5px; }
+ .k { font-family:Consolas, monospace; background:#eef2f7; padding:1px 5px; border-radius:3px; }
+ .warn { background:#fff6e5; border:1px solid #f0d29b; border-radius:6px; padding:10px 14px; font-size:13px; margin:10px 0; }
+</style></head><body>
+<h1>Макет веб-формы «Анализ значений ТЭП (копия для доработок)»</h1>
+<div class="sub">Модуль <span class="k">BA_PHD.WFRM_PHD_ANALISIS_TEP_COPY_FOR_DEV</span>.
+Макет собран из модуля формы (объявления контролов и обработчики) и ТЗ
+(листы «Разделы СЭ - Условия выборки», «СЭ - поля для вывода») — визуальной части формы в выгрузке
+окружения нет. Скриншоты формы использованы для подписей и расположения.</div>
+
+<div class="legend">
+ <span>🟢 <b>подключён</b> — есть обработчик, значение уходит в отчёт</span>
+ <span>🟡 <b>объявлен, обработчика нет</b> — контрол в модуле есть, но в исходном модуле не использовался
+ (ссылки в коде выключены, чтобы не ломать дизайнер)</span>
+ <span>🔴 <b>контрола нет</b> — по ТЗ нужен, в модуле не объявлен</span>
+</div>
+
+<h2>1. Верхняя часть формы (по скриншотам)</h2>
+<div class="frame">
+ <div class="top">
+  <div class="col">
+   <div class="field"><span class="lbl">Год <span class="k">D_CALYEAR</span></span><span class="combo"></span></div>
+   <div class="field"><span class="lbl">СП <span class="k">D_PLANT</span></span><span class="combo"></span></div>
+   <div class="field"><span class="lbl">ТЭП <span class="k">D_ZLIB_INDC</span></span><span class="combo"></span></div>
+   <div class="field"><span class="lbl">Тип данных <span class="k">D_ZTYPEIND</span></span><span class="combo"></span></div>
+   <div class="chk"><span class="box"></span> Выводить коды аналитик <span class="k">CB_DISPLAY_CODE_ANALYT</span></div>
+   <div class="chk"><span class="box"></span> Выводить информацию по статусам <span class="k">CB_DISPLAY_INFO_BY_STATUS</span></div>
+  </div>
+  <div class="col">
+   <div class="field"><span class="lbl">Календарь <span class="k">DateTimePicker1</span></span><span class="combo" style="max-width:280px"></span></div>
+   <div class="field"><span class="lbl">Журнал <span class="k">TextArea1</span></span>
+     <span class="combo" style="height:74px;max-width:280px;color:#7b8794">TextArea1 (вывод ссылки и ошибок)</span></div>
+   <div style="text-align:right"><span class="btn">Применить <span class="k">ButtonApply</span></span><br>
+     <span class="btn sec">Отменить <span class="k">ButtonCancel</span></span></div>
+  </div>
+ </div>
+ <div class="tabs"><span class="tab on">Условия выборки</span><span class="tab">Поля для вывода</span></div>
+ <div class="scope">
+  <div class="tabs2"><span class="tab2 on">Основные данные</span><span class="tab2">Энергоснабжение</span>
+   <span class="tab2">Геология и бурение</span><span class="tab2">Кап.строительство</span>
+   <span class="tab2">Экология</span><span class="tab2">Прочие аналитики</span>
+   <span class="tab2">Данные показателя</span><span class="tab2">Данные расчета</span></div>
+  <div style="color:#5b6875;font-size:12.5px">Поля раздела — см. таблицы ниже. Вкладки:
+   <span class="k">TabControl</span> (режимы «Условия выборки»/«Поля для вывода»),
+   <span class="k">TabControl1</span>, <span class="k">TabControl2</span> (разделы),
+   страницы <span class="k">TabPage1…TabPage18</span> — соответствие страниц разделам задаётся
+   в дизайнере; в выгрузке подписей вкладок нет, поэтому прошу подтвердить.</div>
+ </div>
+</div>
+
+<div class="warn"><b>Проверьте, пожалуйста, три вещи:</b>
+ 1) соответствие «контрол ↔ поле на экране» (столбцы 1–2 таблиц);
+ 2) какие из жёлтых контролов реально есть на форме (ссылки на них я включу после подтверждения);
+ 3) красные строки — чего на форме нет и что нужно создать.</div>
+
+<h2>2. Режим «Условия выборки»: поля разделов</h2>
+<h3>Основные данные <span class="cnt">17 полей</span></h3>
+<table class="grid"><thead><tr><th>Поле на экране (ТТ)</th><th>Контрол в модуле</th><th>Параметр</th><th>Справочник (ТТ)</th><th>Состояние</th><th>Примечание</th></tr></thead><tbody>
+<tr class="ok"><td>Справочник статусов</td><td class="ctl">D_ZPHD_STAT</td><td class="ctl">—</td><td class="ctl">RDSD_ZPHD_STAT</td><td class="st">подключён</td><td class="note"></td></tr>
+<tr class="ok"><td>Поставщик</td><td class="ctl">D_VENDOR</td><td class="ctl">—</td><td class="ctl">RDSD_VENDOR</td><td class="st">подключён</td><td class="note"></td></tr>
+<tr class="ok"><td>Заказчик</td><td class="ctl">D_SOLD_TO</td><td class="ctl">—</td><td class="ctl">RDSD_SOLDTO</td><td class="st">подключён</td><td class="note"></td></tr>
+<tr class="ok"><td>Регион</td><td class="ctl">D_ZHRGRPMO</td><td class="ctl">—</td><td class="ctl">RDSD_ZHRGRPMO</td><td class="st">подключён</td><td class="note"></td></tr>
+<tr class="ok"><td>Вид производства</td><td class="ctl">D_PROFIT_CTR</td><td class="ctl">—</td><td class="ctl">RDSD_PROFIT_CTR</td><td class="st">подключён</td><td class="note"></td></tr>
+<tr class="ok"><td>МВЗ</td><td class="ctl">D_COSTCENTER</td><td class="ctl">—</td><td class="ctl">RDSD_COSTCENTER</td><td class="st">подключён</td><td class="note"></td></tr>
+<tr class="ok"><td>Орг.единица</td><td class="ctl">D_ZORGUNIT</td><td class="ctl">—</td><td class="ctl">RDSD_ZORGU</td><td class="st">подключён</td><td class="note"></td></tr>
+<tr class="ok"><td>Рабочее место исполнителя</td><td class="ctl">D_ZPH_USR2</td><td class="ctl">—</td><td class="ctl">RDSD_ZPH_USR0</td><td class="st">подключён</td><td class="note"></td></tr>
+<tr class="ok"><td>Вид работ</td><td class="ctl">D_ACTTYPE</td><td class="ctl">—</td><td class="ctl">RDSD_ACTTYPE</td><td class="st">подключён</td><td class="note"></td></tr>
+<tr class="ok"><td>Единица оборудования</td><td class="ctl">D_ZEQUI</td><td class="ctl">—</td><td class="ctl">RDSD_ZEQUI</td><td class="st">подключён</td><td class="note"></td></tr>
+<tr class="ok"><td>Класс вида оборудования</td><td class="ctl">D_ZCLSVOBOR</td><td class="ctl">—</td><td class="ctl">RDSD_ZCLSVOBOR</td><td class="st">подключён</td><td class="note"></td></tr>
+<tr class="ok"><td>Материал</td><td class="ctl">D_MATERIAL</td><td class="ctl">—</td><td class="ctl">RDSD_MATERIAL</td><td class="st">подключён</td><td class="note"></td></tr>
+<tr class="ok"><td>Тех.место</td><td class="ctl">D_ZFUNC_LOC</td><td class="ctl">—</td><td class="ctl">RDSD_ZFUNC_LOC</td><td class="st">подключён</td><td class="note"></td></tr>
+<tr class="ok"><td>Месторождение</td><td class="ctl">D_ZSIU_FLD</td><td class="ctl">—</td><td class="ctl">RDSD_ZSIU_FLD</td><td class="st">подключён</td><td class="note"></td></tr>
+<tr class="ok"><td>СПП</td><td class="ctl">D_POSID</td><td class="ctl">—</td><td class="ctl">RDSD_POSID</td><td class="st">подключён</td><td class="note"></td></tr>
+<tr class="ok"><td>ИАС</td><td class="ctl">D_ZLIB_INFS</td><td class="ctl">—</td><td class="ctl">RDSD_INFOSYSTEM</td><td class="st">подключён</td><td class="note"></td></tr>
+<tr class="ok"><td>Тип периода</td><td class="ctl">D_PERIOD_TYPE</td><td class="ctl">—</td><td class="ctl">DIC_TYPE_PERIOD</td><td class="st">подключён</td><td class="note"></td></tr>
+</tbody></table>
+<h3>Энергоснабжение <span class="cnt">11 полей</span></h3>
+<table class="grid"><thead><tr><th>Поле на экране (ТТ)</th><th>Контрол в модуле</th><th>Параметр</th><th>Справочник (ТТ)</th><th>Состояние</th><th>Примечание</th></tr></thead><tbody>
+<tr class="ok"><td>Договор Энерго</td><td class="ctl">D_ZPHD_DOG</td><td class="ctl">—</td><td class="ctl">RDSD_ZPHD_DOG</td><td class="st">подключён</td><td class="note">в ТТ «надо сделать справочник ZPHD_DOG» — справочник в выгрузке есть</td></tr>
+<tr class="ok"><td>Потребитель</td><td class="ctl">D_ZPHD_USL1</td><td class="ctl">—</td><td class="ctl">SHORTCUT_TO_RDSD_SOLDTO_3</td><td class="st">подключён</td><td class="note"></td></tr>
+<tr class="ok"><td>ЭСО физ</td><td class="ctl">D_ZDEBITOR</td><td class="ctl">—</td><td class="ctl">SHORTCUT_TO_RDSD_SOLDTO</td><td class="st">подключён</td><td class="note"></td></tr>
+<tr class="ok"><td>Эсо физ (даль)</td><td class="ctl">D_ZPH_ESO2</td><td class="ctl">—</td><td class="ctl">SHORTCUT_TO_RDSD_SOLDTO_2</td><td class="st">подключён</td><td class="note"></td></tr>
+<tr class="missing"><td>ЭСО покуп</td><td class="ctl">—</td><td class="ctl">—</td><td class="ctl">SHORTCUT_TO_RDSD_SOLDTO_4</td><td class="st">контрола нет</td><td class="note">контрола нет; параметра ZPH_EPOK нет и в запросе</td></tr>
+<tr class="ok"><td>Сетевая компания</td><td class="ctl">D_ZPHD_SK</td><td class="ctl">—</td><td class="ctl">SHORTCUT_TO_RDSD_SOLDTO_5</td><td class="st">подключён</td><td class="note"></td></tr>
+<tr class="ok"><td>Ур.напр.</td><td class="ctl">D_UCVOLTLEVL</td><td class="ctl">—</td><td class="ctl">RDSD_UCVOLTLEVL</td><td class="st">подключён</td><td class="note"></td></tr>
+<tr class="ok"><td>Ур.напр.продаж</td><td class="ctl">D_ZUCVOLTTR</td><td class="ctl">—</td><td class="ctl">SHORTCUT_TO_RDSD_UCVOLTLEVL</td><td class="st">подключён</td><td class="note"></td></tr>
+<tr class="ok"><td>Класс напр.</td><td class="ctl">D_Z_CL_NAPR</td><td class="ctl">—</td><td class="ctl">RDSD_Z_CL_NAPR</td><td class="st">подключён</td><td class="note"></td></tr>
+<tr class="ok"><td>Тип тарифов</td><td class="ctl">D_ZSIU_TY</td><td class="ctl">—</td><td class="ctl">RDSD_ZSIU_TY</td><td class="st">подключён</td><td class="note"></td></tr>
+<tr class="ok"><td>Договор по воде</td><td class="ctl">D_ZDOGLINK</td><td class="ctl">—</td><td class="ctl">RDSD_ZDOGLINK</td><td class="st">подключён</td><td class="note"></td></tr>
+</tbody></table>
+<h3>Геология и бурение <span class="cnt">13 полей</span></h3>
+<table class="grid"><thead><tr><th>Поле на экране (ТТ)</th><th>Контрол в модуле</th><th>Параметр</th><th>Справочник (ТТ)</th><th>Состояние</th><th>Примечание</th></tr></thead><tbody>
+<tr class="ok"><td>Участок недр</td><td class="ctl">D_ZBUR_LU</td><td class="ctl">—</td><td class="ctl">RDSD_ZBUR_LU</td><td class="st">подключён</td><td class="note"></td></tr>
+<tr class="ok"><td>Площадь бурения</td><td class="ctl">D_ZBUR_AREA</td><td class="ctl">—</td><td class="ctl">RDSD_ZBUR_AREA</td><td class="st">подключён</td><td class="note"></td></tr>
+<tr class="ok"><td>Куст</td><td class="ctl">D_ZSKV_KUST</td><td class="ctl">—</td><td class="ctl">RDSD_ZSKV_KUST</td><td class="st">подключён</td><td class="note"></td></tr>
+<tr class="ok"><td>Скважина (геол.ном)</td><td class="ctl">D_Z_SKV_GEO</td><td class="ctl">—</td><td class="ctl">RDSD_Z_SKV_GEO</td><td class="st">подключён</td><td class="note"></td></tr>
+<tr class="ok"><td>Пласт</td><td class="ctl">D_ZBUR_PLST</td><td class="ctl">—</td><td class="ctl">RDSD_ZBUR_PLST</td><td class="st">подключён</td><td class="note"></td></tr>
+<tr class="ok"><td>Технология отбора керна</td><td class="ctl">D_ZPH_TEHK</td><td class="ctl">—</td><td class="ctl">RDSD_ZPH_TEHK</td><td class="st">подключён</td><td class="note"></td></tr>
+<tr class="ok"><td>Струк. особенности пласта</td><td class="ctl">D_ZPH_OPLST</td><td class="ctl">—</td><td class="ctl">RDSD_PH_OPLST</td><td class="st">подключён</td><td class="note">справочник по ТТ — RDSD_PH_OPLST</td></tr>
+<tr class="missing"><td>Мероприятие</td><td class="ctl">—</td><td class="ctl">—</td><td class="ctl">текстовое, ручной ввод</td><td class="st">контрола нет</td><td class="note">контрола нет: нужен WebInput + OnTextChanged (параметр ZPHD_COMM)</td></tr>
+<tr class="ok"><td>Дата начала бурения</td><td class="ctl">D_ZBUR_BEG</td><td class="ctl">—</td><td class="ctl">календарь</td><td class="st">подключён</td><td class="note">в форме — комбо (не календарь); параметр ZBUR_BEG пишется</td></tr>
+<tr class="ok"><td>Дата окончания бурения</td><td class="ctl">D_ZBUR_END</td><td class="ctl">—</td><td class="ctl">календарь</td><td class="st">подключён</td><td class="note">в форме — комбо; параметр ZBUR_END пишется</td></tr>
+<tr class="ok"><td>Пилотный ствол</td><td class="ctl">D_ZPILOT</td><td class="ctl">—</td><td class="ctl">RDSD_ZPILOT</td><td class="st">подключён</td><td class="note"></td></tr>
+<tr class="ok"><td>Состояние скважины</td><td class="ctl">D_ZSKV_ST</td><td class="ctl">—</td><td class="ctl">RDSD_ZSKV_ST</td><td class="st">подключён</td><td class="note"></td></tr>
+<tr class="ok"><td>Примечание</td><td class="ctl">I_ZINDTXT1</td><td class="ctl">—</td><td class="ctl">текстовое, ручной ввод</td><td class="st">подключён</td><td class="note">WebInput; параметр ZINDTXT1 (подключён)</td></tr>
+</tbody></table>
+<h3>Кап.строительство <span class="cnt">4 полей</span></h3>
+<table class="grid"><thead><tr><th>Поле на экране (ТТ)</th><th>Контрол в модуле</th><th>Параметр</th><th>Справочник (ТТ)</th><th>Состояние</th><th>Примечание</th></tr></thead><tbody>
+<tr class="ok"><td>Ген.подрядчик</td><td class="ctl">D_ZGEN_POD</td><td class="ctl">—</td><td class="ctl">SHORTCUT_TO_RDSD_SOLDTO_7</td><td class="st">подключён</td><td class="note"></td></tr>
+<tr class="ok"><td>Ген.заказчик</td><td class="ctl">D_ZGEN_ZAK</td><td class="ctl">—</td><td class="ctl">SHORTCUT_TO_RDSD_SOLDTO_6</td><td class="st">подключён</td><td class="note"></td></tr>
+<tr class="ok"><td>Субподрядчик</td><td class="ctl">D_ZPKR_SUBP</td><td class="ctl">—</td><td class="ctl">SHORTCUT_TO_RDSD_SOLDTO_8</td><td class="st">подключён</td><td class="note"></td></tr>
+<tr class="ok"><td>Шифр проекта стройки</td><td class="ctl">D_ZSHIFR</td><td class="ctl">—</td><td class="ctl">RDSD_ZSHIFR</td><td class="st">подключён</td><td class="note"></td></tr>
+</tbody></table>
+<h3>Экология <span class="cnt">3 полей</span></h3>
+<table class="grid"><thead><tr><th>Поле на экране (ТТ)</th><th>Контрол в модуле</th><th>Параметр</th><th>Справочник (ТТ)</th><th>Состояние</th><th>Примечание</th></tr></thead><tbody>
+<tr class="ok"><td>Номер объекта ЭМ</td><td class="ctl">D_ZOBJEM</td><td class="ctl">—</td><td class="ctl">RDSD_ZOBJEM</td><td class="st">подключён</td><td class="note"></td></tr>
+<tr class="ok"><td>Объект исследования</td><td class="ctl">D_ZPHD_SR</td><td class="ctl">—</td><td class="ctl">RDSD_ZPHD_SR</td><td class="st">подключён</td><td class="note"></td></tr>
+<tr class="ok"><td>Группировка сред ЭМ</td><td class="ctl">D_ZPHD_GRSR</td><td class="ctl">—</td><td class="ctl">RDSD_ZPHD_GRSR</td><td class="st">подключён</td><td class="note"></td></tr>
+</tbody></table>
+<h3>Прочие аналитики <span class="cnt">5 полей</span></h3>
+<table class="grid"><thead><tr><th>Поле на экране (ТТ)</th><th>Контрол в модуле</th><th>Параметр</th><th>Справочник (ТТ)</th><th>Состояние</th><th>Примечание</th></tr></thead><tbody>
+<tr class="ok"><td>Вид газа</td><td class="ctl">D_ZGAZ_TYPE</td><td class="ctl">—</td><td class="ctl">RDSD_ZGAZ_TYPE</td><td class="st">подключён</td><td class="note"></td></tr>
+<tr class="ok"><td>Тип воздушного судна</td><td class="ctl">D_ZAVIATYPE</td><td class="ctl">—</td><td class="ctl">RDSD_ZAVIATYPE</td><td class="st">подключён</td><td class="note"></td></tr>
+<tr class="ok"><td>Дата ввода скв. в экспл.</td><td class="ctl">D_ZPHD_NCH</td><td class="ctl">—</td><td class="ctl">календарь</td><td class="st">подключён</td><td class="note">в форме — комбо; параметр ZPHD_NCH подключён</td></tr>
+<tr class="ok"><td>Дата проведения ГТМ</td><td class="ctl">D_ZPHD_KON</td><td class="ctl">—</td><td class="ctl">календарь</td><td class="st">подключён</td><td class="note">в форме — комбо; параметр ZPHD_KON подключён</td></tr>
+<tr class="ok"><td>ГТМ</td><td class="ctl">D_ZPHD_SPR</td><td class="ctl">—</td><td class="ctl">RDSD_ZPHD_SPR</td><td class="st">подключён</td><td class="note"></td></tr>
+</tbody></table>
+<h3>Данные показателя <span class="cnt">4 полей</span></h3>
+<table class="grid"><thead><tr><th>Поле на экране (ТТ)</th><th>Контрол в модуле</th><th>Параметр</th><th>Справочник (ТТ)</th><th>Состояние</th><th>Примечание</th></tr></thead><tbody>
+<tr class="missing"><td>Вид деятельности</td><td class="ctl">—</td><td class="ctl">—</td><td class="ctl">DIC_ZSIUT_ACTVTS</td><td class="st">контрола нет</td><td class="note">контрола-фильтра нет (есть только чек-бокс вывода CB_ACTIVITY_TYPE); параметра ACTVTS нет и в запросе</td></tr>
+<tr class="missing"><td>Вид показателя</td><td class="ctl">—</td><td class="ctl">—</td><td class="ctl">RDSD_GROUPS</td><td class="st">контрола нет</td><td class="note">контрола-фильтра нет (чек-бокс вывода CB_IND_TYPE)</td></tr>
+<tr class="missing"><td>Формы отчетов</td><td class="ctl">—</td><td class="ctl">—</td><td class="ctl">PFORM</td><td class="st">контрола нет</td><td class="note">контрола-фильтра нет (чек-бокс вывода CB_TEP_FORM_OF_SNG)</td></tr>
+<tr class="missing"><td>Выводить ТЭП-источники (чек-бокс)</td><td class="ctl">—</td><td class="ctl">—</td><td class="ctl">без справочника</td><td class="st">контрола нет</td><td class="note">контрола нет — уточнить, какой чек-бокс ему соответствует</td></tr>
+</tbody></table>
+
+<h2>3. Режим «Поля для вывода»: чек-боксы</h2>
+<h3>Основные данные <span class="cnt">21 полей</span></h3>
+<table class="grid"><thead><tr><th>Поле на экране (ТТ)</th><th>Чек-бокс в модуле</th><th>Идентификатор поля</th><th>Состояние</th><th>Примечание</th></tr></thead><tbody>
+<tr class="missing"><td>Год</td><td class="ctl">—</td><td class="ctl">CALYEAR</td><td class="st">контрола нет</td><td class="note">чек-бокса нет; «Год» уходит в список всегда</td></tr>
+<tr class="ok"><td>СП</td><td class="ctl">CB_PLANT</td><td class="ctl">PLANT</td><td class="st">подключён</td><td class="note"></td></tr>
+<tr class="ok"><td>ТЭП</td><td class="ctl">CB_ZLIB_INDC</td><td class="ctl">ZLIB_INDC</td><td class="st">подключён</td><td class="note"></td></tr>
+<tr class="ok"><td>Ед.измерения</td><td class="ctl">CB_ACT_UNIT</td><td class="ctl">ACT_UNIT</td><td class="st">подключён</td><td class="note"></td></tr>
+<tr class="ok"><td>Поставщик</td><td class="ctl">CB_VENDOR</td><td class="ctl">VENDOR</td><td class="st">подключён</td><td class="note"></td></tr>
+<tr class="ok"><td>Заказчик</td><td class="ctl">CB_SOLD_TO</td><td class="ctl">SOLD_TO</td><td class="st">подключён</td><td class="note"></td></tr>
+<tr class="ok"><td>Регион</td><td class="ctl">CB_ZHRGRPMO</td><td class="ctl">ZHRGRPMO</td><td class="st">подключён</td><td class="note"></td></tr>
+<tr class="ok"><td>Вид производства</td><td class="ctl">CB_PROFIT_CTR</td><td class="ctl">PROFIT_CTR</td><td class="st">подключён</td><td class="note"></td></tr>
+<tr class="ok"><td>МВЗ</td><td class="ctl">CB_COSTCENTER</td><td class="ctl">COSTCENTER</td><td class="st">подключён</td><td class="note"></td></tr>
+<tr class="ok"><td>Орг.единица</td><td class="ctl">CB_ZORGUNIT</td><td class="ctl">ZORGUNIT</td><td class="st">подключён</td><td class="note"></td></tr>
+<tr class="ok"><td>Рабочее место исполнителя</td><td class="ctl">CB_ZPH_USR2</td><td class="ctl">ZPH_USR2</td><td class="st">подключён</td><td class="note"></td></tr>
+<tr class="ok"><td>Вид работ</td><td class="ctl">CB_ACTTYPE</td><td class="ctl">ACTTYPE</td><td class="st">подключён</td><td class="note"></td></tr>
+<tr class="ok"><td>Единица оборудования</td><td class="ctl">CB_ZEQUI</td><td class="ctl">ZEQUI</td><td class="st">подключён</td><td class="note"></td></tr>
+<tr class="missing"><td>Класс вида оборудования</td><td class="ctl">CB_ZCLSVOBOR</td><td class="ctl">ZCLSVOBOR</td><td class="st">не объявлен в модуле</td><td class="note"></td></tr>
+<tr class="ok"><td>Материал</td><td class="ctl">CB_MATERIAL</td><td class="ctl">MATERIAL</td><td class="st">подключён</td><td class="note"></td></tr>
+<tr class="ok"><td>Тех.место</td><td class="ctl">CB_ZFUNC_LOC</td><td class="ctl">ZFUNC_LOC</td><td class="st">подключён</td><td class="note"></td></tr>
+<tr class="ok"><td>Месторождение</td><td class="ctl">CB_ZSIU_FLD</td><td class="ctl">ZSIU_FLD</td><td class="st">подключён</td><td class="note"></td></tr>
+<tr class="ok"><td>СПП-элемент</td><td class="ctl">CB_POSID</td><td class="ctl">POSID</td><td class="st">подключён</td><td class="note"></td></tr>
+<tr class="ok"><td>Инфосистема</td><td class="ctl">CB_ZLIB_INFS</td><td class="ctl">ZLIB_INFS</td><td class="st">подключён</td><td class="note"></td></tr>
+<tr class="ok"><td>Тип периода</td><td class="ctl">CB_PERIOD_TYPE</td><td class="ctl">PERIOD_TYPE</td><td class="st">подключён</td><td class="note"></td></tr>
+<tr class="declared"><td>Вышестоящий ТЭП</td><td class="ctl">CbHigherInd</td><td class="ctl">ZPH_HIGHER</td><td class="st">объявлен, обработчика нет</td><td class="note">контрол объявлен, обработчика нет (уточнить идентификатор)</td></tr>
+</tbody></table>
+<h3>Значения ТЭП <span class="cnt">2 полей</span></h3>
+<table class="grid"><thead><tr><th>Поле на экране (ТТ)</th><th>Чек-бокс в модуле</th><th>Идентификатор поля</th><th>Состояние</th><th>Примечание</th></tr></thead><tbody>
+<tr class="missing"><td>Январь…Декабрь (12)</td><td class="ctl">CB_JANUARY … CB_DECEMBER</td><td class="ctl">ZSIU_INDV_01…12</td><td class="st">не объявлен в модуле</td><td class="note">12 чек-боксов; в запросе таких аналитик нет — подставлять в ANALYTIC_SET нельзя</td></tr>
+<tr class="declared"><td>I кв. / II кв. / 6 мес. / III кв. / 9 мес. / IV кв. / Год</td><td class="ctl">CB_FIRST_QUARTER, CB_SECOND_QUARTER, CB_SIX_MONTH, CB_THIRD_QUARTER, CB_NINE_MONTH, CB_FOURTH_QUARTER, CB_YEAR</td><td class="ctl">ZSIU_INDV_Q1…Q9</td><td class="st">объявлен, обработчика нет</td><td class="note">отмечены по умолчанию; III кв. — контрол не подтверждён</td></tr>
+</tbody></table>
+<h3>Значения ТЭП с начала года <span class="cnt">1 полей</span></h3>
+<table class="grid"><thead><tr><th>Поле на экране (ТТ)</th><th>Чек-бокс в модуле</th><th>Идентификатор поля</th><th>Состояние</th><th>Примечание</th></tr></thead><tbody>
+<tr class="missing"><td>Январь…Год «С нач.года» (19)</td><td class="ctl">—</td><td class="ctl">ZVALUE_SNG и др.</td><td class="st">контрола нет</td><td class="note">контролов нет; колонки в запросе считаются, но в списке полей отчёта их нет</td></tr>
+</tbody></table>
+<h3>Значения корректировок ТЭП <span class="cnt">1 полей</span></h3>
+<table class="grid"><thead><tr><th>Поле на экране (ТТ)</th><th>Чек-бокс в модуле</th><th>Идентификатор поля</th><th>Состояние</th><th>Примечание</th></tr></thead><tbody>
+<tr class="missing"><td>Январь…Год «Коррект.» (19)</td><td class="ctl">—</td><td class="ctl">ZSIU_INDV при ZLIB_INFS = KOROUND</td><td class="st">контрола нет</td><td class="note">контролов нет</td></tr>
+</tbody></table>
+<h3>Энергоснабжение <span class="cnt">11 полей</span></h3>
+<table class="grid"><thead><tr><th>Поле на экране (ТТ)</th><th>Чек-бокс в модуле</th><th>Идентификатор поля</th><th>Состояние</th><th>Примечание</th></tr></thead><tbody>
+<tr class="ok"><td>Договор</td><td class="ctl">CB_ZPHD_DOG</td><td class="ctl">ZPHD_DOG</td><td class="st">подключён</td><td class="note"></td></tr>
+<tr class="ok"><td>Потребитель</td><td class="ctl">CB_ZPHD_USL1</td><td class="ctl">ZPHD_USL1</td><td class="st">подключён</td><td class="note"></td></tr>
+<tr class="ok"><td>ЭСО физ</td><td class="ctl">CB_ZDEBITOR</td><td class="ctl">ZDEBITOR</td><td class="st">подключён</td><td class="note"></td></tr>
+<tr class="ok"><td>Эсо физ (даль)</td><td class="ctl">CB_ZPH_ESO2</td><td class="ctl">ZPH_ESO2</td><td class="st">подключён</td><td class="note"></td></tr>
+<tr class="missing"><td>ЭСО покуп</td><td class="ctl">—</td><td class="ctl">ZPH_EPOK</td><td class="st">контрола нет</td><td class="note">контрола нет (аналитика zph_epok в запросе есть)</td></tr>
+<tr class="ok"><td>Сетевая компания</td><td class="ctl">CB_ZPHD_SK</td><td class="ctl">ZPHD_SK</td><td class="st">подключён</td><td class="note"></td></tr>
+<tr class="ok"><td>Ур.напр.</td><td class="ctl">CB_UCVOLTLEVL</td><td class="ctl">UCVOLTLEVL</td><td class="st">подключён</td><td class="note"></td></tr>
+<tr class="ok"><td>Ур.напр.продаж</td><td class="ctl">CB_ZUCVOLTTR</td><td class="ctl">ZUCVOLTTR</td><td class="st">подключён</td><td class="note"></td></tr>
+<tr class="ok"><td>Класс напр.</td><td class="ctl">CB_Z_CL_NAPR</td><td class="ctl">Z_CL_NAPR</td><td class="st">подключён</td><td class="note"></td></tr>
+<tr class="ok"><td>Тип тарифов</td><td class="ctl">CB_ZSIU_TY</td><td class="ctl">ZSIU_TY</td><td class="st">подключён</td><td class="note"></td></tr>
+<tr class="ok"><td>Договор по воде</td><td class="ctl">CB_ZDOGLINK</td><td class="ctl">ZDOGLINK</td><td class="st">подключён</td><td class="note"></td></tr>
+</tbody></table>
+<h3>Геология и бурение <span class="cnt">13 полей</span></h3>
+<table class="grid"><thead><tr><th>Поле на экране (ТТ)</th><th>Чек-бокс в модуле</th><th>Идентификатор поля</th><th>Состояние</th><th>Примечание</th></tr></thead><tbody>
+<tr class="ok"><td>Лицензионный участок</td><td class="ctl">CB_ZBUR_LU</td><td class="ctl">ZBUR_LU</td><td class="st">подключён</td><td class="note">подпись по экрану (в ТТ «Участок недр»)</td></tr>
+<tr class="ok"><td>Площадь бурения</td><td class="ctl">CB_ZBUR_AREA</td><td class="ctl">ZBUR_AREA</td><td class="st">подключён</td><td class="note"></td></tr>
+<tr class="ok"><td>Куст</td><td class="ctl">CB_ZSKV_KUST</td><td class="ctl">ZSKV_KUST</td><td class="st">подключён</td><td class="note">в ТТ поле ZKUST, в форме — ZSKV_KUST: уточнить</td></tr>
+<tr class="ok"><td>Скважина</td><td class="ctl">CB_Z_SKV_GEO</td><td class="ctl">Z_SKV_GEO</td><td class="st">подключён</td><td class="note">подпись по экрану</td></tr>
+<tr class="ok"><td>Пласт</td><td class="ctl">CB_ZBUR_PLST</td><td class="ctl">ZBUR_PLST</td><td class="st">подключён</td><td class="note"></td></tr>
+<tr class="ok"><td>Технология отбора керна</td><td class="ctl">CB_ZPH_TEHK</td><td class="ctl">ZPH_TEHK</td><td class="st">подключён</td><td class="note"></td></tr>
+<tr class="ok"><td>Структурные особенности пласта</td><td class="ctl">CB_ZPH_OPLST</td><td class="ctl">ZPH_OPLST</td><td class="st">подключён</td><td class="note"></td></tr>
+<tr class="ok"><td>Мероприятия</td><td class="ctl">CB_ZPHD_COMM</td><td class="ctl">ZPHD_COMM</td><td class="st">подключён</td><td class="note">чек-бокс есть; поля ввода значения — нет</td></tr>
+<tr class="ok"><td>Дата начала бурения</td><td class="ctl">CB_ZBUR_BEG</td><td class="ctl">ZBUR_BEG</td><td class="st">подключён</td><td class="note"></td></tr>
+<tr class="ok"><td>Дата окончания бурения</td><td class="ctl">CB_ZBUR_END</td><td class="ctl">ZBUR_END</td><td class="st">подключён</td><td class="note"></td></tr>
+<tr class="ok"><td>Пилотный ствол</td><td class="ctl">CB_ZPILOT</td><td class="ctl">ZPILOT</td><td class="st">подключён</td><td class="note"></td></tr>
+<tr class="ok"><td>Состояние скважины</td><td class="ctl">CB_ZSKV_ST</td><td class="ctl">ZSKV_ST</td><td class="st">подключён</td><td class="note"></td></tr>
+<tr class="ok"><td>Примечание</td><td class="ctl">CB_ZINDTXT1</td><td class="ctl">ZINDTXT1</td><td class="st">подключён</td><td class="note"></td></tr>
+</tbody></table>
+<h3>Кап.строительство <span class="cnt">4 полей</span></h3>
+<table class="grid"><thead><tr><th>Поле на экране (ТТ)</th><th>Чек-бокс в модуле</th><th>Идентификатор поля</th><th>Состояние</th><th>Примечание</th></tr></thead><tbody>
+<tr class="ok"><td>Ген.подрядчик</td><td class="ctl">CB_ZGEN_POD</td><td class="ctl">ZGEN_POD</td><td class="st">подключён</td><td class="note"></td></tr>
+<tr class="ok"><td>Ген.заказчик</td><td class="ctl">CB_ZGEN_ZAK</td><td class="ctl">ZGEN_ZAK</td><td class="st">подключён</td><td class="note"></td></tr>
+<tr class="ok"><td>Субподрядчик</td><td class="ctl">CB_ZPKR_SUBP</td><td class="ctl">ZPKR_SUBP</td><td class="st">подключён</td><td class="note"></td></tr>
+<tr class="ok"><td>Шифр проекта стройки</td><td class="ctl">CB_ZSHIFR</td><td class="ctl">ZSHIFR</td><td class="st">подключён</td><td class="note"></td></tr>
+</tbody></table>
+<h3>Экология <span class="cnt">3 полей</span></h3>
+<table class="grid"><thead><tr><th>Поле на экране (ТТ)</th><th>Чек-бокс в модуле</th><th>Идентификатор поля</th><th>Состояние</th><th>Примечание</th></tr></thead><tbody>
+<tr class="ok"><td>Объект ЭМ</td><td class="ctl">CB_ZOBJEM</td><td class="ctl">ZOBJEM</td><td class="st">подключён</td><td class="note">подпись по экрану (в ТТ «Номер объекта ЭМ»)</td></tr>
+<tr class="ok"><td>Объект исследования</td><td class="ctl">CB_ZPHD_SR</td><td class="ctl">ZPHD_SR</td><td class="st">подключён</td><td class="note"></td></tr>
+<tr class="ok"><td>Группировка сред ЭМ</td><td class="ctl">CB_ZPHD_GRSR</td><td class="ctl">ZPHD_GRSR</td><td class="st">подключён</td><td class="note"></td></tr>
+</tbody></table>
+<h3>Прочие аналитики <span class="cnt">6 полей</span></h3>
+<table class="grid"><thead><tr><th>Поле на экране (ТТ)</th><th>Чек-бокс в модуле</th><th>Идентификатор поля</th><th>Состояние</th><th>Примечание</th></tr></thead><tbody>
+<tr class="ok"><td>Вид газа</td><td class="ctl">CB_ZGAZ_TYPE</td><td class="ctl">ZGAZ_TYPE</td><td class="st">подключён</td><td class="note"></td></tr>
+<tr class="ok"><td>Тип воздушного судна</td><td class="ctl">CB_ZAVIATYPE</td><td class="ctl">ZAVIATYPE</td><td class="st">подключён</td><td class="note"></td></tr>
+<tr class="ok"><td>Дата начала</td><td class="ctl">CB_ZPHD_NCH</td><td class="ctl">ZPHD_NCH</td><td class="st">подключён</td><td class="note"></td></tr>
+<tr class="ok"><td>Дата окончания</td><td class="ctl">CB_ZPHD_KON</td><td class="ctl">ZPHD_KON</td><td class="st">подключён</td><td class="note"></td></tr>
+<tr class="missing"><td>Универсальный справочник</td><td class="ctl">CB_AREA или CbESO3</td><td class="ctl">?</td><td class="st">не объявлен в модуле</td><td class="note">по экрану; какой из двух контролов — уточнить</td></tr>
+<tr class="missing"><td>Операция</td><td class="ctl">CB_AREA или CbESO3</td><td class="ctl">?</td><td class="st">не объявлен в модуле</td><td class="note">по экрану; какой из двух контролов — уточнить</td></tr>
+</tbody></table>
+<h3>Данные показателя <span class="cnt">13 полей</span></h3>
+<table class="grid"><thead><tr><th>Поле на экране (ТТ)</th><th>Чек-бокс в модуле</th><th>Идентификатор поля</th><th>Состояние</th><th>Примечание</th></tr></thead><tbody>
+<tr class="declared"><td>Вид деятельности</td><td class="ctl">CB_ACTIVITY_TYPE</td><td class="ctl">ACTVTS</td><td class="st">объявлен, обработчика нет</td><td class="note">контрол объявлен, обработчика нет</td></tr>
+<tr class="declared"><td>Владелец ТЭП</td><td class="ctl">CB_TEP_OWNER</td><td class="ctl">OWNER</td><td class="st">объявлен, обработчика нет</td><td class="note">контрол объявлен, обработчика нет</td></tr>
+<tr class="declared"><td>МВП ТЭП</td><td class="ctl">CB_MVP_TEP</td><td class="ctl">?</td><td class="st">объявлен, обработчика нет</td><td class="note">подпись по экрану; идентификатор уточнить</td></tr>
+<tr class="declared"><td>Функция/задача персонала</td><td class="ctl">CB_FUNCTION_OF_WOKERS</td><td class="ctl">ZPH_FUNC</td><td class="st">объявлен, обработчика нет</td><td class="note">уточнить идентификатор</td></tr>
+<tr class="declared"><td>Вид показателя</td><td class="ctl">CB_IND_TYPE</td><td class="ctl">ID1</td><td class="st">объявлен, обработчика нет</td><td class="note">контрол объявлен, обработчика нет</td></tr>
+<tr class="declared"><td>Формы ТЭП СНГ</td><td class="ctl">CB_TEP_FORM_OF_SNG</td><td class="ctl">ZF_NUMB</td><td class="st">объявлен, обработчика нет</td><td class="note">контрол объявлен, обработчика нет</td></tr>
+<tr class="declared"><td>Объемный</td><td class="ctl">CB_VOLUME</td><td class="ctl">ZPH_VOLUME</td><td class="st">объявлен, обработчика нет</td><td class="note">уточнить идентификатор</td></tr>
+<tr class="declared"><td>Трудоемкость</td><td class="ctl">CB_TRUD</td><td class="ctl">ZPH_TRUD</td><td class="st">объявлен, обработчика нет</td><td class="note">уточнить идентификатор</td></tr>
+<tr class="declared"><td>В сопоставимых ценах</td><td class="ctl">CB_COMPARABLE_PRICES</td><td class="ctl">ZPH_PRICE_CP</td><td class="st">объявлен, обработчика нет</td><td class="note">уточнить идентификатор</td></tr>
+<tr class="declared"><td>В действующих ценах</td><td class="ctl">CB_CURRENT_PRICES</td><td class="ctl">ZPH_PRICE_CD</td><td class="st">объявлен, обработчика нет</td><td class="note">уточнить идентификатор</td></tr>
+<tr class="declared"><td>В сметных ценах</td><td class="ctl">CB_ESTIMATED_PRICES</td><td class="ctl">?</td><td class="st">объявлен, обработчика нет</td><td class="note">подпись по экрану; идентификатор уточнить</td></tr>
+<tr class="declared"><td>Вид работ (классификация)</td><td class="ctl">CB_ACTTYPE2</td><td class="ctl">ZPH_ACTTYPE2</td><td class="st">объявлен, обработчика нет</td><td class="note">уточнить идентификатор</td></tr>
+<tr class="declared"><td>Код набора аналитик</td><td class="ctl">CB_ANALYTIC_SET</td><td class="ctl">?</td><td class="st">объявлен, обработчика нет</td><td class="note">подпись по экрану; вероятно, список кодов аналитик</td></tr>
+</tbody></table>
+<h3>Данные расчета <span class="cnt">3 полей</span></h3>
+<table class="grid"><thead><tr><th>Поле на экране (ТТ)</th><th>Чек-бокс в модуле</th><th>Идентификатор поля</th><th>Состояние</th><th>Примечание</th></tr></thead><tbody>
+<tr class="missing"><td>Признак уровня</td><td class="ctl">CB_ZPHD_PRIZ или CB_ZPHD_PHD</td><td class="ctl">ZPHD_PRIZ / ZPHD_PHD</td><td class="st">не объявлен в модуле</td><td class="note">на экране 3 строки, а подходящих контролов 4 — уточнить</td></tr>
+<tr class="missing"><td>Исключение из приказа</td><td class="ctl">CB_ZPHD_PHD или CB_ZPHD_IS</td><td class="ctl">ZPHD_PHD / ZPHD_IS</td><td class="st">не объявлен в модуле</td><td class="note">уточнить</td></tr>
+<tr class="missing"><td>Источник данных</td><td class="ctl">CB_ZPHD_NOP1 или …</td><td class="ctl">ZPHD_NOP1</td><td class="st">не объявлен в модуле</td><td class="note">уточнить</td></tr>
+</tbody></table>
+
+<h2>4. Сводка по модулю</h2>
+<table class="grid"><tbody>
+<tr><th>Контролов объявлено</th><td>181 (в т.ч. 95 чек-боксов, 58 комбо, 18 страниц вкладок,
+ 3 вкладки, 2 кнопки, 1 поле ввода, 1 календарь, 1 журнал, 1 панель, 1 область отчёта)</td></tr>
+<tr><th>Чек-боксов подключено к списку полей</th><td>88 (пишут идентификатор поля в <span class="k">P_FIELD_LIST</span>)</td></tr>
+<tr><th>Чек-боксов без обработчика</th><td>20: <span class="k">CB_ACTIVITY_TYPE, CB_ACTTYPE2, CB_ANALYTIC_SET, CB_AREA, CB_COMPARABLE_PRICES, CB_CURRENT_PRICES, CB_DISPLAY_CODE_ANALYT, CB_DISPLAY_INFO_BY_STATUS, CB_ESTIMATED_PRICES, CB_FUNCTION_OF_WOKERS, CB_IND_TYPE, CB_MVP_TEP, CB_NOVEMBER, CB_TEP_FORM_OF_SNG, CB_TEP_OWNER, CB_THIRD_QUARTER, CB_TRUD, CB_VOLUME, CbESO3, CbHigherInd</span></td></tr>
+<tr><th>Комбо, пишущих параметры</th><td>0 из 58</td></tr>
+</tbody></table>
+
+<h2>5. Контролы, объявленные в модуле, но не использованные в исходном коде</h2>
+<div class="sub">Ссылки на них в коде держу выключенными. Если компонент есть на форме — достаточно навесить
+событие <span class="k">OnChange</span>, и он подключится сам. Прошу отметить, какие реально есть на форме.</div>
+<table class="grid"><thead><tr><th>Контрол</th><th>Тип</th><th>Где ожидается</th><th>Состояние</th></tr></thead><tbody>
+<tr class="declared"><td class="ctl">CB_ACTIVITY_TYPE</td><td>WebCheckBox</td><td class="note">«Поля для вывода» → «Данные показателя», «Вид деятельности»</td><td class="st">объявлен, обработчика нет</td></tr>
+<tr class="declared"><td class="ctl">CB_ACTTYPE2</td><td>WebCheckBox</td><td class="note">«Поля для вывода» → «Данные показателя», «Вид работ (классификация)»</td><td class="st">объявлен, обработчика нет</td></tr>
+<tr class="declared"><td class="ctl">CB_ANALYTIC_SET</td><td>WebCheckBox</td><td class="note">назначение в ТТ не найдено</td><td class="st">объявлен, обработчика нет</td></tr>
+<tr class="declared"><td class="ctl">CB_AREA</td><td>WebCheckBox</td><td class="note">назначение в ТТ не найдено</td><td class="st">объявлен, обработчика нет</td></tr>
+<tr class="declared"><td class="ctl">CB_COMPARABLE_PRICES</td><td>WebCheckBox</td><td class="note">«Поля для вывода» → «Данные показателя», «В сопоставимых ценах»</td><td class="st">объявлен, обработчика нет</td></tr>
+<tr class="declared"><td class="ctl">CB_CURRENT_PRICES</td><td>WebCheckBox</td><td class="note">«Поля для вывода» → «Данные показателя», «В действующих ценах»</td><td class="st">объявлен, обработчика нет</td></tr>
+<tr class="declared"><td class="ctl">CB_DISPLAY_CODE_ANALYT</td><td>WebCheckBox</td><td class="note">верхняя часть формы, чек-бокс «Выводить коды аналитик» (виден на скриншоте)</td><td class="st">объявлен, обработчика нет</td></tr>
+<tr class="declared"><td class="ctl">CB_DISPLAY_INFO_BY_STATUS</td><td>WebCheckBox</td><td class="note">верхняя часть формы, чек-бокс «Выводить информацию по статусам» (виден на скриншоте)</td><td class="st">объявлен, обработчика нет</td></tr>
+<tr class="declared"><td class="ctl">CB_ESTIMATED_PRICES</td><td>WebCheckBox</td><td class="note">назначение в ТТ не найдено</td><td class="st">объявлен, обработчика нет</td></tr>
+<tr class="declared"><td class="ctl">CB_FUNCTION_OF_WOKERS</td><td>WebCheckBox</td><td class="note">«Поля для вывода» → «Данные показателя», «Функция/задача»</td><td class="st">объявлен, обработчика нет</td></tr>
+<tr class="declared"><td class="ctl">CB_IND_TYPE</td><td>WebCheckBox</td><td class="note">«Поля для вывода» → «Данные показателя», «Вид показателя»</td><td class="st">объявлен, обработчика нет</td></tr>
+<tr class="declared"><td class="ctl">CB_MVP_TEP</td><td>WebCheckBox</td><td class="note">назначение в ТТ не найдено</td><td class="st">объявлен, обработчика нет</td></tr>
+<tr class="declared"><td class="ctl">CB_NOVEMBER</td><td>WebCheckBox</td><td class="note">«Поля для вывода» → «Значения ТЭП» (в модуле обработчик CbNovemberOnChange)</td><td class="st">объявлен, обработчика нет</td></tr>
+<tr class="declared"><td class="ctl">CB_TEP_FORM_OF_SNG</td><td>WebCheckBox</td><td class="note">«Поля для вывода» → «Данные показателя», «Формы отчетов»</td><td class="st">объявлен, обработчика нет</td></tr>
+<tr class="declared"><td class="ctl">CB_TEP_OWNER</td><td>WebCheckBox</td><td class="note">«Поля для вывода» → «Данные показателя», «Владелец ТЭП»</td><td class="st">объявлен, обработчика нет</td></tr>
+<tr class="declared"><td class="ctl">CB_THIRD_QUARTER</td><td>WebCheckBox</td><td class="note">«Поля для вывода» → «Значения ТЭП» (обработчик CbThirdQuarterOnChange)</td><td class="st">объявлен, обработчика нет</td></tr>
+<tr class="declared"><td class="ctl">CB_TRUD</td><td>WebCheckBox</td><td class="note">«Поля для вывода» → «Данные показателя», «Трудоемкость»</td><td class="st">объявлен, обработчика нет</td></tr>
+<tr class="declared"><td class="ctl">CB_VOLUME</td><td>WebCheckBox</td><td class="note">«Поля для вывода» → «Данные показателя», «Объемный»</td><td class="st">объявлен, обработчика нет</td></tr>
+<tr class="declared"><td class="ctl">CbESO3</td><td>WebCheckBox</td><td class="note">назначение в ТТ не найдено</td><td class="st">объявлен, обработчика нет</td></tr>
+<tr class="declared"><td class="ctl">CbHigherInd</td><td>WebCheckBox</td><td class="note">«Поля для вывода» → «Основные данные», «Вышестоящий ТЭП»</td><td class="st">объявлен, обработчика нет</td></tr>
+</tbody></table>
+
+<h2>6. Чего на форме нет (по ТЗ нужно создать)</h2>
+<table class="grid"><thead><tr><th>Раздел / режим</th><th>Поле по ТЗ</th><th>Контрол</th><th>Что нужно</th></tr></thead><tbody>
+<tr class="missing"><td>Условия выборки → Энергоснабжение</td><td>ЭСО покуп</td><td class="ctl">—</td><td class="note">контрола нет; параметра ZPH_EPOK нет и в запросе</td></tr>
+<tr class="missing"><td>Условия выборки → Геология и бурение</td><td>Мероприятие</td><td class="ctl">—</td><td class="note">контрола нет: нужен WebInput + OnTextChanged (параметр ZPHD_COMM)</td></tr>
+<tr class="missing"><td>Условия выборки → Данные показателя</td><td>Вид деятельности</td><td class="ctl">—</td><td class="note">контрола-фильтра нет (есть только чек-бокс вывода CB_ACTIVITY_TYPE); параметра ACTVTS нет и в запросе</td></tr>
+<tr class="missing"><td>Условия выборки → Данные показателя</td><td>Вид показателя</td><td class="ctl">—</td><td class="note">контрола-фильтра нет (чек-бокс вывода CB_IND_TYPE)</td></tr>
+<tr class="missing"><td>Условия выборки → Данные показателя</td><td>Формы отчетов</td><td class="ctl">—</td><td class="note">контрола-фильтра нет (чек-бокс вывода CB_TEP_FORM_OF_SNG)</td></tr>
+<tr class="missing"><td>Условия выборки → Данные показателя</td><td>Выводить ТЭП-источники (чек-бокс)</td><td class="ctl">—</td><td class="note">контрола нет — уточнить, какой чек-бокс ему соответствует</td></tr>
+<tr class="missing"><td>Поля для вывода → Основные данные</td><td>Год</td><td class="ctl">—</td><td class="note">чек-бокса нет; «Год» уходит в список всегда</td></tr>
+<tr class="missing"><td>Поля для вывода → Основные данные</td><td>Класс вида оборудования</td><td class="ctl">CB_ZCLSVOBOR</td><td class="note">ZCLSVOBOR</td></tr>
+<tr class="missing"><td>Поля для вывода → Значения ТЭП</td><td>Январь…Декабрь (12)</td><td class="ctl">CB_JANUARY … CB_DECEMBER</td><td class="note">12 чек-боксов; в запросе таких аналитик нет — подставлять в ANALYTIC_SET нельзя</td></tr>
+<tr class="missing"><td>Поля для вывода → Значения ТЭП с начала года</td><td>Январь…Год «С нач.года» (19)</td><td class="ctl">—</td><td class="note">контролов нет; колонки в запросе считаются, но в списке полей отчёта их нет</td></tr>
+<tr class="missing"><td>Поля для вывода → Значения корректировок ТЭП</td><td>Январь…Год «Коррект.» (19)</td><td class="ctl">—</td><td class="note">контролов нет</td></tr>
+<tr class="missing"><td>Поля для вывода → Энергоснабжение</td><td>ЭСО покуп</td><td class="ctl">—</td><td class="note">контрола нет (аналитика zph_epok в запросе есть)</td></tr>
+<tr class="missing"><td>Поля для вывода → Прочие аналитики</td><td>Универсальный справочник</td><td class="ctl">CB_AREA или CbESO3</td><td class="note">по экрану; какой из двух контролов — уточнить</td></tr>
+<tr class="missing"><td>Поля для вывода → Прочие аналитики</td><td>Операция</td><td class="ctl">CB_AREA или CbESO3</td><td class="note">по экрану; какой из двух контролов — уточнить</td></tr>
+<tr class="missing"><td>Поля для вывода → Данные расчета</td><td>Признак уровня</td><td class="ctl">CB_ZPHD_PRIZ или CB_ZPHD_PHD</td><td class="note">на экране 3 строки, а подходящих контролов 4 — уточнить</td></tr>
+<tr class="missing"><td>Поля для вывода → Данные расчета</td><td>Исключение из приказа</td><td class="ctl">CB_ZPHD_PHD или CB_ZPHD_IS</td><td class="note">уточнить</td></tr>
+<tr class="missing"><td>Поля для вывода → Данные расчета</td><td>Источник данных</td><td class="ctl">CB_ZPHD_NOP1 или …</td><td class="note">уточнить</td></tr>
+</tbody></table>
+
+<h2>7. Что я понял про связь с отчётом</h2>
+<ul style="font-size:13px;line-height:1.6">
+ <li>Список выбранных полей уходит <b>массивом</b> в нижнем регистре в параметры
+     <span class="k">P_FIELD_LIST</span> и <span class="k">ANALYTIC_SET</span>; запрос подставляет его
+     прямо в SELECT/GROUP BY — так и получается «чек-бокс → столбец», а невыбранное суммируется.</li>
+ <li>Остальные параметры — фильтры (по одному на комбо) и <span class="k">CALYEAR</span> (Год уходит всегда).</li>
+ <li>В отчёте <span class="k">PRX_ANALYSIS_TEP</span> осталось сопоставить
+     <span class="k">ANALYTIC_SET</span> ← <span class="k">P_FIELD_LIST</span>, а также
+     <span class="k">ZTYPEIND</span> и <span class="k">ZGEN_POD</span>.</li>
+</ul>
+</body></html>
