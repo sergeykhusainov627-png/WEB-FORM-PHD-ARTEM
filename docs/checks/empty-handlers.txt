@@ -1,0 +1,13 @@
+﻿=== ����������� � ������ ����� (������� ����������, �� ������ �� ������) ===
+   TextArea1OnTextChanged           (����� ~775)
+   CbNovemberOnChange               (����� ~1116)
+   CbThirdQuarterOnChange           (����� ~1136)
+   I_ZINDTXT1OnTextChanged          (����� ~1329)
+
+=== �����������, ����������� � ���������, ������� �� ����� ��������� � �� ��������� ������� ===
+   TextArea1OnTextChanged           : (�����)
+   CbNovemberOnChange               : (�����)
+   CbThirdQuarterOnChange           : (�����)
+   D_ZPHD_NCHOnSelectionChange      : p_zphd_nch:=D_ZPHD_NCH.Selection.ToVariant;
+   D_ZPHD_KONOnSelectionChange      : p_zphd_kon:=D_ZPHD_KON.Selection.ToVariant;
+   I_ZINDTXT1OnTextChanged          : (�����)

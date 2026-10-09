@@ -1309,14 +1309,16 @@ Class ANALIZ_TEP_FORM_ON_SHOW: WebForm
 
 	Sub D_ZPHD_NCHOnSelectionChange;
 	Begin
-		p_zphd_nch:=D_ZPHD_NCH.Selection.ToVariant;
-		// Нет связи с параметром
+		p_zphd_nch := D_ZPHD_NCH.Selection.ToVariant;
+		SetParamSafe("ZPHD_NCH", p_zphd_nch);
+		SafeGenerate;
 	End Sub D_ZPHD_NCHOnSelectionChange;
 
 	Sub D_ZPHD_KONOnSelectionChange;
 	Begin
-		p_zphd_kon:=D_ZPHD_KON.Selection.ToVariant;
-		// Нет связи с параметром
+		p_zphd_kon := D_ZPHD_KON.Selection.ToVariant;
+		SetParamSafe("ZPHD_KON", p_zphd_kon);
+		SafeGenerate;
 	End Sub D_ZPHD_KONOnSelectionChange;
 
 	Sub D_ZPHD_SPROnSelectionChange;
@@ -1328,7 +1330,10 @@ Class ANALIZ_TEP_FORM_ON_SHOW: WebForm
 
 	Sub I_ZINDTXT1OnTextChanged;
 	Begin
-		
+		// «Примечание» (ТТ: текстовое, ручной ввод). Значение уходит параметром ZINDTXT1,
+		// запрос ищет по маске: ILIKE '%' || :ZINDTXT1 || '%'. Пустое значение параметр убирает.
+		setParamOrRemove("ZINDTXT1", I_ZINDTXT1.Text);
+		SafeGenerate;
 	End Sub I_ZINDTXT1OnTextChanged;
 	
 	/// <summary>

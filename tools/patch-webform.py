@@ -250,6 +250,41 @@ src = sub_once(
 \t\tEnd Try;''',
     src, 'onShow (начало)')
 
+# ---------------------------------------------------------------- 6б. параметры дат и свободного ввода
+# В исходном модуле эти контролы только присваивали значения локальным переменным
+# («// Нет связи с параметром») либо были пустыми — параметры до отчёта не доходили,
+# хотя запрос их ждёт (ZPHD_NCH, ZPHD_KON, ZINDTXT1 — ТТ, «Разделы СЭ - Условия выборки», п. 3.1).
+src = sub_once(
+    r'\tSub D_ZPHD_NCHOnSelectionChange;\n\tBegin\n\t\tp_zphd_nch:=D_ZPHD_NCH\.Selection\.ToVariant;\n\t\t// Нет связи с параметром\n\tEnd Sub D_ZPHD_NCHOnSelectionChange;',
+    '''\tSub D_ZPHD_NCHOnSelectionChange;
+\tBegin
+\t\tp_zphd_nch := D_ZPHD_NCH.Selection.ToVariant;
+\t\tSetParamSafe("ZPHD_NCH", p_zphd_nch);
+\t\tSafeGenerate;
+\tEnd Sub D_ZPHD_NCHOnSelectionChange;''',
+    src, 'D_ZPHD_NCH (параметр)')
+
+src = sub_once(
+    r'\tSub D_ZPHD_KONOnSelectionChange;\n\tBegin\n\t\tp_zphd_kon:=D_ZPHD_KON\.Selection\.ToVariant;\n\t\t// Нет связи с параметром\n\tEnd Sub D_ZPHD_KONOnSelectionChange;',
+    '''\tSub D_ZPHD_KONOnSelectionChange;
+\tBegin
+\t\tp_zphd_kon := D_ZPHD_KON.Selection.ToVariant;
+\t\tSetParamSafe("ZPHD_KON", p_zphd_kon);
+\t\tSafeGenerate;
+\tEnd Sub D_ZPHD_KONOnSelectionChange;''',
+    src, 'D_ZPHD_KON (параметр)')
+
+src = sub_once(
+    r'\tSub I_ZINDTXT1OnTextChanged;\n\tBegin\n\t\t\n\tEnd Sub I_ZINDTXT1OnTextChanged;',
+    '''\tSub I_ZINDTXT1OnTextChanged;
+\tBegin
+\t\t// «Примечание» (ТТ: текстовое, ручной ввод). Значение уходит параметром ZINDTXT1,
+\t\t// запрос ищет по маске: ILIKE '%' || :ZINDTXT1 || '%'. Пустое значение параметр убирает.
+\t\tsetParamOrRemove("ZINDTXT1", I_ZINDTXT1.Text);
+\t\tSafeGenerate;
+\tEnd Sub I_ZINDTXT1OnTextChanged;''',
+    src, 'I_ZINDTXT1 (параметр)')
+
 # ---------------------------------------------------------------- 7. UpdateOpenDefHlinkFromSelection
 src = sub_once(
     r'\tSub UpdateOpenDefHlinkFromSelection\(paramId: String; dimSel: IDimSelection; attrId: String = ""\);\n\tVar\n\t\tparamValue: Variant;\n\tBegin\n\t\tparamValue := WebFormsExt\.GetDimSelectionAttrValue\(dimSel, attrId\);\n\t\tUpdateOpenDefHlink\(paramId, paramValue\);\n\tEnd Sub UpdateOpenDefHlinkFromSelection;',

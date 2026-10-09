@@ -1,6 +1,6 @@
 # Контрольные суммы файлов (снимок для бэкапа)
 
-Снято: 2026-10-06 18:42, локальная машина. Полные SHA-256: `Get-FileHash <файл> -Algorithm SHA256`.
+Снято: 2026-10-09 10:33, локальная машина. Полные SHA-256: `Get-FileHash <файл> -Algorithm SHA256`.
 
 | Файл | Размер | SHA-256 (16 симв.) | Изменён |
 |---|---:|---|---|
@@ -9,11 +9,13 @@
 | `.gitignore` | 0.2 КБ | `c6a2e7a5bff6dc76…` | 2026-10-06 12:19 |
 | `docs/ANALIZ-TEP-webform.md` | 48.1 КБ | `785c0a805dec2a3a…` | 2026-10-06 12:16 |
 | `docs/CHANGES-2026-10-06.md` | 27.2 КБ | `1a5f45ab02d5d488…` | 2026-10-06 18:42 |
-| `docs/checks/lint-module.txt` | 3.1 КБ | `bce42ec83b017d6b…` | 2026-10-06 18:41 |
-| `docs/checks/structure-check.txt` | 5.1 КБ | `e329a1e066dac912…` | 2026-10-06 18:41 |
+| `docs/checks/empty-handlers.txt` | 1.1 КБ | `96220d7db3c6da29…` | 2026-10-09 10:31 |
+| `docs/checks/lint-module.txt` | 3.1 КБ | `8949b9c34f7a3afd…` | 2026-10-09 10:33 |
+| `docs/checks/structure-check.txt` | 5.1 КБ | `df5e361e66d6758b…` | 2026-10-09 10:33 |
 | `docs/CONTROLS-TO-ADD.md` | 7.3 КБ | `c6749ca4ae5e2c3c…` | 2026-10-06 18:25 |
 | `docs/parameter-ids-reference.md` | 5.7 КБ | `6e82bff238646d64…` | 2026-10-06 17:45 |
 | `docs/PEFX-EXPORT-FINDINGS.md` | 17 КБ | `5f0f9728713a5762…` | 2026-10-06 12:08 |
+| `docs/PLAN-TZ-2026-10-09.md` | 8 КБ | `665bedb8b18e6108…` | 2026-10-09 10:33 |
 | `docs/REPORT-COLUMN-FILTER.md` | 6.9 КБ | `66b273c22159a62d…` | 2026-10-06 18:42 |
 | `docs/research/fore-stand-helpers.md` | 57.9 КБ | `15dd629b62420d83…` | 2026-10-06 11:50 |
 | `docs/research/webforms-api-digest.md` | 59.7 КБ | `e3c18903745a811f…` | 2026-10-06 11:50 |
@@ -38,7 +40,7 @@
 | `Fore/stand/DimensionExt.fore` | 11 КБ | `ab785c36c97012ea…` | 2026-10-06 12:04 |
 | `Fore/stand/TabExt.fore` | 5.3 КБ | `74743f09fbbb169c…` | 2026-10-06 12:04 |
 | `Fore/stand/WebFormsExt.fore` | 23.9 КБ | `0902ab5e5cea0f20…` | 2026-10-06 12:04 |
-| `Fore/WFRM_PHD_ANALISIS_TEP_COPY_FOR_DEV.fore` | 70.8 КБ | `9c92a89bd9cc7875…` | 2026-10-06 18:41 |
+| `Fore/WFRM_PHD_ANALISIS_TEP_COPY_FOR_DEV.fore` | 71.2 КБ | `7a68757968e832fa…` | 2026-10-09 10:33 |
 | `README.md` | 9.7 КБ | `e867a18f4351df3f…` | 2026-10-06 18:23 |
 | `tools/backup-offline.ps1` | 3 КБ | `afcb2b057449cfad…` | 2026-10-06 12:25 |
 | `tools/check-webform.py` | 14.4 КБ | `185fa797cc86e86d…` | 2026-10-06 17:52 |
@@ -46,7 +48,7 @@
 | `tools/extract-query-sql.py` | 1 КБ | `b2e254fc89cfc5fb…` | 2026-10-06 18:42 |
 | `tools/form-inventory.js` | 8.1 КБ | `5e6aae6e6aaa4ec1…` | 2026-10-06 11:45 |
 | `tools/git-backup.ps1` | 1.9 КБ | `f23fd022be917382…` | 2026-10-06 12:21 |
-| `tools/patch-webform.py` | 38.4 КБ | `444f9bc9d4cf0e47…` | 2026-10-06 18:41 |
+| `tools/patch-webform.py` | 40.4 КБ | `efa27aaaf704f90d…` | 2026-10-09 10:33 |
 | `tools/pefx-extract.js` | 5.5 КБ | `7595028d75360825…` | 2026-10-06 12:04 |
 | `tools/pefx-scan.js` | 3.5 КБ | `9873bc3e768b17d3…` | 2026-10-06 12:05 |
 | `tools/tt-dump.py` | 2.3 КБ | `237c5f16fcbd4f3e…` | 2026-10-06 12:13 |
