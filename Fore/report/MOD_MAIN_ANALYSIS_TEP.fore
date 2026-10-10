@@ -149,7 +149,9 @@ Begin
 	For Each src In reportParams Do
 		dst := queryParams.FindById(src.Id);
 		If Not IsNull(dst) Then
-			If Not IsNull(src.Value) Then
+			// пустые значения НЕ переносим: пустой массив платформа подставляет в текст запроса
+			// как пустоту, и условие вида COALESCE(:PARAM,'')='' превращается в синтаксическую ошибку
+			If Not isEmptyValue(src.Value) Then
 				dst.Value := src.Value;
 			End If;
 		End If;
@@ -158,10 +160,31 @@ Begin
 	// список выводимых полей: в отчёте P_FIELD_LIST, в запросе — ANALYTIC_SET (массив)
 	dst := queryParams.FindById(C_Q_PARAM_FIELD_LIST);
 	src := reportParams.FindById(C_PARAM_FIELD_LIST);
-	If (Not IsNull(dst)) And (Not IsNull(src)) And (Not IsNull(src.Value)) Then
+	If (Not IsNull(dst)) And (Not IsNull(src)) And (Not isEmptyValue(src.Value)) Then
 		dst.Value := src.Value;
 	End If;
 End Sub applyReportParams;
+
+/// <summary>
+/// 	Пустое ли значение параметра: Null, пустая строка или пустой массив.
+/// 	Такие значения нельзя передавать в запрос — они подставляются в текст SQL и ломают его.
+/// </summary>
+Function isEmptyValue(value: Variant): Boolean;
+Var
+	arr: Array;
+	str: String;
+Begin
+	If IsNull(value) Then Return True; End If;
+	If value Is Array Then
+		arr := value As Array;
+		Return arr.Length = 0;
+	End If;
+	If value Is String Then
+		str := value As String;
+		Return str.IsEmpty;
+	End If;
+	Return False;
+End Function isEmptyValue;
 
 /// <summary>Лист для выгрузки данных запроса: сначала по имени, затем — второй лист отчёта</summary>
 Function getDataSheet(Report: IPrxReport): IPrxSheet;
