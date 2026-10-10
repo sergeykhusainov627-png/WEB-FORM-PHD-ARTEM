@@ -24,6 +24,9 @@ Const
 	C_HEADER_HEIGHT_MIN = 6;
 	// столбец для служебной отметки хода выгрузки (вне таблицы данных)
 	C_TRACE_COL = 200;
+	// ---------- журнал (объект репозитория класса Журнал, KE_CLASS_LOG) ----------
+	C_LOG_ID = "LOG_PHD_TEP_ANALIS_JOURNAL";
+	C_LOG_OP_LOAD = "Выгрузка ТЭП (отчёт)";
 	
 Class RepEvents: ReportEvents
 	/// <summary>
@@ -75,6 +78,8 @@ Begin
 		queryParams := queryDesc.Params.CreateEmptyValues;
 		applyReportParams(Report, queryParams);
 		trace('2. параметры: ' + paramInfo);
+		logWrite(C_LOG_OP_LOAD, True, C_Q_GET_DATA_FROM_UPLOAD_JSON, "QRY_PHD_MULT_DATA_COPY1",
+			'открытие отчёта; ' + paramInfo);
 		
 		trace('3. открытие запроса');
 		datasetInst := queryDesc.Open(queryParams) As IDatasetInstance;
@@ -102,14 +107,63 @@ Begin
 		If rowIdx > 1 Then
 			formatDataSheet(fields.Count, rowIdx - 1);
 			trace('готово: столбцов ' + fields.Count.ToString + ', строк ' + (rowIdx - 1).ToString);
+			logWrite(C_LOG_OP_LOAD, True, WS_DATA_NAME, Report.Sheets.FindByName(WS_DATA_NAME).Name,
+				'выгружено столбцов ' + fields.Count.ToString + ', строк ' + (rowIdx - 1).ToString);
 		Else
 			formatDataSheet(fields.Count, 0);
 			trace('готово: столбцов ' + fields.Count.ToString + ', строк данных нет');
+			logWrite(C_LOG_OP_LOAD, True, WS_DATA_NAME, Report.Sheets.FindByName(WS_DATA_NAME).Name,
+				'выгружено столбцов ' + fields.Count.ToString + ', строк данных нет');
 		End If;
 	Except On E: Exception Do
 		trace('ОШИБКА: ' + E.Message);
+		logWrite(C_LOG_OP_LOAD, False, C_Q_GET_DATA_FROM_UPLOAD_JSON, "QRY_PHD_MULT_DATA_COPY1", E.Message);
 	End Try;
 End Sub loadQueryDataToSheet;
+
+/// <summary>
+/// 	Запись в журнал репозитория (объект класса Журнал, KE_CLASS_LOG).
+/// 	Стандартные поля журнала передаются массивом СТРОГО по порядку:
+/// 	0 - STAMP (дата и время), 1 - USER_ID (пользователь), 2 - OP (операция),
+/// 	3 - OP_SUCC (1 — успешно, 0 — неудачно), 4 - OBJ_ID (идентификатор объекта),
+/// 	5 - OBJ_NAME (наименование объекта), 6 - DESCR (описание).
+/// 	Ошибка записи в журнал не должна срывать формирование отчёта.
+/// </summary>
+Sub logWrite(op: String; success: Boolean; objId: String; objName: String; descr: String);
+Var
+	logObj: ILog;
+	values: Array[0..6] Of Variant;
+Begin
+	Try
+		If IsNull(MB) Then MB := MetabaseClass.Active; End If;
+		logObj := MB.ItemByIdNamespace(C_LOG_ID, MB.GetObjectKeyById(C_NAMESPACE_ID)).Bind As ILog;
+		values[0] := DateTime.Now;
+		values[1] := currentUserName;
+		values[2] := op;
+		values[3] := success ? 1 : 0;
+		values[4] := objId;
+		values[5] := objName;
+		values[6] := descr;
+		logObj.PutRecord(values);
+	Except On E: Exception Do
+		Debug.WriteLine('[АнализТЭП/журнал] запись не удалась: ' + E.Message);
+	End Try;
+End Sub logWrite;
+
+/// <summary>Имя текущего пользователя — для стандартного поля журнала USER_ID</summary>
+Function currentUserName: String;
+Var
+	name: String;
+Begin
+	name := '';
+	Try
+		name := MB.LogonSession.User.FullName;
+	Except
+		name := '';
+	End Try;
+	If name.IsEmpty Then name := 'WEB'; End If;
+	Return name;
+End Function currentUserName;
 
 /// <summary>
 /// 	Служебная отметка хода выгрузки: дублируется в протокол работы платформы (Debug.WriteLine)
