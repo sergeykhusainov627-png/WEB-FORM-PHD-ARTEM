@@ -112,11 +112,12 @@ Begin
 End Sub loadQueryDataToSheet;
 
 /// <summary>
-/// 	Служебная отметка хода выгрузки: пишется в дальнюю ячейку листа (столбец C_TRACE_COL),
-/// 	чтобы по ней видеть, на каком шаге произошёл сбой, и не мешать данным.
+/// 	Служебная отметка хода выгрузки: дублируется в протокол работы платформы (Debug.WriteLine)
+/// 	и в дальнюю ячейку листа (столбец C_TRACE_COL), чтобы видеть, на каком шаге произошёл сбой.
 /// </summary>
 Sub trace(text: String);
 Begin
+	Debug.WriteLine('[АнализТЭП/отчёт] ' + text);
 	If IsNull(wsData) Then Return; End If;
 	wsData.Cell(0, C_TRACE_COL).Value := text;
 End Sub trace;

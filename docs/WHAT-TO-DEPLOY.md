@@ -1,6 +1,6 @@
 # Что залить на стенд
 
-Актуальная версия: коммит **8416048** (ветка `main`), репозиторий
+Актуальная версия: последний коммит ветки `main` (ветка `main`), репозиторий
 <https://github.com/sergeykhusainov627-png/WEB-FORM-PHD-ARTEM>
 
 Заливать нужно **ровно два файла**. Больше ничего создавать не требуется — новых компонентов
@@ -15,8 +15,8 @@
 
 | Файл | Размер | Строк | SHA-256 |
 |---|---:|---:|---|
-| `Fore/WFRM_PHD_ANALISIS_TEP_COPY_FOR_DEV.fore` | 72 887 Б | 1 878 | `4361d4e01745811dc6c76cf9970993631aa4921efdb84ddd48f2fde5522a5b23` |
-| `Fore/report/MOD_MAIN_ANALYSIS_TEP.fore` | 16 745 Б | 397 | `ce014214d4ec15c45901e8bb58608f071b24654bcb1923f16b2e4fe02dfa3a73` |
+| `Fore/WFRM_PHD_ANALISIS_TEP_COPY_FOR_DEV.fore` | 73 305 Б | 1 882 | `d2b830279f1f8781c56f6e3c5cfc04faf250be68c287bf941a95ac0a4c8afc52` |
+| `Fore/report/MOD_MAIN_ANALYSIS_TEP.fore` | 16 841 Б | 398 | `32dca85cae71f49a7692d0f144a01f60aca5ca145910c182e5a9323c2b10a400` |
 
 Проверить скачанный файл: `Get-FileHash <файл> -Algorithm SHA256` — хеш должен совпасть.
 

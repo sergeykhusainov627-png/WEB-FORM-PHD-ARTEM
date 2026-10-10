@@ -429,6 +429,7 @@ __FIELDS__
 	Sub showError(what: String; E: Exception);
 	Begin
 		_lastError := what + ": " + E.Message;
+		Debug.WriteLine('[АнализТЭП/форма] ОШИБКА: ' + _lastError);
 		If IsNull(TextArea1) Then Return; End If;
 		TextArea1.Text := _lastError;
 	End Sub showError;
@@ -443,6 +444,7 @@ __FIELDS__
 	Begin
 		Try
 			Hyperlink.Generate;
+			Debug.WriteLine('[АнализТЭП/форма] гиперссылка сформирована');
 		Except On E: Exception Do
 			showError("Не удалось сформировать ссылку", E);
 		End Try;
@@ -492,7 +494,9 @@ __MODES__
 		End If;
 		
 		SafeGenerate;
+		Debug.WriteLine('[АнализТЭП/форма] полей в списке: ' + fieldList.Count.ToString + ' -> ' + fieldList.Text(","));
 		If (Not IsNull(TextArea1)) And _lastError.IsEmpty Then TextArea1.Text := Hyperlink.Action; End If;
+		Debug.WriteLine('[АнализТЭП/форма] ссылка: ' + Hyperlink.Action);
 	End Sub RefreshFieldList;
 	
 	/// <summary>Идентификатор поля отчёта по имени чек-бокса (пусто — контрол не размечен)</summary>
