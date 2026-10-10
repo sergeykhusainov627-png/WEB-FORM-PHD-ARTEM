@@ -3,6 +3,8 @@ Var
 	
 	wsFieldList: ITabSheet;
 	wsData: ITabSheet;
+	// диагностика: что перенесено в запрос (пишется в служебную ячейку листа)
+	paramInfo: String;
 Const
 	C_NAMESPACE_ID = "BA_PHD";
 	C_Q_GET_DATA_FROM_UPLOAD_JSON = "QRY_PHD_MULT_DATA_COPY1";
@@ -20,6 +22,8 @@ Const
 	C_COL_WIDTH_MIN = 14;
 	C_HEADER_HEIGHT_MAX = 20;
 	C_HEADER_HEIGHT_MIN = 6;
+	// столбец для служебной отметки хода выгрузки (вне таблицы данных)
+	C_TRACE_COL = 200;
 	
 Class RepEvents: ReportEvents
 	/// <summary>
@@ -52,41 +56,70 @@ Var
 	sheet: IPrxSheet;
 	i, rowIdx: Integer;
 Begin
-	MB := MetabaseClass.Active;
-	queryDesc := MB.ItemByIdNamespace(C_Q_GET_DATA_FROM_UPLOAD_JSON, MB.GetObjectKeyById(C_NAMESPACE_ID));
-	queryParams := queryDesc.Params.CreateEmptyValues;
-	applyReportParams(Report, queryParams);
-	datasetInst := queryDesc.Open(queryParams) As IDatasetInstance;
-	
-	sheet := getDataSheet(Report);
-	If IsNull(sheet) Then Return; End If;
-	wsData := (sheet As IPrxTable).TabSheet;
-	If IsNull(wsData) Then Return; End If;
-	
-	wsData.Clear;
-	fields := datasetInst.Fields;
-	// заголовки — идентификаторы полей запроса; при необходимости заменить на наименования
-	// из листа «Словарь полей» (см. getFieldsName / replaceTableTitles)
-	For i := 0 To fields.Count - 1 Do
-		wsData.Cell(0, i).Value := fields.Item(i).Id;
-	End For;
-	
-	rowIdx := 1;
-	While Not datasetInst.Eof Do
+	Try
+		trace('1. получение листа');
+		sheet := getDataSheet(Report);
+		If IsNull(sheet) Then
+			trace('ОШИБКА: лист не найден');
+			Return;
+		End If;
+		wsData := (sheet As IPrxTable).TabSheet;
+		If IsNull(wsData) Then
+			trace('ОШИБКА: лист не таблица');
+			Return;
+		End If;
+		
+		trace('2. параметры запроса');
+		MB := MetabaseClass.Active;
+		queryDesc := MB.ItemByIdNamespace(C_Q_GET_DATA_FROM_UPLOAD_JSON, MB.GetObjectKeyById(C_NAMESPACE_ID));
+		queryParams := queryDesc.Params.CreateEmptyValues;
+		applyReportParams(Report, queryParams);
+		trace('2. параметры: ' + paramInfo);
+		
+		trace('3. открытие запроса');
+		datasetInst := queryDesc.Open(queryParams) As IDatasetInstance;
+		fields := datasetInst.Fields;
+		
+		trace('4. выгрузка данных');
+		wsData.Clear;
+		// заголовки — идентификаторы полей запроса; при необходимости заменить на наименования
+		// из листа «Словарь полей» (см. getFieldsName / replaceTableTitles)
 		For i := 0 To fields.Count - 1 Do
-			wsData.Cell(rowIdx, i).Value := fields.Item(i).Value;
+			wsData.Cell(0, i).Value := fields.Item(i).Id;
 		End For;
-		rowIdx := rowIdx + 1;
-		datasetInst.Next;
-	End While;
-	
-	// если строк с данными нет — оформляем только шапку
-	If rowIdx > 1 Then
-		formatDataSheet(fields.Count, rowIdx - 1);
-	Else
-		formatDataSheet(fields.Count, 0);
-	End If;
+		
+		rowIdx := 1;
+		While Not datasetInst.Eof Do
+			For i := 0 To fields.Count - 1 Do
+				wsData.Cell(rowIdx, i).Value := fields.Item(i).Value;
+			End For;
+			rowIdx := rowIdx + 1;
+			datasetInst.Next;
+		End While;
+		
+		trace('5. оформление');
+		// если строк с данными нет — оформляем только шапку
+		If rowIdx > 1 Then
+			formatDataSheet(fields.Count, rowIdx - 1);
+			trace('готово: столбцов ' + fields.Count.ToString + ', строк ' + (rowIdx - 1).ToString);
+		Else
+			formatDataSheet(fields.Count, 0);
+			trace('готово: столбцов ' + fields.Count.ToString + ', строк данных нет');
+		End If;
+	Except On E: Exception Do
+		trace('ОШИБКА: ' + E.Message);
+	End Try;
 End Sub loadQueryDataToSheet;
+
+/// <summary>
+/// 	Служебная отметка хода выгрузки: пишется в дальнюю ячейку листа (столбец C_TRACE_COL),
+/// 	чтобы по ней видеть, на каком шаге произошёл сбой, и не мешать данным.
+/// </summary>
+Sub trace(text: String);
+Begin
+	If IsNull(wsData) Then Return; End If;
+	wsData.Cell(0, C_TRACE_COL).Value := text;
+End Sub trace;
 
 /// <summary>
 /// 	Оформление выгруженной таблицы: границы, шапка (жирный, заливка, по центру, перенос),
@@ -141,11 +174,14 @@ Sub applyReportParams(Report: IPrxReport; queryParams: IMetabaseObjectParamValue
 Var
 	reportParams: IMetabaseObjectParamValues;
 	src, dst: IMetabaseObjectParamValue;
+	cnt: Integer;
 Begin
+	paramInfo := '';
 	If IsNull(queryParams) Then Return; End If;
 	reportParams := Report.MetabaseObjectInstance.ParamValues;
 	If IsNull(reportParams) Then Return; End If;
 	
+	cnt := 0;
 	For Each src In reportParams Do
 		dst := queryParams.FindById(src.Id);
 		If Not IsNull(dst) Then
@@ -153,6 +189,7 @@ Begin
 			// как пустоту, и условие вида COALESCE(:PARAM,'')='' превращается в синтаксическую ошибку
 			If Not isEmptyValue(src.Value) Then
 				dst.Value := src.Value;
+				cnt := cnt + 1;
 			End If;
 		End If;
 	End For;
@@ -162,29 +199,68 @@ Begin
 	// SQL, и для массива строк они разделяются запятыми (иначе идентификаторы склеиваются).
 	dst := queryParams.FindById(C_Q_PARAM_FIELD_LIST);
 	src := reportParams.FindById(C_PARAM_FIELD_LIST);
+	paramInfo := 'перенесено ' + cnt.ToString;
 	If (Not IsNull(dst)) And (Not IsNull(src)) And (Not isEmptyValue(src.Value)) Then
+		paramInfo := paramInfo + '; список полей: ' + describeValue(src.Value);
 		dst.Value := toStrArray(src.Value);
+	Else
+		paramInfo := paramInfo + '; список полей: пусто';
 	End If;
 End Sub applyReportParams;
 
-/// <summary>Приводит значение параметра к массиву строк (например, список выводимых полей)</summary>
+/// <summary>Краткое описание значения параметра — для диагностики (пишется в служебную ячейку)</summary>
+Function describeValue(value: Variant): String;
+Var
+	arr: Array;
+	n: Integer;
+Begin
+	If IsNull(value) Then Return 'Null'; End If;
+	If value Is String Then Return 'строка "' + (value As String) + '"'; End If;
+	If value Is Array Then
+		arr := value As Array;
+		n := arr.Length;
+		If n = 0 Then Return 'пустой массив'; End If;
+		If arr[0] Is String Then
+			Return 'массив строк (' + n.ToString + '), первый: "' + (arr[0] As String) + '"';
+		End If;
+		Return 'массив (' + n.ToString + '), элементы не строки';
+	End If;
+	Return 'объект (не строка и не массив)';
+End Function describeValue;
+
+/// <summary>
+/// 	Приводит значение параметра к массиву строк (например, список выводимых полей).
+/// 	Ничего не приводит «силой»: элементы, которые не являются строками, пропускаются —
+/// 	иначе возникает ошибка приведения типа object к string.
+/// </summary>
 Function toStrArray(value: Variant): Array Of String;
 Var
 	src: Array;
 	dst: Array Of String;
-	i: Integer;
+	i, n: Integer;
 Begin
 	If IsNull(value) Then Return Null; End If;
 	If Not (value Is Array) Then
-		dst := New String[1];
-		dst[0] := value As String;
-		Return dst;
+		If value Is String Then
+			dst := New String[1];
+			dst[0] := value As String;
+			Return dst;
+		End If;
+		Return Null;
 	End If;
 	src := value As Array;
-	dst := New String[src.Length];
+	// первый проход: сколько элементов действительно строки
+	n := 0;
 	For i := 0 To src.Length - 1 Do
-		If Not IsNull(src[i]) Then
-			dst[i] := src[i] As String;
+		If src[i] Is String Then n := n + 1; End If;
+	End For;
+	If n = 0 Then Return Null; End If;
+	dst := New String[n];
+	n := 0;
+	For i := 0 To src.Length - 1 Do
+		If src[i] Is String Then
+			dst[n] := src[i] As String;
+			n := n + 1;
 		End If;
 	End For;
 	Return dst;
