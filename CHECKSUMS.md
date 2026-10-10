@@ -1,6 +1,6 @@
 # Контрольные суммы файлов (снимок для бэкапа)
 
-Снято: 2026-10-10 11:08, локальная машина. Полные SHA-256: `Get-FileHash <файл> -Algorithm SHA256`.
+Снято: 2026-10-10 15:05, локальная машина. Полные SHA-256: `Get-FileHash <файл> -Algorithm SHA256`.
 
 | Файл | Размер | SHA-256 (16 симв.) | Изменён |
 |---|---:|---|---|
@@ -10,8 +10,8 @@
 | `docs/ANALIZ-TEP-webform.md` | 48.1 КБ | `785c0a805dec2a3a…` | 2026-10-06 12:16 |
 | `docs/CHANGES-2026-10-06.md` | 27.2 КБ | `1a5f45ab02d5d488…` | 2026-10-06 18:42 |
 | `docs/checks/empty-handlers.txt` | 1.1 КБ | `96220d7db3c6da29…` | 2026-10-09 10:31 |
-| `docs/checks/lint-module.txt` | 3.1 КБ | `8949b9c34f7a3afd…` | 2026-10-09 10:33 |
-| `docs/checks/structure-check.txt` | 5.1 КБ | `df5e361e66d6758b…` | 2026-10-09 10:33 |
+| `docs/checks/lint-module.txt` | 3.1 КБ | `8949b9c34f7a3afd…` | 2026-10-10 15:05 |
+| `docs/checks/structure-check.txt` | 5.1 КБ | `df5e361e66d6758b…` | 2026-10-10 15:05 |
 | `docs/CONTROLS-TO-ADD.md` | 7.3 КБ | `c6749ca4ae5e2c3c…` | 2026-10-06 18:25 |
 | `docs/form-layout.html` | 55.4 КБ | `ecf2be51a00e3519…` | 2026-10-09 10:47 |
 | `docs/form-layout.png` | 999.6 КБ | `a17b94503c75a21d…` | 2026-10-09 10:47 |
@@ -35,7 +35,7 @@
 | `export/full_env_web_form_06102026.pefx` | 333.2 КБ | `b368b0061a6380f2…` | 2026-10-06 12:02 |
 | `Fore/_stand/WFRM_PHD_ANALISIS_TEP_COPY_FOR_DEV.stand.fore` | 50.1 КБ | `a284df82e56d8d3d…` | 2026-10-06 11:39 |
 | `Fore/report/_source/MOD_MAIN_ANALYSIS_TEP.source.fore` | 9.7 КБ | `cb0ca1eeb483b217…` | 2026-10-10 11:05 |
-| `Fore/report/MOD_MAIN_ANALYSIS_TEP.fore` | 11.1 КБ | `bb4a4a9041b41471…` | 2026-10-10 11:08 |
+| `Fore/report/MOD_MAIN_ANALYSIS_TEP.fore` | 12.3 КБ | `751b500e45e8163d…` | 2026-10-10 15:05 |
 | `Fore/stand/AppNs.fore` | 3.5 КБ | `778bf6d3efe30e07…` | 2026-10-06 12:04 |
 | `Fore/stand/CAppNavigationLinkBuilder.fore` | 3.1 КБ | `d79787dfe99f17bd…` | 2026-10-06 12:04 |
 | `Fore/stand/CNavigationLinkBuilder.fore` | 14.2 КБ | `09889b7726ba1455…` | 2026-10-06 12:04 |
@@ -46,7 +46,7 @@
 | `Fore/stand/DimensionExt.fore` | 11 КБ | `ab785c36c97012ea…` | 2026-10-06 12:04 |
 | `Fore/stand/TabExt.fore` | 5.3 КБ | `74743f09fbbb169c…` | 2026-10-06 12:04 |
 | `Fore/stand/WebFormsExt.fore` | 23.9 КБ | `0902ab5e5cea0f20…` | 2026-10-06 12:04 |
-| `Fore/WFRM_PHD_ANALISIS_TEP_COPY_FOR_DEV.fore` | 71.2 КБ | `7a68757968e832fa…` | 2026-10-09 10:33 |
+| `Fore/WFRM_PHD_ANALISIS_TEP_COPY_FOR_DEV.fore` | 71.2 КБ | `4361d4e01745811d…` | 2026-10-10 15:04 |
 | `README.md` | 9.9 КБ | `f95d7f9184416280…` | 2026-10-09 17:37 |
 | `tools/backup-offline.ps1` | 3 КБ | `afcb2b057449cfad…` | 2026-10-06 12:25 |
 | `tools/check-webform.py` | 14.4 КБ | `185fa797cc86e86d…` | 2026-10-06 17:52 |
@@ -56,7 +56,7 @@
 | `tools/form-inventory.js` | 8.1 КБ | `5e6aae6e6aaa4ec1…` | 2026-10-06 11:45 |
 | `tools/git-backup.ps1` | 1.9 КБ | `f23fd022be917382…` | 2026-10-06 12:21 |
 | `tools/make-form-layout.py` | 33.7 КБ | `6bcc674c013575bc…` | 2026-10-09 10:47 |
-| `tools/patch-webform.py` | 40.4 КБ | `efa27aaaf704f90d…` | 2026-10-09 10:33 |
+| `tools/patch-webform.py` | 40.4 КБ | `67b1ff5b94648c5f…` | 2026-10-10 15:04 |
 | `tools/pefx-extract.js` | 5.5 КБ | `7595028d75360825…` | 2026-10-06 12:04 |
 | `tools/pefx-scan.js` | 3.5 КБ | `9873bc3e768b17d3…` | 2026-10-06 12:05 |
 | `tools/tt-dump.py` | 2.3 КБ | `237c5f16fcbd4f3e…` | 2026-10-06 12:13 |

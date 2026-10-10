@@ -582,7 +582,7 @@ __MODES__
 	/// </summary>
 	Function analyticSetArray: Variant;
 	Var
-		arr: Array;
+		arr: Array Of String;
 		fieldId: String;
 		i, count: Integer;
 	Begin
@@ -593,7 +593,7 @@ __MODES__
 			If Not fieldId.StartsWith("ZSIU_INDV_") Then count := count + 1; End If;
 		End For;
 		If count = 0 Then Return Null; End If;
-		arr := New Variant[count];
+		arr := New String[count];
 		count := 0;
 		For i := 0 To fieldList.Count - 1 Do
 			fieldId := fieldList.Item(i) As String;

@@ -157,13 +157,38 @@ Begin
 		End If;
 	End For;
 	
-	// список выводимых полей: в отчёте P_FIELD_LIST, в запросе — ANALYTIC_SET (массив)
+	// список выводимых полей: в отчёте P_FIELD_LIST, в запросе — ANALYTIC_SET (массив).
+	// Передаём именно массив СТРОК: платформа подставляет элементы массивного параметра в текст
+	// SQL, и для массива строк они разделяются запятыми (иначе идентификаторы склеиваются).
 	dst := queryParams.FindById(C_Q_PARAM_FIELD_LIST);
 	src := reportParams.FindById(C_PARAM_FIELD_LIST);
 	If (Not IsNull(dst)) And (Not IsNull(src)) And (Not isEmptyValue(src.Value)) Then
-		dst.Value := src.Value;
+		dst.Value := toStrArray(src.Value);
 	End If;
 End Sub applyReportParams;
+
+/// <summary>Приводит значение параметра к массиву строк (например, список выводимых полей)</summary>
+Function toStrArray(value: Variant): Array Of String;
+Var
+	src: Array;
+	dst: Array Of String;
+	i: Integer;
+Begin
+	If IsNull(value) Then Return Null; End If;
+	If Not (value Is Array) Then
+		dst := New String[1];
+		dst[0] := value As String;
+		Return dst;
+	End If;
+	src := value As Array;
+	dst := New String[src.Length];
+	For i := 0 To src.Length - 1 Do
+		If Not IsNull(src[i]) Then
+			dst[i] := src[i] As String;
+		End If;
+	End For;
+	Return dst;
+End Function toStrArray;
 
 /// <summary>
 /// 	Пустое ли значение параметра: Null, пустая строка или пустой массив.
