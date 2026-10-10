@@ -132,34 +132,52 @@ Var
 Begin
 	If IsNull(wsData) Or (colCount <= 0) Or (lastRow < 0) Then Return; End If;
 	
+	// Каждая операция оформления — в своём Try/Except: часть операций недоступна в веб-клиенте
+	// («доступно только в настольном приложении»), и такая операция не должна срывать выгрузку.
+	
 	// --- вся таблица: границы и выравнивание по вертикали ---
-	style := wsData.Rows(0, lastRow).Style;
-	style.BorderStyle(TabBorder.All) := TabBorderStyle.Continuous;
-	style.BorderWeight(TabBorder.All) := TabBorderWeight.Thin;
-	style.VerticalAlignment := TabFormatLayout.Center;
+	Try
+		style := wsData.Rows(0, lastRow).Style;
+		style.BorderStyle(TabBorder.All) := TabBorderStyle.Continuous;
+		style.BorderWeight(TabBorder.All) := TabBorderWeight.Thin;
+		style.VerticalAlignment := TabFormatLayout.Center;
+	Except On E: Exception Do
+		trace('оформление (границы): ' + E.Message);
+	End Try;
 	
 	// --- шапка: жирный шрифт, заливка, выравнивание по центру, перенос по словам ---
-	style := wsData.Rows(0, 0).Style;
-	style.Font.Bold := TriState.OnOption;
-	style.Font.Size := 9;
-	style.HorizontalAlignment := TabFormatAlignment.Center;
-	style.WrapText := TabFormatWordWrap.BreakWords;
-	style.BackgroundBrush := New GxSolidBrush.Create(New GxColor.CreateRGB(C_HEADER_FILL_R, C_HEADER_FILL_G, C_HEADER_FILL_B));
+	Try
+		style := wsData.Rows(0, 0).Style;
+		style.Font.Bold := TriState.OnOption;
+		style.Font.Size := 9;
+		style.HorizontalAlignment := TabFormatAlignment.Center;
+		style.WrapText := TabFormatWordWrap.BreakWords;
+		style.BackgroundBrush := New GxSolidBrush.Create(New GxColor.CreateRGB(C_HEADER_FILL_R, C_HEADER_FILL_G, C_HEADER_FILL_B));
+	Except On E: Exception Do
+		trace('оформление (шапка): ' + E.Message);
+	End Try;
 	
 	// --- строки с данными: числовой формат и запрет переноса ---
 	If lastRow > 0 Then
-		style := wsData.Rows(1, lastRow).Style;
-		style.CustomFormat := C_NUM_FORMAT;
-		style.WrapText := TabFormatWordWrap.None;
+		Try
+			style := wsData.Rows(1, lastRow).Style;
+			style.CustomFormat := C_NUM_FORMAT;
+			style.WrapText := TabFormatWordWrap.None;
+		Except On E: Exception Do
+			trace('оформление (данные): ' + E.Message);
+		End Try;
 	End If;
 	
 	// --- автоподбор ширин столбцов и высоты шапки (значения в мм) ---
-	wsData.Columns(0, colCount - 1).AdjustWidth(C_COL_WIDTH_MAX, C_COL_WIDTH_MIN);
-	wsData.Rows(0, 0).AdjustHeight(C_HEADER_HEIGHT_MAX, C_HEADER_HEIGHT_MIN);
+	Try
+		wsData.Columns(0, colCount - 1).AdjustWidth(C_COL_WIDTH_MAX, C_COL_WIDTH_MIN);
+		wsData.Rows(0, 0).AdjustHeight(C_HEADER_HEIGHT_MAX, C_HEADER_HEIGHT_MIN);
+	Except On E: Exception Do
+		trace('оформление (ширина/высота): ' + E.Message);
+	End Try;
 	
-	// --- закрепление шапки при прокрутке ---
-	wsData.View.FixedRowsCount := 1;
-	wsData.View.FixedColumnsCount := 0;
+	// Закрепление шапки (wsData.View.FixedRowsCount) убрано: в веб-клиенте операция недоступна —
+	// «данный тип операции доступен только в настольном приложении».
 End Sub formatDataSheet;
 
 /// <summary>
