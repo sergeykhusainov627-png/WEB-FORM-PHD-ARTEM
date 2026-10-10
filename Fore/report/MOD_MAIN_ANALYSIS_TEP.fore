@@ -13,13 +13,6 @@ Const
 	// Параметр отчёта со списком выводимых полей; в запросе этому списку соответствует ANALYTIC_SET
 	C_PARAM_FIELD_LIST = "P_FIELD_LIST";
 	C_Q_PARAM_FIELD_LIST = "ANALYTIC_SET";
-	// Остальные параметры у отчёта и у запроса называются одинаково — переносим их по именам.
-	// Список обновлять при добавлении параметров на СЭ/в отчёт.
-	C_PARAM_IDS = "PLANT,CALYEAR,ZTYPEIND,ZLIB_INDC,ZPHD_STAT,VENDOR,SOLD_TO,ZHRGRPMO,PROFIT_CTR,COSTCENTER," +
-		"ZORGUNIT,ZPH_USR2,ACTTYPE,ZEQUI,ZCLSVOBOR,MATERIAL,ZFUNC_LOC,ZSIU_FLD,POSID,ZLIB_INFS,PERIOD_TYPE," +
-		"ZPHD_DOG,ZPHD_USL1,ZDEBITOR,ZPH_ESO2,ZPHD_SK,UCVOLTLEVL,ZUCVOLTTR,Z_CL_NAPR,ZSIU_TY,ZDOGLINK,ZBUR_LU," +
-		"ZBUR_AREA,ZSKV_KUST,Z_SKV_GEO,ZBUR_PLST,ZPH_TEHK,ZPH_OPLST,ZPILOT,ZSKV_ST,ZGEN_POD,ZGEN_ZAK,ZSHIFR," +
-		"ZOBJEM,ZPHD_SR,ZPHD_GRSR,ZGAZ_TYPE,ZAVIATYPE,ZPHD_SPR,ZINDTXT1";
 	
 Class RepEvents: ReportEvents
 	/// <summary>
@@ -81,24 +74,27 @@ Begin
 	End While;
 End Sub loadQueryDataToSheet;
 
-/// <summary>Переносит значения параметров отчёта в параметры запроса (по именам)</summary>
+/// <summary>
+/// 	Переносит ВСЕ параметры отчёта в параметры запроса — автоматически, по идентификаторам:
+/// 	перебираются параметры отчёта (те, что передала веб-форма), и каждый ищется в параметрах
+/// 	запроса с тем же идентификатором. Ручной список параметров не нужен: добавили параметр
+///  на СЭ и в отчёт — он поедет в запрос сам, если так же назван у запроса.
+/// 	Исключение — список выводимых полей: в отчёте он называется P_FIELD_LIST,
+/// 	а в запросе ANALYTIC_SET (массив), поэтому переносится отдельно.
+/// </summary>
 Sub applyReportParams(Report: IPrxReport; queryParams: IMetabaseObjectParamValues);
 Var
 	reportParams: IMetabaseObjectParamValues;
-	ids: Array;
-	i: Integer;
 	src, dst: IMetabaseObjectParamValue;
 Begin
 	If IsNull(queryParams) Then Return; End If;
 	reportParams := Report.MetabaseObjectInstance.ParamValues;
 	If IsNull(reportParams) Then Return; End If;
 	
-	ids := C_PARAM_IDS.Split(",");
-	For i := 0 To ids.Length - 1 Do
-		dst := queryParams.FindById(ids[i] As String);
+	For Each src In reportParams Do
+		dst := queryParams.FindById(src.Id);
 		If Not IsNull(dst) Then
-			src := reportParams.FindById(ids[i] As String);
-			If (Not IsNull(src)) And (Not IsNull(src.Value)) Then
+			If Not IsNull(src.Value) Then
 				dst.Value := src.Value;
 			End If;
 		End If;
