@@ -1,6 +1,6 @@
 # Контрольные суммы файлов (снимок для бэкапа)
 
-Снято: 2026-10-10 15:05, локальная машина. Полные SHA-256: `Get-FileHash <файл> -Algorithm SHA256`.
+Снято: 2026-10-10 15:42, локальная машина. Полные SHA-256: `Get-FileHash <файл> -Algorithm SHA256`.
 
 | Файл | Размер | SHA-256 (16 симв.) | Изменён |
 |---|---:|---|---|
@@ -31,11 +31,12 @@
 | `docs/tt/Селекционный экран.txt` | 2.9 КБ | `b3750983cb1a8fe6…` | 2026-10-06 12:13 |
 | `docs/tt/СЭ - поля для вывода.txt` | 6 КБ | `c998c8874e6c71e5…` | 2026-10-06 12:13 |
 | `docs/TT-vs-CODE.md` | 19.6 КБ | `09eb413c3b991e4d…` | 2026-10-06 12:16 |
+| `docs/WHAT-TO-DEPLOY.md` | 4.3 КБ | `38ccf25553941ef6…` | 2026-10-10 15:42 |
 | `docs/ТТ_Анализ и выгрузка данных ТЭП.xlsx` | 277.6 КБ | `51585f02f486177d…` | 2026-10-06 12:04 |
 | `export/full_env_web_form_06102026.pefx` | 333.2 КБ | `b368b0061a6380f2…` | 2026-10-06 12:02 |
 | `Fore/_stand/WFRM_PHD_ANALISIS_TEP_COPY_FOR_DEV.stand.fore` | 50.1 КБ | `a284df82e56d8d3d…` | 2026-10-06 11:39 |
 | `Fore/report/_source/MOD_MAIN_ANALYSIS_TEP.source.fore` | 9.7 КБ | `cb0ca1eeb483b217…` | 2026-10-10 11:05 |
-| `Fore/report/MOD_MAIN_ANALYSIS_TEP.fore` | 12.3 КБ | `751b500e45e8163d…` | 2026-10-10 15:05 |
+| `Fore/report/MOD_MAIN_ANALYSIS_TEP.fore` | 16.4 КБ | `ce014214d4ec15c4…` | 2026-10-10 15:39 |
 | `Fore/stand/AppNs.fore` | 3.5 КБ | `778bf6d3efe30e07…` | 2026-10-06 12:04 |
 | `Fore/stand/CAppNavigationLinkBuilder.fore` | 3.1 КБ | `d79787dfe99f17bd…` | 2026-10-06 12:04 |
 | `Fore/stand/CNavigationLinkBuilder.fore` | 14.2 КБ | `09889b7726ba1455…` | 2026-10-06 12:04 |
