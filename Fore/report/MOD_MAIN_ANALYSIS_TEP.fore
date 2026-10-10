@@ -332,6 +332,7 @@ Var
 	reportParams: IMetabaseObjectParamValues;
 	src, dst: IMetabaseObjectParamValue;
 	cnt, skipped, failed: Integer;
+	listToQuery: Array Of String;
 Begin
 	paramInfo := '';
 	paramDump := '';
@@ -377,72 +378,126 @@ Begin
 	If (Not IsNull(dst)) And (Not IsNull(src)) And (Not isEmptyValue(src.Value)) Then
 		paramInfo := paramInfo + '; список полей: ' + describeValue(src.Value);
 		paramDump := paramDump + 'ANALYTIC_SET=' + describeValue(src.Value);
-		Try
-			dst.Value := toStrArray(src.Value);
-		Except On E: Exception Do
-			stepFail('2/5 список полей', E);
-		End Try;
+		listToQuery := toStrArray(src.Value);
+		If IsNull(listToQuery) Then
+			// ВАЖНО: если строки получить не удалось, значение запроса НЕ затираем.
+			// Иначе в текст SQL подставится пустота и запрос упадёт: syntax error at or near ","
+			stepFailText('2/5 список полей', 'строки получить не удалось — оставлено значение запроса по умолчанию');
+			paramDump := paramDump + ' (значение запроса не менялось)';
+		Else
+			dst.Value := listToQuery;
+			stepOk('2/5 список полей', 'в запрос передано строк: ' + listToQuery.Length.ToString
+				+ ': ' + listText(listToQuery));
+			paramDump := paramDump + ' -> в запрос: ' + listText(listToQuery);
+		End If;
 	Else
 		paramInfo := paramInfo + '; список полей: пусто';
-		paramDump := paramDump + 'ANALYTIC_SET=<пусто>';
+		paramDump := paramDump + 'ANALYTIC_SET=<пусто> (значение запроса не менялось)';
 	End If;
 	stepOk('2/5 итог', paramInfo);
 End Sub applyReportParams;
 
-/// <summary>Краткое описание значения параметра — для диагностики (пишется в служебную ячейку)</summary>
+/// <summary>Список строк через запятую — для журнала</summary>
+Function listText(items: Array Of String): String;
+Var
+	i: Integer;
+	text: String;
+Begin
+	text := '';
+	For i := 0 To items.Length - 1 Do
+		If i > 0 Then text := text + ', '; End If;
+		text := text + items[i];
+	End For;
+	Return text;
+End Function listText;
+
+/// <summary>
+/// 	Краткое описание значения параметра — для диагностики. Для массивов дополнительно
+/// 	показывает, сколько элементов реально приводится к строке (это и уходит в запрос).
+/// </summary>
 Function describeValue(value: Variant): String;
 Var
 	arr: Array;
-	n: Integer;
+	i, n, total: Integer;
+	firstOk: String;
 Begin
 	If IsNull(value) Then Return 'Null'; End If;
 	If value Is String Then Return 'строка "' + (value As String) + '"'; End If;
 	If value Is Array Then
 		arr := value As Array;
-		n := arr.Length;
-		If n = 0 Then Return 'пустой массив'; End If;
-		If arr[0] Is String Then
-			Return 'массив строк (' + n.ToString + '), первый: "' + (arr[0] As String) + '"';
+		total := arr.Length;
+		If total = 0 Then Return 'пустой массив'; End If;
+		n := 0;
+		firstOk := '';
+		For i := 0 To total - 1 Do
+			Try
+				If Not IsNull(arr[i]) Then
+					If Not (arr[i] As String).IsEmpty Then
+						If n = 0 Then firstOk := arr[i] As String; End If;
+						n := n + 1;
+					End If;
+				End If;
+			Except On E: Exception Do
+				Debug.WriteLine('[АнализТЭП] элемент ' + i.ToString + ' не приводится к строке: ' + E.Message);
+			End Try;
+		End For;
+		If n = 0 Then
+			Return 'массив (' + total.ToString + '), ни один элемент не приводится к строке';
 		End If;
-		Return 'массив (' + n.ToString + '), элементы не строки';
+		Return 'массив (' + total.ToString + '), строк: ' + n.ToString + ', первый: "' + firstOk + '"';
 	End If;
 	Return 'объект (не строка и не массив)';
 End Function describeValue;
 
 /// <summary>
 /// 	Приводит значение параметра к массиву строк (например, список выводимых полей).
-/// 	Ничего не приводит «силой»: элементы, которые не являются строками, пропускаются —
-/// 	иначе возникает ошибка приведения типа object к string.
+/// 	Каждый элемент пробуется отдельно: массив может быть из Variant, а часть элементов —
+/// 	не строки. Раньше такие элементы отбрасывались все сразу, из-за чего список уходил
+/// 	в запрос пустым и SQL ломался (syntax error at or near ",").
 /// </summary>
 Function toStrArray(value: Variant): Array Of String;
 Var
 	src: Array;
 	dst: Array Of String;
-	i, n: Integer;
+	i, n, total: Integer;
 Begin
 	If IsNull(value) Then Return Null; End If;
-	If Not (value Is Array) Then
-		If value Is String Then
-			dst := New String[1];
-			dst[0] := value As String;
-			Return dst;
-		End If;
-		Return Null;
+	If value Is String Then
+		dst := New String[1];
+		dst[0] := value As String;
+		Return dst;
 	End If;
+	If Not (value Is Array) Then Return Null; End If;
 	src := value As Array;
-	// первый проход: сколько элементов действительно строки
+	total := src.Length;
+	If total = 0 Then Return Null; End If;
+	
+	// первый проход: сколько элементов приводится к непустой строке
 	n := 0;
-	For i := 0 To src.Length - 1 Do
-		If src[i] Is String Then n := n + 1; End If;
+	For i := 0 To total - 1 Do
+		Try
+			If Not IsNull(src[i]) Then
+				If Not (src[i] As String).IsEmpty Then n := n + 1; End If;
+			End If;
+		Except On E: Exception Do
+			Debug.WriteLine('[АнализТЭП] элемент ' + i.ToString + ' не приводится к строке: ' + E.Message);
+		End Try;
 	End For;
 	If n = 0 Then Return Null; End If;
+	
 	dst := New String[n];
 	n := 0;
-	For i := 0 To src.Length - 1 Do
-		If src[i] Is String Then
-			dst[n] := src[i] As String;
-			n := n + 1;
-		End If;
+	For i := 0 To total - 1 Do
+		Try
+			If Not IsNull(src[i]) Then
+				If Not (src[i] As String).IsEmpty Then
+					dst[n] := src[i] As String;
+					n := n + 1;
+				End If;
+			End If;
+		Except On E: Exception Do
+			Debug.WriteLine('[АнализТЭП] элемент ' + i.ToString + ' пропущен: ' + E.Message);
+		End Try;
 	End For;
 	Return dst;
 End Function toStrArray;
