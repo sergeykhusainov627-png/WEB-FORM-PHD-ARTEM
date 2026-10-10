@@ -1,6 +1,6 @@
 # Контрольные суммы файлов (снимок для бэкапа)
 
-Снято: 2026-10-09 17:37, локальная машина. Полные SHA-256: `Get-FileHash <файл> -Algorithm SHA256`.
+Снято: 2026-10-10 11:08, локальная машина. Полные SHA-256: `Get-FileHash <файл> -Algorithm SHA256`.
 
 | Файл | Размер | SHA-256 (16 симв.) | Изменён |
 |---|---:|---|---|
@@ -34,6 +34,8 @@
 | `docs/ТТ_Анализ и выгрузка данных ТЭП.xlsx` | 277.6 КБ | `51585f02f486177d…` | 2026-10-06 12:04 |
 | `export/full_env_web_form_06102026.pefx` | 333.2 КБ | `b368b0061a6380f2…` | 2026-10-06 12:02 |
 | `Fore/_stand/WFRM_PHD_ANALISIS_TEP_COPY_FOR_DEV.stand.fore` | 50.1 КБ | `a284df82e56d8d3d…` | 2026-10-06 11:39 |
+| `Fore/report/_source/MOD_MAIN_ANALYSIS_TEP.source.fore` | 9.7 КБ | `cb0ca1eeb483b217…` | 2026-10-10 11:05 |
+| `Fore/report/MOD_MAIN_ANALYSIS_TEP.fore` | 11.1 КБ | `bb4a4a9041b41471…` | 2026-10-10 11:08 |
 | `Fore/stand/AppNs.fore` | 3.5 КБ | `778bf6d3efe30e07…` | 2026-10-06 12:04 |
 | `Fore/stand/CAppNavigationLinkBuilder.fore` | 3.1 КБ | `d79787dfe99f17bd…` | 2026-10-06 12:04 |
 | `Fore/stand/CNavigationLinkBuilder.fore` | 14.2 КБ | `09889b7726ba1455…` | 2026-10-06 12:04 |
@@ -48,6 +50,7 @@
 | `README.md` | 9.9 КБ | `f95d7f9184416280…` | 2026-10-09 17:37 |
 | `tools/backup-offline.ps1` | 3 КБ | `afcb2b057449cfad…` | 2026-10-06 12:25 |
 | `tools/check-webform.py` | 14.4 КБ | `185fa797cc86e86d…` | 2026-10-06 17:52 |
+| `tools/clean-report-module.py` | 4.9 КБ | `7d9f37c9c947cc9d…` | 2026-10-10 11:06 |
 | `tools/cleanup-unused.py` | 6.2 КБ | `098fda82974003c9…` | 2026-10-06 17:44 |
 | `tools/extract-query-sql.py` | 1 КБ | `b2e254fc89cfc5fb…` | 2026-10-06 18:42 |
 | `tools/form-inventory.js` | 8.1 КБ | `5e6aae6e6aaa4ec1…` | 2026-10-06 11:45 |

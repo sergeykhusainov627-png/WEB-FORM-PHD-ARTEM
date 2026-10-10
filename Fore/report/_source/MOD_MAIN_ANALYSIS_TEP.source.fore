@@ -1,0 +1,317 @@
+
+Var
+	MB: IMetabase;
+	curRep: IPrxReport;
+	
+	wsMain: ITabSheet;
+	wsFieldList: ITabSheet;
+Const
+	C_NAMESPACE_ID = "BA_PHD";
+	C_Q_GET_DATA_FROM_UPLOAD_JSON = "QRY_PHD_MULT_DATA_COPY1";
+	WS_MAIN_NAME = "Отчет";
+	WS_FIELD_LIST_NAME = "Словарь полей";
+	
+Class RepEvents: ReportEvents
+	Public Sub OnBeforeOpenReport(Report: IPrxReport; Var Cancel: Boolean);
+	Begin
+		MB := MetabaseClass.Active;
+		curRep := Report;
+		If Report.MetabaseObject.IsEdited = False Then // проверяем, что отчет не в режиме редактирования
+			//tst;
+			//genReport(Report);
+		End If;
+	End Sub OnBeforeOpenReport;
+	
+	Sub OnAfterExecuteTableIsland(TableIsland: IPrxTableIsland);
+	Begin
+		//printReport;
+		TableIsland := TableIsland;
+	End Sub OnAfterExecuteTableIsland;
+	
+End Class RepEvents;
+
+Sub addQuerry;
+Begin
+	
+End Sub addQuerry;
+
+/// <summary>
+/// Назначение:
+/// 	Генерация отчета
+/// </summary>
+Sub genReport(Report: IPrxReport);
+Begin
+	initialization;
+	hideColumns(Report);
+	replaceTableTitles(getFieldsName(wsFieldList));
+End Sub genReport;
+
+/// <summary>
+/// Назначение:
+/// 	Скрытие лишних столбцов, которые НЕ были переданы в качестве параметра
+/// </summary>
+Sub hideColumns(Report: IPrxReport);
+Var
+	sqlColName: String;
+	
+	fieldArrayFromParam: Array Of String;
+	arrayLenght: Integer;
+	j: Integer;
+	defaultFields: StringList;
+Begin
+	arrayLenght := getFieldListFromParam(Report).Split(",", StringSplitOption.NoEmpty).Length - 1;
+	fieldArrayFromParam := New String[arrayLenght];
+	fieldArrayFromParam := getFieldListFromParam(Report).Split(",", StringSplitOption.NoEmpty);
+	defaultFields := getDefaultFields;
+	
+	If wsMain <> Null Then
+		For j := 0 To wsMain.MaxNotEmptyColumn Do
+			sqlColName := wsMain.Cell(0, j).Value;
+			If ((fieldArrayFromParam.IndexOf(sqlColName) = -1) And (Not defaultFields.Contains(sqlColName))) Then
+				wsMain.Column(j).Hidden := TriState.OnOption;
+			Else
+				wsMain.Column(j).ColumnWidth := 22;
+			End If;
+		End For;
+	End If;
+		
+End Sub hideColumns;
+
+/// <summary>
+/// Назначение: Установка полей по умолчанию
+/// </summary>
+Function getDefaultFields: StringList;
+Var
+	defaultFields: StringList;
+Begin
+	defaultFields := New StringList.Create;
+	
+	defaultFields.Add("ЯНВАРЬ");
+	defaultFields.Add("ФЕВРАЛЬ");
+	defaultFields.Add("МАРТ");
+	defaultFields.Add("АПРЕЛЬ");
+	defaultFields.Add("МАЙ");
+	defaultFields.Add("ИЮНЬ");
+	defaultFields.Add("ИЮЛЬ");
+	defaultFields.Add("АВГУСТ");
+	defaultFields.Add("СЕНТЯБРЬ");
+	defaultFields.Add("ОКТЯБРЬ");
+	defaultFields.Add("НОЯБРЬ");
+	defaultFields.Add("ДЕКАБРЬ");
+	defaultFields.Add("I КВ.");
+	defaultFields.Add("II КВ.");
+	defaultFields.Add("III КВ.");
+	defaultFields.Add("IV КВ.");
+	defaultFields.Add("ГОД");
+	
+	Return defaultFields;
+		
+End Function getDefaultFields;
+
+/// <summary>
+/// Назначение: получить спискок полей из параметра
+/// </summary>
+Function getFieldListFromParam(Report: IPrxReport): String;
+Var
+	fieldListParam: IMetabaseObjectParamValue;
+	fieldListValue: String;
+Begin
+	fieldListParam := Report.MetabaseObjectInstance.ParamValues.FindById("P_FILED_LIST");
+	If Not IsNull(fieldListParam) Then
+		fieldListValue := fieldListParam.Value;
+	End If;
+	Return fieldListValue;
+End Function getFieldListFromParam;
+
+/// <summary>
+/// Назначение:
+/// 	Замена названия полей реляционной области
+/// Входные параметры:
+/// 	fieldList - список полей и их названия на русском языке
+/// </summary>
+Sub replaceTableTitles(fieldList: IHashtable);
+Var
+	j: Integer;
+	lCol: Integer;
+	sqlColName: String;
+Const
+	titleRowPos = 0;
+Begin
+	
+	If Not IsNull(fieldList) Then
+		lCol := wsFieldList.MaxNotEmptyColumn;
+		For j := 0 To lCol Do
+			sqlColName := wsFieldList.Cell(titleRowPos, j).Value;
+			If fieldList.ContainsKey(sqlColName) Then
+				wsFieldList.Cell(titleRowPos, j).Value := fieldList.Item(sqlColName);
+				wsFieldList.Cell(titleRowPos, j).Text := fieldList.Item(sqlColName);
+			End If;
+		End For;
+	End If;
+	
+End Sub replaceTableTitles;
+
+/// <summary>
+/// Назначение:
+/// 	Инициализация глобальных переменных
+/// </summary>
+Sub initialization;
+Var
+	repSheets: IPrxSheets;
+Begin
+	repSheets := PrxReport.ActiveReport.Sheets;
+	If Not IsNull(repSheets.FindByName(WS_MAIN_NAME)) Then wsMain := (repSheets.FindByName(WS_MAIN_NAME) As IPrxTable).TabSheet; End If;
+	If Not IsNull(repSheets.FindByName(WS_FIELD_LIST_NAME)) Then wsFieldList := (repSheets.FindByName(WS_FIELD_LIST_NAME) As IPrxTable).TabSheet; End If;
+End Sub initialization;
+
+Sub MAIN;
+Begin
+	//tst;
+End Sub MAIN;
+
+//Sub tst;
+//Var
+//	ws: ITabSheet;
+//	schema: IDimSelectionSchema;
+//Const
+//	C_ANALYZ_TEP_REP_ID = "PRX_ANALYSIS_TEP";
+//	WSNAME = "Отчет";
+//Begin
+//	//MB := MetabaseClass.Active;
+//	//schema := MB.ItemByIdNamespace("MS_CURRENT_USER_SP", MB.GetObjectKeyByIdNamespace("RDSD_SP", 1788057)).Bind As IDimSelectionSchema;
+//	////schema.ProcessInplace(dimen
+//	//
+//	//getHyperlink;
+//	//
+//	
+//	If PrxReport.ActiveReport.Sheets.FindByName(WSNAME) <> Null Then
+//		ws := (PrxReport.ActiveReport.Sheets.FindByName(WSNAME) As IPrxTable).TabSheet;
+//	
+//		If ws <> Null Then
+//			ws.Cell(7, 0).Style.Hyperlink.Text := "TST";
+//			ws.Cell(7, 0).Style.Hyperlink.ActionType := TabHyperlinkActionType.OpenObject;
+//			//ws.Cell(7, 7).Style.Hyperlink.Action := String.Format("@{0}(PLANT={1};CALYEAR={2};ZLIB_INDC={3})", C_ANALYZ_TEP_REP_ID, "6500", "2026", "IND00005000");
+//			ws.Cell(7, 0).Style.Hyperlink.Action := String.Format("@{0}(PLANT={1};CALYEAR={2};ZLIB_INDC={3};ANALYTIC_SET={4})",
+//																																C_ANALYZ_TEP_REP_ID,
+//																																"6500" ,
+//																																"2026" ,
+//																																"IND00005000" ,
+//																																"[CALYEAR,PLANT,ZLIB_INDC,ACT_UNIT,MATERIAL]" );
+//			ws.Cell(7, 0).Style.Hyperlink.Enable := TriState.OnOption;
+//			ws.Cell(7, 0).Value := "zzz";
+//		End If;
+//	End If;
+//		
+//End Sub tst;
+//
+//Public Function getHyperlink: String;
+//Var
+//	params: IMetabaseObjectParamValues;
+//	param: IMetabaseObjectParamValue;
+//	HParamList: IHashtable;
+//	linkTxt: String;
+//	Pattern: String;
+//	Result: IRegexMatch;
+//	comboBoxTxt: String;
+//	DICT_ID: String;
+//Const
+//	REP_ID = "PXR_ANALYSIS_TEP";
+//Begin
+//	
+//	//Pattern := #39 + "ID=""([^""]+)" + #39;
+//	Pattern := "ID=""([^""]+)""";
+//	
+//	If HParamList = Null Then HParamList := New Hashtable.Create; End If;
+//		
+//	params := curRep.MetabaseObjectInstance.ParamValues;
+//	// Сбор параметров по имени и их значению
+//	For Each param In params Do
+//		comboBoxTxt := param.Binding.AsString;
+//		Result := Regex.Match(comboBoxTxt, Pattern As String);
+//		
+//		If Result.Success Then
+//			DICT_ID := Result.Group.Length = 2 ? Result.Group[Result.Group.Length - 1] : Result.Group[0];
+//			For Each DICT_ID In Result.Group Do
+//				DICT_ID := DICT_ID;
+//			End For;
+//		End If;
+//		
+//		If Not HParamList.Contains(param.Id) Then
+//			HParamList.Add(param.Id, fillStringListByParams(params, param.Id));
+//		End If;
+//	End For;
+//	linkTxt := "@{0}";
+//	Return "";
+//End Function getHyperlink;
+//
+//Public Function fillStringListByParams(params: IMetabaseObjectParamValues; paramId: String = ""): StringList;
+//Var
+//	i: Integer;
+//	mySl: StringList;
+//Begin
+//	mySl := New StringList.Create;
+//	If ((params.FindById(paramId).IsArray) And (params.FindById(paramId) <> Null)) Then
+//		For i := 0 To (params.FindById(paramId).Value As Array).Length - 1 Do
+//			mySl.Add(((params.FindById(paramId).Value As Array)[i] As String));
+//		End For;
+//	Else
+//		mySl.Add(params.FindById(paramId).Value As String);
+//	End If;
+//	Return mySl;
+//End Function fillStringListByParams;
+
+/// <summary>
+/// Назначение:
+/// 	Сбор имен полей с листа
+///	Входные параметры:
+/// 	wsFieldList - Лист: "Словарь полей"
+/// </summary>
+Private Function getFieldsName(wsFieldList: ITabSheet): iHashtable;
+Var
+	fieldList: Hashtable;
+	i: Integer;
+	lRow: Integer;
+	fieldName: String;
+	fieldDesc: String;
+Begin
+	If IsNull(fieldList) Then
+		fieldList := New Hashtable.Create;
+		lRow := wsFieldList.MaxNotEmptyRow;
+		For i := 0 To lRow Do
+			fieldName := wsFieldList.Cell(i, 0).Value;
+			fieldDesc := wsFieldList.Cell(i, 1).Value;
+			If Not fieldList.Contains(fieldName) Then
+				fieldList.Add(fieldName, fieldDesc);
+			End If;
+		End For;
+	End If;
+	Return fieldList.Count > 1 ? fieldList : Null;
+End Function getFieldsName;
+
+
+
+Function readDataToJsonArrFromQuery: array Of string;
+Var
+	mb: IMetabase;
+	DatasetInst: IDatasetInstance;
+	Fields: IDatasetInstanceFields;
+	Field: IDatasetInstanceField;
+	rowList: stringList;
+	i: integer;
+	arrLst: stringList;
+Begin
+	MB := MetabaseClass.Active;
+	DatasetInst := MB.ItemByIdNamespace(C_Q_GET_DATA_FROM_UPLOAD_JSON, MB.GetObjectKeyById(C_NAMESPACE_ID)).open(Null) As idatasetinstance;
+	fields := datasetinst.Fields;
+	arrLst := New stringlist.Create;
+	while Not datasetinst.Eof Do
+		rowList := New stringlist.Create;
+		For i := 0 To fields.Count - 1 Do
+			field := Fields.Item(i);
+			rowList.Add("""" + Field.Id + """: """ + string.replace(field.Value, """", "\""") + """");
+		End For;
+		arrLst.add("{" + rowList.Text(",") + "}");
+		DatasetInst.Next;
+	End while;
+	return arrLst.ToArray;
+End Function readDataToJsonArrFromQuery;

@@ -1,0 +1,302 @@
+Var
+	MB: IMetabase;
+	
+	wsMain: ITabSheet;
+	wsFieldList: ITabSheet;
+	wsData: ITabSheet;
+Const
+	C_NAMESPACE_ID = "BA_PHD";
+	C_Q_GET_DATA_FROM_UPLOAD_JSON = "QRY_PHD_MULT_DATA_COPY1";
+	WS_MAIN_NAME = "Отчет";
+	WS_FIELD_LIST_NAME = "Словарь полей";
+	WS_DATA_NAME = "Лист2";
+	// Параметр отчёта со списком выводимых полей; в запросе этому списку соответствует ANALYTIC_SET
+	C_PARAM_FIELD_LIST = "P_FIELD_LIST";
+	C_Q_PARAM_FIELD_LIST = "ANALYTIC_SET";
+	// Остальные параметры у отчёта и у запроса называются одинаково — переносим их по именам.
+	// Список обновлять при добавлении параметров на СЭ/в отчёт.
+	C_PARAM_IDS = "PLANT,CALYEAR,ZTYPEIND,ZLIB_INDC,ZPHD_STAT,VENDOR,SOLD_TO,ZHRGRPMO,PROFIT_CTR,COSTCENTER," +
+		"ZORGUNIT,ZPH_USR2,ACTTYPE,ZEQUI,ZCLSVOBOR,MATERIAL,ZFUNC_LOC,ZSIU_FLD,POSID,ZLIB_INFS,PERIOD_TYPE," +
+		"ZPHD_DOG,ZPHD_USL1,ZDEBITOR,ZPH_ESO2,ZPHD_SK,UCVOLTLEVL,ZUCVOLTTR,Z_CL_NAPR,ZSIU_TY,ZDOGLINK,ZBUR_LU," +
+		"ZBUR_AREA,ZSKV_KUST,Z_SKV_GEO,ZBUR_PLST,ZPH_TEHK,ZPH_OPLST,ZPILOT,ZSKV_ST,ZGEN_POD,ZGEN_ZAK,ZSHIFR," +
+		"ZOBJEM,ZPHD_SR,ZPHD_GRSR,ZGAZ_TYPE,ZAVIATYPE,ZPHD_SPR,ZINDTXT1";
+	
+Class RepEvents: ReportEvents
+	/// <summary>
+	/// 	Открытие отчёта: забираем данные запроса (со всеми параметрами, переданными с СЭ)
+	/// 	и выгружаем их вместе с заголовками на лист WS_DATA_NAME.
+	/// </summary>
+	Public Sub OnBeforeOpenReport(Report: IPrxReport; Var Cancel: Boolean);
+	Begin
+		If Report.MetabaseObject.IsEdited = False Then // отчёт не в режиме редактирования
+			loadQueryDataToSheet(Report);
+		End If;
+	End Sub OnBeforeOpenReport;
+	
+	Sub OnAfterExecuteTableIsland(TableIsland: IPrxTableIsland);
+	Begin
+	End Sub OnAfterExecuteTableIsland;
+	
+End Class RepEvents;
+
+/// <summary>
+/// 	Передаёт все параметры отчёта в запрос, открывает запрос как IDatasetInstance и выгружает
+/// 	его содержимое вместе с заголовками на лист WS_DATA_NAME.
+/// </summary>
+Sub loadQueryDataToSheet(Report: IPrxReport);
+Var
+	queryDesc: IMetabaseObjectDescriptor;
+	queryParams: IMetabaseObjectParamValues;
+	datasetInst: IDatasetInstance;
+	fields: IDatasetInstanceFields;
+	sheet: IPrxSheet;
+	i, rowIdx: Integer;
+Begin
+	MB := MetabaseClass.Active;
+	queryDesc := MB.ItemByIdNamespace(C_Q_GET_DATA_FROM_UPLOAD_JSON, MB.GetObjectKeyById(C_NAMESPACE_ID));
+	queryParams := queryDesc.Params.CreateEmptyValues;
+	applyReportParams(Report, queryParams);
+	datasetInst := queryDesc.Open(queryParams) As IDatasetInstance;
+	
+	sheet := getDataSheet(Report);
+	If IsNull(sheet) Then Return; End If;
+	wsData := (sheet As IPrxTable).TabSheet;
+	If IsNull(wsData) Then Return; End If;
+	
+	wsData.Clear;
+	fields := datasetInst.Fields;
+	// заголовки — идентификаторы полей запроса; при необходимости заменить на наименования
+	// из листа «Словарь полей» (см. getFieldsName / replaceTableTitles)
+	For i := 0 To fields.Count - 1 Do
+		wsData.Cell(0, i).Value := fields.Item(i).Id;
+	End For;
+	
+	rowIdx := 1;
+	While Not datasetInst.Eof Do
+		For i := 0 To fields.Count - 1 Do
+			wsData.Cell(rowIdx, i).Value := fields.Item(i).Value;
+		End For;
+		rowIdx := rowIdx + 1;
+		datasetInst.Next;
+	End While;
+End Sub loadQueryDataToSheet;
+
+/// <summary>Переносит значения параметров отчёта в параметры запроса (по именам)</summary>
+Sub applyReportParams(Report: IPrxReport; queryParams: IMetabaseObjectParamValues);
+Var
+	reportParams: IMetabaseObjectParamValues;
+	ids: Array;
+	i: Integer;
+	src, dst: IMetabaseObjectParamValue;
+Begin
+	If IsNull(queryParams) Then Return; End If;
+	reportParams := Report.MetabaseObjectInstance.ParamValues;
+	If IsNull(reportParams) Then Return; End If;
+	
+	ids := C_PARAM_IDS.Split(",");
+	For i := 0 To ids.Length - 1 Do
+		dst := queryParams.FindById(ids[i] As String);
+		If Not IsNull(dst) Then
+			src := reportParams.FindById(ids[i] As String);
+			If (Not IsNull(src)) And (Not IsNull(src.Value)) Then
+				dst.Value := src.Value;
+			End If;
+		End If;
+	End For;
+	
+	// список выводимых полей: в отчёте P_FIELD_LIST, в запросе — ANALYTIC_SET (массив)
+	dst := queryParams.FindById(C_Q_PARAM_FIELD_LIST);
+	src := reportParams.FindById(C_PARAM_FIELD_LIST);
+	If (Not IsNull(dst)) And (Not IsNull(src)) And (Not IsNull(src.Value)) Then
+		dst.Value := src.Value;
+	End If;
+End Sub applyReportParams;
+
+/// <summary>Лист для выгрузки данных запроса: сначала по имени, затем — второй лист отчёта</summary>
+Function getDataSheet(Report: IPrxReport): IPrxSheet;
+Var
+	sheet: IPrxSheet;
+Begin
+	sheet := Report.Sheets.FindByName(WS_DATA_NAME);
+	If IsNull(sheet) And (Report.Sheets.Count > 1) Then
+		sheet := Report.Sheets.Item(1);
+	End If;
+	Return sheet;
+End Function getDataSheet;
+
+/// <summary>
+/// 	Генерация отчёта: инициализация листов, скрытие невыбранных столбцов, заголовки.
+/// 	Сейчас не вызывается (данные выгружает loadQueryDataToSheet) — оставлено для скрытия столбцов.
+/// </summary>
+Sub genReport(Report: IPrxReport);
+Begin
+	initialization;
+	hideColumns(Report);
+	replaceTableTitles(getFieldsName(wsFieldList));
+End Sub genReport;
+
+/// <summary>
+/// 	Скрытие лишних столбцов, которые НЕ были переданы в качестве параметра
+/// </summary>
+Sub hideColumns(Report: IPrxReport);
+Var
+	sqlColName: String;
+	
+	fieldArrayFromParam: Array Of String;
+	j: Integer;
+	defaultFields: StringList;
+Begin
+	fieldArrayFromParam := getFieldListFromParam(Report).Split(",", StringSplitOption.NoEmpty);
+	defaultFields := getDefaultFields;
+	
+	If wsMain <> Null Then
+		For j := 0 To wsMain.MaxNotEmptyColumn Do
+			sqlColName := wsMain.Cell(0, j).Value;
+			If ((fieldArrayFromParam.IndexOf(sqlColName) = -1) And (Not defaultFields.Contains(sqlColName))) Then
+				wsMain.Column(j).Hidden := TriState.OnOption;
+			Else
+				wsMain.Column(j).ColumnWidth := 22;
+			End If;
+		End For;
+	End If;
+		
+End Sub hideColumns;
+
+/// <summary>
+/// 	Установка полей по умолчанию
+/// </summary>
+Function getDefaultFields: StringList;
+Var
+	defaultFields: StringList;
+Begin
+	defaultFields := New StringList.Create;
+	
+	defaultFields.Add("ЯНВАРЬ");
+	defaultFields.Add("ФЕВРАЛЬ");
+	defaultFields.Add("МАРТ");
+	defaultFields.Add("АПРЕЛЬ");
+	defaultFields.Add("МАЙ");
+	defaultFields.Add("ИЮНЬ");
+	defaultFields.Add("ИЮЛЬ");
+	defaultFields.Add("АВГУСТ");
+	defaultFields.Add("СЕНТЯБРЬ");
+	defaultFields.Add("ОКТЯБРЬ");
+	defaultFields.Add("НОЯБРЬ");
+	defaultFields.Add("ДЕКАБРЬ");
+	defaultFields.Add("I КВ.");
+	defaultFields.Add("II КВ.");
+	defaultFields.Add("III КВ.");
+	defaultFields.Add("IV КВ.");
+	defaultFields.Add("ГОД");
+	
+	Return defaultFields;
+		
+End Function getDefaultFields;
+
+/// <summary>
+/// 	Получить список полей из параметра отчёта
+/// </summary>
+Function getFieldListFromParam(Report: IPrxReport): String;
+Var
+	fieldListParam: IMetabaseObjectParamValue;
+	fieldListValue: String;
+Begin
+	fieldListParam := Report.MetabaseObjectInstance.ParamValues.FindById(C_PARAM_FIELD_LIST);
+	If Not IsNull(fieldListParam) Then
+		fieldListValue := fieldListParam.Value;
+	End If;
+	Return fieldListValue;
+End Function getFieldListFromParam;
+
+/// <summary>
+/// 	Замена названия полей реляционной области.
+/// 	Входные параметры: fieldList - список полей и их названия на русском языке
+/// </summary>
+Sub replaceTableTitles(fieldList: IHashtable);
+Var
+	j: Integer;
+	lCol: Integer;
+	sqlColName: String;
+Const
+	titleRowPos = 0;
+Begin
+	
+	If Not IsNull(fieldList) Then
+		lCol := wsFieldList.MaxNotEmptyColumn;
+		For j := 0 To lCol Do
+			sqlColName := wsFieldList.Cell(titleRowPos, j).Value;
+			If fieldList.ContainsKey(sqlColName) Then
+				wsFieldList.Cell(titleRowPos, j).Value := fieldList.Item(sqlColName);
+				wsFieldList.Cell(titleRowPos, j).Text := fieldList.Item(sqlColName);
+			End If;
+		End For;
+	End If;
+	
+End Sub replaceTableTitles;
+
+/// <summary>
+/// 	Инициализация глобальных переменных
+/// </summary>
+Sub initialization;
+Var
+	repSheets: IPrxSheets;
+Begin
+	repSheets := PrxReport.ActiveReport.Sheets;
+	If Not IsNull(repSheets.FindByName(WS_MAIN_NAME)) Then wsMain := (repSheets.FindByName(WS_MAIN_NAME) As IPrxTable).TabSheet; End If;
+	If Not IsNull(repSheets.FindByName(WS_FIELD_LIST_NAME)) Then wsFieldList := (repSheets.FindByName(WS_FIELD_LIST_NAME) As IPrxTable).TabSheet; End If;
+	If Not IsNull(repSheets.FindByName(WS_DATA_NAME)) Then wsData := (repSheets.FindByName(WS_DATA_NAME) As IPrxTable).TabSheet; End If;
+End Sub initialization;
+
+/// <summary>
+/// 	Сбор имен полей с листа.
+/// 	Входные параметры: wsFieldList - Лист: "Словарь полей"
+/// </summary>
+Private Function getFieldsName(wsFieldList: ITabSheet): iHashtable;
+Var
+	fieldList: Hashtable;
+	i: Integer;
+	lRow: Integer;
+	fieldName: String;
+	fieldDesc: String;
+Begin
+	If IsNull(fieldList) Then
+		fieldList := New Hashtable.Create;
+		lRow := wsFieldList.MaxNotEmptyRow;
+		For i := 0 To lRow Do
+			fieldName := wsFieldList.Cell(i, 0).Value;
+			fieldDesc := wsFieldList.Cell(i, 1).Value;
+			If Not fieldList.Contains(fieldName) Then
+				fieldList.Add(fieldName, fieldDesc);
+			End If;
+		End For;
+	End If;
+	Return fieldList.Count > 1 ? fieldList : Null;
+End Function getFieldsName;
+
+/// <summary>
+/// 	Выгрузка результата запроса в виде JSON (в текущей логике не используется, оставлено как API)
+/// </summary>
+Function readDataToJsonArrFromQuery: array Of string;
+Var
+	DatasetInst: IDatasetInstance;
+	Fields: IDatasetInstanceFields;
+	Field: IDatasetInstanceField;
+	rowList: stringList;
+	i: integer;
+	arrLst: stringList;
+Begin
+	MB := MetabaseClass.Active;
+	DatasetInst := MB.ItemByIdNamespace(C_Q_GET_DATA_FROM_UPLOAD_JSON, MB.GetObjectKeyById(C_NAMESPACE_ID)).open(Null) As idatasetinstance;
+	fields := datasetinst.Fields;
+	arrLst := New stringlist.Create;
+	while Not datasetinst.Eof Do
+		rowList := New stringlist.Create;
+		For i := 0 To fields.Count - 1 Do
+			field := Fields.Item(i);
+			rowList.Add("""" + Field.Id + """: """ + string.replace(field.Value, """", "\""") + """");
+		End For;
+		arrLst.add("{" + rowList.Text(",") + "}");
+		DatasetInst.Next;
+	End while;
+	return arrLst.ToArray;
+End Function readDataToJsonArrFromQuery;
