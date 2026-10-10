@@ -276,6 +276,11 @@ Class ANALIZ_TEP_FORM_ON_SHOW: WebForm
 	// Отмечать ли чек-боксы «Поля для вывода» по умолчанию (ТТ: Год, СП, ТЭП, Ед.измерения,
 	// I кв., II кв., 6 мес., III кв., 9 мес., IV кв., Год). False — вывод только по выбору пользователя.
 	Const C_APPLY_DEFAULT_CHECKED = True;
+	// ---------- журнал (объект класса Журнал, KE_CLASS_LOG; модулю нужна ссылка на сборку Db) ----------
+	Const C_LOG_ID = "LOG_PHD_TEP_ANALIS_JOURNAL";
+	Const C_LOG_NAMESPACE_ID = "BA_PHD";
+	Const C_LOG_OP_FORM = "Веб-форма ТЭП";
+	Const C_LOG_DESCR_MAX = 240;
 	
 	_AnalyzTepHyperlink: COpenHyperlink; // CUrlHyperlink
 	_hlink: ITabHyperlink;
@@ -346,13 +351,17 @@ Class ANALIZ_TEP_FORM_ON_SHOW: WebForm
 	Sub ANALIZ_TEP_FORM_ON_SHOW;
 	Begin
 		Try
+			logRecord(C_LOG_OP_FORM, True, "", "", '0/3 открытие формы');
 			_hlink := InitializeHlinkOpenObject(ReportBoxOk.Report, "  Ок  ", C_ANALYZ_TEP_REP_ID);
 			// Создаёт COpenHyperlink и менеджер параметров (геттер свойства Hyperlink)
 			_AnalyzTepHyperlink := Hyperlink;
+			logRecord(C_LOG_OP_FORM, True, "", "", '1/3 гиперссылка инициализирована');
 			// Значения по умолчанию, набор полей вывода и генерация ссылки
 			setDefaultDimensionValue;
+			logRecord(C_LOG_OP_FORM, True, "", "", '2/3 значения по умолчанию и список полей установлены');
 			// Ограничение выбора СП согласно полномочиям (ТТ, лист «Селекционный экран»)
 			applyPlantAccessRights;
+			logRecord(C_LOG_OP_FORM, True, "", "", '3/3 ограничения по СП применены; форма готова');
 		Except On E: Exception Do
 			// Ошибка инициализации не должна ломать форму: текст ошибки остаётся в TextArea1
 			showError("Ошибка инициализации формы", E);
@@ -1539,9 +1548,91 @@ Class ANALIZ_TEP_FORM_ON_SHOW: WebForm
 	Begin
 		_lastError := what + ": " + E.Message;
 		Debug.WriteLine('[АнализТЭП/форма] ОШИБКА: ' + _lastError);
+		logRecord(C_LOG_OP_FORM, False, "", "", what + ': ' + logErrText(E));
 		If IsNull(TextArea1) Then Return; End If;
 		TextArea1.Text := _lastError;
 	End Sub showError;
+	
+	/// <summary>
+	/// 	Запись в журнал репозитория (объект класса Журнал, KE_CLASS_LOG).
+	/// 	Стандартные поля передаются массивом СТРОГО по порядку: STAMP, USER_ID, OP,
+	/// 	OP_SUCC (1/0), OBJ_ID, OBJ_NAME, DESCR. Требуется ссылка на сборку Db (интерфейс ILog).
+	/// 	Ошибка записи не должна ломать форму.
+	/// </summary>
+	Sub logRecord(op: String; success: Boolean; objId: String; objName: String; descr: String);
+	Var
+		logObj: ILog;
+		values: Array[0..6] Of Variant;
+	Begin
+		Try
+			If IsNull(MB) Then MB := MetabaseClass.Active; End If;
+			logObj := MB.ItemByIdNamespace(C_LOG_ID, MB.GetObjectKeyById(C_LOG_NAMESPACE_ID)).Bind As ILog;
+			values[0] := DateTime.Now;
+			values[1] := logUser;
+			values[2] := logCut(op);
+			values[3] := success ? 1 : 0;
+			values[4] := objId;
+			values[5] := objName;
+			values[6] := logCut(descr);
+			logObj.PutRecord(values);
+		Except On E: Exception Do
+			Debug.WriteLine('[АнализТЭП/журнал] запись не удалась: ' + E.Message);
+		End Try;
+	End Sub logRecord;
+	
+	/// <summary>Длинный текст пишется несколькими записями журнала (поле DESCR ограничено)</summary>
+	Sub logLong(prefix: String; text: String);
+	Var
+		part: String;
+	Begin
+		part := text;
+		If IsNull(part) Then part := ''; End If;
+		If part.IsEmpty Then
+			logRecord(C_LOG_OP_FORM, True, "", "", prefix + ': <пусто>');
+			Return;
+		End If;
+		While Not part.IsEmpty Do
+			If part.Length <= C_LOG_DESCR_MAX Then
+				logRecord(C_LOG_OP_FORM, True, "", "", prefix + ': ' + part);
+				Return;
+			End If;
+			logRecord(C_LOG_OP_FORM, True, "", "", prefix + ': ' + part.Substring(0, C_LOG_DESCR_MAX));
+			part := part.Substring(C_LOG_DESCR_MAX);
+		End While;
+	End Sub logLong;
+	
+	/// <summary>Текст ошибки с модулем/формой и номером строки (e.Source, e.Line)</summary>
+	Function logErrText(E: Exception): String;
+	Begin
+		If IsNull(E) Then Return 'ОШИБКА без описания'; End If;
+		Return 'ОШИБКА: ' + E.Message + ' [модуль: ' + E.Source + ', строка: ' + E.Line.ToString + ']';
+	End Function logErrText;
+	
+	/// <summary>Обрезает текст до длины поля журнала</summary>
+	Function logCut(text: String): String;
+	Var
+		t: String;
+	Begin
+		t := text;
+		If IsNull(t) Then t := ''; End If;
+		If t.Length <= C_LOG_DESCR_MAX Then Return t; End If;
+		Return t.Substring(0, C_LOG_DESCR_MAX) + '…';
+	End Function logCut;
+	
+	/// <summary>Имя текущего пользователя — для стандартного поля журнала USER_ID</summary>
+	Function logUser: String;
+	Var
+		name: String;
+	Begin
+		name := '';
+		Try
+			name := MB.LogonSession.User.FullName;
+		Except
+			name := '';
+		End Try;
+		If name.IsEmpty Then name := 'WEB'; End If;
+		Return name;
+	End Function logUser;
 	
 	/// <summary>
 	/// 	Безопасная генерация гиперссылки. COpenHyperlink.Generate обращается к целевому отчёту
@@ -1554,6 +1645,8 @@ Class ANALIZ_TEP_FORM_ON_SHOW: WebForm
 		Try
 			Hyperlink.Generate;
 			Debug.WriteLine('[АнализТЭП/форма] гиперссылка сформирована');
+			logRecord(C_LOG_OP_FORM, True, C_ANALYZ_TEP_REP_ID, "PRX_ANALYSIS_TEP",
+				'ссылка сформирована; длина: ' + Hyperlink.Action.Length.ToString + ' симв.');
 		Except On E: Exception Do
 			showError("Не удалось сформировать ссылку", E);
 		End Try;
@@ -1685,8 +1778,10 @@ Class ANALIZ_TEP_FORM_ON_SHOW: WebForm
 		
 		SafeGenerate;
 		Debug.WriteLine('[АнализТЭП/форма] полей в списке: ' + fieldList.Count.ToString + ' -> ' + fieldList.Text(","));
+		logRecord(C_LOG_OP_FORM, True, "", "", 'полей в списке: ' + fieldList.Count.ToString + ' -> ' + fieldList.Text(","));
 		If (Not IsNull(TextArea1)) And _lastError.IsEmpty Then TextArea1.Text := Hyperlink.Action; End If;
 		Debug.WriteLine('[АнализТЭП/форма] ссылка: ' + Hyperlink.Action);
+		logLong('ссылка', Hyperlink.Action);
 	End Sub RefreshFieldList;
 	
 	/// <summary>Идентификатор поля отчёта по имени чек-бокса (пусто — контрол не размечен)</summary>
