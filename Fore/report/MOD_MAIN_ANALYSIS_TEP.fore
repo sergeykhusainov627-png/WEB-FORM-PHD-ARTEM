@@ -1,23 +1,30 @@
 Var
 	MB: IMetabase;
 	
-	wsMain: ITabSheet;
 	wsFieldList: ITabSheet;
 	wsData: ITabSheet;
 Const
 	C_NAMESPACE_ID = "BA_PHD";
 	C_Q_GET_DATA_FROM_UPLOAD_JSON = "QRY_PHD_MULT_DATA_COPY1";
-	WS_MAIN_NAME = "Отчет";
 	WS_FIELD_LIST_NAME = "Словарь полей";
-	WS_DATA_NAME = "Лист2";
+	WS_DATA_NAME = "Лист1";
 	// Параметр отчёта со списком выводимых полей; в запросе этому списку соответствует ANALYTIC_SET
 	C_PARAM_FIELD_LIST = "P_FIELD_LIST";
 	C_Q_PARAM_FIELD_LIST = "ANALYTIC_SET";
+	// ---------- оформление листа с данными ----------
+	C_NUM_FORMAT = "#,##0.00";
+	C_HEADER_FILL_R = 219;
+	C_HEADER_FILL_G = 233;
+	C_HEADER_FILL_B = 245;
+	C_COL_WIDTH_MAX = 60;
+	C_COL_WIDTH_MIN = 14;
+	C_HEADER_HEIGHT_MAX = 20;
+	C_HEADER_HEIGHT_MIN = 6;
 	
 Class RepEvents: ReportEvents
 	/// <summary>
-	/// 	Открытие отчёта: забираем данные запроса (со всеми параметрами, переданными с СЭ)
-	/// 	и выгружаем их вместе с заголовками на лист WS_DATA_NAME.
+	/// 	Открытие отчёта: забираем данные запроса (со всеми параметрами, переданными с СЭ),
+	/// 	выгружаем их вместе с заголовками на лист WS_DATA_NAME и оформляем таблицу.
 	/// </summary>
 	Public Sub OnBeforeOpenReport(Report: IPrxReport; Var Cancel: Boolean);
 	Begin
@@ -33,8 +40,8 @@ Class RepEvents: ReportEvents
 End Class RepEvents;
 
 /// <summary>
-/// 	Передаёт все параметры отчёта в запрос, открывает запрос как IDatasetInstance и выгружает
-/// 	его содержимое вместе с заголовками на лист WS_DATA_NAME.
+/// 	Передаёт все параметры отчёта в запрос, открывает запрос как IDatasetInstance, выгружает
+/// 	его содержимое вместе с заголовками на лист WS_DATA_NAME и оформляет таблицу.
 /// </summary>
 Sub loadQueryDataToSheet(Report: IPrxReport);
 Var
@@ -72,7 +79,55 @@ Begin
 		rowIdx := rowIdx + 1;
 		datasetInst.Next;
 	End While;
+	
+	// если строк с данными нет — оформляем только шапку
+	If rowIdx > 1 Then
+		formatDataSheet(fields.Count, rowIdx - 1);
+	Else
+		formatDataSheet(fields.Count, 0);
+	End If;
 End Sub loadQueryDataToSheet;
+
+/// <summary>
+/// 	Оформление выгруженной таблицы: границы, шапка (жирный, заливка, по центру, перенос),
+/// 	числовой формат, автоподбор ширин и высоты шапки, закрепление шапки при прокрутке.
+/// 	Входные параметры: colCount - число столбцов, lastRow - номер последней строки с данными.
+/// </summary>
+Sub formatDataSheet(colCount: Integer; lastRow: Integer);
+Var
+	style: ITabCellStyle;
+Begin
+	If IsNull(wsData) Or (colCount <= 0) Or (lastRow < 0) Then Return; End If;
+	
+	// --- вся таблица: границы и выравнивание по вертикали ---
+	style := wsData.Rows(0, lastRow).Style;
+	style.BorderStyle(TabBorder.All) := TabBorderStyle.Continuous;
+	style.BorderWeight(TabBorder.All) := TabBorderWeight.Thin;
+	style.VerticalAlignment := TabFormatLayout.Center;
+	
+	// --- шапка: жирный шрифт, заливка, выравнивание по центру, перенос по словам ---
+	style := wsData.Rows(0, 0).Style;
+	style.Font.Bold := TriState.OnOption;
+	style.Font.Size := 9;
+	style.HorizontalAlignment := TabFormatAlignment.Center;
+	style.WrapText := TabFormatWordWrap.BreakWords;
+	style.BackgroundBrush := New GxSolidBrush.Create(New GxColor.CreateRGB(C_HEADER_FILL_R, C_HEADER_FILL_G, C_HEADER_FILL_B));
+	
+	// --- строки с данными: числовой формат и запрет переноса ---
+	If lastRow > 0 Then
+		style := wsData.Rows(1, lastRow).Style;
+		style.CustomFormat := C_NUM_FORMAT;
+		style.WrapText := TabFormatWordWrap.None;
+	End If;
+	
+	// --- автоподбор ширин столбцов и высоты шапки (значения в мм) ---
+	wsData.Columns(0, colCount - 1).AdjustWidth(C_COL_WIDTH_MAX, C_COL_WIDTH_MIN);
+	wsData.Rows(0, 0).AdjustHeight(C_HEADER_HEIGHT_MAX, C_HEADER_HEIGHT_MIN);
+	
+	// --- закрепление шапки при прокрутке ---
+	wsData.View.FixedRowsCount := 1;
+	wsData.View.FixedColumnsCount := 0;
+End Sub formatDataSheet;
 
 /// <summary>
 /// 	Переносит ВСЕ параметры отчёта в параметры запроса — автоматически, по идентификаторам:
@@ -121,90 +176,6 @@ Begin
 End Function getDataSheet;
 
 /// <summary>
-/// 	Генерация отчёта: инициализация листов, скрытие невыбранных столбцов, заголовки.
-/// 	Сейчас не вызывается (данные выгружает loadQueryDataToSheet) — оставлено для скрытия столбцов.
-/// </summary>
-Sub genReport(Report: IPrxReport);
-Begin
-	initialization;
-	hideColumns(Report);
-	replaceTableTitles(getFieldsName(wsFieldList));
-End Sub genReport;
-
-/// <summary>
-/// 	Скрытие лишних столбцов, которые НЕ были переданы в качестве параметра
-/// </summary>
-Sub hideColumns(Report: IPrxReport);
-Var
-	sqlColName: String;
-	
-	fieldArrayFromParam: Array Of String;
-	j: Integer;
-	defaultFields: StringList;
-Begin
-	fieldArrayFromParam := getFieldListFromParam(Report).Split(",", StringSplitOption.NoEmpty);
-	defaultFields := getDefaultFields;
-	
-	If wsMain <> Null Then
-		For j := 0 To wsMain.MaxNotEmptyColumn Do
-			sqlColName := wsMain.Cell(0, j).Value;
-			If ((fieldArrayFromParam.IndexOf(sqlColName) = -1) And (Not defaultFields.Contains(sqlColName))) Then
-				wsMain.Column(j).Hidden := TriState.OnOption;
-			Else
-				wsMain.Column(j).ColumnWidth := 22;
-			End If;
-		End For;
-	End If;
-		
-End Sub hideColumns;
-
-/// <summary>
-/// 	Установка полей по умолчанию
-/// </summary>
-Function getDefaultFields: StringList;
-Var
-	defaultFields: StringList;
-Begin
-	defaultFields := New StringList.Create;
-	
-	defaultFields.Add("ЯНВАРЬ");
-	defaultFields.Add("ФЕВРАЛЬ");
-	defaultFields.Add("МАРТ");
-	defaultFields.Add("АПРЕЛЬ");
-	defaultFields.Add("МАЙ");
-	defaultFields.Add("ИЮНЬ");
-	defaultFields.Add("ИЮЛЬ");
-	defaultFields.Add("АВГУСТ");
-	defaultFields.Add("СЕНТЯБРЬ");
-	defaultFields.Add("ОКТЯБРЬ");
-	defaultFields.Add("НОЯБРЬ");
-	defaultFields.Add("ДЕКАБРЬ");
-	defaultFields.Add("I КВ.");
-	defaultFields.Add("II КВ.");
-	defaultFields.Add("III КВ.");
-	defaultFields.Add("IV КВ.");
-	defaultFields.Add("ГОД");
-	
-	Return defaultFields;
-		
-End Function getDefaultFields;
-
-/// <summary>
-/// 	Получить список полей из параметра отчёта
-/// </summary>
-Function getFieldListFromParam(Report: IPrxReport): String;
-Var
-	fieldListParam: IMetabaseObjectParamValue;
-	fieldListValue: String;
-Begin
-	fieldListParam := Report.MetabaseObjectInstance.ParamValues.FindById(C_PARAM_FIELD_LIST);
-	If Not IsNull(fieldListParam) Then
-		fieldListValue := fieldListParam.Value;
-	End If;
-	Return fieldListValue;
-End Function getFieldListFromParam;
-
-/// <summary>
 /// 	Замена названия полей реляционной области.
 /// 	Входные параметры: fieldList - список полей и их названия на русском языке
 /// </summary>
@@ -231,19 +202,6 @@ Begin
 End Sub replaceTableTitles;
 
 /// <summary>
-/// 	Инициализация глобальных переменных
-/// </summary>
-Sub initialization;
-Var
-	repSheets: IPrxSheets;
-Begin
-	repSheets := PrxReport.ActiveReport.Sheets;
-	If Not IsNull(repSheets.FindByName(WS_MAIN_NAME)) Then wsMain := (repSheets.FindByName(WS_MAIN_NAME) As IPrxTable).TabSheet; End If;
-	If Not IsNull(repSheets.FindByName(WS_FIELD_LIST_NAME)) Then wsFieldList := (repSheets.FindByName(WS_FIELD_LIST_NAME) As IPrxTable).TabSheet; End If;
-	If Not IsNull(repSheets.FindByName(WS_DATA_NAME)) Then wsData := (repSheets.FindByName(WS_DATA_NAME) As IPrxTable).TabSheet; End If;
-End Sub initialization;
-
-/// <summary>
 /// 	Сбор имен полей с листа.
 /// 	Входные параметры: wsFieldList - Лист: "Словарь полей"
 /// </summary>
@@ -255,17 +213,16 @@ Var
 	fieldName: String;
 	fieldDesc: String;
 Begin
-	If IsNull(fieldList) Then
-		fieldList := New Hashtable.Create;
-		lRow := wsFieldList.MaxNotEmptyRow;
-		For i := 0 To lRow Do
-			fieldName := wsFieldList.Cell(i, 0).Value;
-			fieldDesc := wsFieldList.Cell(i, 1).Value;
-			If Not fieldList.Contains(fieldName) Then
-				fieldList.Add(fieldName, fieldDesc);
-			End If;
-		End For;
-	End If;
+	If IsNull(wsFieldList) Then Return Null; End If;
+	fieldList := New Hashtable.Create;
+	lRow := wsFieldList.MaxNotEmptyRow;
+	For i := 0 To lRow Do
+		fieldName := wsFieldList.Cell(i, 0).Value;
+		fieldDesc := wsFieldList.Cell(i, 1).Value;
+		If Not fieldList.Contains(fieldName) Then
+			fieldList.Add(fieldName, fieldDesc);
+		End If;
+	End For;
 	Return fieldList.Count > 1 ? fieldList : Null;
 End Function getFieldsName;
 
