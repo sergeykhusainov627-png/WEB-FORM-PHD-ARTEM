@@ -62,44 +62,44 @@ Var
 	sheet: IPrxSheet;
 	i, rowIdx: Integer;
 Begin
-	stepOk('0/5 запуск', 'открытие отчёта; режим редактирования: ' + Report.MetabaseObject.IsEdited.ToString);
+	step_Ok("0/5 запуск", "открытие отчёта; режим редактирования: " + Report.MetabaseObject.IsEdited.ToString);
 	Try
-		stepOk('1/5 лист', 'ищем лист "' + WS_DATA_NAME + '"');
+		step_Ok("1/5 лист", "ищем лист "" + WS_DATA_NAME + """);
 		sheet := getDataSheet(Report);
 		If IsNull(sheet) Then
-			stepFailText('1/5 лист', 'лист не найден');
+			step_FailText("1/5 лист", "лист не найден");
 			Return;
 		End If;
 		wsData := (sheet As IPrxTable).TabSheet;
 		If IsNull(wsData) Then
-			stepFailText('1/5 лист', 'лист не является таблицей');
+			step_FailText("1/5 лист", "лист не является таблицей");
 			Return;
 		End If;
-		stepOk('1/5 лист', 'лист найден: "' + sheet.Name + '"');
+		step_Ok("1/5 лист", "лист найден: "" + sheet.Name + """);
 		
-		stepOk('2/5 параметры', 'получаем параметры отчёта');
+		step_Ok("2/5 параметры", "получаем параметры отчёта");
 		MB := MetabaseClass.Active;
 		queryDesc := MB.ItemByIdNamespace(C_Q_GET_DATA_FROM_UPLOAD_JSON, MB.GetObjectKeyById(C_NAMESPACE_ID));
 		queryParams := queryDesc.Params.CreateEmptyValues;
-		stepOk('2/5 параметры', 'параметров у запроса: ' + queryParams.Count.ToString);
+		step_Ok("2/5 параметры", "параметров у запроса: " + queryParams.Count.ToString);
 		applyReportParams(Report, queryParams);
-		stepOk('2/5 параметры', paramInfo);
+		step_Ok("2/5 параметры", paramInfo);
 		logParamDump;
 		
-		stepOk('3/5 запрос', 'открываем запрос ' + C_Q_GET_DATA_FROM_UPLOAD_JSON);
+		step_Ok("3/5 запрос", "открываем запрос " + C_Q_GET_DATA_FROM_UPLOAD_JSON);
 		datasetInst := queryDesc.Open(queryParams) As IDatasetInstance;
 		fields := datasetInst.Fields;
-		stepOk('3/5 запрос', 'запрос открыт; столбцов в результате: ' + fields.Count.ToString);
+		step_Ok("3/5 запрос", "запрос открыт; столбцов в результате: " + fields.Count.ToString);
 		logColumnsDump(fields);
 		
-		stepOk('4/5 выгрузка', 'очищаем лист и пишем шапку');
+		step_Ok("4/5 выгрузка", "очищаем лист и пишем шапку");
 		wsData.Clear;
 		// заголовки — идентификаторы полей запроса; при необходимости заменить на наименования
 		// из листа «Словарь полей» (см. getFieldsName / replaceTableTitles)
 		For i := 0 To fields.Count - 1 Do
 			wsData.Cell(0, i).Value := fields.Item(i).Id;
 		End For;
-		stepOk('4/5 выгрузка', 'шапка записана');
+		step_Ok("4/5 выгрузка", "шапка записана");
 		
 		rowIdx := 1;
 		While Not datasetInst.Eof Do
@@ -109,19 +109,19 @@ Begin
 			rowIdx := rowIdx + 1;
 			datasetInst.Next;
 		End While;
-		stepOk('4/5 выгрузка', 'строк выгружено: ' + (rowIdx - 1).ToString);
+		step_Ok("4/5 выгрузка", "строк выгружено: " + (rowIdx - 1).ToString);
 		
-		stepOk('5/5 оформление', 'старт');
+		step_Ok("5/5 оформление", "старт");
 		// если строк с данными нет — оформляем только шапку
 		If rowIdx > 1 Then
 			formatDataSheet(fields.Count, rowIdx - 1);
 		Else
 			formatDataSheet(fields.Count, 0);
 		End If;
-		stepOk('готово', 'столбцов: ' + fields.Count.ToString + ', строк: ' + (rowIdx - 1).ToString
-			+ '; лист: "' + sheet.Name + '"');
+		step_Ok("готово", "столбцов: " + fields.Count.ToString + ", строк: " + (rowIdx - 1).ToString
+			+ "; лист: "" + sheet.Name + """);
 	Except On E: Exception Do
-		stepFail('сбой выгрузки', E);
+		step_Fail("сбой выгрузки", E);
 	End Try;
 End Sub loadQueryDataToSheet;
 
@@ -150,36 +150,36 @@ Begin
 		values[6] := cut(descr, C_LOG_DESCR_MAX);
 		logObj.PutRecord(values);
 	Except On E: Exception Do
-		Debug.WriteLine('[АнализТЭП/журнал] запись не удалась: ' + E.Message);
+		Debug.WriteLine("[АнализТЭП/журнал] запись не удалась: " + E.Message);
 	End Try;
 End Sub logRecord;
 
 /// <summary>Успешный шаг: отметка в журнале + протокол + ячейка листа</summary>
-Sub stepOk(step: String; info: String);
+Sub step_Ok(step_: String; info: String);
 Begin
-	trace(step + ' — ' + info);
-	logRecord(C_LOG_OP_LOAD, True, WS_DATA_NAME, '', step + ': ' + info);
-End Sub stepOk;
+	trace(step_ + " — " + info);
+	logRecord(C_LOG_OP_LOAD, True, WS_DATA_NAME, "", step_ + ": " + info);
+End Sub step_Ok;
 
 /// <summary>Сбой шага с исключением: в журнал уходит текст, модуль и номер строки</summary>
-Sub stepFail(step: String; E: Exception);
+Sub step_Fail(step_: String; E: Exception);
 Begin
-	trace(step + ' — ' + errText(E));
-	logRecord(C_LOG_OP_LOAD, False, WS_DATA_NAME, '', step + ': ' + errText(E));
-End Sub stepFail;
+	trace(step_ + " — " + errText(E));
+	logRecord(C_LOG_OP_LOAD, False, WS_DATA_NAME, "", step_ + ": " + errText(E));
+End Sub step_Fail;
 
 /// <summary>Сбой шага без исключения (лист не найден и т.п.)</summary>
-Sub stepFailText(step: String; reason: String);
+Sub step_FailText(step_: String; reason: String);
 Begin
-	trace(step + ' — ОШИБКА: ' + reason);
-	logRecord(C_LOG_OP_LOAD, False, WS_DATA_NAME, '', step + ': ОШИБКА: ' + reason);
-End Sub stepFailText;
+	trace(step_ + " — ОШИБКА: " + reason);
+	logRecord(C_LOG_OP_LOAD, False, WS_DATA_NAME, "", step_ + ": ОШИБКА: " + reason);
+End Sub step_FailText;
 
 /// <summary>Подробный текст ошибки: сообщение, модуль/форма и номер строки (e.Source, e.Line)</summary>
 Function errText(E: Exception): String;
 Begin
-	If IsNull(E) Then Return 'ОШИБКА без описания'; End If;
-	Return 'ОШИБКА: ' + E.Message + ' [модуль: ' + E.Source + ', строка: ' + E.Line.ToString + ']';
+	If IsNull(E) Then Return "ОШИБКА без описания"; End If;
+	Return "ОШИБКА: " + E.Message + " [модуль: " + E.Source + ", строка: " + E.Line.ToString + "]";
 End Function errText;
 
 /// <summary>Обрезает текст до длины поля журнала</summary>
@@ -188,9 +188,9 @@ Var
 	t: String;
 Begin
 	t := text;
-	If IsNull(t) Then t := ''; End If;
+	If IsNull(t) Then t := ""; End If;
 	If t.Length <= maxLen Then Return t; End If;
-	Return t.Substring(0, maxLen) + '…';
+	Return t.Substring(0, maxLen) + "…";
 End Function cut;
 
 /// <summary>Выгружает в журнал значения перенесённых параметров — порциями по длине поля</summary>
@@ -201,10 +201,10 @@ Begin
 	part := paramDump;
 	While Not part.IsEmpty Do
 		If part.Length <= C_LOG_DESCR_MAX Then
-			logRecord(C_LOG_OP_LOAD, True, WS_DATA_NAME, '', '2/5 параметры: ' + part);
+			logRecord(C_LOG_OP_LOAD, True, WS_DATA_NAME, "", "2/5 параметры: " + part);
 			Return;
 		End If;
-		logRecord(C_LOG_OP_LOAD, True, WS_DATA_NAME, '', '2/5 параметры: ' + part.Substring(0, C_LOG_DESCR_MAX));
+		logRecord(C_LOG_OP_LOAD, True, WS_DATA_NAME, "", "2/5 параметры: " + part.Substring(0, C_LOG_DESCR_MAX));
 		part := part.Substring(C_LOG_DESCR_MAX);
 	End While;
 End Sub logParamDump;
@@ -215,17 +215,17 @@ Var
 	text, part: String;
 	i: Integer;
 Begin
-	text := '';
+	text := "";
 	For i := 0 To fields.Count - 1 Do
-		text := text + fields.Item(i).Id + ', ';
+		text := text + fields.Item(i).Id + ", ";
 	End For;
 	part := text;
 	While Not part.IsEmpty Do
 		If part.Length <= C_LOG_DESCR_MAX Then
-			logRecord(C_LOG_OP_LOAD, True, WS_DATA_NAME, '', '3/5 колонки: ' + part);
+			logRecord(C_LOG_OP_LOAD, True, WS_DATA_NAME, "", "3/5 колонки: " + part);
 			Return;
 		End If;
-		logRecord(C_LOG_OP_LOAD, True, WS_DATA_NAME, '', '3/5 колонки: ' + part.Substring(0, C_LOG_DESCR_MAX));
+		logRecord(C_LOG_OP_LOAD, True, WS_DATA_NAME, "", "3/5 колонки: " + part.Substring(0, C_LOG_DESCR_MAX));
 		part := part.Substring(C_LOG_DESCR_MAX);
 	End While;
 End Sub logColumnsDump;
@@ -235,13 +235,13 @@ Function currentUserName: String;
 Var
 	name: String;
 Begin
-	name := '';
+	name := "";
 	Try
 		name := MB.LogonSession.User.FullName;
 	Except
-		name := '';
+		name := "";
 	End Try;
-	If name.IsEmpty Then name := 'WEB'; End If;
+	If name.IsEmpty Then name := "WEB"; End If;
 	Return name;
 End Function currentUserName;
 
@@ -251,7 +251,7 @@ End Function currentUserName;
 /// </summary>
 Sub trace(text: String);
 Begin
-	Debug.WriteLine('[АнализТЭП/отчёт] ' + text);
+	Debug.WriteLine("[АнализТЭП/отчёт] " + text);
 	If IsNull(wsData) Then Return; End If;
 	wsData.Cell(0, C_TRACE_COL).Value := text;
 End Sub trace;
@@ -272,13 +272,16 @@ Begin
 	
 	// --- вся таблица: границы и выравнивание по вертикали ---
 	Try
-		style := wsData.Rows(0, lastRow).Style;
-		style.BorderStyle(TabBorder.All) := TabBorderStyle.Continuous;
+		style := wsData.cells(0,0, lastRow,colCount).Style;
+		style.BorderStyle(TabBorder.InsideHorizontal) := TabBorderStyle.Continuous;
+		style.BorderStyle(TabBorder.InsideVertical) := TabBorderStyle.Continuous;
+		style.BorderStyle(TabBorder.Outline) := TabBorderStyle.Continuous;
 		style.BorderWeight(TabBorder.All) := TabBorderWeight.Thin;
+		
 		style.VerticalAlignment := TabFormatLayout.Center;
-		stepOk('5/5 границы', 'применены');
+		step_Ok("5/5 границы", "применены");
 	Except On E: Exception Do
-		stepFail('5/5 границы', E);
+		step_Fail("5/5 границы", E);
 	End Try;
 	
 	// --- шапка: жирный шрифт, заливка, выравнивание по центру, перенос по словам ---
@@ -289,20 +292,20 @@ Begin
 		style.HorizontalAlignment := TabFormatAlignment.Center;
 		style.WrapText := TabFormatWordWrap.BreakWords;
 		style.BackgroundBrush := New GxSolidBrush.Create(New GxColor.CreateRGB(C_HEADER_FILL_R, C_HEADER_FILL_G, C_HEADER_FILL_B));
-		stepOk('5/5 шапка', 'жирный, заливка, центрирование, перенос — применены');
+		step_Ok("5/5 шапка", "жирный, заливка, центрирование, перенос — применены");
 	Except On E: Exception Do
-		stepFail('5/5 шапка', E);
+		step_Fail("5/5 шапка", E);
 	End Try;
 	
 	// --- строки с данными: числовой формат и запрет переноса ---
 	If lastRow > 0 Then
 		Try
 			style := wsData.Rows(1, lastRow).Style;
-			style.CustomFormat := C_NUM_FORMAT;
+			//style.CustomFormat := C_NUM_FORMAT;
 			style.WrapText := TabFormatWordWrap.None;
-			stepOk('5/5 данные', 'числовой формат ' + C_NUM_FORMAT + ' применён к строкам 2..' + (lastRow + 1).ToString);
+			step_Ok("5/5 данные", "числовой формат " + C_NUM_FORMAT + " применён к строкам 2.." + (lastRow + 1).ToString);
 		Except On E: Exception Do
-			stepFail('5/5 данные', E);
+			step_Fail("5/5 данные", E);
 		End Try;
 	End If;
 	
@@ -310,9 +313,9 @@ Begin
 	Try
 		wsData.Columns(0, colCount - 1).AdjustWidth(C_COL_WIDTH_MAX, C_COL_WIDTH_MIN);
 		wsData.Rows(0, 0).AdjustHeight(C_HEADER_HEIGHT_MAX, C_HEADER_HEIGHT_MIN);
-		stepOk('5/5 ширина/высота', 'автоподбор применён');
+		step_Ok("5/5 ширина/высота", "автоподбор применён");
 	Except On E: Exception Do
-		stepFail('5/5 ширина/высота', E);
+		step_Fail("5/5 ширина/высота", E);
 	End Try;
 	
 	// Закрепление шапки (wsData.View.FixedRowsCount) убрано: в веб-клиенте операция недоступна —
@@ -334,13 +337,13 @@ Var
 	cnt, skipped, failed: Integer;
 	listToQuery: Array Of String;
 Begin
-	paramInfo := '';
-	paramDump := '';
+	paramInfo := "";
+	paramDump := "";
 	If IsNull(queryParams) Then Return; End If;
 	reportParams := Report.MetabaseObjectInstance.ParamValues;
 	If IsNull(reportParams) Then Return; End If;
 	
-	stepOk('2/5 параметры', 'параметров у отчёта: ' + reportParams.Count.ToString);
+	step_Ok("2/5 параметры", "параметров у отчёта: " + reportParams.Count.ToString);
 	cnt := 0;
 	skipped := 0;
 	failed := 0;
@@ -353,19 +356,19 @@ Begin
 				skipped := skipped + 1; // у запроса нет такого параметра
 			Else
 				// пустые значения НЕ переносим: пустой массив платформа подставляет в текст запроса
-				// как пустоту, и условие вида COALESCE(:PARAM,'')='' превращается в синтаксическую ошибку
+				// как пустоту, и условие вида COALESCE(:PARAM,"")="" превращается в синтаксическую ошибку
 				If isEmptyValue(src.Value) Then
-					paramDump := paramDump + src.Id + '=<пусто>; ';
+					paramDump := paramDump + src.Id + "=<пусто>; ";
 				Else
 					dst.Value := src.Value;
 					cnt := cnt + 1;
-					paramDump := paramDump + src.Id + '=' + describeValue(src.Value) + '; ';
+					paramDump := paramDump + src.Id + "=" + describeValue(src.Value) + "; ";
 				End If;
 			End If;
 		Except On E: Exception Do
 			failed := failed + 1;
-			paramDump := paramDump + src.Id + '=ОШИБКА(' + E.Message + '); ';
-			stepFail('2/5 параметр ' + src.Id, E);
+			paramDump := paramDump + src.Id + "=ОШИБКА(" + E.Message + "); ";
+			step_Fail("2/5 параметр " + src.Id, E);
 		End Try;
 	End For;
 	
@@ -374,27 +377,27 @@ Begin
 	// SQL, и для массива строк они разделяются запятыми (иначе идентификаторы склеиваются).
 	dst := queryParams.FindById(C_Q_PARAM_FIELD_LIST);
 	src := reportParams.FindById(C_PARAM_FIELD_LIST);
-	paramInfo := 'перенесено ' + cnt.ToString + ', пустых ' + skipped.ToString + ', ошибок ' + failed.ToString;
+	paramInfo := "перенесено " + cnt.ToString + ", пустых " + skipped.ToString + ", ошибок " + failed.ToString;
 	If (Not IsNull(dst)) And (Not IsNull(src)) And (Not isEmptyValue(src.Value)) Then
-		paramInfo := paramInfo + '; список полей: ' + describeValue(src.Value);
-		paramDump := paramDump + 'ANALYTIC_SET=' + describeValue(src.Value);
+		paramInfo := paramInfo + "; список полей: " + describeValue(src.Value);
+		paramDump := paramDump + "ANALYTIC_SET=" + describeValue(src.Value);
 		listToQuery := toStrArray(src.Value);
 		If IsNull(listToQuery) Then
 			// ВАЖНО: если строки получить не удалось, значение запроса НЕ затираем.
 			// Иначе в текст SQL подставится пустота и запрос упадёт: syntax error at or near ","
-			stepFailText('2/5 список полей', 'строки получить не удалось — оставлено значение запроса по умолчанию');
-			paramDump := paramDump + ' (значение запроса не менялось)';
+			step_FailText("2/5 список полей", "строки получить не удалось — оставлено значение запроса по умолчанию");
+			paramDump := paramDump + " (значение запроса не менялось)";
 		Else
 			dst.Value := listToQuery;
-			stepOk('2/5 список полей', 'в запрос передано строк: ' + listToQuery.Length.ToString
-				+ ': ' + listText(listToQuery));
-			paramDump := paramDump + ' -> в запрос: ' + listText(listToQuery);
+			step_Ok("2/5 список полей", "в запрос передано строк: " + listToQuery.Length.ToString
+				+ ": " + listText(listToQuery));
+			paramDump := paramDump + " -> в запрос: " + listText(listToQuery);
 		End If;
 	Else
-		paramInfo := paramInfo + '; список полей: пусто';
-		paramDump := paramDump + 'ANALYTIC_SET=<пусто> (значение запроса не менялось)';
+		paramInfo := paramInfo + "; список полей: пусто";
+		paramDump := paramDump + "ANALYTIC_SET=<пусто> (значение запроса не менялось)";
 	End If;
-	stepOk('2/5 итог', paramInfo);
+	step_Ok("2/5 итог", paramInfo);
 End Sub applyReportParams;
 
 /// <summary>Список строк через запятую — для журнала</summary>
@@ -403,9 +406,9 @@ Var
 	i: Integer;
 	text: String;
 Begin
-	text := '';
+	text := "";
 	For i := 0 To items.Length - 1 Do
-		If i > 0 Then text := text + ', '; End If;
+		If i > 0 Then text := text + ", "; End If;
 		text := text + items[i];
 	End For;
 	Return text;
@@ -421,14 +424,14 @@ Var
 	i, n, total: Integer;
 	firstOk: String;
 Begin
-	If IsNull(value) Then Return 'Null'; End If;
-	If value Is String Then Return 'строка "' + (value As String) + '"'; End If;
+	If IsNull(value) Then Return "Null"; End If;
+	If value Is String Then Return "строка "" + (value As String) + """; End If;
 	If value Is Array Then
 		arr := value As Array;
 		total := arr.Length;
-		If total = 0 Then Return 'пустой массив'; End If;
+		If total = 0 Then Return "пустой массив"; End If;
 		n := 0;
-		firstOk := '';
+		firstOk := "";
 		For i := 0 To total - 1 Do
 			Try
 				If Not IsNull(arr[i]) Then
@@ -438,15 +441,15 @@ Begin
 					End If;
 				End If;
 			Except On E: Exception Do
-				Debug.WriteLine('[АнализТЭП] элемент ' + i.ToString + ' не приводится к строке: ' + E.Message);
+				Debug.WriteLine("[АнализТЭП] элемент " + i.ToString + " не приводится к строке: " + E.Message);
 			End Try;
 		End For;
 		If n = 0 Then
-			Return 'массив (' + total.ToString + '), ни один элемент не приводится к строке';
+			Return "массив (" + total.ToString + "), ни один элемент не приводится к строке";
 		End If;
-		Return 'массив (' + total.ToString + '), строк: ' + n.ToString + ', первый: "' + firstOk + '"';
+		Return "массив (" + total.ToString + "), строк: " + n.ToString + ", первый: "" + firstOk + """;
 	End If;
-	Return 'объект (не строка и не массив)';
+	Return "объект (не строка и не массив)";
 End Function describeValue;
 
 /// <summary>
@@ -480,7 +483,7 @@ Begin
 				If Not (src[i] As String).IsEmpty Then n := n + 1; End If;
 			End If;
 		Except On E: Exception Do
-			Debug.WriteLine('[АнализТЭП] элемент ' + i.ToString + ' не приводится к строке: ' + E.Message);
+			Debug.WriteLine("[АнализТЭП] элемент " + i.ToString + " не приводится к строке: " + E.Message);
 		End Try;
 	End For;
 	If n = 0 Then Return Null; End If;
@@ -496,7 +499,7 @@ Begin
 				End If;
 			End If;
 		Except On E: Exception Do
-			Debug.WriteLine('[АнализТЭП] элемент ' + i.ToString + ' пропущен: ' + E.Message);
+			Debug.WriteLine("[АнализТЭП] элемент " + i.ToString + " пропущен: " + E.Message);
 		End Try;
 	End For;
 	Return dst;

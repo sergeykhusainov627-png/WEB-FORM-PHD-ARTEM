@@ -1,0 +1,1987 @@
+Var
+	fieldList: IStringList;	
+
+Class ANALIZ_TEP_FORM_ON_SHOW: WebForm
+		
+	TextArea1: WebTextArea;
+	PANEL3: WebPanel;
+	
+	TabControl: WebTabControl;
+	TabControl1: WebTabControl;
+	TabControl2: WebTabControl;
+	
+	TabPage1: WebTabPage;
+	TabPage2: WebTabPage;
+	TabPage3: WebTabPage;
+	TabPage4: WebTabPage;
+	TabPage5: WebTabPage;
+	TabPage6: WebTabPage;
+	TabPage7: WebTabPage;
+	TabPage8: WebTabPage;
+	TabPage9: WebTabPage;
+	TabPage10: WebTabPage;
+	TabPage11: WebTabPage;
+	TabPage12: WebTabPage;
+	TabPage13: WebTabPage;
+	TabPage14: WebTabPage;
+	TabPage15: WebTabPage;
+	TabPage16: WebTabPage;
+	TabPage17: WebTabPage;
+	TabPage18: WebTabPage;
+	
+	DateTimePicker1: WebDateTimePicker;
+	ButtonCancel: WebButton;
+	ReportBoxOk: WebReportBox;
+	ButtonApply: WebButton;
+	
+	DimensionCombo1: WebDimensionCombo;
+	D_ZBUR_BEG: WebDimensionCombo;
+	D_ZBUR_END: WebDimensionCombo;
+	D_ZGEN_ZAK: WebDimensionCombo;
+	D_ZPKR_SUBP: WebDimensionCombo;
+	D_ZPHD_NCH: WebDimensionCombo;
+	D_ZPHD_KON: WebDimensionCombo;
+	DimensionCombo9: WebDimensionCombo;
+	DimensionCombo10: WebDimensionCombo;
+	DimensionCombo11: WebDimensionCombo;
+	
+	I_ZINDTXT1: WebInput;
+	
+	D_ZTYPEIND: WebDimensionCombo;
+	D_PLANT: WebDimensionCombo;
+	D_ZLIB_INDC: WebDimensionCombo;
+	D_CALYEAR: WebDimensionCombo;
+	D_ZPHD_SPR: WebDimensionCombo;
+	D_ZAVIATYPE: WebDimensionCombo;
+	D_ZGAZ_TYPE: WebDimensionCombo;
+	D_ZPHD_GRSR: WebDimensionCombo;
+	D_ZPHD_SR: WebDimensionCombo;
+	D_ZOBJEM: WebDimensionCombo;
+	D_ZSHIFR: WebDimensionCombo;
+	D_ZGEN_POD: WebDimensionCombo;
+	D_ZSKV_ST: WebDimensionCombo;
+	D_ZPILOT: WebDimensionCombo;
+	D_ZPH_OPLST: WebDimensionCombo;
+	D_ZPH_TEHK: WebDimensionCombo;
+	D_ZBUR_PLST: WebDimensionCombo;
+	D_Z_SKV_GEO: WebDimensionCombo;
+	D_ZSKV_KUST: WebDimensionCombo;
+	D_ZBUR_AREA: WebDimensionCombo;
+	D_ZBUR_LU: WebDimensionCombo;
+	D_ZDOGLINK: WebDimensionCombo;
+	D_ZSIU_TY: WebDimensionCombo;
+	D_Z_CL_NAPR: WebDimensionCombo;
+	D_ZUCVOLTTR: WebDimensionCombo;
+	D_UCVOLTLEVL: WebDimensionCombo;
+	D_ZPHD_SK: WebDimensionCombo;
+	D_ZPH_ESO2: WebDimensionCombo;
+	D_ZDEBITOR: WebDimensionCombo;
+	D_ZPHD_USL1: WebDimensionCombo;
+	D_ZPHD_DOG: WebDimensionCombo;
+	D_PERIOD_TYPE: WebDimensionCombo;
+	D_ZLIB_INFS: WebDimensionCombo;
+	D_POSID: WebDimensionCombo;
+	D_ZSIU_FLD: WebDimensionCombo;
+	D_ZFUNC_LOC: WebDimensionCombo;
+	D_MATERIAL: WebDimensionCombo;
+	D_ZCLSVOBOR: WebDimensionCombo;
+	D_ZEQUI: WebDimensionCombo;
+	D_ACTTYPE: WebDimensionCombo;
+	D_ZPH_USR2: WebDimensionCombo;
+	D_ZORGUNIT: WebDimensionCombo;
+	D_COSTCENTER: WebDimensionCombo;
+	D_PROFIT_CTR: WebDimensionCombo;
+	D_ZHRGRPMO: WebDimensionCombo;
+	D_SOLD_TO: WebDimensionCombo;
+	D_VENDOR: WebDimensionCombo;
+	D_ZPHD_STAT: WebDimensionCombo;
+	
+	CB_DISPLAY_CODE_ANALYT: WebCheckBox;
+	CbHigherInd: WebCheckBox;
+	CB_NINE_MONTH: WebCheckBox;
+	CB_YEAR: WebCheckBox;
+	CbESO3: WebCheckBox;
+	CB_AREA: WebCheckBox;
+	CB_ACTIVITY_TYPE: WebCheckBox;
+	CB_TEP_OWNER: WebCheckBox;
+	CB_MVP_TEP: WebCheckBox;
+	CB_FUNCTION_OF_WOKERS: WebCheckBox;
+	CB_IND_TYPE: WebCheckBox;
+	CB_TEP_FORM_OF_SNG: WebCheckBox;
+	CB_VOLUME: WebCheckBox;
+	CB_TRUD: WebCheckBox;
+	CB_COMPARABLE_PRICES: WebCheckBox;
+	CB_CURRENT_PRICES: WebCheckBox;
+	CB_ESTIMATED_PRICES: WebCheckBox;
+	CB_ACTTYPE2: WebCheckBox;
+	CB_ANALYTIC_SET: WebCheckBox;
+	
+	CB_PERIOD_TYPE: WebCheckBox;
+	CB_ZINDTXT1: WebCheckBox;
+	CB_ZSKV_ST: WebCheckBox;
+	CB_ZPILOT: WebCheckBox;
+	CB_ZBUR_END: WebCheckBox;
+	CB_ZBUR_BEG: WebCheckBox;
+	CB_ZPHD_COMM: WebCheckBox;
+	CB_ZPH_OPLST: WebCheckBox;
+	CB_ZPH_TEHK: WebCheckBox;
+	CB_ZBUR_PLST: WebCheckBox;
+	CB_Z_SKV_GEO: WebCheckBox;
+	CB_ZSKV_KUST: WebCheckBox;
+	CB_ZBUR_AREA: WebCheckBox;
+	CB_ZBUR_LU: WebCheckBox;
+	CB_ZPHD_PHD: WebCheckBox;
+	CB_ZPHD_IS: WebCheckBox;
+	CB_ZPHD_PRIZ: WebCheckBox;	
+	CB_ZPHD_NOP1: WebCheckBox;
+	CB_ZPHD_SPR: WebCheckBox;
+	CB_ZPHD_KON: WebCheckBox;
+	CB_ZPHD_NCH: WebCheckBox;
+	CB_ZAVIATYPE: WebCheckBox;
+	CB_ZGAZ_TYPE: WebCheckBox;
+	CB_ZPHD_GRSR: WebCheckBox;
+	CB_ZPHD_SR: WebCheckBox;
+	CB_ZOBJEM: WebCheckBox;
+	CB_ZSHIFR: WebCheckBox;
+	CB_ZPKR_SUBP: WebCheckBox;
+	CB_ZGEN_ZAK: WebCheckBox;
+	CB_ZGEN_POD: WebCheckBox;
+	CB_ZDOGLINK: WebCheckBox;
+	CB_ZSIU_TY: WebCheckBox;
+	CB_Z_CL_NAPR: WebCheckBox;
+	CB_ZUCVOLTTR: WebCheckBox;
+	CB_UCVOLTLEVL: WebCheckBox;
+	CB_ZPHD_SK: WebCheckBox;
+	CB_ZPH_ESO2: WebCheckBox;
+	CB_ZDEBITOR: WebCheckBox;
+	CB_ZPHD_USL1: WebCheckBox;
+	CB_ZPHD_DOG: WebCheckBox;
+	CB_POSID: WebCheckBox;
+	CB_ZSIU_FLD: WebCheckBox;
+	CB_ZFUNC_LOC: WebCheckBox;
+	CB_SIX_MONTH: WebCheckBox;
+	CB_FOURTH_QUARTER: WebCheckBox;
+	CB_THIRD_QUARTER: WebCheckBox;
+	CB_SECOND_QUARTER: WebCheckBox;
+	CB_FIRST_QUARTER: WebCheckBox;
+	CB_DECEMBER: WebCheckBox;
+	CB_NOVEMBER: WebCheckBox;
+	CB_OCTOBER: WebCheckBox;
+	CB_SEPTEMBER: WebCheckBox;
+	CB_AUGUST: WebCheckBox;
+	CB_JULY: WebCheckBox;
+	CB_JUNE: WebCheckBox;
+	CB_MAY: WebCheckBox;
+	CB_APRIL: WebCheckBox;
+	CB_MARCH: WebCheckBox;
+	CB_FEBRUARY: WebCheckBox;
+	CB_JANUARY: WebCheckBox;
+	CB_MATERIAL: WebCheckBox;
+	CB_ZEQUI: WebCheckBox;
+	CB_ACTTYPE: WebCheckBox;
+	CB_ZPH_USR2: WebCheckBox;
+	CB_ZORGUNIT: WebCheckBox;
+	CB_COSTCENTER: WebCheckBox;
+	CB_PROFIT_CTR: WebCheckBox;
+	CB_ZHRGRPMO: WebCheckBox;
+	CB_SOLD_TO: WebCheckBox;
+	CB_VENDOR: WebCheckBox;
+	CB_ACT_UNIT: WebCheckBox;
+	CB_ZLIB_INFS: WebCheckBox;
+	CB_ZLIB_INDC: WebCheckBox;
+	CB_PLANT: WebCheckBox;
+	CB_CALYEAR: WebCheckBox;
+	CB_DISPLAY_INFO_BY_STATUS: WebCheckBox;
+		
+	MB: IMETABASE;
+	hlink: ITabHyperlink;
+	
+	// Значения с основных справочников
+	p_calyear: Variant;
+	p_ztypeind: Variant;
+	p_plant: Variant; 
+	p_zlib_indc: Variant;
+	// Значения с раздела "Основные данные"
+	p_vendor: Variant;
+	p_zphd_stat: Variant;
+	p_sold_to: Variant;
+	p_zhrgrpmo: Variant;
+	p_profit_ctr: Variant;
+	p_costcenter: Variant;
+	p_zorgunit: Variant;
+	p_zph_usr2: Variant;
+	p_acttype: Variant;
+	p_zequi: Variant;
+	p_zclsvobor: Variant;
+	p_material: Variant;
+	p_zfunc_loc: Variant;
+	p_zsiu_fld: Variant;
+	p_posid: Variant;
+	p_zlib_infs: Variant;
+	p_periop_type: Variant;
+	// Значения с раздела "Энергоснабжение"
+	p_zphp_dog: Variant;
+	p_zphp_usl1: Variant;
+	p_zdebitor: Variant;
+	p_zph_eso2: Variant;
+	p_zphd_sk: Variant;
+	p_ucvoltlevl: Variant;
+	p_zucvolttr: Variant;
+	p_z_cl_napr: Variant;
+	p_zsiu_ty: Variant;
+	p_zdoglink: Variant; 
+	// Значения с раздела "Геология и бурение"
+	p_zbur_lu: Variant;
+	p_zbur_area: Variant;
+	p_zskv_kust: Variant;
+	p_z_skv_geo: Variant;
+	p_zbur_plst: Variant;
+	p_zph_tehk: Variant;
+	p_zph_oplst: Variant;
+	p_zbur_beg: Variant;
+	p_zbur_end: Variant;
+	p_zpilot: Variant;
+	p_zskv_st: Variant;
+	// Значения с раздела "Кап. строительство"
+	p_zgen_pod: Variant;
+	p_zgen_zak: Variant;
+	p_zpkr_subp: Variant;
+	p_zshifr: Variant;
+	// Значения с раздела "Экология"
+	p_zobjem: Variant;
+	p_zphd_sr: Variant;
+	p_zphd_grsr: Variant;
+	// Значения с раздела "Прочие аналитики"
+	p_zgaz_type: Variant;
+	p_zaviatype: Variant;
+	p_zphd_nch: Variant;
+	p_zphd_kon: Variant;
+	p_zphd_spr: Variant;	 	
+	 
+	Const C_ANALYZ_TEP_REP_ID = "PRX_ANALYSIS_TEP";
+	// Параметры СЭ регламантного отчета с кнопкой
+	Const C_PARAM_PLANT = "PLANT";
+	Const C_PARAM_CALYEAR = "CALYEAR";
+	Const C_PARAM_ZTYPEIND = "ZTYPEIND";
+	Const C_PARAM_ZLIB_INFS = "ZLIB_INFS";
+	Const C_PARAM_ZBUR_BEG = "ZBUR_BEG";
+	Const C_PARAM_ZBUR_END = "ZBUR_END";
+	Const C_PARAM_ZPKR_SUBP = "ZPKR_SUBP";
+	// Значения по умолчанию для СЭ (ТТ, лист «Селекционный экран»)
+	Const C_DEFAULT_TYPE_IND = "0000000001";
+	Const C_ACCESS_SP_GROUP = "PHD_ADMIN";
+	Const C_ACCESS_SP_GROUP_PREFIX = "PHD_CURATOR_";
+	// Суффикс идентификатора поля статуса для режима «Выводить информацию по статусам»
+	Const C_STATUS_FIELD_SUFFIX = "_STAT";
+	// Отмечать ли чек-боксы «Поля для вывода» по умолчанию (ТТ: Год, СП, ТЭП, Ед.измерения,
+	// I кв., II кв., 6 мес., III кв., 9 мес., IV кв., Год). False — вывод только по выбору пользователя.
+	Const C_APPLY_DEFAULT_CHECKED = True;
+	// ---------- журнал (объект класса Журнал, KE_CLASS_LOG; модулю нужна ссылка на сборку Db) ----------
+	Const C_LOG_ID = "LOG_PHD_TEP_ANALIS_JOURNAL";
+	Const C_LOG_NAMESPACE_ID = "BA_PHD";
+	Const C_LOG_OP_FORM = "Веб-форма ТЭП";
+	Const C_LOG_DESCR_MAX = 240;
+	
+	_AnalyzTepHyperlink: COpenHyperlink; // CUrlHyperlink
+	_hlink: ITabHyperlink;
+	
+	// --- «Поля для вывода»: таблицы соответствия «имя чек-бокса -> идентификатор поля отчёта» ---
+	// Текст последней ошибки (диагностика: показывается в TextArea1)	
+	_lastError: String;
+	_fieldIds: IHashtable;
+	_codeIds: IHashtable;
+	
+	/// <summary>
+	/// 	Гиперссылка
+	/// </summary>
+	Property Hyperlink: COpenHyperlink
+	Get
+	Begin
+		If IsNull(_AnalyzTepHyperlink) Then
+			_AnalyzTepHyperlink := New COpenHyperlink.Create(ReportBoxOk.Report, AppNs.PHD, "Ок");
+			_AnalyzTepHyperlink.InitObject(C_ANALYZ_TEP_REP_ID);
+		End If;	
+		Return _AnalyzTepHyperlink;
+	End Get
+	End Property Hyperlink;
+	
+	Sub initialization;
+	Begin	
+		MB := MetabaseClass.Active;
+		If IsNull(fieldList) Then fieldList := New StringList.Create; End If;
+		InitOutputFieldIds;
+	End Sub initialization;
+	
+	/// <summary>
+	/// 	Значения по умолчанию СЭ (ТТ, лист «Селекционный экран»): год — текущий, СП — из основной
+	/// 	записи пользователя, тип данных — «План», плюс набор полей вывода по умолчанию.
+	/// </summary>
+	Sub setDefaultDimensionValue;
+	Begin
+		initialization;
+		// Год: текущий год
+		setComboSelectionByAttribute(D_CALYEAR, C_PARAM_CALYEAR, "NAME", DateTime.Now.Year.ToString);
+		// СП: из основной записи пользователя
+		setComboSelectionByAttribute(D_PLANT, C_PARAM_PLANT, "CODE", getUserSP);
+		// Тип данных: «План» (ID 0000000001)
+		setComboSelectionByAttribute(D_ZTYPEIND, C_PARAM_ZTYPEIND, "ID", C_DEFAULT_TYPE_IND);
+		// Поля вывода, установленные по умолчанию (ТТ, лист «СЭ - поля для вывода»)
+		initOutputDefaults;
+		RefreshFieldList;
+	End Sub setDefaultDimensionValue;
+	
+	Private Function getUserSP: String;
+	Var
+		userSP: String;
+		User: IMetabaseUser;
+	Begin
+		// СП пользователя из основной записи (атрибут BUS_AREA). Ошибки не должны ронять форму.
+		userSP := "";
+		Try
+			User := MB.LogonSession.User; //Получаем пользователя запустившего отчет
+			If Not IsNull(User) Then
+				userSP := User.Attributes.FindById("BUS_AREA").Value As String; //Получаем значение атрибута "BUS_AREA"
+			End If;
+		Except
+			userSP := "";
+		End Try;
+		Return userSP;
+	End Function getUserSP;
+	
+	Sub ANALIZ_TEP_FORM_ON_SHOW;
+	Begin
+		Try
+			logRecord(C_LOG_OP_FORM, True, "", "", "0/3 открытие формы");
+			_hlink := InitializeHlinkOpenObject(ReportBoxOk.Report, "  Ок  ", C_ANALYZ_TEP_REP_ID);
+			// Создаёт COpenHyperlink и менеджер параметров (геттер свойства Hyperlink)
+			_AnalyzTepHyperlink := Hyperlink;
+			logRecord(C_LOG_OP_FORM, True, "", "", "1/3 гиперссылка инициализирована");
+			// Значения по умолчанию, набор полей вывода и генерация ссылки
+			setDefaultDimensionValue;
+			logRecord(C_LOG_OP_FORM, True, "", "", "2/3 значения по умолчанию и список полей установлены");
+			// Ограничение выбора СП согласно полномочиям (ТТ, лист «Селекционный экран»)
+			applyPlantAccessRights;
+			logRecord(C_LOG_OP_FORM, True, "", "", "3/3 ограничения по СП применены; форма готова");
+		Except On E: Exception Do
+			// Ошибка инициализации не должна ломать форму: текст ошибки остаётся в TextArea1
+			showError("Ошибка инициализации формы", E);
+		End Try;
+									
+		//SafeGenerate; вернуть
+		//Hyperlink.DesingCell(ButtonCancel.Color);								
+				
+		//madeLinkForMyselfTst;
+		//TextArea1.Text := Hyperlink.Action;
+		
+		// Сбор значений с СЭ 			 
+		//openReportTab := ReportBoxOk.Report.ActiveSheet As ITabSheet;
+		//optionReport := ReportBoxVariant.Report;
+		//br := New GxSolidBrush.Create(Gxcolor.FromKnownColor(GxKnownColor.LightGray));
+		//activeButtonColor := ButtonCancel.Color; //New Gxcolor.CreateRGB(70, 142, 240);
+		//disabledButtonColor := New Gxcolor.CreateRGB(222, 235, 255);
+		//SetOpenRBActivity(False);				
+						
+	End Sub ANALIZ_TEP_FORM_ON_SHOW;
+	
+	Sub madeLinkForMyselfTst;
+	Var
+		link: ITabHyperlink;
+		style: ITabCellStyle;	
+		openReportTab: ITabSheet;
+	Begin
+		// tst сделал ссылку сам
+		//openReportTab := ReportBoxOk.Report.ActiveSheet As ITabSheet;
+		openReportTab := ReportBoxOk.Report.ActiveSheet.Sheets.FindByName("Лист2") As ITabSheet;		
+		TextArea1.Text := ReportBoxOk.Report.ActiveSheet.Name;
+		
+		
+		style := openReportTab.Cell(0, 0).Style;		
+		link := style.Hyperlink;
+		link.ActionType := TabHyperlinkActionType.OpenObject;
+		link.Action := String.Format("@{0}(PLANT={1};CALYEAR={2};ZLIB_INDC={3})", C_ANALYZ_TEP_REP_ID, "6500", "2026", "IND00005000");	
+		// link.Action := String.Format("@{0}(PLANT={1};CALYEAR={2};ZLIB_INDC={3}; ANALYTIC_SET={4})", 
+		// 																							C_ANALYZ_TEP_REP_ID, 
+		// 																							"6500", 
+		// 																							"2026", 
+		// 																							"IND00005000",
+		// 																							"[CALYEAR,PLANT,ZLIB_INDC,ACT_UNIT,MATERIAL]");	
+		link.Enable := TriState.OnOption;								
+		link.Color := GxColor.FromName("Blue");		
+		openReportTab.Cell(0, 0).Value := "tst";
+		//TextArea1.Text := link.Action;
+	End Sub madeLinkForMyselfTst;	
+	
+	{Sub UpdateOpenDefHlink(paramId: String; paramValue: Variant);
+	Begin
+		_AnalyzTepHyperlink.SetParamValue(paramId, paramValue);
+		_AnalyzTepSafeGenerate;
+	End Sub UpdateOpenDefHlink;}
+	
+	{Function InitializeHlinkOpenObject(report: IPrxReport; hlinkText, hlinkAction: String): ITabHyperlink;
+	Var
+		hlinkCell: ITabRange;
+		hlinkCellStyle: ITabCellStyle;
+		hlink: ITabHyperlink; 
+	Begin
+		hlinkCell := (report.ActiveSheet As ITabSheet).Cell(0, 0);
+		
+		// Настройка визуальной составляющей кнопки
+		hlinkCellStyle := hlinkCell.Style;
+		hlinkCellStyle.HorizontalAlignment := TabFormatAlignment.Center;
+		hlinkCellStyle.VerticalAlignment := TabFormatLayout.Center;
+		hlinkCellStyle.BorderColor(TabBorder.All) := ButtonCancel.Color;
+		hlinkCellStyle.BackgroundBrush := New GxSolidBrush.Create(ButtonCancel.Color);
+		hlinkCellStyle.Font.Size := 14;
+		hlinkCellStyle.Font.Name := "Roboto";
+		hlinkCellStyle.Font.Color := GxColor.FromName("White");
+		
+		// Создание гиперссылки
+		TabExt.SetTabHyperlink(hlinkCell, hlinkText, TabHyperlinkActionType.OpenObject, hlinkAction, False);
+		hlink := hlinkCell.Style.Hyperlink;
+		hlink.Underline := TriState.OffOption;
+		hlink.Color := GxColor.FromName("White");
+		
+		Return hlink;
+	End Function InitializeHlinkOpenObject;}
+
+	/// <summary>
+	/// Назначение:
+	/// 	Обновление гиперссылки по параметру
+	/// Входные параметры:
+	/// 	paramName 			- имя параметра 
+	/// 	dimSel 				- выбранные значения из справочника
+	/// 	attrControlValue	- атрибут справочника, управляющий значением
+	/// </summary>
+	Sub UpdateHyperlinkParams(paramName: String; dimSel: IDimSelection; attrControlValue: String);
+	Begin
+		UpdateOpenDefHlinkFromSelection(String.ToUpper(paramName), D_CALYEAR.Selection, String.ToUpper(attrControlValue));
+		Hyperlink.SetParamValueFromSelection(String.ToUpper(paramName), D_CALYEAR.Selection, String.ToUpper(attrControlValue));
+		SafeGenerate;
+	End Sub UpdateHyperlinkParams;
+
+	Sub D_CALYEAROnSelectionChange;
+	Begin
+		UpdateOpenDefHlinkFromSelection("CALYEAR", D_CALYEAR.Selection, "NAME");
+		Hyperlink.SetParamValueFromSelection("CALYEAR", D_CALYEAR.Selection, "NAME");
+		SafeGenerate;
+		
+		//UpdateHyperlinkParams("CALYEAR", D_CALYEAR.Selection, "NAME");
+	End Sub D_CALYEAROnSelectionChange;
+
+	Sub D_PLANTOnSelectionChange;
+		
+	Begin
+		//UpdateOpenDefHlinkFromSelection("PLANT", D_PLANT.Selection, "CODE");
+		
+		
+		//tst := D_PLANT.Selection.AttributeToVariant(D_PLANT.DimInstance.Attributes.FindById("CODE").Attribute); // Извлелечение данных из отметки
+	
+		//TextArea1.Text := D_PLANT.Selection.ToString("CODE");
+		
+		//TextArea1.Text := path.Text(",");
+		
+		// path := New StringList.Create;
+		
+		// groupSel := D_PLANT.Selection;
+		// groupDim := groupSel.Dimension;
+		// path.Add(DimensionExt.GetAttributeValueByElementIndex(groupDim, C_ATTR_NAME_ID, elemIndex));
+		// TextArea1.Text := path.Text(",");
+		
+		//DimensionExt.GetAttributeValueByElementId(groupDim, "CODE");
+		
+		//p_plant := D_PLANT.Selection.ToVariant;
+		//getCollectionValues(D_PLANT); // was 
+		// Attr := D_PLANT.Selection.Dimension.Attributes.FindById("KEY");
+		// If Attr <> Null Then
+        //  	index := Attr.LookupDisplayValue(p_plant);
+		// 	 Attr := D_PLANT.Selection.Dimension.Attributes.FindById("CODE");
+			
+			 
+		// 	//TextArea1.Text := index.ToString;
+		// 	 TextArea1.Text := Attr.Value(index);
+   		// End If;		   
+		
+		UpdateOpenDefHlinkFromSelection("PLANT", D_PLANT.Selection, "CODE");
+		Hyperlink.SetParamValueFromSelection("PLANT", D_PLANT.Selection, "CODE");
+		SafeGenerate;
+		
+		//UpdateHyperlinkParams("PLANT", D_PLANT.Selection, "CODE");
+	End Sub D_PLANTOnSelectionChange;
+	
+	Function getCollectionValues(dim: IWebDimensionCombo): StringList;
+	Var
+		dimValuesByAttr: StringList;
+		arrValue: Variant;
+		myArray: Array Of Variant;
+		i: Integer;
+	Begin
+		dimValuesByAttr := New StringList.Create;
+		
+		If dim.Selection.MultiSelect Then
+			//TextArea1.Text := (dim.Selection.ToVariant Is Array);
+			
+			If dim.Selection.ToVariant Is Array Then
+				arrValue := dim.Selection.ToVariant;
+				For i:= 0 To myArray.Length -1 do
+					TextArea1.Text := myArray[i] As String;
+				End For;
+			 
+				// ElemArr := (dim.Selection.ToVariant As Array);
+				// Elems := ElemArr.Elements;
+				// Iter := Elems.Iterator;
+				
+				// While Iter.Next Do
+				// 	//Debug.WriteLine(Elems.Name(Iter.Element));
+				// 	TextArea1.Text := Iter.Element.ToString;
+				// End While;
+			End If;
+			
+			// If dim.Selection.SelectedCount = 1 Then
+			// 	TextArea1.Text := dim.Selection.SelectedCount.ToString;
+			// Else
+			// 	TextArea1.Text := dim.Selection.SelectedCount.ToString;
+			// End If;
+			
+			// If dim.Selection.ToVariant Is Array Then
+			// 	//TextArea1.Text := "Это массив";
+			// End If;		
+			
+		End If;
+	
+		Return dimValuesByAttr;
+	End Function getCollectionValues;
+	
+	Function getAttValueByKey(dim: IWebDimensionCombo; key: Variant; attrName: String): Variant;
+	Var
+		attrValue: Variant;
+		Attr: IDimAttributeInstance;
+	Begin
+		Attr := dim.Selection.Dimension.Attributes.FindById(attrName);
+		If Not IsNull(Attr) Then
+			
+		End If;
+		Return attrValue;
+	End Function getAttValueByKey;
+	
+	Sub D_ZLIB_INDCOnSelectionChange;
+	Begin
+		// p_zlib_indc := D_ZLIB_INDC.Selection.ToVariant;
+		// //_AnalyzTepHyperlink.SetParamValue(C_PARAM_ZLIB_INDC, p_zlib_indc); // san
+		
+		// // tst
+		// If _AnalyzTepHyperlink <> Null Then
+		// 	TextArea1.Text := "";
+		// 	TextArea1.Text := p_zlib_indc;
+		// //	_AnalyzTepHyperlink := New COpenHyperlink.Create(ReportBoxOk.Report, AppNs.PHD, "Ок");
+		// 	//PM := _AnalyzTepHyperlink.ParamManager;
+		// 	//TextArea1.Text := _AnalyzTepHyperlink.ParamManager.Params.Count;
+		// Else
+		// 	TextArea1.Text := "0";
+		// End If;
+		
+		UpdateOpenDefHlinkFromSelection("ZLIB_INDC", D_ZLIB_INDC.Selection, "CODE");
+		Hyperlink.SetParamValueFromSelection("ZLIB_INDC", D_ZLIB_INDC.Selection, "CODE");
+		SafeGenerate;
+	End Sub D_ZLIB_INDCOnSelectionChange;
+
+	Sub D_ZTYPEINDOnSelectionChange;
+	Begin	
+		UpdateOpenDefHlinkFromSelection("ZTYPEIND", D_ZTYPEIND.Selection, "ID");
+		Hyperlink.SetParamValueFromSelection("ZTYPEIND", D_ZTYPEIND.Selection, "ID");
+		SafeGenerate;
+	End Sub D_ZTYPEINDOnSelectionChange;
+
+	Sub D_ZPHD_STATOnSelectionChange;
+	Begin
+		UpdateOpenDefHlinkFromSelection("ZPHD_STAT", D_ZPHD_STAT.Selection, "ZPHD_STAT");
+		Hyperlink.SetParamValueFromSelection("ZPHD_STAT", D_ZPHD_STAT.Selection, "ZPHD_STAT");
+		SafeGenerate;
+	End Sub D_ZPHD_STATOnSelectionChange;
+
+	Sub D_VENDOROnSelectionChange;
+	Begin
+		UpdateOpenDefHlinkFromSelection("VENDOR", D_VENDOR.Selection, "VENDOR");
+		Hyperlink.SetParamValueFromSelection("VENDOR", D_VENDOR.Selection, "VENDOR");
+		SafeGenerate;
+	End Sub D_VENDOROnSelectionChange;
+
+	Sub D_SOLD_TOOnSelectionChange;
+	Begin
+		UpdateOpenDefHlinkFromSelection("SOLD_TO", D_SOLD_TO.Selection, "CODE");
+		Hyperlink.SetParamValueFromSelection("SOLD_TO", D_SOLD_TO.Selection, "CODE");
+		SafeGenerate;
+	End Sub D_SOLD_TOOnSelectionChange;
+
+	Sub D_ZHRGRPMOOnSelectionChange;
+	Begin
+		UpdateOpenDefHlinkFromSelection("ZHRGRPMO", D_ZHRGRPMO.Selection, "ZHRGRPMO");
+		Hyperlink.SetParamValueFromSelection("ZHRGRPMO", D_ZHRGRPMO.Selection, "ZHRGRPMO");
+		SafeGenerate;
+	End Sub D_ZHRGRPMOOnSelectionChange;
+
+	Sub D_PROFIT_CTROnSelectionChange;
+	Begin
+		UpdateOpenDefHlinkFromSelection("PROFIT_CTR", D_PROFIT_CTR.Selection, "PROFIT_CTR");
+		Hyperlink.SetParamValueFromSelection("PROFIT_CTR", D_PROFIT_CTR.Selection, "PROFIT_CTR");
+		SafeGenerate;
+	End Sub D_PROFIT_CTROnSelectionChange;
+
+	Sub D_COSTCENTEROnSelectionChange;
+	Begin	
+		UpdateOpenDefHlinkFromSelection("COSTCENTER", D_COSTCENTER.Selection, "COSTCENTER");
+		Hyperlink.SetParamValueFromSelection("COSTCENTER", D_COSTCENTER.Selection, "COSTCENTER");
+		SafeGenerate;
+	End Sub D_COSTCENTEROnSelectionChange;
+		
+	Sub D_ZORGUNITOnSelectionChange;
+	Begin
+		UpdateOpenDefHlinkFromSelection("ZORGUNIT", D_ZORGUNIT.Selection, "ZORGU");
+		Hyperlink.SetParamValueFromSelection("ZORGUNIT", D_ZORGUNIT.Selection, "ZORGU");
+		SafeGenerate;
+	End Sub D_ZORGUNITOnSelectionChange;
+
+	Sub D_ZPH_USR2OnSelectionChange;
+	Begin
+		UpdateOpenDefHlinkFromSelection("ZPH_USR2", D_ZPH_USR2.Selection, "ZPH_USR2");
+		Hyperlink.SetParamValueFromSelection("ZPH_USR2", D_ZPH_USR2.Selection, "ZPH_USR2");
+		SafeGenerate;
+	End Sub D_ZPH_USR2OnSelectionChange;
+
+	Sub D_ACTTYPEOnSelectionChange;
+	Begin
+		UpdateOpenDefHlinkFromSelection("ACTTYPE", D_ACTTYPE.Selection, "ACTTYPE");
+		Hyperlink.SetParamValueFromSelection("ACTTYPE", D_ACTTYPE.Selection, "ACTTYPE");
+		SafeGenerate;
+	End Sub D_ACTTYPEOnSelectionChange;
+
+	Sub D_ZEQUIOnSelectionChange;
+	Begin
+		UpdateOpenDefHlinkFromSelection("ZEQUI", D_ZEQUI.Selection, "ZEQUI");
+		Hyperlink.SetParamValueFromSelection("ZEQUI", D_ZEQUI.Selection, "ZEQUI");
+		SafeGenerate;
+	End Sub D_ZEQUIOnSelectionChange;
+
+	Sub D_ZCLSVOBOROnSelectionChange;
+	Begin
+		UpdateOpenDefHlinkFromSelection("ZCLSVOBOR", D_ZCLSVOBOR.Selection, "ZCLSVOBOR");
+		Hyperlink.SetParamValueFromSelection("ZCLSVOBOR", D_ZCLSVOBOR.Selection, "ZCLSVOBOR");
+		SafeGenerate;
+	End Sub D_ZCLSVOBOROnSelectionChange;
+
+	Sub D_MATERIALOnSelectionChange;
+	Begin
+		UpdateOpenDefHlinkFromSelection("MATERIAL", D_MATERIAL.Selection, "MATERIAL");
+		Hyperlink.SetParamValueFromSelection("MATERIAL", D_MATERIAL.Selection, "MATERIAL");
+		SafeGenerate;
+	End Sub D_MATERIALOnSelectionChange;
+
+	Sub D_ZFUNC_LOCOnSelectionChange;
+	Begin
+		UpdateOpenDefHlinkFromSelection("ZFUNC_LOC", D_ZFUNC_LOC.Selection, "ZFUNC_LOC");
+		Hyperlink.SetParamValueFromSelection("ZFUNC_LOC", D_ZFUNC_LOC.Selection, "ZFUNC_LOC");
+		SafeGenerate;
+	End Sub D_ZFUNC_LOCOnSelectionChange;
+
+	Sub D_ZSIU_FLDOnSelectionChange;
+	Begin
+		UpdateOpenDefHlinkFromSelection("ZSIU_FLD", D_ZSIU_FLD.Selection, "ZSIU_FLD");
+		Hyperlink.SetParamValueFromSelection("ZSIU_FLD", D_ZSIU_FLD.Selection, "ZSIU_FLD");
+		SafeGenerate;
+	End Sub D_ZSIU_FLDOnSelectionChange;
+
+	Sub D_POSIDOnSelectionChange;
+	Begin
+		UpdateOpenDefHlinkFromSelection("POSID", D_POSID.Selection, "POSID");
+		Hyperlink.SetParamValueFromSelection("POSID", D_POSID.Selection, "POSID");
+		SafeGenerate;
+	End Sub D_POSIDOnSelectionChange;
+
+	Sub D_ZLIB_INFSOnSelectionChange;
+	Begin
+		p_zlib_infs := D_ZLIB_INFS.Selection.ToVariant;
+		SetParamSafe(C_PARAM_ZLIB_INFS, p_zlib_infs);
+		SafeGenerate;
+	End Sub D_ZLIB_INFSOnSelectionChange;
+
+	Sub D_PERIOD_TYPEOnSelectionChange;
+	Begin
+		UpdateOpenDefHlinkFromSelection("PERIOD_TYPE", D_PERIOD_TYPE.Selection, "ID");
+		Hyperlink.SetParamValueFromSelection("PERIOD_TYPE", D_PERIOD_TYPE.Selection, "ID");
+		SafeGenerate;
+	End Sub D_PERIOD_TYPEOnSelectionChange;
+
+	// Энергоснабжение
+	Sub D_ZPHD_DOGOnSelectionChange;
+	Begin
+		UpdateOpenDefHlinkFromSelection("ZPHD_DOG", D_ZPHD_DOG.Selection, "ZPHD_DOG");
+		Hyperlink.SetParamValueFromSelection("ZPHD_DOG", D_ZPHD_DOG.Selection, "ZPHD_DOG");
+		SafeGenerate;
+	End Sub D_ZPHD_DOGOnSelectionChange;
+
+	Sub D_ZPHD_USL1OnSelectionChange;
+	Begin
+		UpdateOpenDefHlinkFromSelection("ZPHD_USL1", D_ZPHD_USL1.Selection, "CODE");
+		Hyperlink.SetParamValueFromSelection("ZPHD_USL1", D_ZPHD_USL1.Selection, "CODE");
+		SafeGenerate;
+	End Sub D_ZPHD_USL1OnSelectionChange;
+
+	Sub D_ZDEBITOROnSelectionChange;
+	Begin
+		UpdateOpenDefHlinkFromSelection("ZDEBITOR", D_ZDEBITOR.Selection, "CODE");
+		Hyperlink.SetParamValueFromSelection("ZDEBITOR", D_ZDEBITOR.Selection, "CODE");
+		SafeGenerate;
+	End Sub D_ZDEBITOROnSelectionChange;
+
+	Sub D_ZPH_ESO2OnSelectionChange;
+	Begin
+		UpdateOpenDefHlinkFromSelection("ZPH_ESO2", D_ZPH_ESO2.Selection, "CODE");
+		Hyperlink.SetParamValueFromSelection("ZPH_ESO2", D_ZPH_ESO2.Selection, "CODE");
+		SafeGenerate;
+	End Sub D_ZPH_ESO2OnSelectionChange;
+
+	Sub D_ZPHD_SKOnSelectionChange;
+	Begin
+		UpdateOpenDefHlinkFromSelection("ZPHD_SK", D_ZPHD_SK.Selection, "CODE");
+		Hyperlink.SetParamValueFromSelection("ZPHD_SK", D_ZPHD_SK.Selection, "CODE");
+		SafeGenerate;
+	End Sub D_ZPHD_SKOnSelectionChange;
+
+	Sub D_UCVOLTLEVLOnSelectionChange;
+	Begin
+		UpdateOpenDefHlinkFromSelection("UCVOLTLEVL", D_UCVOLTLEVL.Selection, "UCVOLTLEVL");
+		Hyperlink.SetParamValueFromSelection("UCVOLTLEVL", D_UCVOLTLEVL.Selection, "UCVOLTLEVL");
+		SafeGenerate;
+	End Sub D_UCVOLTLEVLOnSelectionChange;
+
+	Sub D_ZUCVOLTTROnSelectionChange;
+	Begin
+		UpdateOpenDefHlinkFromSelection("ZUCVOLTTR", D_ZUCVOLTTR.Selection, "UCVOLTLEVL");
+		Hyperlink.SetParamValueFromSelection("ZUCVOLTTR", D_ZUCVOLTTR.Selection, "UCVOLTLEVL");
+		SafeGenerate;
+	End Sub D_ZUCVOLTTROnSelectionChange;
+
+	Sub D_Z_CL_NAPROnSelectionChange;
+	Begin
+		UpdateOpenDefHlinkFromSelection("Z_CL_NAPR", D_Z_CL_NAPR.Selection, "Z_CL_NAPR");
+		Hyperlink.SetParamValueFromSelection("Z_CL_NAPR", D_Z_CL_NAPR.Selection, "Z_CL_NAPR");
+		SafeGenerate;
+	End Sub D_Z_CL_NAPROnSelectionChange;
+
+	Sub D_ZSIU_TYOnSelectionChange;
+	Begin
+		UpdateOpenDefHlinkFromSelection("ZSIU_TY", D_ZSIU_TY.Selection, "ZSIU_TY");
+		Hyperlink.SetParamValueFromSelection("ZSIU_TY", D_ZSIU_TY.Selection, "ZSIU_TY");
+		SafeGenerate;
+	End Sub D_ZSIU_TYOnSelectionChange;
+
+	Sub D_ZDOGLINKOnSelectionChange;
+	Begin
+		UpdateOpenDefHlinkFromSelection("ZDOGLINK", D_ZDOGLINK.Selection, "ZDOGLINK");
+		Hyperlink.SetParamValueFromSelection("ZDOGLINK", D_ZDOGLINK.Selection, "ZDOGLINK");
+		SafeGenerate;
+	End Sub D_ZDOGLINKOnSelectionChange;
+	
+	Sub TextArea1OnTextChanged;
+	Begin
+
+	End Sub TextArea1OnTextChanged;
+
+
+	
+	Sub CB_PLANTOnChange;
+	Begin
+		fillFieldListByStatusFlag(CB_PLANT, "PLANT");
+	End Sub CB_PLANTOnChange;
+
+	Sub CB_ZLIB_INDCOnChange;
+	Begin
+		fillFieldListByStatusFlag(CB_ZLIB_INDC, "ZLIB_INDC");
+	End Sub CB_ZLIB_INDCOnChange;
+
+	Sub CB_ZLIB_INFSOnChange;
+	Begin
+		fillFieldListByStatusFlag(CB_ZLIB_INFS, "ZLIB_INFS");
+	End Sub CB_ZLIB_INFSOnChange;
+
+	Sub CB_ACT_UNITOnChange;
+	Begin
+		fillFieldListByStatusFlag(CB_ACT_UNIT, "ACT_UNIT");
+	End Sub CB_ACT_UNITOnChange;
+
+	Sub CB_VENDOROnChange;
+	Begin
+		fillFieldListByStatusFlag(CB_VENDOR, "VENDOR");
+	End Sub CB_VENDOROnChange;
+
+	Sub CB_SOLD_TOOnChange;
+	Begin
+		fillFieldListByStatusFlag(CB_SOLD_TO, "SOLD_TO");
+	End Sub CB_SOLD_TOOnChange;
+
+	Sub CB_COSTCENTEROnChange;
+	Begin
+		fillFieldListByStatusFlag(CB_COSTCENTER, "COSTCENTER");
+	End Sub CB_COSTCENTEROnChange;
+
+	Sub CB_ZORGUNITOnChange;
+	Begin
+		fillFieldListByStatusFlag(CB_ZORGUNIT, "ZORGUNIT");
+	End Sub CB_ZORGUNITOnChange;
+
+	Sub CB_ZPH_USR2OnChange;
+	Begin
+		fillFieldListByStatusFlag(CB_ZPH_USR2, "ZPH_USR2");
+	End Sub CB_ZPH_USR2OnChange;
+
+	Sub CB_ACTTYPEOnChange;
+	Begin
+		fillFieldListByStatusFlag(CB_ACTTYPE, "ACTTYPE");
+	End Sub CB_ACTTYPEOnChange;
+
+	Sub CB_ZEQUIOnChange;
+	Begin
+		fillFieldListByStatusFlag(CB_ZEQUI, "ZEQUI");
+	End Sub CB_ZEQUIOnChange;
+
+	Sub CB_MATERIALOnChange;
+	Begin
+		fillFieldListByStatusFlag(CB_MATERIAL, "MATERIAL");
+	End Sub CB_MATERIALOnChange;
+
+	Sub CB_PROFIT_CTROnChange;
+	Begin
+		fillFieldListByStatusFlag(CB_PROFIT_CTR, "PROFIT_CTR");
+	End Sub CB_PROFIT_CTROnChange;
+
+	Sub CB_ZFUNC_LOCOnChange;
+	Begin
+		fillFieldListByStatusFlag(CB_ZFUNC_LOC, "ZFUNC_LOC");
+	End Sub CB_ZFUNC_LOCOnChange;
+
+	Sub CB_ZSIU_FLDOnChange;
+	Begin
+		fillFieldListByStatusFlag(CB_ZSIU_FLD, "ZSIU_FLD");
+	End Sub CB_ZSIU_FLDOnChange;
+
+	Sub CB_PERIOD_TYPEOnChange;
+	Begin
+		fillFieldListByStatusFlag(CB_PERIOD_TYPE, "PERIOD_TYPE");
+	End Sub CB_PERIOD_TYPEOnChange;
+
+	Sub CB_POSIDOnChange;
+	Begin
+		fillFieldListByStatusFlag(CB_POSID, "POSID");
+	End Sub CB_POSIDOnChange;
+
+	Sub CB_ZPHD_DOGOnChange;
+	Begin
+		fillFieldListByStatusFlag(CB_ZPHD_DOG, "ZPHD_DOG");
+	End Sub CB_ZPHD_DOGOnChange;
+
+	Sub CB_ZPHD_USL1OnChange;
+	Begin
+		fillFieldListByStatusFlag(CB_ZPHD_USL1, "ZPHD_USL1");
+	End Sub CB_ZPHD_USL1OnChange;
+
+	Sub CB_ZDEBITOROnChange;
+	Begin
+		fillFieldListByStatusFlag(CB_ZDEBITOR, "ZDEBITOR");
+	End Sub CB_ZDEBITOROnChange;
+
+	Sub CB_ZPH_ESO2OnChange;
+	Begin
+		fillFieldListByStatusFlag(CB_ZPH_ESO2, "ZPH_ESO2");
+	End Sub CB_ZPH_ESO2OnChange;
+
+	Sub CB_ZPHD_SKOnChange;
+	Begin
+		fillFieldListByStatusFlag(CB_ZPHD_SK, "ZPHD_SK");
+	End Sub CB_ZPHD_SKOnChange;
+
+	Sub CB_UCVOLTLEVLOnChange;
+	Begin
+		fillFieldListByStatusFlag(CB_UCVOLTLEVL, "UCVOLTLEVL");
+	End Sub CB_UCVOLTLEVLOnChange;
+
+	Sub CB_ZUCVOLTTROnChange;
+	Begin
+		fillFieldListByStatusFlag(CB_ZUCVOLTTR, "ZUCVOLTTR");
+	End Sub CB_ZUCVOLTTROnChange;
+
+	Sub CB_Z_CL_NAPROnChange;
+	Begin
+		fillFieldListByStatusFlag(CB_Z_CL_NAPR, "Z_CL_NAPR");
+	End Sub CB_Z_CL_NAPROnChange;
+
+	Sub CB_ZSIU_TYOnChange;
+	Begin
+		fillFieldListByStatusFlag(CB_ZSIU_TY, "ZSIU_TY");
+	End Sub CB_ZSIU_TYOnChange;
+
+	Sub CB_ZDOGLINKOnChange;
+	Begin
+		fillFieldListByStatusFlag(CB_ZDOGLINK, "ZDOGLINK");
+	End Sub CB_ZDOGLINKOnChange;
+
+	Sub CB_ZGEN_PODOnChange;
+	Begin
+		fillFieldListByStatusFlag(CB_ZGEN_POD, "ZGEN_POD");
+	End Sub CB_ZGEN_PODOnChange;
+
+	Sub CB_ZGEN_ZAKOnChange;
+	Begin
+		fillFieldListByStatusFlag(CB_ZGEN_ZAK, "ZGEN_ZAK");
+	End Sub CB_ZGEN_ZAKOnChange;
+
+	Sub CB_ZSHIFROnChange;
+	Begin
+		fillFieldListByStatusFlag(CB_ZSHIFR, "ZSHIFR");
+	End Sub CB_ZSHIFROnChange;
+
+	Sub CB_ZOBJEMOnChange;
+	Begin
+		fillFieldListByStatusFlag(CB_ZOBJEM, "ZOBJEM");
+	End Sub CB_ZOBJEMOnChange;
+
+	Sub CB_ZPHD_SROnChange;
+	Begin
+		fillFieldListByStatusFlag(CB_ZPHD_SR, "ZPHD_SR");
+	End Sub CB_ZPHD_SROnChange;
+	
+	
+
+	Sub CB_ZPHD_GRSROnChange;
+	Begin
+		fillFieldListByStatusFlag(CB_ZPHD_GRSR, "ZPHD_GRSR");
+	End Sub CB_ZPHD_GRSROnChange;
+
+	Sub CB_ZGAZ_TYPEOnChange;
+	Begin
+		fillFieldListByStatusFlag(CB_ZGAZ_TYPE, "ZGAZ_TYPE");
+	End Sub CB_ZGAZ_TYPEOnChange;
+
+	Sub CB_ZAVIATYPEOnChange;
+	Begin
+		fillFieldListByStatusFlag(CB_ZAVIATYPE, "ZAVIATYPE");
+	End Sub CB_ZAVIATYPEOnChange;
+
+	Sub CB_ZPHD_NCHOnChange;
+	Begin
+		fillFieldListByStatusFlag(CB_ZPHD_NCH, "ZPHD_NCH");
+	End Sub CB_ZPHD_NCHOnChange;
+
+	Sub CB_ZPHD_KONOnChange;
+	Begin
+		fillFieldListByStatusFlag(CB_ZPHD_KON, "ZPHD_KON");
+	End Sub CB_ZPHD_KONOnChange;
+
+	Sub CB_ZBUR_LUOnChange;
+	Begin
+		fillFieldListByStatusFlag(CB_ZBUR_LU, "ZBUR_LU");
+	End Sub CB_ZBUR_LUOnChange;
+
+	Sub CB_ZBUR_AREAOnChange;
+	Begin
+		fillFieldListByStatusFlag(CB_ZBUR_AREA, "ZBUR_AREA");
+	End Sub CB_ZBUR_AREAOnChange;
+
+	Sub CB_ZSKV_KUSTOnChange;
+	Begin
+		fillFieldListByStatusFlag(CB_ZSKV_KUST, "ZSKV_KUST");
+	End Sub CB_ZSKV_KUSTOnChange;
+
+	Sub CB_Z_SKV_GEOOnChange;
+	Begin
+		fillFieldListByStatusFlag(CB_Z_SKV_GEO, "Z_SKV_GEO");
+	End Sub CB_Z_SKV_GEOOnChange;
+
+	Sub CB_ZBUR_PLSTOnChange;
+	Begin
+		fillFieldListByStatusFlag(CB_ZBUR_PLST, "ZBUR_PLST");
+	End Sub CB_ZBUR_PLSTOnChange;
+
+	Sub CB_ZPH_TEHKOnChange;
+	Begin
+		fillFieldListByStatusFlag(CB_ZPH_TEHK, "ZPH_TEHK");
+	End Sub CB_ZPH_TEHKOnChange;
+
+	Sub CB_ZPH_OPLSTOnChange;
+	Begin
+		fillFieldListByStatusFlag(CB_ZPH_OPLST, "ZPH_OPLST");
+	End Sub CB_ZPH_OPLSTOnChange;
+
+	Sub CB_ZPHD_COMMOnChange;
+	Begin
+		fillFieldListByStatusFlag(CB_ZPHD_COMM, "ZPHD_COMM");
+	End Sub CB_ZPHD_COMMOnChange;
+
+	Sub CB_ZBUR_BEGOnChange;
+	Begin
+		fillFieldListByStatusFlag(CB_ZBUR_BEG, "ZBUR_BEG");
+	End Sub CB_ZBUR_BEGOnChange;
+
+	Sub CB_ZBUR_ENDOnChange;
+	Begin
+		fillFieldListByStatusFlag(CB_ZBUR_END, "ZBUR_END");
+	End Sub CB_ZBUR_ENDOnChange;
+	
+	Sub CB_ZPILOTOnChange;
+	Begin
+		fillFieldListByStatusFlag(CB_ZPILOT, "ZPILOT");
+	End Sub CB_ZPILOTOnChange;
+
+	Sub CB_ZSKV_STOnChange;
+	Begin
+		fillFieldListByStatusFlag(CB_ZSKV_ST, "ZSKV_ST");
+	End Sub CB_ZSKV_STOnChange;
+
+	Sub CB_ZINDTXT1OnChange;
+	Begin
+		fillFieldListByStatusFlag(CB_ZINDTXT1, "ZINDTXT1");
+	End Sub CB_ZINDTXT1OnChange;
+
+	Sub CB_ZPKR_SUBPOnChange;
+	Begin
+		fillFieldListByStatusFlag(CB_ZPKR_SUBP, "ZPKR_SUBP");
+	End Sub CB_ZPKR_SUBPOnChange;
+
+	Sub CB_ZPHD_SPROnChange;
+	Begin
+		fillFieldListByStatusFlag(CB_ZPHD_SPR, "ZPHD_SPR");
+	End Sub CB_ZPHD_SPROnChange;
+
+	Sub CB_ZPHD_NOP1OnChange;
+	Begin
+		fillFieldListByStatusFlag(CB_ZPHD_NOP1, "ZPHD_NOP1");
+	End Sub CB_ZPHD_NOP1OnChange;
+
+	Sub CB_ZPHD_ISOnChange;
+	Begin
+		fillFieldListByStatusFlag(CB_ZPHD_IS, "ZPHD_IS");
+	End Sub CB_ZPHD_ISOnChange;
+
+	Sub CB_ZPHD_PHDOnChange;
+	Begin
+		fillFieldListByStatusFlag(CB_ZPHD_PHD, "ZPHD_PHD");
+	End Sub CB_ZPHD_PHDOnChange;
+
+	Sub CB_ZPHD_PRIZOnChange;
+	Begin
+		fillFieldListByStatusFlag(CB_ZPHD_PRIZ, "ZPHD_PRIZ");
+	End Sub CB_ZPHD_PRIZOnChange;
+
+	// Значения ТЭП ---------------------------------------------------------->
+	Sub CB_JANUARYOnChange;
+	Begin
+		fillFieldListByStatusFlag(CB_JANUARY, "ZSIU_INDV_01");
+	End Sub CB_JANUARYOnChange;
+
+	Sub CB_FEBRUARYOnChange;
+	Begin
+		fillFieldListByStatusFlag(CB_FEBRUARY, "ZSIU_INDV_02");
+	End Sub CB_FEBRUARYOnChange;
+
+	Sub CB_MARCHOnChange;
+	Begin
+		fillFieldListByStatusFlag(CB_MARCH, "ZSIU_INDV_03");
+	End Sub CB_MARCHOnChange;
+
+	Sub CB_APRILOnChange;
+	Begin
+		fillFieldListByStatusFlag(CB_APRIL, "ZSIU_INDV_04");
+	End Sub CB_APRILOnChange;
+
+	Sub CB_MAYOnChange;
+	Begin
+		fillFieldListByStatusFlag(CB_MAY, "ZSIU_INDV_05");
+	End Sub CB_MAYOnChange;
+
+	Sub CB_JUNEOnChange;
+	Begin
+		fillFieldListByStatusFlag(CB_JUNE, "ZSIU_INDV_06");
+	End Sub CB_JUNEOnChange;
+
+	Sub CB_JULYOnChange;
+	Begin
+		fillFieldListByStatusFlag(CB_JULY, "ZSIU_INDV_07");
+	End Sub CB_JULYOnChange;
+
+	Sub CB_AUGUSTOnChange;
+	Begin
+		fillFieldListByStatusFlag(CB_AUGUST, "ZSIU_INDV_08");
+	End Sub CB_AUGUSTOnChange;
+
+	Sub CB_SEPTEMBEROnChange;
+	Begin
+		fillFieldListByStatusFlag(CB_SEPTEMBER, "ZSIU_INDV_09");
+	End Sub CB_SEPTEMBEROnChange;
+
+	Sub CB_OCTOBEROnChange;
+	Begin
+		fillFieldListByStatusFlag(CB_OCTOBER, "ZSIU_INDV_10");
+	End Sub CB_OCTOBEROnChange;
+
+	Sub CbNovemberOnChange;
+	Begin
+		
+	End Sub CbNovemberOnChange;
+
+	Sub CB_DECEMBEROnChange;
+	Begin
+		fillFieldListByStatusFlag(CB_DECEMBER, "ZSIU_INDV_12");
+	End Sub CB_DECEMBEROnChange;
+
+	Sub CB_FIRST_QUARTEROnChange;
+	Begin
+		fillFieldListByStatusFlag(CB_FIRST_QUARTER, "ZSIU_INDV_Q1");
+	End Sub CB_FIRST_QUARTEROnChange;
+
+	Sub CB_SECOND_QUARTEROnChange;
+	Begin
+		fillFieldListByStatusFlag(CB_SECOND_QUARTER, "ZSIU_INDV_Q2");
+	End Sub CB_SECOND_QUARTEROnChange;
+
+	Sub CbThirdQuarterOnChange;
+	Begin
+		
+	End Sub CbThirdQuarterOnChange;
+
+	Sub CB_FOURTH_QUARTEROnChange;
+	Begin
+		fillFieldListByStatusFlag(CB_FOURTH_QUARTER, "ZSIU_INDV_Q4");
+	End Sub CB_FOURTH_QUARTEROnChange;
+
+	Sub CB_SIX_MONTHOnChange;
+	Begin
+		fillFieldListByStatusFlag(CB_SIX_MONTH, "ZSIU_INDV_Q6");
+	End Sub CB_SIX_MONTHOnChange;
+
+	Sub CB_NINE_MONTHOnChange;
+	Begin
+		fillFieldListByStatusFlag(CB_NINE_MONTH, "ZSIU_INDV_Q9");
+	End Sub CB_NINE_MONTHOnChange;
+
+	Sub CB_YEAROnChange;
+	Begin
+		fillFieldListByStatusFlag(CB_YEAR, "ZSIU_INDV_Q0");
+	End Sub CB_YEAROnChange;
+	// Значения ТЭП <---------------------------------------------------------
+	
+	//Геология и бурение
+	Sub D_ZBUR_LUOnSelectionChange;
+	Begin
+		UpdateOpenDefHlinkFromSelection("ZBUR_LU", D_ZBUR_LU.Selection, "CODE");
+		Hyperlink.SetParamValueFromSelection("ZBUR_LU", D_ZBUR_LU.Selection, "CODE");
+		SafeGenerate;
+	End Sub D_ZBUR_LUOnSelectionChange;
+
+	Sub D_ZBUR_AREAOnSelectionChange;
+	Begin
+		UpdateOpenDefHlinkFromSelection("ZBUR_AREA", D_ZBUR_AREA.Selection, "ZBUR_AREA");
+		Hyperlink.SetParamValueFromSelection("ZBUR_AREA", D_ZBUR_AREA.Selection, "ZBUR_AREA");
+		SafeGenerate;
+	End Sub D_ZBUR_AREAOnSelectionChange;
+
+	Sub D_ZSKV_KUSTOnSelectionChange;
+	Begin
+		UpdateOpenDefHlinkFromSelection("ZSKV_KUST", D_ZSKV_KUST.Selection, "ZSKV_KUST");
+		Hyperlink.SetParamValueFromSelection("ZSKV_KUST", D_ZSKV_KUST.Selection, "ZSKV_KUST");
+		SafeGenerate;
+	End Sub D_ZSKV_KUSTOnSelectionChange;
+
+	Sub D_Z_SKV_GEOOnSelectionChange;
+	Begin
+		UpdateOpenDefHlinkFromSelection("Z_SKV_GEO", D_Z_SKV_GEO.Selection, "Z_SKV_GEO");
+		Hyperlink.SetParamValueFromSelection("Z_SKV_GEO", D_Z_SKV_GEO.Selection, "Z_SKV_GEO");
+		SafeGenerate;
+	End Sub D_Z_SKV_GEOOnSelectionChange;
+
+	Sub D_ZBUR_PLSTOnSelectionChange;
+	Begin
+		UpdateOpenDefHlinkFromSelection("ZBUR_PLST", D_ZBUR_PLST.Selection, "ZBUR_PLST");
+		Hyperlink.SetParamValueFromSelection("ZBUR_PLST", D_ZBUR_PLST.Selection, "ZBUR_PLST");
+		SafeGenerate;
+	End Sub D_ZBUR_PLSTOnSelectionChange;
+
+	Sub D_ZPH_TEHKOnSelectionChange;
+	Begin
+		UpdateOpenDefHlinkFromSelection("ZPH_TEHK", D_ZPH_TEHK.Selection, "CODE");
+		Hyperlink.SetParamValueFromSelection("ZPH_TEHK", D_ZPH_TEHK.Selection, "CODE");
+		SafeGenerate;
+	End Sub D_ZPH_TEHKOnSelectionChange;
+
+	Sub D_ZPH_OPLSTOnSelectionChange;
+	Begin
+		UpdateOpenDefHlinkFromSelection("ZPH_OPLST", D_ZPH_OPLST.Selection, "CODE");
+		Hyperlink.SetParamValueFromSelection("ZPH_OPLST", D_ZPH_OPLST.Selection, "CODE");
+		SafeGenerate;
+	End Sub D_ZPH_OPLSTOnSelectionChange;
+
+	Sub D_ZBUR_BEGOnSelectionChange;
+	Begin
+		p_zbur_beg := D_ZBUR_BEG.Selection.ToVariant;
+		SetParamSafe(C_PARAM_ZBUR_BEG, p_zbur_beg);
+		SafeGenerate;		
+		// Нет привязки к параметру
+	End Sub D_ZBUR_BEGOnSelectionChange;
+
+	Sub D_ZBUR_ENDOnSelectionChange;
+	Begin
+		p_zbur_end := D_ZBUR_END.Selection.ToVariant;
+		SetParamSafe(C_PARAM_ZBUR_END, p_zbur_end);
+		SafeGenerate;		
+		// Нет привязки к параметру
+	End Sub D_ZBUR_ENDOnSelectionChange;
+
+	Sub D_ZPILOTOnSelectionChange;
+	Begin
+		UpdateOpenDefHlinkFromSelection("ZPILOT", D_ZPILOT.Selection, "CODE");
+		Hyperlink.SetParamValueFromSelection("ZPILOT", D_ZPILOT.Selection, "CODE");
+		SafeGenerate;
+	End Sub D_ZPILOTOnSelectionChange;
+
+	Sub D_ZSKV_STOnSelectionChange;
+	Begin
+		UpdateOpenDefHlinkFromSelection("ZSKV_ST", D_ZSKV_ST.Selection, "ZSKV_ST");
+		Hyperlink.SetParamValueFromSelection("ZSKV_ST", D_ZSKV_ST.Selection, "ZSKV_ST");
+		SafeGenerate;
+	End Sub D_ZSKV_STOnSelectionChange;
+	
+	//Кап строительство
+	Sub D_ZGEN_PODOnSelectionChange;
+	Begin
+		UpdateOpenDefHlinkFromSelection("ZGEN_POD", D_ZGEN_POD.Selection, "CODE");
+		Hyperlink.SetParamValueFromSelection("ZGEN_POD", D_ZGEN_POD.Selection, "CODE");
+		SafeGenerate;
+	End Sub D_ZGEN_PODOnSelectionChange;
+
+	Sub D_ZGEN_ZAKOnSelectionChange;
+	Begin
+		UpdateOpenDefHlinkFromSelection("ZGEN_ZAK", D_ZGEN_ZAK.Selection, "CODE");
+		Hyperlink.SetParamValueFromSelection("ZGEN_ZAK", D_ZGEN_ZAK.Selection, "CODE");
+		SafeGenerate;
+	End Sub D_ZGEN_ZAKOnSelectionChange;
+
+	Sub D_ZPKR_SUBPOnSelectionChange;
+	Begin
+		p_zpkr_subp := D_ZPKR_SUBP.Selection.ToVariant;
+		SetParamSafe(C_PARAM_ZPKR_SUBP, p_zpkr_subp);
+		SafeGenerate;
+		
+		// Нет привязки к параметру
+	End Sub D_ZPKR_SUBPOnSelectionChange;
+
+	Sub D_ZSHIFROnSelectionChange;
+	Begin
+		UpdateOpenDefHlinkFromSelection("ZSHIFR", D_ZSHIFR.Selection, "ZSHIFR");
+		Hyperlink.SetParamValueFromSelection("ZSHIFR", D_ZSHIFR.Selection, "ZSHIFR");
+		SafeGenerate;
+	End Sub D_ZSHIFROnSelectionChange;
+	
+	//Экология
+	Sub D_ZOBJEMOnSelectionChange;
+	Begin
+		UpdateOpenDefHlinkFromSelection("ZOBJEM", D_ZOBJEM.Selection, "CODE");
+		Hyperlink.SetParamValueFromSelection("ZOBJEM", D_ZOBJEM.Selection, "CODE");
+		SafeGenerate;
+	End Sub D_ZOBJEMOnSelectionChange;
+
+	Sub D_ZPHD_SROnSelectionChange;
+	Begin
+		UpdateOpenDefHlinkFromSelection("ZPHD_SR", D_ZPHD_SR.Selection, "ZPHD_SR");
+		Hyperlink.SetParamValueFromSelection("ZPHD_SR", D_ZPHD_SR.Selection, "ZPHD_SR");
+		SafeGenerate;
+	End Sub D_ZPHD_SROnSelectionChange;
+
+	Sub D_ZPHD_GRSROnSelectionChange;
+	Begin
+		UpdateOpenDefHlinkFromSelection("ZPHD_GRSR", D_ZPHD_GRSR.Selection, "ZPHD_GRSR");
+		Hyperlink.SetParamValueFromSelection("ZPHD_GRSR", D_ZPHD_GRSR.Selection, "ZPHD_GRSR");
+		SafeGenerate;
+	End Sub D_ZPHD_GRSROnSelectionChange;
+
+	//Прочие аналитики
+	Sub D_ZGAZ_TYPEOnSelectionChange;
+	Begin	
+		UpdateOpenDefHlinkFromSelection("ZGAZ_TYPE", D_ZGAZ_TYPE.Selection, "CODE");
+		Hyperlink.SetParamValueFromSelection("ZGAZ_TYPE", D_ZGAZ_TYPE.Selection, "CODE");
+		SafeGenerate;
+	End Sub D_ZGAZ_TYPEOnSelectionChange;
+
+	Sub D_ZAVIATYPEOnSelectionChange;
+	Begin
+		UpdateOpenDefHlinkFromSelection("ZAVIATYPE", D_ZAVIATYPE.Selection, "ZAVIATYPE");
+		Hyperlink.SetParamValueFromSelection("ZAVIATYPE", D_ZAVIATYPE.Selection, "ZAVIATYPE");
+		SafeGenerate;
+	End Sub D_ZAVIATYPEOnSelectionChange;
+
+	Sub D_ZPHD_NCHOnSelectionChange;
+	Begin
+		p_zphd_nch := D_ZPHD_NCH.Selection.ToVariant;
+		SetParamSafe("ZPHD_NCH", p_zphd_nch);
+		SafeGenerate;
+	End Sub D_ZPHD_NCHOnSelectionChange;
+
+	Sub D_ZPHD_KONOnSelectionChange;
+	Begin
+		p_zphd_kon := D_ZPHD_KON.Selection.ToVariant;
+		SetParamSafe("ZPHD_KON", p_zphd_kon);
+		SafeGenerate;
+	End Sub D_ZPHD_KONOnSelectionChange;
+
+	Sub D_ZPHD_SPROnSelectionChange;
+	Begin
+		UpdateOpenDefHlinkFromSelection("ZPHD_SPR", D_ZPHD_SPR.Selection, "ZPHD_SPR");
+		Hyperlink.SetParamValueFromSelection("ZPHD_SPR", D_ZPHD_SPR.Selection, "ZPHD_SPR");
+		SafeGenerate;
+	End Sub D_ZPHD_SPROnSelectionChange;
+
+	Sub I_ZINDTXT1OnTextChanged;
+	Begin
+		// «Примечание» (ТТ: текстовое, ручной ввод). Значение уходит параметром ZINDTXT1,
+		// запрос ищет по маске: ILIKE "%" || :ZINDTXT1 || "%". Пустое значение параметр убирает.
+		setParamOrRemove("ZINDTXT1", I_ZINDTXT1.Text);
+		SafeGenerate;
+	End Sub I_ZINDTXT1OnTextChanged;
+	
+	/// <summary>
+	/// 	Передаёт значение отметки в гиперссылку. Значение пишется в менеджер параметров
+	/// 	(CObjectParamManager), из которого строку действия собирает COpenHyperlink.Generate.
+	/// 	Ручная сборка строки не нужна: Generate всё равно пересобирает её из менеджера параметров.
+	/// </summary>
+	Sub UpdateOpenDefHlinkFromSelection(paramId: String; dimSel: IDimSelection; attrId: String = "");
+	Begin
+		If IsNull(dimSel) Then Return; End If;
+		Hyperlink.SetParamValueFromSelection(paramId, dimSel, attrId);
+	End Sub UpdateOpenDefHlinkFromSelection;
+	
+	/// <summary>
+	/// 	Здесь был ручной разбор строки действия (UpdateOpenDefHlink + 5 вложенных подпрограмм).
+	/// 	Он удалён: COpenHyperlink.Generate пересобирает строку из менеджера параметров и затирает
+	/// 	ручную правку, а сам разбор мог падать на String.SubString(-1) при отсутствующем параметре.
+	/// </summary>
+	
+	Function InitializeHlinkOpenObject(report: IPrxReport; hlinkText, hlinkAction: String): ITabHyperlink;
+	Var
+		hlinkCell: ITabRange;
+		hlinkCellStyle: ITabCellStyle;
+		hlink: ITabHyperlink;
+	Begin
+		hlinkCell := (report.ActiveSheet As ITabSheet).Cell(0, 0);
+		
+		// Настройка визуальной составляющей кнопки
+		hlinkCellStyle := hlinkCell.Style;
+		hlinkCellStyle.HorizontalAlignment := TabFormatAlignment.Center;
+		hlinkCellStyle.VerticalAlignment := TabFormatLayout.Center;
+		hlinkCellStyle.BorderColor(TabBorder.All) := ButtonCancel.Color;
+		hlinkCellStyle.BackgroundBrush := New GxSolidBrush.Create(ButtonCancel.Color);
+		hlinkCellStyle.Font.Size := 14;
+		hlinkCellStyle.Font.Name := "Roboto";
+		hlinkCellStyle.Font.Color := GxColor.FromName("White");
+		
+		// Создание гиперссылки
+		TabExt.SetTabHyperlink(hlinkCell, hlinkText, TabHyperlinkActionType.OpenObject, hlinkAction, True);
+		hlink := hlinkCell.Style.Hyperlink;
+		hlink.Underline := TriState.OffOption;
+		hlink.Color := GxColor.FromName("White");
+		
+		Return hlink;
+	End Function InitializeHlinkOpenObject;
+
+	Sub CB_ZHRGRPMOOnChange;
+	Begin
+		fillFieldListByStatusFlag(CB_ZHRGRPMO, "ZHRGRPMO");
+	End Sub CB_ZHRGRPMOOnChange;
+	
+	/// <summary>
+	/// 	Обработчик чек-бокса «Поля для вывода». Идентификатор поля берётся из таблицы
+	/// 	InitOutputFieldIds по имени контрола, поэтому список всегда пересобирается целиком.
+	/// </summary>
+	Sub fillFieldListByStatusFlag(CB: IWebCheckBox; fieldName : String);
+	Begin	
+		If IsNull(CB) Then Return; End If;
+		RefreshFieldList;
+	End Sub fillFieldListByStatusFlag;
+	
+	/// <summary>
+	/// 	Поля, выводимые без чек-бокса. Сейчас это только «Год»: контрола CB_CALYEAR в форме нет,
+	/// 	а в ТТ «Год» — поле вывода «по умолчанию» (лист «СЭ - поля для вывода»), поэтому он
+	/// 	всегда попадает в P_FIELD_LIST. Остальные поля попадают туда ТОЛЬКО если их чек-бокс отмечен:
+	/// 	не отмечен — поля (и колонки) в отчёте нет.
+	/// 	Если для «Года» появится чек-бокс — убрать строку ниже, завести поле в InitOutputFieldIds
+	/// 	и уточнить идентификатор: CALYEAR (как в исходном модуле) или YEAR (как в ТТ).
+	/// </summary>
+	Sub addFieldsWithoutCheckBox;
+	Begin
+		addFieldToList("CALYEAR");   // Год
+	End Sub addFieldsWithoutCheckBox;
+
+
+
+	// ============================================================================================
+	//  «Поля для вывода» — идентификаторы полей отчёта для параметра P_FIELD_LIST
+	//
+	//  Источник: ТТ «Анализ и выгрузка данных ТЭП», лист «Вывод полей в отчете» (колонка «Поле»).
+	//  Идентификаторы, помеченные «уточнить», в ТТ не указаны — приняты по имени поля/контрола;
+	//  при расхождении с отчётом PRX_ANALYSIS_TEP правьте ТОЛЬКО этот метод.
+	//
+	//  Чего пока нет (нужны контролы в дизайнере формы):
+	//    * группа «Значения ТЭП с начала года»  — 19 полей, источник TBL_PHD_FAP_MULT.ZVALUE_SNG;
+	//    * группа «Значения корректировок ТЭП»   — 19 полей, ZSIU_INDV + ZLIB_INFS=KOROUND;
+	//    * «Класс вида оборудования» (ZCLSVOBOR) — есть поле в ТТ, контрола на форме нет;
+	//    * не размечены: CB_ANALYTIC_SET, CB_AREA, CB_ESTIMATED_PRICES, CB_MVP_TEP, CbESO3
+	//      (в ТТ не найдены — уточнить назначение).
+	// ============================================================================================
+	Sub InitOutputFieldIds;
+	Begin
+		If Not IsNull(_fieldIds) Then Return; End If;
+		_fieldIds := New Hashtable.Create;
+		_codeIds := New Hashtable.Create;
+		// --- подтверждённые поля (контролы используются в исходном модуле) ---
+		_fieldIds.Add("CB_ACTTYPE", "ACTTYPE");
+		_fieldIds.Add("CB_ACT_UNIT", "ACT_UNIT");
+		_fieldIds.Add("CB_COSTCENTER", "COSTCENTER");
+		_fieldIds.Add("CB_MATERIAL", "MATERIAL");
+		_fieldIds.Add("CB_PERIOD_TYPE", "PERIOD_TYPE");
+		_fieldIds.Add("CB_PLANT", "PLANT");
+		_fieldIds.Add("CB_POSID", "POSID");
+		_fieldIds.Add("CB_PROFIT_CTR", "PROFIT_CTR");
+		_fieldIds.Add("CB_SOLD_TO", "SOLD_TO");
+		_fieldIds.Add("CB_UCVOLTLEVL", "UCVOLTLEVL");
+		_fieldIds.Add("CB_VENDOR", "VENDOR");
+		_fieldIds.Add("CB_ZAVIATYPE", "ZAVIATYPE");
+		_fieldIds.Add("CB_ZBUR_AREA", "ZBUR_AREA");
+		_fieldIds.Add("CB_ZBUR_BEG", "ZBUR_BEG");
+		_fieldIds.Add("CB_ZBUR_END", "ZBUR_END");
+		_fieldIds.Add("CB_ZBUR_LU", "ZBUR_LU");
+		_fieldIds.Add("CB_ZBUR_PLST", "ZBUR_PLST");
+		_fieldIds.Add("CB_ZDEBITOR", "ZDEBITOR");
+		_fieldIds.Add("CB_ZDOGLINK", "ZDOGLINK");
+		_fieldIds.Add("CB_ZEQUI", "ZEQUI");
+		_fieldIds.Add("CB_ZFUNC_LOC", "ZFUNC_LOC");
+		_fieldIds.Add("CB_ZGAZ_TYPE", "ZGAZ_TYPE");
+		_fieldIds.Add("CB_ZGEN_POD", "ZGEN_POD");
+		_fieldIds.Add("CB_ZGEN_ZAK", "ZGEN_ZAK");
+		_fieldIds.Add("CB_ZHRGRPMO", "ZHRGRPMO");
+		_fieldIds.Add("CB_ZINDTXT1", "ZINDTXT1");
+		_fieldIds.Add("CB_ZLIB_INDC", "ZLIB_INDC");
+		_fieldIds.Add("CB_ZLIB_INFS", "ZLIB_INFS");
+		_fieldIds.Add("CB_ZOBJEM", "ZOBJEM");
+		_fieldIds.Add("CB_ZORGUNIT", "ZORGUNIT");
+		_fieldIds.Add("CB_ZPHD_COMM", "ZPHD_COMM");
+		_fieldIds.Add("CB_ZPHD_DOG", "ZPHD_DOG");
+		_fieldIds.Add("CB_ZPHD_GRSR", "ZPHD_GRSR");
+		_fieldIds.Add("CB_ZPHD_IS", "ZPHD_IS");
+		_fieldIds.Add("CB_ZPHD_KON", "ZPHD_KON");
+		_fieldIds.Add("CB_ZPHD_NCH", "ZPHD_NCH");
+		_fieldIds.Add("CB_ZPHD_NOP1", "ZPHD_NOP1");
+		_fieldIds.Add("CB_ZPHD_PHD", "ZPHD_PHD");
+		_fieldIds.Add("CB_ZPHD_PRIZ", "ZPHD_PRIZ");
+		_fieldIds.Add("CB_ZPHD_SK", "ZPHD_SK");
+		_fieldIds.Add("CB_ZPHD_SPR", "ZPHD_SPR");
+		_fieldIds.Add("CB_ZPHD_SR", "ZPHD_SR");
+		_fieldIds.Add("CB_DISPLAY_INFO_BY_STATUS", "ZPHD_STAT");
+		_fieldIds.Add("CB_ZPHD_USL1", "ZPHD_USL1");
+		_fieldIds.Add("CB_ZPH_ESO2", "ZPH_ESO2");
+		_fieldIds.Add("CB_ZPH_OPLST", "ZPH_OPLST");
+		_fieldIds.Add("CB_ZPH_TEHK", "ZPH_TEHK");
+		_fieldIds.Add("CB_ZPH_USR2", "ZPH_USR2");
+		_fieldIds.Add("CB_ZPILOT", "ZPILOT");
+		_fieldIds.Add("CB_ZPKR_SUBP", "ZPKR_SUBP");
+		_fieldIds.Add("CB_ZSHIFR", "ZSHIFR");
+		_fieldIds.Add("CB_ZSIU_FLD", "ZSIU_FLD");
+		_fieldIds.Add("CB_ZSIU_TY", "ZSIU_TY");
+		_fieldIds.Add("CB_ZSKV_KUST", "ZSKV_KUST");
+		_fieldIds.Add("CB_ZSKV_ST", "ZSKV_ST");
+		_fieldIds.Add("CB_ZUCVOLTTR", "ZUCVOLTTR");
+		_fieldIds.Add("CB_Z_CL_NAPR", "Z_CL_NAPR");
+		_fieldIds.Add("CB_Z_SKV_GEO", "Z_SKV_GEO");
+		
+		// --- поля ТТ, контролы которых в исходном модуле не использовались ---
+		// Существование этих компонентов на форме не подтверждено: ссылка на отсутствующий
+		// контрол ломает дизайнер формы («Ошибка сервера»). Когда компонент появится,
+		// раскомментируйте строку и добавьте в RefreshFieldList строку
+		//     CollectIfChecked(<Контрол>, "<Контрол>");
+		// _fieldIds.Add("CbHigherInd", "ZPH_HIGHER"); // Вышестоящий ТЭП (⚠ уточнить) (компонент не подтверждён)
+		// _fieldIds.Add("CB_ACTIVITY_TYPE", "ACTVTS"); // Вид деятельности (компонент не подтверждён)
+		// _fieldIds.Add("CB_IND_TYPE", "ID1");        // Вид показателя (компонент не подтверждён)
+		// _fieldIds.Add("CB_TEP_FORM_OF_SNG", "ZF_NUMB"); // Формы отчётов (компонент не подтверждён)
+		// _fieldIds.Add("CB_TEP_OWNER", "OWNER");     // Владелец ТЭП (компонент не подтверждён)
+		// _fieldIds.Add("CB_FUNCTION_OF_WOKERS", "ZPH_FUNC"); // Функция/задача (⚠ уточнить) (компонент не подтверждён)
+		// _fieldIds.Add("CB_VOLUME", "ZPH_VOLUME");   // Объёмный (⚠ уточнить) (компонент не подтверждён)
+		// _fieldIds.Add("CB_TRUD", "ZPH_TRUD");       // Трудоёмкость (⚠ уточнить) (компонент не подтверждён)
+		// _fieldIds.Add("CB_COMPARABLE_PRICES", "ZPH_PRICE_CP"); // В сопоставимых ценах (⚠ уточнить) (компонент не подтверждён)
+		// _fieldIds.Add("CB_CURRENT_PRICES", "ZPH_PRICE_CD"); // В действующих ценах (⚠ уточнить) (компонент не подтверждён)
+		// _fieldIds.Add("CB_ACTTYPE2", "ZPH_ACTTYPE2"); // Вид работ (классификация) (⚠ уточнить) (компонент не подтверждён)
+		_fieldIds.Add("CB_JANUARY", "ZSIU_INDV_01");            // Январь
+		_fieldIds.Add("CB_FEBRUARY", "ZSIU_INDV_02");           // Февраль
+		_fieldIds.Add("CB_MARCH", "ZSIU_INDV_03");              // Март
+		_fieldIds.Add("CB_APRIL", "ZSIU_INDV_04");              // Апрель
+		_fieldIds.Add("CB_MAY", "ZSIU_INDV_05");                // Май
+		_fieldIds.Add("CB_JUNE", "ZSIU_INDV_06");               // Июнь
+		_fieldIds.Add("CB_JULY", "ZSIU_INDV_07");               // Июль
+		_fieldIds.Add("CB_AUGUST", "ZSIU_INDV_08");             // Август
+		_fieldIds.Add("CB_SEPTEMBER", "ZSIU_INDV_09");          // Сентябрь
+		_fieldIds.Add("CB_OCTOBER", "ZSIU_INDV_10");            // Октябрь
+		// _fieldIds.Add("CB_NOVEMBER", "ZSIU_INDV_11"); // Ноябрь (компонент не подтверждён)
+		_fieldIds.Add("CB_DECEMBER", "ZSIU_INDV_12");           // Декабрь
+		_fieldIds.Add("CB_FIRST_QUARTER", "ZSIU_INDV_Q1");      // I кв.
+		_fieldIds.Add("CB_SECOND_QUARTER", "ZSIU_INDV_Q2");     // II кв.
+		// _fieldIds.Add("CB_THIRD_QUARTER", "ZSIU_INDV_Q3"); // III кв. (компонент не подтверждён)
+		_fieldIds.Add("CB_FOURTH_QUARTER", "ZSIU_INDV_Q4");     // IV кв.
+		_fieldIds.Add("CB_SIX_MONTH", "ZSIU_INDV_Q6");          // 6 мес.
+		_fieldIds.Add("CB_NINE_MONTH", "ZSIU_INDV_Q9");         // 9 мес.
+		_fieldIds.Add("CB_YEAR", "ZSIU_INDV_Q0");               // Год
+		
+		// --- Идентификаторы полей-кодов для режима «Выводить коды аналитик»
+		// (ТТ, лист «Вывод полей в отчете», колонка «Поле» при «Выводить код = да»).
+		// Ключ — основной идентификатор поля; указываются только те, где код отличается от него.
+		_codeIds.Add("PLANT", "SP");
+		_codeIds.Add("SOLD_TO", "KEY");
+		_codeIds.Add("ZPH_USR2", "CODE_ZPH_USR0");
+		_codeIds.Add("PERIOD_TYPE", "PERIOD_TY");
+	End Sub InitOutputFieldIds;
+	
+	/// <summary>Показ ошибки на форме: TextArea1 виден пользователю, исключение не всплывает</summary>
+	Sub showError(what: String; E: Exception);
+	Begin
+		_lastError := what + ": " + E.Message;
+		Debug.WriteLine("[АнализТЭП/форма] ОШИБКА: " + _lastError);
+		logRecord(C_LOG_OP_FORM, False, "", "", what + ": " + logErrText(E));
+		If IsNull(TextArea1) Then Return; End If;
+		TextArea1.Text := _lastError;
+	End Sub showError;
+	
+	/// <summary>
+	/// 	Запись в журнал репозитория (объект класса Журнал, KE_CLASS_LOG).
+	/// 	Стандартные поля передаются массивом СТРОГО по порядку: STAMP, USER_ID, OP,
+	/// 	OP_SUCC (1/0), OBJ_ID, OBJ_NAME, DESCR. Требуется ссылка на сборку Db (интерфейс ILog).
+	/// 	Ошибка записи не должна ломать форму.
+	/// </summary>
+	Sub logRecord(op: String; success: Boolean; objId: String; objName: String; descr: String);
+	Var
+		logObj: ILog;
+		values: Array[0..6] Of Variant;
+	Begin
+		Try
+			If IsNull(MB) Then MB := MetabaseClass.Active; End If;
+			logObj := MB.ItemByIdNamespace(C_LOG_ID, MB.GetObjectKeyById(C_LOG_NAMESPACE_ID)).Bind As ILog;
+			values[0] := DateTime.Now;
+			values[1] := logUser;
+			values[2] := logCut(op);
+			values[3] := success ? 1 : 0;
+			values[4] := objId;
+			values[5] := objName;
+			values[6] := logCut(descr);
+			logObj.PutRecord(values);
+		Except On E: Exception Do
+			Debug.WriteLine("[АнализТЭП/журнал] запись не удалась: " + E.Message);
+		End Try;
+	End Sub logRecord;
+	
+	/// <summary>Длинный текст пишется несколькими записями журнала (поле DESCR ограничено)</summary>
+	Sub logLong(prefix: String; text: String);
+	Var
+		part: String;
+	Begin
+		part := text;
+		If IsNull(part) Then part := ""; End If;
+		If part.IsEmpty Then
+			logRecord(C_LOG_OP_FORM, True, "", "", prefix + ": <пусто>");
+			Return;
+		End If;
+		While Not part.IsEmpty Do
+			If part.Length <= C_LOG_DESCR_MAX Then
+				logRecord(C_LOG_OP_FORM, True, "", "", prefix + ": " + part);
+				Return;
+			End If;
+			logRecord(C_LOG_OP_FORM, True, "", "", prefix + ": " + part.Substring(0, C_LOG_DESCR_MAX));
+			part := part.Substring(C_LOG_DESCR_MAX);
+		End While;
+	End Sub logLong;
+	
+	/// <summary>Текст ошибки с модулем/формой и номером строки (e.Source, e.Line)</summary>
+	Function logErrText(E: Exception): String;
+	Begin
+		If IsNull(E) Then Return "ОШИБКА без описания"; End If;
+		Return "ОШИБКА: " + E.Message + " [модуль: " + E.Source + ", строка: " + E.Line.ToString + "]";
+	End Function logErrText;
+	
+	/// <summary>Обрезает текст до длины поля журнала</summary>
+	Function logCut(text: String): String;
+	Var
+		t: String;
+	Begin
+		t := text;
+		If IsNull(t) Then t := ""; End If;
+		If t.Length <= C_LOG_DESCR_MAX Then Return t; End If;
+		Return t.Substring(0, C_LOG_DESCR_MAX) + "…";
+	End Function logCut;
+	
+	/// <summary>Имя текущего пользователя — для стандартного поля журнала USER_ID</summary>
+	Function logUser: String;
+	Var
+		name: String;
+	Begin
+		name := "";
+		Try
+			name := MB.LogonSession.User.FullName;
+		Except
+			name := "";
+		End Try;
+		If name.IsEmpty Then name := "WEB"; End If;
+		Return name;
+	End Function logUser;
+	
+	/// <summary>
+	/// 	Безопасная генерация гиперссылки. COpenHyperlink.Generate обращается к целевому отчёту
+	/// 	(MbExt.ItemById с strict = True) и к ячейке листа отчёта — при неверном идентификаторе
+	/// 	отчёта или отсутствующем листе это исключение. Раньше оно всплывало из onShow и ломало
+	/// 	форму, теперь текст ошибки остаётся в TextArea1, а форма продолжает работать.
+	/// </summary>
+	Sub SafeGenerate;
+	Begin
+		Try
+			Hyperlink.Generate;
+			Debug.WriteLine("[АнализТЭП/форма] гиперссылка сформирована");
+			logRecord(C_LOG_OP_FORM, True, C_ANALYZ_TEP_REP_ID, "PRX_ANALYSIS_TEP",
+				"ссылка сформирована; длина: " + Hyperlink.Action.Length.ToString + " симв.");
+		Except On E: Exception Do
+			showError("Не удалось сформировать ссылку", E);
+		End Try;
+	End Sub SafeGenerate;
+	
+	/// <summary>Запись параметра гиперссылки с проверкой менеджера параметров</summary>
+	Sub SetParamSafe(paramId: String; value: Variant);
+	Begin
+		Try
+			If IsNull(Hyperlink.ParameterManager) Then Return; End If;
+			Hyperlink.SetParamValue(paramId, value);
+		Except On E: Exception Do
+			showError("Не удалось записать параметр " + paramId, E);
+		End Try;
+	End Sub SetParamSafe;
+	
+	/// <summary>
+	/// 	Пересобирает P_FIELD_LIST по состояниям чек-боксов и генерирует гиперссылку.
+	/// 	Единственная точка изменения списка полей: чек-боксы + таблица InitOutputFieldIds.
+	/// 	Перебор контролов — явным списком: IWebComponents нельзя объявлять как тип
+	/// 	(в отличие от IWebComponent), поэтому Self.Components здесь не используется.
+	/// </summary>
+	Sub RefreshFieldList;
+	Var
+		analyticSet: Variant;
+	Begin
+		If IsNull(fieldList) Then fieldList := New StringList.Create; End If;
+		fieldList.Clear;
+		addFieldsWithoutCheckBox;
+		
+		CollectIfChecked(CB_ACTTYPE, "CB_ACTTYPE");
+		CollectIfChecked(CB_ACT_UNIT, "CB_ACT_UNIT");
+		CollectIfChecked(CB_COSTCENTER, "CB_COSTCENTER");
+		CollectIfChecked(CB_MATERIAL, "CB_MATERIAL");
+		CollectIfChecked(CB_PERIOD_TYPE, "CB_PERIOD_TYPE");
+		CollectIfChecked(CB_PLANT, "CB_PLANT");
+		CollectIfChecked(CB_POSID, "CB_POSID");
+		CollectIfChecked(CB_PROFIT_CTR, "CB_PROFIT_CTR");
+		CollectIfChecked(CB_SOLD_TO, "CB_SOLD_TO");
+		CollectIfChecked(CB_UCVOLTLEVL, "CB_UCVOLTLEVL");
+		CollectIfChecked(CB_VENDOR, "CB_VENDOR");
+		CollectIfChecked(CB_ZAVIATYPE, "CB_ZAVIATYPE");
+		CollectIfChecked(CB_ZBUR_AREA, "CB_ZBUR_AREA");
+		CollectIfChecked(CB_ZBUR_BEG, "CB_ZBUR_BEG");
+		CollectIfChecked(CB_ZBUR_END, "CB_ZBUR_END");
+		CollectIfChecked(CB_ZBUR_LU, "CB_ZBUR_LU");
+		CollectIfChecked(CB_ZBUR_PLST, "CB_ZBUR_PLST");
+		CollectIfChecked(CB_ZDEBITOR, "CB_ZDEBITOR");
+		CollectIfChecked(CB_ZDOGLINK, "CB_ZDOGLINK");
+		CollectIfChecked(CB_ZEQUI, "CB_ZEQUI");
+		CollectIfChecked(CB_ZFUNC_LOC, "CB_ZFUNC_LOC");
+		CollectIfChecked(CB_ZGAZ_TYPE, "CB_ZGAZ_TYPE");
+		CollectIfChecked(CB_ZGEN_POD, "CB_ZGEN_POD");
+		CollectIfChecked(CB_ZGEN_ZAK, "CB_ZGEN_ZAK");
+		CollectIfChecked(CB_ZHRGRPMO, "CB_ZHRGRPMO");
+		CollectIfChecked(CB_ZINDTXT1, "CB_ZINDTXT1");
+		CollectIfChecked(CB_ZLIB_INDC, "CB_ZLIB_INDC");
+		CollectIfChecked(CB_ZLIB_INFS, "CB_ZLIB_INFS");
+		CollectIfChecked(CB_ZOBJEM, "CB_ZOBJEM");
+		CollectIfChecked(CB_ZORGUNIT, "CB_ZORGUNIT");
+		CollectIfChecked(CB_ZPHD_COMM, "CB_ZPHD_COMM");
+		CollectIfChecked(CB_ZPHD_DOG, "CB_ZPHD_DOG");
+		CollectIfChecked(CB_ZPHD_GRSR, "CB_ZPHD_GRSR");
+		CollectIfChecked(CB_ZPHD_IS, "CB_ZPHD_IS");
+		CollectIfChecked(CB_ZPHD_KON, "CB_ZPHD_KON");
+		CollectIfChecked(CB_ZPHD_NCH, "CB_ZPHD_NCH");
+		CollectIfChecked(CB_ZPHD_NOP1, "CB_ZPHD_NOP1");
+		CollectIfChecked(CB_ZPHD_PHD, "CB_ZPHD_PHD");
+		CollectIfChecked(CB_ZPHD_PRIZ, "CB_ZPHD_PRIZ");
+		CollectIfChecked(CB_ZPHD_SK, "CB_ZPHD_SK");
+		CollectIfChecked(CB_ZPHD_SPR, "CB_ZPHD_SPR");
+		CollectIfChecked(CB_ZPHD_SR, "CB_ZPHD_SR");
+		CollectIfChecked(CB_CALYEAR, "CB_CALYEAR");
+		CollectIfChecked(CB_ZPHD_USL1, "CB_ZPHD_USL1");
+		CollectIfChecked(CB_ZPH_ESO2, "CB_ZPH_ESO2");
+		CollectIfChecked(CB_ZPH_OPLST, "CB_ZPH_OPLST");
+		CollectIfChecked(CB_ZPH_TEHK, "CB_ZPH_TEHK");
+		CollectIfChecked(CB_ZPH_USR2, "CB_ZPH_USR2");
+		CollectIfChecked(CB_ZPILOT, "CB_ZPILOT");
+		CollectIfChecked(CB_ZPKR_SUBP, "CB_ZPKR_SUBP");
+		CollectIfChecked(CB_ZSHIFR, "CB_ZSHIFR");
+		CollectIfChecked(CB_ZSIU_FLD, "CB_ZSIU_FLD");
+		CollectIfChecked(CB_ZSIU_TY, "CB_ZSIU_TY");
+		CollectIfChecked(CB_ZSKV_KUST, "CB_ZSKV_KUST");
+		CollectIfChecked(CB_ZSKV_ST, "CB_ZSKV_ST");
+		CollectIfChecked(CB_ZUCVOLTTR, "CB_ZUCVOLTTR");
+		CollectIfChecked(CB_Z_CL_NAPR, "CB_Z_CL_NAPR");
+		CollectIfChecked(CB_Z_SKV_GEO, "CB_Z_SKV_GEO");
+		CollectIfChecked(CB_JANUARY, "CB_JANUARY");
+		CollectIfChecked(CB_FEBRUARY, "CB_FEBRUARY");
+		CollectIfChecked(CB_MARCH, "CB_MARCH");
+		CollectIfChecked(CB_APRIL, "CB_APRIL");
+		CollectIfChecked(CB_MAY, "CB_MAY");
+		CollectIfChecked(CB_JUNE, "CB_JUNE");
+		CollectIfChecked(CB_JULY, "CB_JULY");
+		CollectIfChecked(CB_AUGUST, "CB_AUGUST");
+		CollectIfChecked(CB_SEPTEMBER, "CB_SEPTEMBER");
+		CollectIfChecked(CB_OCTOBER, "CB_OCTOBER");
+		CollectIfChecked(CB_DECEMBER, "CB_DECEMBER");
+		CollectIfChecked(CB_FIRST_QUARTER, "CB_FIRST_QUARTER");
+		CollectIfChecked(CB_SECOND_QUARTER, "CB_SECOND_QUARTER");
+		CollectIfChecked(CB_FOURTH_QUARTER, "CB_FOURTH_QUARTER");
+		CollectIfChecked(CB_SIX_MONTH, "CB_SIX_MONTH");
+		CollectIfChecked(CB_NINE_MONTH, "CB_NINE_MONTH");
+		CollectIfChecked(CB_YEAR, "CB_YEAR");
+		
+		
+		
+		// Режим «Выводить коды аналитик»: в P_ANALYTIC_SET уходит список полей-кодов
+		// Если чек-бокс CB_DISPLAY_CODE_ANALYT появится на форме (с обработчиком
+		// CB_DISPLAY_CODE_ANALYTOnChange), раскомментировать строку:
+		// If CB_DISPLAY_CODE_ANALYT.Checked Then setParamOrRemove(C_PARAM_P_ANALYTIC_SET, codeFieldsText); End If;
+		
+		// Список выбранных аналитик уходит МАССИВОМ в нижнем регистре: ровно в таком виде его
+		// подставляет в свой текст запрос QRY_PHD_MULT_DATA_COPY1 (параметр ANALYTIC_SET).
+		// Поэтому в отчёте появляются колонки только выбранных полей.
+		analyticSet := analyticSetArray;
+		If IsNull(analyticSet) Then
+			// Пустой список записывать нельзя: SELECT превратится в синтаксически неверный
+			setParamOrRemove("P_FIELD_LIST", "");
+			setParamOrRemove("ANALYTIC_SET", "");
+		Else
+			SetParamSafe("P_FIELD_LIST", analyticSet);
+			SetParamSafe("ANALYTIC_SET", analyticSet);
+		End If;
+		
+		SafeGenerate;
+		Debug.WriteLine("[АнализТЭП/форма] полей в списке: " + fieldList.Count.ToString + " -> " + fieldList.Text(","));
+		logRecord(C_LOG_OP_FORM, True, "", "", "полей в списке: " + fieldList.Count.ToString + " -> " + fieldList.Text(","));
+		If (Not IsNull(TextArea1)) And _lastError.IsEmpty Then TextArea1.Text := Hyperlink.Action; End If;
+		Debug.WriteLine("[АнализТЭП/форма] ссылка: " + Hyperlink.Action);
+		logLong("ссылка", Hyperlink.Action);
+	End Sub RefreshFieldList;
+	
+	/// <summary>Идентификатор поля отчёта по имени чек-бокса (пусто — контрол не размечен)</summary>
+	Function fieldIdByControl(controlName: String): String;
+	Var
+		value: Variant;
+	Begin
+		If IsNull(_fieldIds) Or controlName.IsEmpty Then Return ""; End If;
+		value := _fieldIds.Item(controlName);
+		If IsNull(value) Then Return ""; End If;
+		Return value As String;
+	End Function fieldIdByControl;
+	
+	/// <summary>Добавляет поле, если его чек-бокс отмечен (идентификатор берётся из таблицы)</summary>
+	Sub CollectIfChecked(cb: IWebCheckBox; controlName: String);
+	Begin
+		If IsNull(cb) Then Return; End If;
+		If Not cb.Checked Then Return; End If;
+		addFieldToList(fieldIdByControl(controlName));
+	End Sub CollectIfChecked;
+	
+	/// <summary>Добавляет идентификатор в список полей, если его там ещё нет</summary>
+	Sub addFieldToList(fieldId: String);
+	Begin
+		If IsNull(fieldList) Or fieldId.IsEmpty Then Return; End If;
+		If fieldList.IndexOf(fieldId) = -1 Then fieldList.Add(fieldId); End If;
+	End Sub addFieldToList;
+	
+	/// <summary>Поля статусов для выбранных периодов (режим «Выводить информацию по статусам»)</summary>
+	Sub addStatusFields;
+	Var
+		fieldId: String;
+		i, count: Integer;
+	Begin
+		// count фиксируем заранее: добавляемые поля статусов не должны попасть в этот же перебор
+		count := fieldList.Count;
+		For i := 0 To count - 1 Do
+			fieldId := fieldList.Item(i) As String;
+			If fieldId.StartsWith("ZSIU_INDV_") Then
+				addFieldToList(fieldId + C_STATUS_FIELD_SUFFIX);
+			End If;
+		End For;
+	End Sub addStatusFields;
+	
+	/// <summary>Список полей-кодов выбранных аналитик (режим «Выводить коды аналитик»)</summary>
+	Function codeFieldsText: String;
+	Var
+		list: IStringList;
+		fieldId: String;
+		codeId: Variant;
+		i, count: Integer;
+	Begin
+		list := New StringList.Create;
+		count := fieldList.Count;
+		For i := 0 To count - 1 Do
+			fieldId := fieldList.Item(i) As String;
+			codeId := _codeIds.Item(fieldId);
+			If Not IsNull(codeId) Then
+				If list.IndexOf(codeId As String) = -1 Then list.Add(codeId As String); End If;
+			End If;
+		End For;
+		Return list.Text(", ");
+	End Function codeFieldsText;
+	
+	/// <summary>Устанавливает параметр или убирает его из менеджера (пустое значение = убрать)</summary>
+	Sub setParamOrRemove(paramId, value: String);
+	Var
+		params: IHashtable;
+	Begin
+		If IsNull(Hyperlink.ParameterManager) Then Return; End If;
+		params := Hyperlink.ParameterManager.Params;
+		If IsNull(params) Then Return; End If;
+		If value.IsEmpty Then
+			// Пустое значение нельзя писать в параметры: CObjectParamManager присваивает значение как есть
+			If params.Contains(paramId) Then params.Remove(paramId); End If;
+		Else
+			Hyperlink.SetParamValue(paramId, value);
+		End If;
+	End Sub setParamOrRemove;
+	
+	/// <summary>
+	/// 	Массив идентификаторов выбранных аналитик в НИЖНЕМ регистре. В таком виде значения
+	/// 	подставляются в текст запроса QRY_PHD_MULT_DATA_COPY1 (параметр ANALYTIC_SET, тип «массив»):
+	/// 	запрос строит список колонок по этому параметру, поэтому невыбранные поля в отчёт не попадают.
+	/// 	Периоды (ZSIU_INDV_*) в массив не входят — это не аналитики запроса, а фиксированные колонки отчёта.
+	/// 	Возвращает Null, если аналитик не выбрано ни одной (пустой SELECT недопустим).
+	/// </summary>
+	Function analyticSetArray: Variant;
+	Var
+		arr: Array Of String;
+		fieldId: String;
+		i, count: Integer;
+	Begin
+		If IsNull(fieldList) Then Return Null; End If;
+		count := 0;
+		For i := 0 To fieldList.Count - 1 Do
+			fieldId := fieldList.Item(i) As String;
+			If Not fieldId.StartsWith("ZSIU_INDV_") Then count := count + 1; End If;
+		End For;
+		If count = 0 Then Return Null; End If;
+		arr := New String[count];
+		count := 0;
+		For i := 0 To fieldList.Count - 1 Do
+			fieldId := fieldList.Item(i) As String;
+			If Not fieldId.StartsWith("ZSIU_INDV_") Then
+				arr[count] := String.ToLower(fieldId);
+				count := count + 1;
+			End If;
+		End For;
+		Return arr;
+	End Function analyticSetArray;
+		/// <summary>Состояния чек-боксов «Поля для вывода» по умолчанию (ТТ, лист «СЭ - поля для вывода»)</summary>
+	Sub initOutputDefaults;
+	Begin
+		If Not C_APPLY_DEFAULT_CHECKED Then Return; End If;
+		// Отмечаются только те контролы, существование которых подтверждено исходным модулем.
+		// Для неподтверждённых строки закомментированы — включить после добавления компонентов.
+		SetCheckBoxIfExists(CB_PLANT, True);
+		SetCheckBoxIfExists(CB_ZLIB_INDC, True);
+		SetCheckBoxIfExists(CB_ACT_UNIT, True);
+		SetCheckBoxIfExists(CB_FIRST_QUARTER, True);
+		SetCheckBoxIfExists(CB_SECOND_QUARTER, True);
+		SetCheckBoxIfExists(CB_SIX_MONTH, True);
+		// SetCheckBoxIfExists(CB_THIRD_QUARTER, True);   // компонент не подтверждён
+		SetCheckBoxIfExists(CB_NINE_MONTH, True);
+		SetCheckBoxIfExists(CB_FOURTH_QUARTER, True);
+		SetCheckBoxIfExists(CB_YEAR, True);
+	End Sub initOutputDefaults;
+	
+	Sub SetCheckBoxIfExists(CB: IWebCheckBox; checked: Boolean);
+	Begin
+		If IsNull(CB) Then Return; End If;
+		CB.Checked := checked;
+	End Sub SetCheckBoxIfExists;
+	
+	/// <summary>Отметка элемента справочника по значению атрибута (значение — в т.ч. из полномочий)</summary>
+	Sub setComboSelectionByAttribute(combo: IWebDimensionCombo; paramId, attrId, value: String);
+	Var
+		index: Integer;
+		sel: IDimSelection;
+	Begin
+		If IsNull(combo) Or value.IsEmpty Then Return; End If;
+		index := DimensionExt.GetElementIndexByAttributeValue(combo.DimInstance, attrId, value);
+		If index = -1 Then Return; End If;
+		sel := combo.DimInstance.CreateSelection;
+		sel.SelectElement(index, False);
+		combo.Selection := sel;
+		Hyperlink.SetParamValueFromSelection(paramId, combo.Selection, attrId);
+	End Sub setComboSelectionByAttribute;
+	
+	/// <summary>
+	/// 	Ограничение на вывод (выбор) СП: PHD_ADMIN и PHD_CURATOR_* выбирают любое СП,
+	/// 	остальным подставляется СП из основной записи пользователя и выбор запрещается.
+	/// </summary>
+	Sub applyPlantAccessRights;
+	Var
+		spCode: String;
+	Begin
+		If IsNull(D_PLANT) Then Return; End If;
+		If isPlantPrivileged Then Return; End If;
+		
+		spCode := getUserSP;
+		If spCode.IsEmpty Then
+			// Полномочий нет и СП не определён — оставляем выбор, иначе форму нельзя заполнить
+			Return;
+		End If;
+		
+		setComboSelectionByAttribute(D_PLANT, C_PARAM_PLANT, "CODE", spCode);
+		D_PLANT.Enabled := False;
+		SafeGenerate;
+	End Sub applyPlantAccessRights;
+	
+	Function isPlantPrivileged: Boolean;
+	Var
+		user: IMetabaseUser;
+		group: ISecuritySubject;
+	Begin
+		user := MB.LogonSession.User;
+		If IsNull(user) Then Return False; End If;
+		If user.IsAdmin Then Return True; End If;
+		
+		For Each group In user.MemberOf Do
+			If Not IsNull(group) Then
+				If group.Name = C_ACCESS_SP_GROUP Then Return True; End If;
+				If group.Name.StartsWith(C_ACCESS_SP_GROUP_PREFIX) Then Return True; End If;
+			End If;
+		End For;
+		
+		Return False;
+	End Function isPlantPrivileged;
+
+
+
+	
+	
+	Sub CB_DISPLAY_INFO_BY_STATUSOnChange;
+	Begin
+		fillFieldListByStatusFlag(CB_DISPLAY_INFO_BY_STATUS, "ZPHD_STAT");
+	End Sub CB_DISPLAY_INFO_BY_STATUSOnChange;
+
+	Sub CB_DISPLAY_CODE_ANALYTOnChange;
+	Begin
+		If CB_DISPLAY_CODE_ANALYT.Checked Then setParamOrRemove(C_PARAM_P_ANALYTIC_SET, codeFieldsText); End If;
+	End Sub CB_DISPLAY_CODE_ANALYTOnChange;
+
+End Class ANALIZ_TEP_FORM_ON_SHOW;
+
