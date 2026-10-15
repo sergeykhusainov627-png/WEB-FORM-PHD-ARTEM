@@ -1756,10 +1756,16 @@ Class ANALIZ_TEP_FORM_ON_SHOW: WebForm
 		
 		
 		
-		// Режим «Выводить коды аналитик»: в P_ANALYTIC_SET уходит список полей-кодов
-		// Если чек-бокс CB_DISPLAY_CODE_ANALYT появится на форме (с обработчиком
-		// CB_DISPLAY_CODE_ANALYTOnChange), раскомментировать строку:
-		// If CB_DISPLAY_CODE_ANALYT.Checked Then setParamOrRemove(C_PARAM_P_ANALYTIC_SET, codeFieldsText); End If;
+		// Режим «Выводить информацию по статусам»: к выбранным периодам добавляются поля статусов
+		If (Not IsNull(CB_DISPLAY_INFO_BY_STATUS)) And CB_DISPLAY_INFO_BY_STATUS.Checked Then
+			addStatusFields;
+		End If;
+		
+		// Режим «Выводить коды аналитик»: к выбранным полям добавляются их поля-коды,
+		// чтобы в отчёте были и наименование, и код (ТТ, п.4)
+		If (Not IsNull(CB_DISPLAY_CODE_ANALYT)) And CB_DISPLAY_CODE_ANALYT.Checked Then
+			addCodeFields;
+		End If;
 		
 		// Список выбранных аналитик уходит МАССИВОМ в нижнем регистре: ровно в таком виде его
 		// подставляет в свой текст запрос QRY_PHD_MULT_DATA_COPY1 (параметр ANALYTIC_SET).
@@ -1823,26 +1829,24 @@ Class ANALIZ_TEP_FORM_ON_SHOW: WebForm
 			End If;
 		End For;
 	End Sub addStatusFields;
-	
-	/// <summary>Список полей-кодов выбранных аналитик (режим «Выводить коды аналитик»)</summary>
-	Function codeFieldsText: String;
+
+	/// <summary>Поля-коды выбранных аналитик (режим «Выводить коды аналитик»)</summary>
+	Sub addCodeFields;
 	Var
-		list: IStringList;
 		fieldId: String;
 		codeId: Variant;
 		i, count: Integer;
 	Begin
-		list := New StringList.Create;
+		If IsNull(_codeIds) Then Return; End If;
+		// count фиксируем заранее: добавляемые поля-коды не должны попасть в этот же перебор
 		count := fieldList.Count;
 		For i := 0 To count - 1 Do
 			fieldId := fieldList.Item(i) As String;
 			codeId := _codeIds.Item(fieldId);
-			If Not IsNull(codeId) Then
-				If list.IndexOf(codeId As String) = -1 Then list.Add(codeId As String); End If;
-			End If;
+			If Not IsNull(codeId) Then addFieldToList(codeId As String); End If;
 		End For;
-		Return list.Text(", ");
-	End Function codeFieldsText;
+	End Sub addCodeFields;
+	
 	
 	/// <summary>Устанавливает параметр или убирает его из менеджера (пустое значение = убрать)</summary>
 	Sub setParamOrRemove(paramId, value: String);
@@ -1982,7 +1986,8 @@ Class ANALIZ_TEP_FORM_ON_SHOW: WebForm
 
 	Sub CB_DISPLAY_CODE_ANALYTOnChange;
 	Begin
-		If CB_DISPLAY_CODE_ANALYT.Checked Then setParamOrRemove(C_PARAM_P_ANALYTIC_SET, codeFieldsText); End If;
+		// пересобирает список полей (с кодами) и заново формирует ссылку
+		RefreshFieldList;
 	End Sub CB_DISPLAY_CODE_ANALYTOnChange;
 
 End Class ANALIZ_TEP_FORM_ON_SHOW;
