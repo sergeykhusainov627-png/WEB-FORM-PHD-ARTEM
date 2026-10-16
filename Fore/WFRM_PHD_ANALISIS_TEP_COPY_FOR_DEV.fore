@@ -1852,8 +1852,6 @@ Class ANALIZ_TEP_FORM_ON_SHOW: WebForm
 	/// </summary>
 	Sub buildExtraFields;
 	Var
-		i, j, k: Integer;
-		typeId, typeName, caption, suffix, agg, measure: String;
 		exprs, names: StringList;
 		hasStatus: Boolean;
 	Begin
@@ -1911,7 +1909,7 @@ Class ANALIZ_TEP_FORM_ON_SHOW: WebForm
 		el: IDimElement;
 		i: Integer;
 		dim: IDimInstance;
-		attrId, attrName: IDimAttribute;
+		attrId, attrName: DimAttributeInstance;
 		code, title: String;
 	Begin
 		If IsNull(D_ZTYPEIND) Then Return; End If;
@@ -1934,7 +1932,7 @@ Class ANALIZ_TEP_FORM_ON_SHOW: WebForm
 	Sub addExtraForType(exprs: StringList; names: StringList; typeId: String; typeName: String; hasStatus: Boolean);
 	Var
 		i: Integer;
-		caption, suffix: String;
+		caption: String;
 	Begin
 		For i := 0 To extraCaptions.Count - 1 Do
 			caption := extraCaptions.Item(i) As String;
