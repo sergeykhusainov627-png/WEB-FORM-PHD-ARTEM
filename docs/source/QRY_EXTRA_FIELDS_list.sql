@@ -2,6 +2,9 @@
    Запрос-генератор значений для параметров EXTRA_FIELDS и EXTRA_NAMES.
    Подключается как источник справочника в редакторе параметров (как сейчас сделано для ANALYTIC_SET).
 
+   ВАЖНО: значения EXPR и NAME начинаются с ", " — так пустая подстановка параметра
+   остаётся синтаксически верной (нет висячей запятой), а заполненная корректно продолжает список.
+
    Колонки результата:
      SORT           - порядок (период -> тип данных -> вид колонки); по нему сортируется справочник
      PERIOD         - подпись периода
@@ -57,9 +60,9 @@ SELECT
     t.attr                                                 AS "ATTR_FOR_FLTR",
     CASE k.ord WHEN 1 THEN 'значение' WHEN 2 THEN 'статус'
                WHEN 3 THEN 'значение с нач.года' ELSE 'статус с нач.года' END AS "KIND",
-    k.agg || '(' || k.measure || ') FILTER (WHERE ' || p.cond ||
+    ', ' || k.agg || '(' || k.measure || ') FILTER (WHERE ' || p.cond ||
         ' AND ztypeind = ''' || t.id || ''') AS "' || p.caption || k.suffix || ' (' || t.name || ')"' AS "EXPR",
-    '"' || p.caption || k.suffix || ' (' || t.name || ')"'   AS "NAME"
+    ', "' || p.caption || k.suffix || ' (' || t.name || ')"'   AS "NAME"
 FROM P p
 CROSS JOIN T t
 CROSS JOIN K k
