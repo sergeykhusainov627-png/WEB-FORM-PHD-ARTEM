@@ -1903,32 +1903,83 @@ Class ANALIZ_TEP_FORM_ON_SHOW: WebForm
 		logRecord(C_LOG_OP_FORM, True, "", "", "динамических колонок: " + exprs.Count.ToString + " (статусы: " + (hasStatus ? "да" : "нет") + ")");
 	End Sub buildExtraFields;
 
-	/// <summary>Колонки для всех выбранных типов данных D_ZTYPEIND</summary>
+	/// <summary>
+	/// 	Колонки для всех выбранных типов данных. Коды берём из параметра ZTYPEIND (его форма пишет
+	/// 	из D_ZTYPEIND), подписи — из атрибута NAME справочника: ищем элемент с таким значением
+	/// 	атрибута ID перебором по индексам (в справке: Dimen.Elements.Count, Attr.Value(индекс)).
+	/// 	Отметку не опрашиваем — у IDimSelection нет свойства состояния, есть SelectedCount.
+	/// </summary>
 	Sub addExtraForTypes(exprs: StringList; names: StringList; hasStatus: Boolean);
 	Var
-		i: Integer;
+		ids: StringList;
+		i, j: Integer;
 		dim: IDimInstance;
 		attrs: IDimAttributesInstance;
 		attrId, attrName: IDimAttributeInstance;
 		code, title: String;
+		found: Boolean;
 	Begin
+		ids := getSelectedTypeIds;
+		If ids.Count = 0 Then Return; End If;
 		If IsNull(D_ZTYPEIND) Then Return; End If;
 		dim := D_ZTYPEIND.DimInstance;
 		If IsNull(dim) Then Return; End If;
-		// справка: Dimen.Attributes -> IDimAttributesInstance; Attr.Value(индекс элемента)
 		attrs := dim.Attributes;
 		attrId := attrs.FindById("ID");
 		attrName := attrs.FindById("NAME");
-		// элементы и атрибуты адресуются по индексу (см. справку: Dimen.Elements.Count, Attr.Value(i))
-		For i := 0 To dim.Elements.Count - 1 Do
-			If D_ZTYPEIND.Selection.State(i) <> DimElementState.NotSelected Then
-				code := attrId.Value(i) As String;
-				title := attrName.Value(i) As String;
-				If title.IsEmpty Then title := code; End If;
-				addExtraForType(exprs, names, code, title, hasStatus);
+		For j := 0 To ids.Count - 1 Do
+			code := ids.Item(j) As String;
+			title := "";
+			found := False;
+			If Not IsNull(attrId) Then
+				For i := 0 To dim.Elements.Count - 1 Do
+					If (Not found) And ((attrId.Value(i) As String) = code) Then
+						title := attrName.Value(i) As String;
+						found := True;
+					End If;
+				End For;
 			End If;
+			If title.IsEmpty Then title := code; End If;
+			addExtraForType(exprs, names, code, title, hasStatus);
 		End For;
 	End Sub addExtraForTypes;
+
+	/// <summary>Значения параметра ZTYPEIND (выбранные типы данных) списком строк</summary>
+	Function getSelectedTypeIds: StringList;
+	Var
+		params: IHashtable;
+		value: Variant;
+		arr: Array;
+		list: StringList;
+		i: Integer;
+	Begin
+		list := New StringList.Create;
+		If IsNull(Hyperlink.ParameterManager) Then Return list; End If;
+		params := Hyperlink.ParameterManager.Params;
+		If IsNull(params) Then Return list; End If;
+		If Not params.Contains(C_PARAM_ZTYPEIND) Then Return list; End If;
+		value := params.Item(C_PARAM_ZTYPEIND);
+		If IsNull(value) Then Return list; End If;
+		If value Is Array Then
+			arr := value As Array;
+			For i := 0 To arr.Length - 1 Do
+				Try
+					If Not IsNull(arr[i]) Then
+						If Not (arr[i] As String).IsEmpty Then list.Add(arr[i] As String); End If;
+					End If;
+				Except On E: Exception Do
+					Debug.WriteLine("[АнализТЭП/форма] элемент ZTYPEIND не строка: " + E.Message);
+				End Try;
+			End For;
+		Else
+			Try
+				list.Add(value As String);
+			Except On E: Exception Do
+				Debug.WriteLine("[АнализТЭП/форма] значение ZTYPEIND не строка: " + E.Message);
+			End Try;
+		End If;
+		Return list;
+	End Function getSelectedTypeIds;
 
 	/// <summary>Колонки одного типа данных: значение и статус по каждому периоду, оба набора</summary>
 	Sub addExtraForType(exprs: StringList; names: StringList; typeId: String; typeName: String; hasStatus: Boolean);
