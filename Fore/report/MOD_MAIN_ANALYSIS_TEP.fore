@@ -421,6 +421,7 @@ End Function listText;
 Function describeValue(value: Variant): String;
 Var
 	arr: Array;
+	lst: StringList;
 	i, n, total: Integer;
 	firstOk: String;
 Begin
@@ -462,6 +463,7 @@ Function toStrArray(value: Variant): Array Of String;
 Var
 	src: Array;
 	dst: Array Of String;
+	sl: StringList;
 	i, n, total: Integer;
 Begin
 	If IsNull(value) Then Return Null; End If;
@@ -470,7 +472,21 @@ Begin
 		dst[0] := value As String;
 		Return dst;
 	End If;
-	If Not (value Is Array) Then Return Null; End If;
+	If Not (value Is Array) Then
+		// платформа может отдать массивный параметр объектом-списком строк
+		Try
+			sl := value As StringList;
+			If Not IsNull(sl) Then
+				If sl.Count = 0 Then Return Null; End If;
+				dst := New String[sl.Count];
+				For i := 0 To sl.Count - 1 Do dst[i] := sl.Item(i) As String; End For;
+				Return dst;
+			End If;
+		Except On E: Exception Do
+			Debug.WriteLine("[АнализТЭП] значение не StringList: " + E.Message);
+		End Try;
+		Return Null;
+	End If;
 	src := value As Array;
 	total := src.Length;
 	If total = 0 Then Return Null; End If;
