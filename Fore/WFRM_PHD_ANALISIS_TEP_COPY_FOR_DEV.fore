@@ -1911,6 +1911,11 @@ Class ANALIZ_TEP_FORM_ON_SHOW: WebForm
 		SetParamSafe(C_PARAM_EXTRA_FIELDS, listToArray(exprs));
 		SetParamSafe(C_PARAM_EXTRA_NAMES, listToArray(names));
 		SetParamSafe(C_PARAM_P_STATUS, hasStatus ? "1" : "0");
+		// диагностика: что реально лежит в параметрах гиперссылки (это и уедет в отчёт)
+		logParamCheck(C_PARAM_EXTRA_FIELDS);
+		logParamCheck(C_PARAM_EXTRA_NAMES);
+		logParamCheck(C_PARAM_P_STATUS);
+		logParamCheck(C_PARAM_FIELD_LIST);
 		Debug.WriteLine("[АнализТЭП/форма] динамических колонок: " + exprs.Count.ToString + " (статусы: " + (hasStatus ? "да" : "нет") + ")");
 		logRecord(C_LOG_OP_FORM, True, "", "", "динамических колонок: " + exprs.Count.ToString + " (статусы: " + (hasStatus ? "да" : "нет") + ")");
 	End Sub buildExtraFields;
@@ -1971,6 +1976,7 @@ Class ANALIZ_TEP_FORM_ON_SHOW: WebForm
 		iExpr, iName, iPeriod, iType, iKind: Integer;
 		ids: StringList;
 		typeId, periodNum, kindCode: String;
+		rowCount: Integer;
 		rowOk: Boolean;
 	Begin
 		If IsNull(MB) Then MB := MetabaseClass.Active; End If;
@@ -1996,6 +2002,7 @@ Class ANALIZ_TEP_FORM_ON_SHOW: WebForm
 			ids := getSelectedTypeIds;
 			If ids.Count = 0 Then ids.Add(C_DEFAULT_TYPE_IND); End If;
 			While Not ds.Eof Do
+				rowCount := rowCount + 1;
 				periodNum := fields.Item(iPeriod).Value As String;
 				typeId := fields.Item(iType).Value As String;
 				kindCode := fields.Item(iKind).Value As String;
@@ -2015,6 +2022,9 @@ Class ANALIZ_TEP_FORM_ON_SHOW: WebForm
 			logRecord(C_LOG_OP_FORM, False, "", "", "генератор недоступен: " + E.Message);
 			Return False;
 		End Try;
+		logRecord(C_LOG_OP_FORM, True, "", "", "генератор: прочитано строк " + rowCount.ToString
+			+ ", отобрано " + exprs.Count.ToString + " (периодов " + extraPeriods.Count.ToString
+			+ ", типов " + ids.Count.ToString + ", статусы " + (hasStatus ? "да" : "нет") + ")");
 		Return exprs.Count > 0;
 	End Function fillFromGenerator;
 
@@ -2030,6 +2040,51 @@ Class ANALIZ_TEP_FORM_ON_SHOW: WebForm
 	End Function fieldIndex;
 
 	/// <summary>Список строк -> «плоский» массив строк (StringList.ToArray отдаёт объект)</summary>
+
+	/// <summary>
+	/// 	Диагностика: что реально записано в параметр гиперссылки (тип и первые значения).
+	/// 	Именно это значение платформа упакует в ссылку и передаст в отчёт.
+	/// </summary>
+	Sub logParamCheck(paramId: String);
+	Var
+		params: IHashtable;
+		value: Variant;
+		arr: Array;
+		text: String;
+	Begin
+		text := paramId + " = ";
+		If IsNull(Hyperlink.ParameterManager) Then
+			text := text + "менеджер параметров недоступен";
+		Else
+			params := Hyperlink.ParameterManager.Params;
+			If IsNull(params) Then
+				text := text + "список параметров недоступен";
+			Else
+				If Not params.Contains(paramId) Then
+					text := text + "не записан";
+				Else
+					value := params.Item(paramId);
+					If IsNull(value) Then
+						text := text + "Null";
+					Else
+						If value Is Array Then
+							arr := value As Array;
+							text := text + "массив(" + arr.Length.ToString + "), первый: " + (arr[0] As String);
+						Else
+							If value Is String Then
+								text := text + "строка: " + (value As String);
+							Else
+								text := text + "объект (не строка и не массив)";
+							End If;
+						End If;
+					End If;
+				End If;
+			End If;
+		End If;
+		Debug.WriteLine("[АнализТЭП/форма] " + text);
+		logRecord(C_LOG_OP_FORM, True, "", "", "диагностика " + text);
+	End Sub logParamCheck;
+
 	Function listToArray(list: StringList): Array Of String;
 	Var
 		arr: Array Of String;
