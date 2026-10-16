@@ -149,9 +149,9 @@ Main_Data AS (
         
         (SELECT t.ACTVTS FROM t1895280 t WHERE t.CODE = v.zlib_indc AND now() BETWEEN t.DATE_FROM AND t.DATE_TO LIMIT 1) AS "Код вида деятельности",
         (SELECT t.SNAME FROM t1895280 t WHERE t.CODE = v.zlib_indc AND now() BETWEEN t.DATE_FROM AND t.DATE_TO LIMIT 1) AS "Наименование вида деятельности",
-        (SELECT f.forms_text FROM Forms_Agg f WHERE f.ZLIB_INDC = v.zlib_indc AND f.GJAHR = v.calyear AND f.PLANT = v.plant LIMIT 1) AS "Формы ТЭП СНГ"
+        (SELECT f.forms_text FROM Forms_Agg f WHERE f.ZLIB_INDC = v.zlib_indc AND f.GJAHR = v.calyear AND f.PLANT = v.plant LIMIT 1) AS "Формы ТЭП СНГ",
         
-        :EXTRA_FIELDS            -- каждый элемент начинается с ', ' (запятая внутри значения)
+        :EXTRA_FIELDS
     FROM 
         VIEW_PHD_MULT_LEFT v
     WHERE           
@@ -219,9 +219,9 @@ Main_Data AS (
 
 -- 3. Финальный вывод
 SELECT
-    :ANALYTIC_SET,          -- выбранные аналитики (у параметра есть значение по умолчанию)
+    :ANALYTIC_SET,          -- выбранные аналитики
+    :EXTRA_NAMES,           -- динамические колонки периодов и статусов (их число задаёт форма)
     "Код вида деятельности",
     "Наименование вида деятельности",
     "Формы ТЭП СНГ"
-    :EXTRA_NAMES            -- динамические колонки; каждый элемент начинается с ', '
 FROM Main_Data;
