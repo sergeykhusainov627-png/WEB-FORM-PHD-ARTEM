@@ -1908,14 +1908,17 @@ Class ANALIZ_TEP_FORM_ON_SHOW: WebForm
 	Var
 		i: Integer;
 		dim: IDimInstance;
-		attrId, attrName: DimAttributeInstance;
+		attrs: IDimAttributesInstance;
+		attrId, attrName: IDimAttributeInstance;
 		code, title: String;
 	Begin
 		If IsNull(D_ZTYPEIND) Then Return; End If;
 		dim := D_ZTYPEIND.DimInstance;
 		If IsNull(dim) Then Return; End If;
-		attrId := dim.Attributes.FindById("ID");
-		attrName := dim.Attributes.FindById("NAME");
+		// справка: Dimen.Attributes -> IDimAttributesInstance; Attr.Value(индекс элемента)
+		attrs := dim.Attributes;
+		attrId := attrs.FindById("ID");
+		attrName := attrs.FindById("NAME");
 		// элементы и атрибуты адресуются по индексу (см. справку: Dimen.Elements.Count, Attr.Value(i))
 		For i := 0 To dim.Elements.Count - 1 Do
 			If D_ZTYPEIND.Selection.State(i) <> DimElementState.NotSelected Then
