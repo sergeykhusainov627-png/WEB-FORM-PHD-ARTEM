@@ -398,6 +398,11 @@ Begin
 		paramDump := paramDump + "ANALYTIC_SET=<пусто> (значение запроса не менялось)";
 	End If;
 	step_Ok("2/5 итог", paramInfo);
+	// диагностика проблемных параметров: что пришло от отчёта и что реально ушло в запрос
+	logParamValue("EXTRA_FIELDS", reportParams, queryParams);
+	logParamValue("EXTRA_NAMES", reportParams, queryParams);
+	logParamValue("P_STATUS", reportParams, queryParams);
+	logParamValue(C_Q_PARAM_FIELD_LIST, reportParams, queryParams);
 End Sub applyReportParams;
 
 /// <summary>Список строк через запятую — для журнала</summary>
