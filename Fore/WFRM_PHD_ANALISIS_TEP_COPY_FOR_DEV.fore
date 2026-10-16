@@ -285,6 +285,8 @@ Class ANALIZ_TEP_FORM_ON_SHOW: WebForm
 	Const C_PARAM_EXTRA_FIELDS = "EXTRA_FIELDS";
 	Const C_PARAM_EXTRA_NAMES = "EXTRA_NAMES";
 	Const C_PARAM_P_STATUS = "P_STATUS";
+	// параметр отчёта со списком выводимых аналитик (в форме используется как строка)
+	Const C_PARAM_FIELD_LIST = "P_FIELD_LIST";
 	// запрос-генератор значений для EXTRA_FIELDS / EXTRA_NAMES (источник справочника)
 	Const C_GENERATOR_ID = "QRY_PHD_ANALYS_TEP_EXTRA_FIELDS";
 	
