@@ -1906,7 +1906,6 @@ Class ANALIZ_TEP_FORM_ON_SHOW: WebForm
 	/// <summary>Колонки для всех выбранных типов данных D_ZTYPEIND</summary>
 	Sub addExtraForTypes(exprs: StringList; names: StringList; hasStatus: Boolean);
 	Var
-		el: IDimElement;
 		i: Integer;
 		dim: IDimInstance;
 		attrId, attrName: DimAttributeInstance;
@@ -1917,11 +1916,11 @@ Class ANALIZ_TEP_FORM_ON_SHOW: WebForm
 		If IsNull(dim) Then Return; End If;
 		attrId := dim.Attributes.FindById("ID");
 		attrName := dim.Attributes.FindById("NAME");
+		// элементы и атрибуты адресуются по индексу (см. справку: Dimen.Elements.Count, Attr.Value(i))
 		For i := 0 To dim.Elements.Count - 1 Do
-			el := dim.Elements.Item(i);
-			If D_ZTYPEIND.Selection.State(el) <> DimElementState.NotSelected Then
-				code := attrId.Value(el) As String;
-				title := attrName.Value(el) As String;
+			If D_ZTYPEIND.Selection.State(i) <> DimElementState.NotSelected Then
+				code := attrId.Value(i) As String;
+				title := attrName.Value(i) As String;
 				If title.IsEmpty Then title := code; End If;
 				addExtraForType(exprs, names, code, title, hasStatus);
 			End If;
