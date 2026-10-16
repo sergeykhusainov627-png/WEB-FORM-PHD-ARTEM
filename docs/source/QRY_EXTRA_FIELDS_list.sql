@@ -2,7 +2,9 @@
    Запрос-генератор значений для параметров EXTRA_FIELDS и EXTRA_NAMES.
    Подключается как источник справочника в редакторе параметров (как сейчас сделано для ANALYTIC_SET).
 
-   Колонки результата (PERIOD_NUM, TYPE_ID, KIND_CODE — машиночитаемые, для фильтрации в форме):
+   Колонки результата (ID — идентификатор строки для справочника; PERIOD_NUM, TYPE_ID,
+   KIND_CODE — машиночитаемые, для фильтрации в форме):
+     ID             - идентификатор строки (row_number) — ключ справочника
      SORT           - порядок (период -> тип данных -> вид колонки); по нему сортируется справочник
      PERIOD         - подпись периода
      DATA_TYPE      - наименование типа данных из DICT_DATA_TYPE (таблица t117604)
@@ -51,6 +53,7 @@ K(ord, suffix, agg, measure) AS (VALUES
         (4, '. С нач.года. Статус', 'MAX', 'zphd_stat')
 )
 SELECT
+    ROW_NUMBER() OVER (ORDER BY p.ord, t.ord, k.ord)       AS "ID",   -- идентификатор строки для справочника
     p.ord * 100 + t.ord * 10 + k.ord                       AS "SORT",
     p.ord                                                  AS "PERIOD_NUM",
     p.caption                                              AS "PERIOD",
