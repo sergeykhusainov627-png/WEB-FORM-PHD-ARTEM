@@ -1976,8 +1976,15 @@ Class ANALIZ_TEP_FORM_ON_SHOW: WebForm
 		If IsNull(MB) Then MB := MetabaseClass.Active; End If;
 		If IsNull(extraPeriods) Then Return False; End If;
 		Try
-			desc := MB.ItemById(C_GENERATOR_ID);
-			If IsNull(desc) Then Return False; End If;
+			// генератор лежит в том же namespace, что и запрос данных (BA_PHD)
+			desc := MB.ItemByIdNamespace(C_GENERATOR_ID, MB.GetObjectKeyById(C_LOG_NAMESPACE_ID));
+			If IsNull(desc) Then
+				desc := MB.ItemById(C_GENERATOR_ID);
+			End If;
+			If IsNull(desc) Then
+				logRecord(C_LOG_OP_FORM, False, "", "", "генератор " + C_GENERATOR_ID + " не найден в " + C_LOG_NAMESPACE_ID);
+				Return False;
+			End If;
 			ds := desc.Open(Null) As IDatasetInstance;
 			fields := ds.Fields;
 			iExpr := fieldIndex(fields, "EXPR");
@@ -2005,6 +2012,7 @@ Class ANALIZ_TEP_FORM_ON_SHOW: WebForm
 			End While;
 		Except On E: Exception Do
 			Debug.WriteLine("[АнализТЭП/форма] генератор недоступен: " + E.Message);
+			logRecord(C_LOG_OP_FORM, False, "", "", "генератор недоступен: " + E.Message);
 			Return False;
 		End Try;
 		Return exprs.Count > 0;
