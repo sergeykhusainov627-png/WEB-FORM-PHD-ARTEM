@@ -404,6 +404,32 @@ Begin
 	logParamValue("P_STATUS", reportParams, queryParams);
 	logParamValue(C_Q_PARAM_FIELD_LIST, reportParams, queryParams);
 End Sub applyReportParams;
+/// <summary>
+/// 	Диагностика параметра: что пришло в отчёт и что лежит в параметре запроса.
+/// 	Пишется в журнал и в служебную ячейку листа.
+/// </summary>
+Sub logParamValue(paramId: String; reportParams: IMetabaseObjectParamValues; queryParams: IMetabaseObjectParamValues);
+Var
+	src, dst: IMetabaseObjectParamValue;
+	text: String;
+Begin
+	text := paramId;
+	src := reportParams.FindById(paramId);
+	If IsNull(src) Then
+		text := text + ": в отчёте параметра нет";
+	Else
+		text := text + ": отчёт -> " + describeValue(src.Value);
+	End If;
+	dst := queryParams.FindById(paramId);
+	If IsNull(dst) Then
+		text := text + "; в запросе параметра нет";
+	Else
+		text := text + "; запрос = " + describeValue(dst.Value);
+	End If;
+	trace(text);
+	logRecord(C_LOG_OP_LOAD, True, WS_DATA_NAME, "", "диагностика " + text);
+End Sub logParamValue;
+
 
 /// <summary>Список строк через запятую — для журнала</summary>
 Function listText(items: Array Of String): String;
