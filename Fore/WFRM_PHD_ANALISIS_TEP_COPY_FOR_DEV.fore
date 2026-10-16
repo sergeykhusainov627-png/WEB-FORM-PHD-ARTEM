@@ -285,6 +285,8 @@ Class ANALIZ_TEP_FORM_ON_SHOW: WebForm
 	Const C_PARAM_EXTRA_FIELDS = "EXTRA_FIELDS";
 	Const C_PARAM_EXTRA_NAMES = "EXTRA_NAMES";
 	Const C_PARAM_P_STATUS = "P_STATUS";
+	// запрос-генератор значений для EXTRA_FIELDS / EXTRA_NAMES (источник справочника)
+	Const C_GENERATOR_ID = "QRY_PHD_ANALYS_TEP_EXTRA_FIELDS";
 	
 	_AnalyzTepHyperlink: COpenHyperlink; // CUrlHyperlink
 	_hlink: ITabHyperlink;
@@ -292,6 +294,7 @@ Class ANALIZ_TEP_FORM_ON_SHOW: WebForm
 	// --- «Поля для вывода»: таблицы соответствия «имя чек-бокса -> идентификатор поля отчёта» ---
 	// Текст последней ошибки (диагностика: показывается в TextArea1)	
 	_lastError: String;
+	extraPeriods: StringList;
 	extraConds: StringList;
 	extraCaptions: StringList;
 	_fieldIds: IHashtable;
@@ -1835,11 +1838,12 @@ Class ANALIZ_TEP_FORM_ON_SHOW: WebForm
 	End Sub addStatusFields;
 
 	/// <summary>Период в динамический список, если отмечен его чек-бокс</summary>
-	Sub addPeriodIfChecked(cb: IWebCheckBox; cond: String; caption: String);
+	Sub addPeriodIfChecked(cb: IWebCheckBox; periodNum: Integer; cond: String; caption: String);
 	Begin
 		If IsNull(cb) Then Return; End If;
 		If Not cb.Checked Then Return; End If;
-		// значение: агрегат по периоду и типу данных; имя: подпись для заголовка колонки
+		// номер периода нужен для фильтрации строк генератора, cond/caption — для запасного пути
+		extraPeriods.Add(periodNum.ToString);
 		extraConds.Add(cond);
 		extraCaptions.Add(caption);
 	End Sub addPeriodIfChecked;
@@ -1857,31 +1861,34 @@ Class ANALIZ_TEP_FORM_ON_SHOW: WebForm
 	Begin
 		If IsNull(extraConds) Then extraConds := New StringList.Create; End If;
 		If IsNull(extraCaptions) Then extraCaptions := New StringList.Create; End If;
+		If IsNull(extraPeriods) Then extraPeriods := New StringList.Create; End If;
+		extraPeriods.Clear;
 		extraConds.Clear;
 		extraCaptions.Clear;
 		
 		// --- 1. периоды по отмеченным чек-боксам (19 периодов запроса)
-		addPeriodIfChecked(CB_JANUARY, "period = 1", "Январь");
-		addPeriodIfChecked(CB_FEBRUARY, "period = 2", "Февраль");
-		addPeriodIfChecked(CB_MARCH, "period = 3", "Март");
-		addPeriodIfChecked(CB_APRIL, "period = 4", "Апрель");
-		addPeriodIfChecked(CB_MAY, "period = 5", "Май");
-		addPeriodIfChecked(CB_JUNE, "period = 6", "Июнь");
-		addPeriodIfChecked(CB_JULY, "period = 7", "Июль");
-		addPeriodIfChecked(CB_AUGUST, "period = 8", "Август");
-		addPeriodIfChecked(CB_SEPTEMBER, "period = 9", "Сентябрь");
-		addPeriodIfChecked(CB_OCTOBER, "period = 10", "Октябрь");
-		addPeriodIfChecked(CB_NOVEMBER, "period = 11", "Ноябрь");
-		addPeriodIfChecked(CB_DECEMBER, "period = 12", "Декабрь");
-		addPeriodIfChecked(CB_FIRST_QUARTER, "period IN (13)", "I кв.");
-		addPeriodIfChecked(CB_SECOND_QUARTER, "period IN (14)", "II кв.");
-		addPeriodIfChecked(CB_SIX_MONTH, "period IN (15)", "6 мес.");
-		addPeriodIfChecked(CB_THIRD_QUARTER, "period IN (16)", "III кв.");
-		addPeriodIfChecked(CB_NINE_MONTH, "period IN (17)", "9 мес.");
-		addPeriodIfChecked(CB_FOURTH_QUARTER, "period IN (18)", "IV кв.");
-		addPeriodIfChecked(CB_YEAR, "period IN (19)", "Год");
+		addPeriodIfChecked(CB_JANUARY, 1, "period = 1", "Январь");
+		addPeriodIfChecked(CB_FEBRUARY, 2, "period = 2", "Февраль");
+		addPeriodIfChecked(CB_MARCH, 3, "period = 3", "Март");
+		addPeriodIfChecked(CB_APRIL, 4, "period = 4", "Апрель");
+		addPeriodIfChecked(CB_MAY, 5, "period = 5", "Май");
+		addPeriodIfChecked(CB_JUNE, 6, "period = 6", "Июнь");
+		addPeriodIfChecked(CB_JULY, 7, "period = 7", "Июль");
+		addPeriodIfChecked(CB_AUGUST, 8, "period = 8", "Август");
+		addPeriodIfChecked(CB_SEPTEMBER, 9, "period = 9", "Сентябрь");
+		addPeriodIfChecked(CB_OCTOBER, 10, "period = 10", "Октябрь");
+		addPeriodIfChecked(CB_NOVEMBER, 11, "period = 11", "Ноябрь");
+		addPeriodIfChecked(CB_DECEMBER, 12, "period = 12", "Декабрь");
+		addPeriodIfChecked(CB_FIRST_QUARTER, 13, "period IN (13)", "I кв.");
+		addPeriodIfChecked(CB_SECOND_QUARTER, 14, "period IN (14)", "II кв.");
+		addPeriodIfChecked(CB_SIX_MONTH, 15, "period IN (15)", "6 мес.");
+		addPeriodIfChecked(CB_THIRD_QUARTER, 16, "period IN (16)", "III кв.");
+		addPeriodIfChecked(CB_NINE_MONTH, 17, "period IN (17)", "9 мес.");
+		addPeriodIfChecked(CB_FOURTH_QUARTER, 18, "period IN (18)", "IV кв.");
+		addPeriodIfChecked(CB_YEAR, 19, "period IN (19)", "Год");
 		// защита от пустого параметра: хотя бы один период
 		If extraConds.Count = 0 Then
+			extraPeriods.Add("19");
 			extraConds.Add("period IN (19)");
 			extraCaptions.Add("Год");
 		End If;
@@ -1890,7 +1897,12 @@ Class ANALIZ_TEP_FORM_ON_SHOW: WebForm
 		exprs := New StringList.Create;
 		names := New StringList.Create;
 		hasStatus := (Not IsNull(CB_DISPLAY_INFO_BY_STATUS)) And CB_DISPLAY_INFO_BY_STATUS.Checked;
-		addExtraForTypes(exprs, names, hasStatus);
+		// основной путь: значения берём из запроса-генератора (то же, что видно в справочнике параметра)
+		If Not fillFromGenerator(exprs, names, hasStatus) Then
+			// запасной путь: генератор недоступен — собираем выражения сами
+			logRecord(C_LOG_OP_FORM, False, "", "", "генератор недоступен, выражения собираются в форме");
+			addExtraForTypes(exprs, names, hasStatus);
+		End If;
 		If exprs.Count = 0 Then
 			// защита от пустого параметра: тип данных по умолчанию «План»
 			addExtraForType(exprs, names, C_DEFAULT_TYPE_IND, "План", hasStatus);
@@ -1943,6 +1955,71 @@ Class ANALIZ_TEP_FORM_ON_SHOW: WebForm
 			addExtraForType(exprs, names, code, title, hasStatus);
 		End For;
 	End Sub addExtraForTypes;
+
+
+	/// <summary>
+	/// 	Читает значения EXTRA_FIELDS/EXTRA_NAMES из запроса-генератора
+	/// 	(QRY_PHD_ANALYS_TEP_EXTRA_FIELDS). Фильтр: выбранные периоды (extraPeriods),
+	/// 	выбранные типы данных (TYPE_ID из параметра ZTYPEIND), вид колонки.
+	/// 	Возвращает True, если строки взяты; иначе False — форма соберёт выражения сама.
+	/// </summary>
+	Function fillFromGenerator(exprs: StringList; names: StringList; hasStatus: Boolean): Boolean;
+	Var
+		desc: IMetabaseObjectDescriptor;
+		ds: IDatasetInstance;
+		fields: IDatasetInstanceFields;
+		iExpr, iName, iPeriod, iType, iKind: Integer;
+		ids: StringList;
+		typeId, periodNum, kindCode: String;
+		rowOk: Boolean;
+	Begin
+		If IsNull(MB) Then MB := MetabaseClass.Active; End If;
+		If IsNull(extraPeriods) Then Return False; End If;
+		Try
+			desc := MB.ItemById(C_GENERATOR_ID);
+			If IsNull(desc) Then Return False; End If;
+			ds := desc.Open(Null) As IDatasetInstance;
+			fields := ds.Fields;
+			iExpr := fieldIndex(fields, "EXPR");
+			iName := fieldIndex(fields, "NAME");
+			iPeriod := fieldIndex(fields, "PERIOD_NUM");
+			iType := fieldIndex(fields, "TYPE_ID");
+			iKind := fieldIndex(fields, "KIND_CODE");
+			If (iExpr < 0) Or (iName < 0) Or (iPeriod < 0) Or (iType < 0) Or (iKind < 0) Then Return False; End If;
+			ids := getSelectedTypeIds;
+			If ids.Count = 0 Then ids.Add(C_DEFAULT_TYPE_IND); End If;
+			While Not ds.Eof Do
+				periodNum := fields.Item(iPeriod).Value As String;
+				typeId := fields.Item(iType).Value As String;
+				kindCode := fields.Item(iKind).Value As String;
+				rowOk := (extraPeriods.IndexOf(periodNum) >= 0) And (ids.IndexOf(typeId) >= 0);
+				If rowOk Then
+					// 1 и 3 — значения (всегда), 2 и 4 — статусы (только при отмеченном чек-боксе)
+					If (kindCode = "2") Or (kindCode = "4") Then rowOk := hasStatus; End If;
+				End If;
+				If rowOk Then
+					exprs.Add(fields.Item(iExpr).Value As String);
+					names.Add(fields.Item(iName).Value As String);
+				End If;
+				ds.Next;
+			End While;
+		Except On E: Exception Do
+			Debug.WriteLine("[АнализТЭП/форма] генератор недоступен: " + E.Message);
+			Return False;
+		End Try;
+		Return exprs.Count > 0;
+	End Function fillFromGenerator;
+
+	/// <summary>Индекс колонки результата по идентификатору (-1, если нет)</summary>
+	Function fieldIndex(fields: IDatasetInstanceFields; name: String): Integer;
+	Var
+		i: Integer;
+	Begin
+		For i := 0 To fields.Count - 1 Do
+			If (fields.Item(i).Id As String) = name Then Return i; End If;
+		End For;
+		Return -1;
+	End Function fieldIndex;
 
 	/// <summary>Список строк -> «плоский» массив строк (StringList.ToArray отдаёт объект)</summary>
 	Function listToArray(list: StringList): Array Of String;
