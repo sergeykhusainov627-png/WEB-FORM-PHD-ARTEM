@@ -1896,8 +1896,8 @@ Class ANALIZ_TEP_FORM_ON_SHOW: WebForm
 			addExtraForType(exprs, names, C_DEFAULT_TYPE_IND, "План", hasStatus);
 		End If;
 		
-		SetParamSafe(C_PARAM_EXTRA_FIELDS, exprs.ToArray);
-		SetParamSafe(C_PARAM_EXTRA_NAMES, names.ToArray);
+		SetParamSafe(C_PARAM_EXTRA_FIELDS, listToArray(exprs));
+		SetParamSafe(C_PARAM_EXTRA_NAMES, listToArray(names));
 		SetParamSafe(C_PARAM_P_STATUS, hasStatus ? "1" : "0");
 		Debug.WriteLine("[АнализТЭП/форма] динамических колонок: " + exprs.Count.ToString + " (статусы: " + (hasStatus ? "да" : "нет") + ")");
 		logRecord(C_LOG_OP_FORM, True, "", "", "динамических колонок: " + exprs.Count.ToString + " (статусы: " + (hasStatus ? "да" : "нет") + ")");
@@ -1943,6 +1943,21 @@ Class ANALIZ_TEP_FORM_ON_SHOW: WebForm
 			addExtraForType(exprs, names, code, title, hasStatus);
 		End For;
 	End Sub addExtraForTypes;
+
+	/// <summary>Список строк -> «плоский» массив строк (StringList.ToArray отдаёт объект)</summary>
+	Function listToArray(list: StringList): Array Of String;
+	Var
+		arr: Array Of String;
+		i: Integer;
+	Begin
+		If IsNull(list) Then Return Null; End If;
+		arr := New String[list.Count];
+		For i := 0 To list.Count - 1 Do
+			arr[i] := list.Item(i) As String;
+		End For;
+		Return arr;
+	End Function listToArray;
+
 
 	/// <summary>Значения параметра ZTYPEIND (выбранные типы данных) списком строк</summary>
 	Function getSelectedTypeIds: StringList;
