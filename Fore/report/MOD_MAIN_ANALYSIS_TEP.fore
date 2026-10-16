@@ -450,6 +450,15 @@ Begin
 		End If;
 		Return "массив (" + total.ToString + "), строк: " + n.ToString + ", первый: "" + firstOk + """;
 	End If;
+	Try
+		lst := value As StringList;
+		If Not IsNull(lst) Then
+			If lst.Count = 0 Then Return "список строк (пустой)"; End If;
+			Return "список строк (" + lst.Count.ToString + "), первый: " + (lst.Item(0) As String);
+		End If;
+	Except On E: Exception Do
+		Debug.WriteLine("[АнализТЭП] значение не StringList: " + E.Message);
+	End Try;
 	Return "объект (не строка и не массив)";
 End Function describeValue;
 

@@ -16,7 +16,7 @@
 | Файл | Размер | Строк | SHA-256 |
 |---|---:|---:|---|
 | `Fore/WFRM_PHD_ANALISIS_TEP_COPY_FOR_DEV.fore` | 91 748 Б | 2 277 | `45f5200fc55cf1e57e0309ef1f075a92279c9d938ef90148ed60cb3814715087` |
-| `Fore/report/MOD_MAIN_ANALYSIS_TEP.fore` | 27 879 Б | 635 | `49f740a2eb0a2140e920be8b6239bfdcba39aa979768495da784876c8143d95f` |
+| `Fore/report/MOD_MAIN_ANALYSIS_TEP.fore` | 28 276 Б | 644 | `9f843f09dd82bb4fd59032b4bc8a9e9ff3905aba3b27c7abab8d72b50f77bef0` |
 
 Проверить скачанный файл: `Get-FileHash <файл> -Algorithm SHA256` — хеш должен совпасть.
 
