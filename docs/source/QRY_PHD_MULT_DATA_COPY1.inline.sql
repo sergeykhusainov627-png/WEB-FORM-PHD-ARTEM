@@ -25,7 +25,7 @@ src AS (
     JOIN TBL_FAP_MULT TBL
       ON D."KEY" = TBL.KEY_CONNECT AND TBL.plant = D.plant AND TBL.year = D.calyear
     WHERE D.IS_TEMPORARY = 2
-WHERE           
+AND           
      	          (D.PLANT 		    	IN (:PLANT) 	 							OR COALESCE(:PLANT,'')='') 
         AND (D.ZLIB_INDC	    	IN (:ZLIB_INDC)  							OR COALESCE(:ZLIB_INDC,'')='') 
         AND (D.CALYEAR 	    	IN (:CALYEAR) 	 							OR COALESCE(:CALYEAR,'')='') 
