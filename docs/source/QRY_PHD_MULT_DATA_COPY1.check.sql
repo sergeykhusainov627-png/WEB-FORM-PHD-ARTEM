@@ -86,11 +86,11 @@ AND
 -- 2. Основной расчёт: аналитики/наименования/ключи + динамические колонки периодов и статусов
 Main_Data AS (
     SELECT
-        v.zlib_indc, v.calyear, v.plant, v.vendor,   -- вместо :ANALYTIC_SET
+        v.zlib_indc, v.calyear, v.plant, v.vendor,
         (SELECT t.ACTVTS FROM t1895280 t WHERE t.CODE = v.zlib_indc AND now() BETWEEN t.DATE_FROM AND t.DATE_TO LIMIT 1) AS "Код вида деятельности",
         (SELECT t.SNAME FROM t1895280 t WHERE t.CODE = v.zlib_indc AND now() BETWEEN t.DATE_FROM AND t.DATE_TO LIMIT 1) AS "Наименование вида деятельности",
         (SELECT f.forms_text FROM Forms_Agg f WHERE f.ZLIB_INDC = v.zlib_indc AND f.GJAHR = v.calyear AND f.PLANT = v.plant LIMIT 1) AS "Формы ТЭП СНГ",
-        1 AS "Нет данных"                              -- вместо :EXTRA_FIELDS
+        1 AS "Нет данных"
     FROM src v
 -- Блок LEFT JOIN к справочникам наименований (реестр dict-tables.md + лист «Вывод полей в отчете»).
 -- Вставлять после inline-версии VIEW_PHD_MULT как CTE src:  FROM src D  LEFT JOIN ...
