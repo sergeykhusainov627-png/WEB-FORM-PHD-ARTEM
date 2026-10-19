@@ -190,7 +190,7 @@ LEFT JOIN t2364976 n_owners                         -- RDSD_OWNERS
        ON n_owners."KEY" = n_inds.owner
     GROUP BY
         :ANALYTIC_SET,
-        CASE WHEN COALESCE(:P_STATUS, '0') = '1' THEN COALESCE(zphd_stat, '') ELSE 'Итого' END,
+        CASE WHEN COALESCE(:P_STATUS, '0') = '1' THEN COALESCE(v.zphd_stat, '') ELSE 'Итого' END,
         v.zlib_indc, v.calyear, v.plant
 )
 -- 3. Финальный вывод
