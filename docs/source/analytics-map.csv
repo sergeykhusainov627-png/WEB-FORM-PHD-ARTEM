@@ -1,0 +1,142 @@
+﻿поле_отчета;аналитика;ключ;наименование;есть_код
+Год;year;;;нет
+СП;sp;D.sp;n_rdsd_plant.TXTMD;да
+ТЭП;zlib_indc;n_dict_phd_left.ZLIB_INDC;n_dict_phd_left.ZLIB_INDC;нет
+Наименование ТЭП;sname;n_rdsd_inds.SNAME;n_rdsd_inds.SNAME;нет
+Ед.измерения;act_unit;n_dict_phd_left.ACT_UNIT;n_dict_phd_left.ACT_UNIT;нет
+Поставщик;vendor;D.vendor;n_rdsd_vendor.TXTMD;да
+Заказчик;key;D.key;n_rdsd_soldto.NAME;да
+Регион;zhrgrpmo;D.zhrgrpmo;n_rdsd_zhrgrpmo.NAME;да
+Вид производства;profit_ctr;D.profit_ctr;n_rdsd_profit_ctr.NAME;да
+МВЗ;costcenter;n_dict_phd_left.COSTCENTER;n_dict_phd_left.COSTCENTER;нет
+Орг.единица;zorgu;D.zorgu;n_rdsd_zorgu.NAME;да
+Рабочее место исполнителя;code_zph_usr0;D.code_zph_usr0;n_rdsd_zph_usr0.NAME;да
+Вид работ;acttype;D.acttype;n_rdsd_acttype.NAME;да
+Единица оборудования;zequi;D.zequi;n_rdsd_zequi.NAME;да
+Класс вида оборудования;zclsvobor;D.zclsvobor;n_rdsd_zclsvobor.NAME;да
+Материал;material;D.material;n_rdsd_material.NAME;да
+Тех.место;zfunc_loc;D.zfunc_loc;n_rdsd_zfunc_loc.NAME;да
+Месторождение;zsiu_fld;D.zsiu_fld;n_rdsd_zsiu_fld.NAME;да
+СПП;posid;D.posid;n_rdsd_posid.NAME;да
+ИАС;zlib_infs;D.zlib_infs;n_rdsd_infosystem.NAME;да
+Тип периода;period_ty;D.period_ty;n_dic_type_period.NAME;да
+Договор;zphd_dog;n_dict_phd_left.ZPHD_DOG;n_dict_phd_left.ZPHD_DOG;нет
+Потребитель;zphd_usl1;D.zphd_usl1;n_shortcut_to_rdsd_soldto_3.NAME;да
+ЭСО физ;zdebitor;D.zdebitor;n_shortcut_to_rdsd_soldto.NAME;да
+Эсо физ (даль);zph_eso2;D.zph_eso2;n_shortcut_to_rdsd_soldto_2.NAME;да
+ЭСО покуп;zph_epok;D.zph_epok;n_shortcut_to_rdsd_soldto_4.NAME;да
+Сетевая компания;zphd_sk;D.zphd_sk;n_shortcut_to_rdsd_soldto_5.NAME;да
+Ур.напр.;ucvoltlevl;D.ucvoltlevl;n_rdsd_ucvoltlevl.NAME;да
+Ур.напр.продаж;zucvolttr;D.zucvolttr;n_shortcut_to_rdsd_ucvoltlevl.NAME;да
+Класс напр.;z_cl_napr;D.z_cl_napr;n_rdsd_z_cl_napr.NAME;да
+Тип тарифов;zsiu_ty;D.zsiu_ty;n_rdsd_zsiu_ty.NAME;да
+Договор по воде;zdoglink;n_dict_phd_left.ZDOGLINK;n_dict_phd_left.ZDOGLINK;нет
+Участок недр;zbur_lu;D.zbur_lu;n_rdsd_zbur_lu.NAME;да
+Пощадь бурения;zbur_area;D.zbur_area;n_rdsd_zbur_area.NAME;да
+Куст;zskv_kust;D.zskv_kust;n_dict_phd_left.ZKUST;да
+Скважина (геол.ном);z_skv_geo;n_dict_phd_left.Z_SKV_GEO;n_dict_phd_left.Z_SKV_GEO;нет
+Пласт;zbur_plst;D.zbur_plst;n_rdsd_zbur_plst.ZBUR_PLST;да
+Технология отбора керна;name;n_rdsd_zph_tehk.NAME;n_rdsd_zph_tehk.NAME;нет
+Струк. особенности пласта;name;;;нет
+Мероприятие;zphd_comm;D.zphd_comm;n_dict_phd_left.ZPHD_COMM;да
+Дата начала бурения;zbur_beg;n_dict_phd_left.ZBUR_BEG;n_dict_phd_left.ZBUR_BEG;нет
+Дата окончания бурения;zbur_end;n_dict_phd_left.ZBUR_END;n_dict_phd_left.ZBUR_END;нет
+Пилотный ствол;zpilot;n_dict_phd_left.ZPILOT;n_dict_phd_left.ZPILOT;нет
+Состояние скважины;name;n_rdsd_zskv_st.NAME;n_rdsd_zskv_st.NAME;нет
+Примечание;zindtxt1;n_dict_phd_left.ZINDTXT1;n_dict_phd_left.ZINDTXT1;нет
+Ген.подрядчик;zgen_pod;D.zgen_pod;n_shortcut_to_rdsd_soldto_7.NAME;да
+Ген.заказчик;zgen_zak;D.zgen_zak;n_shortcut_to_rdsd_soldto_6.NAME;да
+Субподрядчик;zpkr_subp;D.zpkr_subp;n_shortcut_to_rdsd_soldto_8.NAME;да
+Шифр проекта стройки;name;n_rdsd_zshifr.NAME;n_rdsd_zshifr.NAME;нет
+Номер объекта ЭМ;name;n_rdsd_zobjem.NAME;n_rdsd_zobjem.NAME;нет
+Объект исследования;zphd_sr;D.zphd_sr;n_rdsd_zphd_sr.NAME;да
+Группировка сред ЭМ;zphd_grsr;D.zphd_grsr;n_rdsd_zphd_grsr.NAME;да
+Вид газа;zgaz_type;D.zgaz_type;n_rdsd_zgaz_type.NAME;да
+Тип воздушного судна;zaviatype;D.zaviatype;n_rdsd_zaviatype.NAME;да
+Дата ввода скв. в экспл.;zphd_nch;n_dict_phd_left.ZPHD_NCH;n_dict_phd_left.ZPHD_NCH;нет
+Дата проведения ГТМ;zphd_kon;n_dict_phd_left.ZPHD_KON;n_dict_phd_left.ZPHD_KON;нет
+ГТМ (Универсальный справочник);zphd_nop1 при zphd_spr = gtm_skv;D.zphd_nop1 при zphd_spr = gtm_skv;n_rdsd_zphd_spr.NAME, по ZPHD_NOP1 при ZPHD_SPR = GTM_SKV;да
+Вид деятельности;actvts;D.actvts;n_rdsd_actvts.SNAME;да
+Вид показателя;id1;;;да
+Формы  отчетов;zf_numb;;;нет
+ТЭП-источник;zf_numb;;;нет
+Наименование ТЭП-источника;sname;n_rdsd_inds.SNAME;n_rdsd_inds.SNAME;нет
+Владелец ТЭП;owner;D.owner;n_rdsd_owners.SHORT_NAME;да
+Исключение из приказа;zphd_is;n_dict_phd_left.ZPHD_IS;n_dict_phd_left.ZPHD_IS;нет
+Источник данных;zlib_infs;n_dict_phd_left.ZLIB_INFS;n_dict_phd_left.ZLIB_INFS;нет
+Январь;zsiu_indv при  quarter = 1 calmonth =  01;;;нет
+Февраль;zsiu_indv при  quarter = 1 calmonth =  02;;;нет
+Март;zsiu_indv при  quarter = 1 calmonth =  03;;;нет
+Апрель;zsiu_indv при  quarter = 2 calmonth =  04;;;нет
+Май;zsiu_indv при  quarter = 2 calmonth =  05;;;нет
+Июнь;zsiu_indv при  quarter = 2 calmonth =  06;;;нет
+Июль;zsiu_indv при  quarter = 3 calmonth =  07;;;нет
+Август;zsiu_indv при  quarter = 3 calmonth =  08;;;нет
+Сентябрь;zsiu_indv при  quarter = 3 calmonth =  09;;;нет
+Октябрь;zsiu_indv при  quarter = 4 calmonth =  10;;;нет
+Ноябрь;zsiu_indv при  quarter = 4 calmonth =  11;;;нет
+Декабрь;zsiu_indv при  quarter = 4 calmonth =  12;;;нет
+I кв.;zsiu_indv при  quarter = 1 calmonth =  00;;;нет
+II кв.;zsiu_indv при  quarter = 2 calmonth =  00;;;нет
+6 мес.;zsiu_indv при  quarter = 6 calmonth =  00;;;нет
+III кв.;zsiu_indv при  quarter = 3 calmonth =  00;;;нет
+9 мес.;zsiu_indv при  quarter = 9 calmonth =  00;;;нет
+IV кв.;zsiu_indv при  quarter = 4 calmonth =  00;;;нет
+Год;zsiu_indv при  quarter = 0 calmonth =  00;;;нет
+Январь. С нач.года;zvalue_sng при  quarter = 1 calmonth =  01;;;нет
+Февраль. С нач.года;zvalue_sng при  quarter = 1 calmonth =  02;;;нет
+Март. С нач.года;zvalue_sng при  quarter = 1 calmonth =  03;;;нет
+Апрель. С нач.года;zvalue_sng при  quarter = 2 calmonth =  04;;;нет
+Май. С нач. года;zvalue_sng при  quarter = 2 calmonth =  05;;;нет
+Июнь. С нач.года;zvalue_sng при  quarter = 2 calmonth =  06;;;нет
+Июль. С нач.года;zvalue_sng при  quarter = 3 calmonth =  07;;;нет
+Август. С нач.года;zvalue_sng при  quarter = 3 calmonth =  08;;;нет
+Сентябрь. С нач.года;zvalue_sng при  quarter = 3 calmonth =  09;;;нет
+Октябрь. С нач. года;zvalue_sng при  quarter = 4 calmonth =  10;;;нет
+Ноябрь. С нач. года;zvalue_sng при  quarter = 4 calmonth =  11;;;нет
+Декабрь.С нач. года;zvalue_sng при  quarter = 4 calmonth =  12;;;нет
+I кв.С нач. года;zvalue_sng при  quarter = 1 calmonth =  00;;;нет
+II кв.С нач. года;zvalue_sng при  quarter = 2 calmonth =  00;;;нет
+6 мес.С нач. года;zvalue_sng при  quarter = 6 calmonth =  00;;;нет
+III кв.С нач. года;zvalue_sng при  quarter = 3 calmonth =  00;;;нет
+9 мес.С нач. года;zvalue_sng при  quarter = 9 calmonth =  00;;;нет
+IV кв.С нач. года;zvalue_sng при  quarter = 4 calmonth =  00;;;нет
+Год. С нач. года;zvalue_sng при  quarter = 0 calmonth =  00;;;нет
+Январь. Коррект.;zsiu_indv при  quarter = 1 calmonth =  01  zlib_infs=koround;;;нет
+Февраль.  Коррект.;zsiu_indv при  quarter = 1 calmonth =  02  zlib_infs=koround;;;нет
+Март. Коррект.;zsiu_indv при  quarter = 1 calmonth =  03  zlib_infs=koround;;;нет
+Апрель. Коррект.;zsiu_indv при  quarter = 2 calmonth =  04  zlib_infs=koround;;;нет
+Май. Коррект.;zsiu_indv при  quarter = 2 calmonth =  05  zlib_infs=koround;;;нет
+Июнь. Коррект.;zsiu_indv при  quarter = 2 calmonth =  06  zlib_infs=koround;;;нет
+Июль. Коррект.;zsiu_indv при  quarter = 3 calmonth =  07  zlib_infs=koround;;;нет
+Август.Коррект.;zsiu_indv при  quarter = 3 calmonth =  08  zlib_infs=koround;;;нет
+Сентябрь. Коррект.;zsiu_indv при  quarter = 3 calmonth =  09  zlib_infs=koround;;;нет
+Октябрь. Коррект.;zsiu_indv при  quarter = 4 calmonth =  10  zlib_infs=koround;;;нет
+Ноябрь. Коррект.;zsiu_indv при  quarter = 4 calmonth =  11  zlib_infs=koround;;;нет
+Декабрь.Коррект.;zsiu_indv при  quarter = 4 calmonth =  12  zlib_infs=koround;;;нет
+I кв.Коррект.;zsiu_indv при  quarter = 1 calmonth =  00  zlib_infs=koround;;;нет
+II кв.Коррект.;zsiu_indv при  quarter = 2 calmonth =  00  zlib_infs=koround;;;нет
+6 мес.Коррект.;zsiu_indv при  quarter = 6 calmonth =  00  zlib_infs=koround;;;нет
+III кв.Коррект.;zsiu_indv при  quarter = 3 calmonth =  00  zlib_infs=koround;;;нет
+9 мес.Коррект.;zsiu_indv при  quarter = 9 calmonth =  00  zlib_infs=koround;;;нет
+IV кв.Коррект.;zsiu_indv при  quarter = 4 calmonth =  00  zlib_infs=koround;;;нет
+Год. Коррект.;zsiu_indv при  quarter = 0 calmonth =  00  zlib_infs=koround;;;нет
+Январь. Статус;zphd_stat при  quarter = 1 calmonth =  01;;;нет
+Февраль.  Статус;zphd_stat при  quarter = 1 calmonth =  02;;;нет
+Март. Статус;zphd_stat при  quarter = 1 calmonth =  03;;;нет
+Апрель. Статус;zphd_stat при  quarter = 2 calmonth =  04;;;нет
+Май. Статус;zphd_stat при  quarter = 2 calmonth =  05;;;нет
+Июнь. Статус;zphd_stat при  quarter = 2 calmonth =  06;;;нет
+Июль. Статус;zphd_stat при  quarter = 3 calmonth =  07;;;нет
+Август.Статус;zphd_stat при  quarter = 3 calmonth =  08;;;нет
+Сентябрь. Статус;zphd_stat при  quarter = 3 calmonth =  09;;;нет
+Октябрь.Статус;zphd_stat при  quarter = 4 calmonth =  10;;;нет
+Ноябрь. Статус;zphd_stat при  quarter = 4 calmonth =  11;;;нет
+Декабрь.Статус;zphd_stat при  quarter = 4 calmonth =  12;;;нет
+I кв.Статус;zphd_stat при  quarter = 1 calmonth =  00;;;нет
+II кв.Статус;zphd_stat при  quarter = 2 calmonth =  00;;;нет
+6 мес.Статус;zphd_stat при  quarter = 6 calmonth =  00;;;нет
+III кв.Статус;zphd_stat при  quarter = 3 calmonth =  00;;;нет
+9 мес.Статус;zphd_stat при  quarter = 9 calmonth =  00;;;нет
+IV кв.Статус;zphd_stat при  quarter = 4 calmonth =  00;;;нет
+Год. Статус;zphd_stat при  quarter = 0 calmonth =  00;;;нет
