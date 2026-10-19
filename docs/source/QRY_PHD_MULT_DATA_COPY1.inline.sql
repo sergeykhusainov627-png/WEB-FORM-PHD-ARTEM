@@ -29,7 +29,7 @@ AND
      	          (D.PLANT 		    	IN (:PLANT) 	 							OR COALESCE(:PLANT,'')='') 
         AND (D.ZLIB_INDC	    	IN (:ZLIB_INDC)  							OR COALESCE(:ZLIB_INDC,'')='') 
         AND (D.CALYEAR 	    	IN (:CALYEAR) 	 							OR COALESCE(:CALYEAR,'')='') 
-        AND (D.ZPHD_STAT     	IN (:ZPHD_STAT)   							OR COALESCE(:ZPHD_STAT,'')='')
+        AND (TBL.ZPHD_STAT     	IN (:ZPHD_STAT)   							OR COALESCE(:ZPHD_STAT,'')='')
         AND (D.ZTYPEIND     	IN (:ZTYPEIND)   							OR COALESCE(:ZTYPEIND,'')='')
         AND (D.VENDOR 	    	IN (:VENDOR) 	  							OR COALESCE(:VENDOR,'')='') 
         AND (D.SOLD_TO 	    	IN (:SOLD_TO) 	  							OR COALESCE(:SOLD_TO,'')='') 
@@ -95,7 +95,6 @@ Main_Data AS (
 -- Блок LEFT JOIN к справочникам наименований (реестр dict-tables.md + лист «Вывод полей в отчете»).
 -- Вставлять после inline-версии VIEW_PHD_MULT как CTE src:  FROM src D  LEFT JOIN ...
     LEFT JOIN t2312312 n_rdsd_plant ON n_rdsd_plant.plant = v.sp  -- RDSD_PLANT
-    LEFT JOIN t1913698 n_dict_phd_left ON n_dict_phd_left.KEY = v.zlib_indc  -- DICT_PHD_LEFT
     LEFT JOIN t1895280 n_rdsd_inds ON n_rdsd_inds.code = v.sname AND to_date(v.calyear || '-01-01', 'YYYY-MM-DD') BETWEEN n_rdsd_inds.datefrom AND n_rdsd_inds.dateto AND n_rdsd_inds.date_from <> 'invalid_date'  -- RDSD_INDS
     LEFT JOIN t2322857 n_rdsd_vendor ON n_rdsd_vendor.vendor = v.vendor  -- RDSD_VENDOR
     LEFT JOIN t2301822 n_rdsd_soldto ON n_rdsd_soldto.code = v.key  -- RDSD_SOLDTO
