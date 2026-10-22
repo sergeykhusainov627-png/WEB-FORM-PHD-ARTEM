@@ -1237,7 +1237,6 @@ Class ANALIZ_TEP_FORM_ON_SHOW: WebForm
 		// «Примечание» (ТТ: текстовое, ручной ввод). Значение уходит параметром ZINDTXT1,
 		// запрос ищет по маске: ILIKE "%" || :ZINDTXT1 || "%". Пустое значение параметр убирает.
 		setParamOrRemove("ZINDTXT1", I_ZINDTXT1.Text);
-		SafeGenerate;
 	End Sub I_ZINDTXT1OnTextChanged;
 	
 	/// <summary>
@@ -1726,7 +1725,6 @@ Class ANALIZ_TEP_FORM_ON_SHOW: WebForm
 		Else
 		End If;
 		
-		SafeGenerate;
 		Debug.WriteLine("[АнализТЭП/форма] полей в списке: " + fieldList.Count.ToString + " -> " + fieldList.Text(","));
 		logRecord(C_LOG_OP_FORM, True, "", "", "полей в списке: " + fieldList.Count.ToString + " -> " + fieldList.Text(","));
 		If (Not IsNull(TextArea1)) And _lastError.IsEmpty Then
@@ -2160,7 +2158,6 @@ Class ANALIZ_TEP_FORM_ON_SHOW: WebForm
 		
 		setComboSelectionByAttribute(D_PLANT, C_PARAM_PLANT, "CODE", spCode);
 		D_PLANT.Enabled := False;
-		SafeGenerate;
 	End Sub applyPlantAccessRights;
 	
 	Function isPlantPrivileged: Boolean;
