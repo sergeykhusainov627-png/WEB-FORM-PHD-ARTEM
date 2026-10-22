@@ -2515,6 +2515,16 @@ Class ANALIZ_TEP_FORM_ON_SHOW: WebForm
 		End If;
 		sql := String.Replace(sql, ":EXTRA_FIELDS", _sqlExtraFields);
 		sql := String.Replace(sql, ":EXTRA_NAMES", _sqlExtraNames);
+
+		// читаемый SQL: переносы строк перед ключевыми словами
+		sql := String.Replace(sql, " WITH ", C_CRLF + "WITH ");
+		sql := String.Replace(sql, " SELECT ", C_CRLF + "SELECT ");
+		sql := String.Replace(sql, " FROM ", C_CRLF + "FROM ");
+		sql := String.Replace(sql, " LEFT JOIN ", C_CRLF + "LEFT JOIN ");
+		sql := String.Replace(sql, " JOIN ", C_CRLF + "JOIN ");
+		sql := String.Replace(sql, " WHERE ", C_CRLF + "WHERE ");
+		sql := String.Replace(sql, " GROUP BY ", C_CRLF + "GROUP BY ");
+		sql := String.Replace(sql, " ORDER BY ", C_CRLF + "ORDER BY ");
 		If _sqlStatus.IsEmpty Then
 			_sqlStatus := "0";
 		End If;
