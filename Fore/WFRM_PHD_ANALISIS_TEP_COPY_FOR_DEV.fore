@@ -287,6 +287,223 @@ Class ANALIZ_TEP_FORM_ON_SHOW: WebForm
 	Const C_PARAM_P_STATUS = "P_STATUS";
 	// параметр отчёта со списком выводимых аналитик (в форме используется как строка)
 	Const C_PARAM_FIELD_LIST = "P_FIELD_LIST";
+	// ---------- новая схема: весь SQL собирается в форме и передаётся одной строкой в отчёт ----------
+	Const C_PARAM_P_SQL = "P_SQL";
+	Const C_FILTER_PARAMS = "PLANT,CALYEAR,ZLIB_INDC,ZPHD_STAT,ZTYPEIND,VENDOR,SOLD_TO,ZHRGRPMO,PROFIT_CTR,COSTCENTER,ZORGUNIT,ZPH_USR2,ACTTYPE,ZEQUI,ZCLSVOBOR,MATERIAL,ZFUNC_LOC,ZSIU_FLD,POSID,ZLIB_INFS,PERIOD_TYPE,ZPHD_DOG,ZPHD_USL1,ZDEBITOR,ZPH_ESO2,ZPHD_SK,UCVOLTLEVL,ZUCVOLTTR,Z_CL_NAPR,ZSIU_TY,ZDOGLINK,ZBUR_LU,ZBUR_AREA,ZSKV_KUST,Z_SKV_GEO,ZBUR_PLST,ZPH_TEHK,ZPH_OPLST,ZPILOT,ZSKV_ST,ZGEN_POD,ZGEN_ZAK,ZSHIFR,ZOBJEM,ZPHD_SR,ZPHD_GRSR,ZGAZ_TYPE,ZAVIATYPE,ZPHD_SPR,ZINDTXT1";
+	Const C_SQL_TEMPLATE = 
+		"WITH"
+		+ "Forms_Agg AS ("
+		+ "    SELECT ZLIB_INDC, GJAHR, PLANT,"
+		+ "           STRING_AGG(DISTINCT ZF_NUMB, ', ') FILTER (WHERE ZF_NUMB IS NOT NULL AND ZF_NUMB <> '') AS forms_text"
+		+ "    FROM TBL_ZIDNFORM"
+		+ "    WHERE ZLIB_INDC IN (:ZLIB_INDC) AND GJAHR IN (:CALYEAR) AND PLANT IN (:PLANT)"
+		+ "    GROUP BY ZLIB_INDC, GJAHR, PLANT"
+		+ "),"
+		+ "src AS ("
+		+ "    SELECT D.*, TBL.zsiu_indv, TBL.zvalue_sng, TBL.period, TBL.zphd_stat, TBL.zind_sche, TBL.key_connect,"
+		+ "           n_rdsd_vendor.TXTMD AS vendor_name,"
+		+ "           n_rdsd_soldto.NAME AS sold_to_name,"
+		+ "           n_rdsd_zhrgrpmo.NAME AS zhrgrpmo_name,"
+		+ "           n_rdsd_profit_ctr.NAME AS profit_ctr_name,"
+		+ "           n_rdsd_acttype.NAME AS acttype_name,"
+		+ "           n_rdsd_zequi.NAME AS zequi_name,"
+		+ "           n_rdsd_zclsvobor.NAME AS zclsvobor_name,"
+		+ "           n_rdsd_material.NAME AS material_name,"
+		+ "           n_rdsd_zfunc_loc.NAME AS zfunc_loc_name,"
+		+ "           n_rdsd_zsiu_fld.NAME AS zsiu_fld_name,"
+		+ "           n_rdsd_posid.NAME AS posid_name,"
+		+ "           n_rdsd_infosystem.NAME AS zlib_infs_name,"
+		+ "           n_shortcut_to_rdsd_soldto_3.NAME AS zphd_usl1_name,"
+		+ "           n_shortcut_to_rdsd_soldto.NAME AS zdebitor_name,"
+		+ "           n_shortcut_to_rdsd_soldto_2.NAME AS zph_eso2_name,"
+		+ "           n_shortcut_to_rdsd_soldto_4.NAME AS zph_epok_name,"
+		+ "           n_shortcut_to_rdsd_soldto_5.NAME AS zphd_sk_name,"
+		+ "           n_rdsd_ucvoltlevl.NAME AS ucvoltlevl_name,"
+		+ "           n_shortcut_to_rdsd_ucvoltlevl.NAME AS zucvolttr_name,"
+		+ "           n_rdsd_z_cl_napr.NAME AS z_cl_napr_name,"
+		+ "           n_rdsd_zsiu_ty.NAME AS zsiu_ty_name,"
+		+ "           n_rdsd_zbur_lu.NAME AS zbur_lu_name,"
+		+ "           n_rdsd_zbur_area.NAME AS zbur_area_name,"
+		+ "           n_rdsd_zbur_plst.ZBUR_PLST AS zbur_plst_name,"
+		+ "           n_rdsd_zph_tehk.NAME AS name_name,"
+		+ "           n_shortcut_to_rdsd_soldto_7.NAME AS zgen_pod_name,"
+		+ "           n_shortcut_to_rdsd_soldto_6.NAME AS zgen_zak_name,"
+		+ "           n_shortcut_to_rdsd_soldto_8.NAME AS zpkr_subp_name,"
+		+ "           n_rdsd_zphd_sr.NAME AS zphd_sr_name,"
+		+ "           n_rdsd_zphd_grsr.NAME AS zphd_grsr_name,"
+		+ "           n_rdsd_zgaz_type.NAME AS zgaz_type_name,"
+		+ "           n_rdsd_zaviatype.NAME AS zaviatype_name,"
+		+ "           n_plant.TXTMD AS plant_name,"
+		+ "           n_period_type.NAME AS period_type_name,"
+		+ "           n_inds.SNAME AS zlib_indc_name"
+		+ "    FROM t1913698 D"
+		+ "    JOIN TBL_FAP_MULT TBL"
+		+ "      ON D.""KEY"" = TBL.KEY_CONNECT AND TBL.plant = D.plant AND TBL.year = D.calyear"
+		+ "    LEFT JOIN t2322857   n_rdsd_vendor"
+		+ "       ON n_rdsd_vendor.vendor = D.vendor"
+		+ "    LEFT JOIN t2301822   n_rdsd_soldto"
+		+ "       ON n_rdsd_soldto.code = D.sold_to"
+		+ "    LEFT JOIN t2306331   n_rdsd_zhrgrpmo"
+		+ "       ON n_rdsd_zhrgrpmo.zhrgrpmo = D.zhrgrpmo"
+		+ "    LEFT JOIN t2320954   n_rdsd_profit_ctr"
+		+ "       ON n_rdsd_profit_ctr.profit_ctr = D.profit_ctr"
+		+ "    LEFT JOIN t2320948   n_rdsd_acttype"
+		+ "       ON n_rdsd_acttype.acttype = D.acttype"
+		+ "      AND to_date(D.calyear || '-01-01', 'YYYY-MM-DD')"
+		+ "          BETWEEN n_rdsd_acttype.datefrom AND n_rdsd_acttype.dateto"
+		+ "    LEFT JOIN t2338354   n_rdsd_zequi"
+		+ "       ON n_rdsd_zequi.zequi = D.zequi"
+		+ "      AND to_date(D.calyear || '-01-01', 'YYYY-MM-DD')"
+		+ "          BETWEEN n_rdsd_zequi.datefrom AND n_rdsd_zequi.dateto"
+		+ "    LEFT JOIN t2308461   n_rdsd_zclsvobor"
+		+ "       ON n_rdsd_zclsvobor.zclsvobor = D.zclsvobor"
+		+ "    LEFT JOIN t2321329   n_rdsd_material"
+		+ "       ON n_rdsd_material.material = D.material"
+		+ "    LEFT JOIN t2335739   n_rdsd_zfunc_loc"
+		+ "       ON n_rdsd_zfunc_loc.zfunc_loc = D.zfunc_loc"
+		+ "      AND to_date(D.calyear || '-01-01', 'YYYY-MM-DD')"
+		+ "          BETWEEN n_rdsd_zfunc_loc.datefrom::date AND n_rdsd_zfunc_loc.dateto::date"
+		+ "    LEFT JOIN t2320973   n_rdsd_zsiu_fld"
+		+ "       ON n_rdsd_zsiu_fld.zsiu_fld = D.zsiu_fld"
+		+ "    LEFT JOIN t2337709   n_rdsd_posid"
+		+ "       ON n_rdsd_posid.posid = D.posid"
+		+ "    LEFT JOIN t1895288   n_rdsd_infosystem"
+		+ "       ON n_rdsd_infosystem.code_value = D.zlib_infs"
+		+ "    LEFT JOIN t2301822   n_shortcut_to_rdsd_soldto_3"
+		+ "       ON n_shortcut_to_rdsd_soldto_3.code = D.zphd_usl1"
+		+ "    LEFT JOIN t2301822   n_shortcut_to_rdsd_soldto"
+		+ "       ON n_shortcut_to_rdsd_soldto.code = D.zdebitor"
+		+ "    LEFT JOIN t2301822   n_shortcut_to_rdsd_soldto_2"
+		+ "       ON n_shortcut_to_rdsd_soldto_2.code = D.zph_eso2"
+		+ "    LEFT JOIN t2301822   n_shortcut_to_rdsd_soldto_4"
+		+ "       ON n_shortcut_to_rdsd_soldto_4.code = D.zph_epok"
+		+ "    LEFT JOIN t2301822   n_shortcut_to_rdsd_soldto_5"
+		+ "       ON n_shortcut_to_rdsd_soldto_5.code = D.zphd_sk"
+		+ "    LEFT JOIN t2307584   n_rdsd_ucvoltlevl"
+		+ "       ON n_rdsd_ucvoltlevl.ucvoltlevl = D.ucvoltlevl"
+		+ "    LEFT JOIN t2307584   n_shortcut_to_rdsd_ucvoltlevl"
+		+ "       ON n_shortcut_to_rdsd_ucvoltlevl.ucvoltlevl = D.zucvolttr"
+		+ "    LEFT JOIN t2307947   n_rdsd_z_cl_napr"
+		+ "       ON n_rdsd_z_cl_napr.z_cl_napr = D.z_cl_napr"
+		+ "    LEFT JOIN t2307875   n_rdsd_zsiu_ty"
+		+ "       ON n_rdsd_zsiu_ty.zsiu_ty = D.zsiu_ty"
+		+ "    LEFT JOIN t2320979   n_rdsd_zbur_lu"
+		+ "       ON n_rdsd_zbur_lu.code = D.zbur_lu"
+		+ "    LEFT JOIN t2311573   n_rdsd_zbur_area"
+		+ "       ON n_rdsd_zbur_area.zbur_area = D.zbur_area"
+		+ "    LEFT JOIN t2337842    n_rdsd_zbur_plst"
+		+ "       ON n_rdsd_zbur_plst.zbur_plst = D.zbur_plst"
+		+ "    LEFT JOIN t2311619   n_rdsd_zph_tehk"
+		+ "       ON n_rdsd_zph_tehk.code = D.name"
+		+ "    LEFT JOIN t2311231   n_rdsd_zskv_st"
+		+ "       ON n_rdsd_zskv_st.zskv_st = D.name"
+		+ "    LEFT JOIN t2301822   n_shortcut_to_rdsd_soldto_7"
+		+ "       ON n_shortcut_to_rdsd_soldto_7.code = D.zgen_pod"
+		+ "    LEFT JOIN t2301822   n_shortcut_to_rdsd_soldto_6"
+		+ "       ON n_shortcut_to_rdsd_soldto_6.code = D.zgen_zak"
+		+ "    LEFT JOIN t2301822   n_shortcut_to_rdsd_soldto_8"
+		+ "       ON n_shortcut_to_rdsd_soldto_8.code = D.zpkr_subp"
+		+ "    LEFT JOIN t2311391   n_rdsd_zshifr"
+		+ "       ON n_rdsd_zshifr.zshifr = D.name"
+		+ "    LEFT JOIN t2335657   n_rdsd_zobjem"
+		+ "       ON n_rdsd_zobjem.zobjem = D.name"
+		+ "    LEFT JOIN t2335635   n_rdsd_zphd_sr"
+		+ "       ON n_rdsd_zphd_sr.zphd_sr = D.zphd_sr"
+		+ "    LEFT JOIN t2311629   n_rdsd_zphd_grsr"
+		+ "       ON n_rdsd_zphd_grsr.zphd_grsr = D.zphd_grsr"
+		+ "    LEFT JOIN t2290906   n_rdsd_zgaz_type"
+		+ "       ON n_rdsd_zgaz_type.code = D.zgaz_type"
+		+ "    LEFT JOIN t2307768   n_rdsd_zaviatype"
+		+ "       ON n_rdsd_zaviatype.zaviatype = D.zaviatype"
+		+ "    LEFT JOIN t2321022 n_zph_usr0"
+		+ "    on n_zph_usr0.zph_usr0 = D.zph_usr2"
+		+ "    LEFT JOIN t2312312 n_plant"
+		+ "       ON n_plant.plant = D.plant"
+		+ "    LEFT JOIN t2317517 n_period_type"
+		+ "       ON n_period_type.id = D.period_type"
+		+ "    LEFT JOIN t1895280 n_inds"
+		+ "       ON n_inds.code = D.zlib_indc"
+		+ "    LEFT JOIN t2494391 n_actvts"
+		+ "       ON n_actvts.code_value = n_inds.actvts"
+		+ "    LEFT JOIN t2364976 n_owners"
+		+ "       ON n_owners.""KEY"" = n_inds.owner"
+		+ "    WHERE D.IS_TEMPORARY = 2"
+		+ "AND"
+		+ "     	          (D.PLANT 		    	IN (:PLANT) 	 							OR COALESCE(:PLANT,'')='')"
+		+ "        AND (D.ZLIB_INDC	    	IN (:ZLIB_INDC)  							OR COALESCE(:ZLIB_INDC,'')='')"
+		+ "        AND (D.CALYEAR 	    	IN (:CALYEAR) 	 							OR COALESCE(:CALYEAR,'')='')"
+		+ "        AND (TBL.ZPHD_STAT     	IN (:ZPHD_STAT)   							OR COALESCE(:ZPHD_STAT,'')='')"
+		+ "        AND (D.ZTYPEIND     	IN (:ZTYPEIND)   							OR COALESCE(:ZTYPEIND,'')='')"
+		+ "        AND (D.VENDOR 	    	IN (:VENDOR) 	  							OR COALESCE(:VENDOR,'')='')"
+		+ "        AND (D.SOLD_TO 	    	IN (:SOLD_TO) 	  							OR COALESCE(:SOLD_TO,'')='')"
+		+ "        AND (D.ZHRGRPMO       	IN (:ZHRGRPMO) 	  						OR COALESCE(:ZHRGRPMO,'')='')"
+		+ "        AND (D.PROFIT_CTR     	IN (:PROFIT_CTR)  							OR COALESCE(:PROFIT_CTR,'')='')"
+		+ "        AND (D.COSTCENTER     IN (:COSTCENTER)  						OR COALESCE(:COSTCENTER,'')='')"
+		+ "        AND (D.ZORGUNIT 	    	IN (:ZORGUNIT) 	  						OR COALESCE(:ZORGUNIT,'')='')"
+		+ "        AND (D.ZPH_USR2 	    	IN (:ZPH_USR2) 	  						OR COALESCE(:ZPH_USR2,'')='')"
+		+ "        AND (D.ACTTYPE  	    	IN (:ACTTYPE) 	  							OR COALESCE(:ACTTYPE,'')='')"
+		+ "        AND (D.ZEQUI 		    	IN (:ZEQUI) 	  								OR COALESCE(:ZEQUI,'')='')"
+		+ "        AND (D.ZCLSVOBOR      	IN (:ZCLSVOBOR)   							OR COALESCE(:ZCLSVOBOR,'')='')"
+		+ "        AND (D.MATERIAL 	    	IN (:MATERIAL) 	  						OR COALESCE(:MATERIAL,'')='')"
+		+ "        AND (D.ZFUNC_LOC 	    	IN (:ZFUNC_LOC)   							OR COALESCE(:ZFUNC_LOC,'')='')"
+		+ "        AND (D.ZSIU_FLD 	    	IN (:ZSIU_FLD)    							OR COALESCE(:ZSIU_FLD,'')='')"
+		+ "        AND (D.POSID 		    	IN (:POSID) 	  								OR COALESCE(:POSID,'')='')"
+		+ "        AND (D.ZLIB_INFS 	    	IN (:ZLIB_INFS)   							OR COALESCE(:ZLIB_INFS,'')='')"
+		+ "        AND (D.PERIOD_TYPE    IN (:PERIOD_TYPE) 						OR COALESCE(:PERIOD_TYPE,'')='')"
+		+ "        AND (D.ZPHD_DOG 	    	IN (:ZPHD_DOG) 	  						OR COALESCE(:ZPHD_DOG,'')='')"
+		+ "        AND (D.ZPHD_USL1 	    	IN (:ZPHD_USL1)   							OR COALESCE(:ZPHD_USL1,'')='')"
+		+ "        AND (D.ZDEBITOR 	    	IN (:ZDEBITOR) 	  						OR COALESCE(:ZDEBITOR,'')='')"
+		+ "        AND (D.ZPH_ESO2 	    	IN (:ZPH_ESO2) 	  						OR COALESCE(:ZPH_ESO2,'')='')"
+		+ "        AND (D.ZPHD_SK 	    	IN (:ZPHD_SK) 	  							OR COALESCE(:ZPHD_SK,'')='')"
+		+ "        AND (D.UCVOLTLEVL     	IN (:UCVOLTLEVL)  							OR COALESCE(:UCVOLTLEVL,'')='')"
+		+ "        AND (D.ZUCVOLTTR      	IN (:ZUCVOLTTR)   							OR COALESCE(:ZUCVOLTTR,'')='')"
+		+ "        AND (D.Z_CL_NAPR      	IN (:Z_CL_NAPR)   							OR COALESCE(:Z_CL_NAPR,'')='')"
+		+ "        AND (D.ZSIU_TY 	    	IN (:ZSIU_TY)     							OR COALESCE(:ZSIU_TY,'')='')"
+		+ "        AND (D.ZDOGLINK 	    	IN (:ZDOGLINK) 	  						OR COALESCE(:ZDOGLINK,'')='')"
+		+ "        AND (D.ZBUR_LU 	    	IN (:ZBUR_LU) 	  							OR COALESCE(:ZBUR_LU,'')='')"
+		+ "        AND (D.ZBUR_AREA      	IN (:ZBUR_AREA)   							OR COALESCE(:ZBUR_AREA,'')='')"
+		+ "        AND (D.ZSKV_KUST 	   	IN (:ZSKV_KUST)   							OR COALESCE(:ZSKV_KUST,'')='')"
+		+ "        AND (D.Z_SKV_GEO 	  	IN (:Z_SKV_GEO)   							OR COALESCE(:Z_SKV_GEO,'')='')"
+		+ "        AND (D.ZBUR_PLST 	   	IN (:ZBUR_PLST)   							OR COALESCE(:ZBUR_PLST,'')='')"
+		+ "        AND (D.ZPH_TEHK 	   	IN (:ZPH_TEHK) 	  						OR COALESCE(:ZPH_TEHK,'')='')"
+		+ "        AND (D.ZPH_OPLST 	    	IN (:ZPH_OPLST)   							OR COALESCE(:ZPH_OPLST,'')='')"
+		+ "        AND (D.ZPHD_COMM      IN (:ZPHD_COMM)   						OR COALESCE(:ZPHD_COMM,'')='')"
+		+ "        AND (TO_DATE(D.ZBUR_BEG, 'YYYY-MM-DD')"
+		+ "							IN (TO_DATE(:ZBUR_BEG, 'YYYY-MM-DD')) 	OR COALESCE(:ZBUR_BEG,'')='')"
+		+ "        AND (D.ZPILOT 	    		IN (:ZPILOT) 	  							OR COALESCE(:ZPILOT,'')='')"
+		+ "        AND (D.ZSKV_ST 	    	IN (:ZSKV_ST) 	  							OR COALESCE(:ZSKV_ST,'')='')"
+		+ "        AND (D.ZGEN_POD 	    	IN (:ZGEN_POD) 	  						OR COALESCE(:ZGEN_POD,'')='')"
+		+ "        AND (D.ZGEN_ZAK 	    	IN (:ZGEN_ZAK) 	  						OR COALESCE(:ZGEN_ZAK,'')='')"
+		+ "        AND (D.ZSHIFR 			IN (:ZSHIFR) 	  							OR COALESCE(:ZSHIFR,'')='')"
+		+ "        AND (D.ZOBJEM 	    		IN (:ZOBJEM) 	  							OR COALESCE(:ZOBJEM,'')='')"
+		+ "        AND (D.ZPHD_SR 	    	IN (:ZPHD_SR) 	  							OR COALESCE(:ZPHD_SR,'')='')"
+		+ "        AND (D.ZPHD_GRSR      IN (:ZPHD_GRSR)   							OR COALESCE(:ZPHD_GRSR,'')='')"
+		+ "        AND (D.ZGAZ_TYPE 	    	IN (:ZGAZ_TYPE)   							OR COALESCE(:ZGAZ_TYPE,'')='')"
+		+ "        AND (D.ZAVIATYPE 	    	IN (:ZAVIATYPE)   							OR COALESCE(:ZAVIATYPE,'')='')"
+		+ "        AND (D.ZPHD_NCH 	    	IN (:ZPHD_NCH) 	  						OR COALESCE(:ZPHD_NCH,'')='')"
+		+ "        AND (D.ZPHD_SPR 	    	IN (:ZPHD_SPR) 	  						OR COALESCE(:ZPHD_SPR,'')='')"
+		+ "	 AND (D.ZINDTXT1 	    	ILIKE '%' || :ZINDTXT1 || '%' 					OR COALESCE(:ZINDTXT1,'')='')"
+		+ "),"
+		+ "Main_Data AS ("
+		+ "    SELECT"
+		+ "        :ANALYTIC_SET,"
+		+ "        (SELECT t.ACTVTS FROM t1895280 t WHERE t.CODE = v.zlib_indc AND now() BETWEEN t.DATE_FROM AND t.DATE_TO LIMIT 1) AS ""Код вида деятельности"","
+		+ "        (SELECT t.SNAME FROM t1895280 t WHERE t.CODE = v.zlib_indc AND now() BETWEEN t.DATE_FROM AND t.DATE_TO LIMIT 1) AS ""Наименование вида деятельности"","
+		+ "        (SELECT f.forms_text FROM Forms_Agg f WHERE f.ZLIB_INDC = v.zlib_indc AND f.GJAHR = v.calyear AND f.PLANT = v.plant LIMIT 1) AS ""Формы ТЭП СНГ"","
+		+ "        :EXTRA_FIELDS"
+		+ "    FROM src v"
+		+ "    GROUP BY"
+		+ "        :ANALYTIC_SET,"
+		+ "        CASE WHEN COALESCE(:P_STATUS, '0') = '1' THEN COALESCE(zphd_stat, '') ELSE 'Итого' END,"
+		+ "        v.zlib_indc, v.calyear, v.plant"
+		+ ")"
+		+ "SELECT"
+		+ "    :ANALYTIC_SET,"
+		+ "    :EXTRA_NAMES,"
+		+ "    ""Код вида деятельности"","
+		+ "    ""Наименование вида деятельности"","
+		+ "    ""Формы ТЭП СНГ"""
+		+ "FROM Main_Data;";
 	// запрос-генератор значений для EXTRA_FIELDS / EXTRA_NAMES (источник справочника)
 	Const C_GENERATOR_ID = "QRY_PHD_ANALYS_TEP_EXTRA_FIELDS";
 	
@@ -298,6 +515,9 @@ Class ANALIZ_TEP_FORM_ON_SHOW: WebForm
 	_lastError: String;
 	extraPeriods: StringList;
 	extraConds: StringList;
+	_sqlExtraFields: String;
+	_sqlExtraNames: String;
+	_sqlStatus: String;
 	extraCaptions: StringList;
 	_fieldIds: IHashtable;
 	_codeIds: IHashtable;
@@ -1654,6 +1874,7 @@ Class ANALIZ_TEP_FORM_ON_SHOW: WebForm
 	Sub SafeGenerate;
 	Begin
 		Try
+			SetParamSafe(C_PARAM_P_SQL, buildSql);
 			Hyperlink.Generate;
 			Debug.WriteLine("[АнализТЭП/форма] гиперссылка сформирована");
 			logRecord(C_LOG_OP_FORM, True, C_ANALYZ_TEP_REP_ID, "PRX_ANALYSIS_TEP",
@@ -1911,6 +2132,10 @@ Class ANALIZ_TEP_FORM_ON_SHOW: WebForm
 		End If;
 		
 		SetParamSafe(C_PARAM_EXTRA_FIELDS, listToArray(exprs));
+		// строки для сборки текста SQL (новая схема — параметры запроса больше не используются)
+		_sqlExtraFields := listTextSep(exprs, ", ");
+		_sqlExtraNames := listTextSep(names, ", ");
+		If hasStatus Then _sqlStatus := "1"; Else _sqlStatus := "0"; End If;
 		SetParamSafe(C_PARAM_EXTRA_NAMES, listToArray(names));
 		SetParamSafe(C_PARAM_P_STATUS, hasStatus ? "1" : "0");
 		// диагностика: что реально лежит в параметрах гиперссылки (это и уедет в отчёт)
@@ -2331,3 +2556,102 @@ Class ANALIZ_TEP_FORM_ON_SHOW: WebForm
 
 End Class ANALIZ_TEP_FORM_ON_SHOW;
 
+	/// <summary>Склейка строкового списка с разделителем</summary>
+	Function listTextSep(list: StringList; sep: String): String;
+	Var
+		i: Integer;
+		text: String;
+	Begin
+		If IsNull(list) Then Return ""; End If;
+		text := "";
+		For i := 0 To list.Count - 1 Do
+			If i > 0 Then text := text + sep; End If;
+			text := text + (list.Item(i) As String);
+		End For;
+		Return text;
+	End Function listTextSep;
+
+	/// <summary>Строковый литерал для SQL</summary>
+	Function quoteLiteral(value: String): String;
+	Begin
+		If IsNull(value) Then Return "''"; End If;
+		Return "'" + value.Replace("'", "''") + "'";
+	End Function quoteLiteral;
+
+	/// <summary>Значение параметра гиперссылки текстом (массив — через запятую)</summary>
+	Function paramText(params: IHashtable; paramId: String): String;
+	Var
+		value: Variant;
+		arr: Array;
+		i: Integer;
+		text: String;
+	Begin
+		If IsNull(params) Then Return ""; End If;
+		Try
+			If Not params.Contains(paramId) Then Return ""; End If;
+			value := params.Item(paramId);
+			If IsNull(value) Then Return ""; End If;
+			If value Is Array Then
+				arr := value As Array;
+				text := "";
+				For i := 0 To arr.Length - 1 Do
+					If i > 0 Then text := text + ","; End If;
+					text := text + (arr[i] As String);
+				End For;
+				Return text;
+			End If;
+			Return value As String;
+		Except On E: Exception Do
+			Return "";
+		End Try;
+	End Function paramText;
+
+	/// <summary>
+	/// 	Собирает полный текст SQL для отчёта (параметр P_SQL): подставляет в шаблон
+	/// 	C_SQL_TEMPLATE аналитики, динамические колонки, статусы и все фильтры СЭ.
+	/// </summary>
+	Function buildSql: String;
+	Var
+		sql, text: String;
+		names: Array Of String;
+		arrNames: Array Of String;
+		params: IHashtable;
+		i: Integer;
+	Begin
+		sql := C_SQL_TEMPLATE;
+		Try
+			names := analyticSetArray;
+			text := "";
+			If Not IsNull(names) Then
+				For i := 0 To names.Length - 1 Do
+					If i > 0 Then text := text + ", "; End If;
+					text := text + (names[i] As String);
+				End For;
+			End If;
+			If text.IsEmpty Then text := "v.zlib_indc, v.calyear, v.plant"; End If;
+			sql := sql.Replace(":ANALYTIC_SET", text);
+		Except On E: Exception Do
+			Debug.WriteLine("[АнализТЭП/форма] аналитики в SQL: " + E.Message);
+			sql := sql.Replace(":ANALYTIC_SET", "v.zlib_indc, v.calyear, v.plant");
+		End Try;
+		If _sqlExtraFields.IsEmpty Then _sqlExtraFields := "1 AS "Нет данных""; End If;
+		If _sqlExtraNames.IsEmpty Then _sqlExtraNames := ""Нет данных""; End If;
+		sql := sql.Replace(":EXTRA_FIELDS", _sqlExtraFields);
+		sql := sql.Replace(":EXTRA_NAMES", _sqlExtraNames);
+		If _sqlStatus.IsEmpty Then _sqlStatus := "0"; End If;
+		sql := sql.Replace(":P_STATUS", "'" + _sqlStatus + "'");
+		Try
+			If Not IsNull(Hyperlink.ParameterManager) Then
+				params := Hyperlink.ParameterManager.Params;
+				arrNames := C_FILTER_PARAMS.Split(",");
+				For i := 0 To arrNames.Length - 1 Do
+					text := paramText(params, (arrNames[i] As String).Trim);
+					sql := sql.Replace(":" + (arrNames[i] As String).Trim, quoteLiteral(text));
+				End For;
+			End If;
+		Except On E2: Exception Do
+			Debug.WriteLine("[АнализТЭП/форма] фильтры в SQL: " + E2.Message);
+		End Try;
+		Debug.WriteLine("[АнализТЭП/форма] SQL собран, символов: " + sql.Length.ToString);
+		Return sql;
+	End Function buildSql;
