@@ -10,7 +10,7 @@
 | vendor | `vendor` | `RDSD_VENDOR` | `t2322857` | `vendor` | `TXTMD` |
 | zhrgrpmo | `zhrgrpmo` | `RDSD_ZHRGRPMO` | `t2306331` | `zhrgrpmo` | `NAME` |
 | calyear | `calyear` | — | — | — | (то же поле) |
-| plant | `plant` | `n_plant` | `—` | `—` | `TXTMD` |
+| plant | `plant` | `RDSD_PLANT` | `t2312312` | `plant` | `TXTMD` |
 | zlib_infs | `zlib_infs` | `RDSD_INFOSYSTEM` | `t1895288` | `code_value` | `NAME` |
 | zbur_lu | `zbur_lu` | `RDSD_ZBUR_LU` | `t2320979` | `code` | `NAME` |
 | zsiu_fld | `zsiu_fld` | `RDSD_ZSIU_FLD` | `t2308973` | `zsiu_fld` | `NAME` |
@@ -21,7 +21,7 @@
 | calcty | `calcty` | — | — | — | (то же поле) |
 | ztypeind | `ztypeind` | — | — | — | (то же поле) |
 | zorgunit | `zorgunit` | — | — | — | (то же поле) |
-| period_type | `period_type` | `n_period_type` | `—` | `—` | `NAME` |
+| period_type | `period_type` | `DIC_TYPE_PERIOD` | `t2317517` | `—` | `NAME` |
 | zzdop | `zzdop` | — | — | — | (то же поле) |
 | zphd_priz | `zphd_priz` | — | — | — | (то же поле) |
 | zregi_mvz | `zregi_mvz` | — | — | — | (то же поле) |
@@ -78,7 +78,7 @@
 | zhrpos_sh | `zhrpos_sh` | — | — | — | (то же поле) |
 | hrposition | `hrposition` | — | — | — | (то же поле) |
 | zclsvobor | `zclsvobor` | `RDSD_ZCLSVOBOR` | `t2308461` | `zclsvo_b or` | `NAME` |
-| zlib_indc | `zlib_indc` | `n_inds` | `—` | `—` | `SNAME` |
+| zlib_indc | `zlib_indc` | `RDSD_INDS` | `t1895280` | `code` | `SNAME` |
 | act_unit | `act_unit` | — | — | — | (то же поле) |
 | zsiu_indv | `zsiu_indv` | — | — | — | (то же поле) |
 | zvalue_sng | `zvalue_sng` | — | — | — | (то же поле) |
