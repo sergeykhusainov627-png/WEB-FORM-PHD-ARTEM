@@ -2648,6 +2648,37 @@ Class ANALIZ_TEP_FORM_ON_SHOW: WebForm
 		End Try;
 	End Sub selectAllpage4OnClick;
 
+	/// <summary>Кнопка «Снять все» на вкладке аналитик (TabPage4): снимает все чек-боксы вывода</summary>
+	Sub clearAllPg4OnClick;
+	Begin
+		Try
+		SetCheckBoxIfExists(CB_CALYEAR, False);
+		SetCheckBoxIfExists(CB_PLANT, False);
+		SetCheckBoxIfExists(CB_ZLIB_INDC, False);
+		SetCheckBoxIfExists(CB_ZLIB_INFS, False);
+		SetCheckBoxIfExists(CB_ACT_UNIT, False);
+		SetCheckBoxIfExists(CB_VENDOR, False);
+		SetCheckBoxIfExists(CB_SOLD_TO, False);
+		SetCheckBoxIfExists(CB_ZHRGRPMO, False);
+		SetCheckBoxIfExists(CB_PROFIT_CTR, False);
+		SetCheckBoxIfExists(CB_COSTCENTER, False);
+		SetCheckBoxIfExists(CB_ZORGUNIT, False);
+		SetCheckBoxIfExists(CB_ZPH_USR2, False);
+		SetCheckBoxIfExists(CB_ACTTYPE, False);
+		SetCheckBoxIfExists(CB_ZEQUI, False);
+		SetCheckBoxIfExists(CB_MATERIAL, False);
+		SetCheckBoxIfExists(CB_ZFUNC_LOC, False);
+		SetCheckBoxIfExists(CB_ZSIU_FLD, False);
+		SetCheckBoxIfExists(CB_POSID, False);
+		SetCheckBoxIfExists(CbHigherInd, False);
+		SetCheckBoxIfExists(CB_PERIOD_TYPE, False);
+			RefreshFieldList;
+		Except On E: Exception Do
+			showError("не удалось снять отметки полей", E);
+		End Try;
+	End Sub clearAllPg4OnClick;
+
+
 
 
 End Class ANALIZ_TEP_FORM_ON_SHOW;
