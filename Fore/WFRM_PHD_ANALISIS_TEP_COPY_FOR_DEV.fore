@@ -309,19 +309,19 @@ Class ANALIZ_TEP_FORM_ON_SHOW: WebForm
 	Const C_NSI_DIC_TYPE_PERIOD                      = "DIC_TYPE_PERIOD";   // t2317517
 	Const C_NSI_RDSD_ACTTYPE                         = "RDSD_ACTTYPE";   // t2320948
 	Const C_NSI_RDSD_PROFIT_CTR                      = "RDSD_PROFIT_CTR";   // t2320954
-	Const C_TBL_T2320973 = "t2320973";   // 
+	Const C_NSI_RDSD_ZSIU_FLD = "RDSD_ZSIU_FLD";   // t2320973
 	Const C_NSI_RDSD_ZBUR_LU                         = "RDSD_ZBUR_LU";   // t2320979
-	Const C_TBL_T2321022 = "t2321022";   // 
+	Const C_NSI_RDSD_ZPH_USR0 = "RDSD_ZPH_USR0";   // t2321022
 	Const C_NSI_RDSD_MATERIAL                        = "RDSD_MATERIAL";   // t2321329
 	Const C_NSI_RDSD_VENDOR                          = "RDSD_VENDOR";   // t2322857
-	Const C_TBL_T2335635 = "t2335635";   // 
-	Const C_TBL_T2335657 = "t2335657";   // 
-	Const C_TBL_T2335739 = "t2335739";   // 
+	Const C_NSI_RDSD_ZPHD_SR = "RDSD_ZPHD_SR";   // t2335635
+	Const C_NSI_RDSD_ZOBJEM = "RDSD_ZOBJEM";   // t2335657
+	Const C_NSI_RDSD_ZFUNC_LOC = "RDSD_ZFUNC_LOC";   // t2335739
 	Const C_NSI_RDSD_POSID                           = "RDSD_POSID";   // t2337709
-	Const C_TBL_T2337842 = "t2337842";   // 
-	Const C_TBL_T2338354 = "t2338354";   // 
+	Const C_NSI_RDSD_ZBUR_PLST = "RDSD_ZBUR_PLST";   // t2337842
+	Const C_NSI_RDSD_ZEQUI = "RDSD_ZEQUI";   // t2338354
 	Const C_NSI_RDSD_OWNERS                          = "RDSD_OWNERS";   // t2364976
-	Const C_TBL_T2494391 = "t2494391";   // 
+	Const C_NSI_RDSD_ACTVTS = "RDSD_ACTVTS";   // t2494391
 	// запрос-генератор значений для EXTRA_FIELDS / EXTRA_NAMES (источник справочника)
 	
 	_AnalyzTepHyperlink: COpenHyperlink; // CUrlHyperlink
@@ -2365,7 +2365,7 @@ Class ANALIZ_TEP_FORM_ON_SHOW: WebForm
 		+ "       ON n_rdsd_acttype.acttype = D.acttype"
 		+ "      AND to_date(D.calyear || '-01-01', 'YYYY-MM-DD')"
 		+ "          BETWEEN n_rdsd_acttype.datefrom AND n_rdsd_acttype.dateto"
-		+ "    LEFT JOIN " + C_TBL_T2338354 + "   n_rdsd_zequi"
+		+ "    LEFT JOIN " + nsiTable(C_NSI_RDSD_ZEQUI) + "   n_rdsd_zequi"
 		+ "       ON n_rdsd_zequi.zequi = D.zequi"
 		+ "      AND to_date(D.calyear || '-01-01', 'YYYY-MM-DD')"
 		+ "          BETWEEN n_rdsd_zequi.datefrom AND n_rdsd_zequi.dateto"
@@ -2373,11 +2373,11 @@ Class ANALIZ_TEP_FORM_ON_SHOW: WebForm
 		+ "       ON n_rdsd_zclsvobor.zclsvobor = D.zclsvobor"
 		+ "    LEFT JOIN " + nsiTable(C_NSI_RDSD_MATERIAL) + "   n_rdsd_material"
 		+ "       ON n_rdsd_material.material = D.material"
-		+ "    LEFT JOIN " + C_TBL_T2335739 + "   n_rdsd_zfunc_loc"
+		+ "    LEFT JOIN " + nsiTable(C_NSI_RDSD_ZFUNC_LOC) + "   n_rdsd_zfunc_loc"
 		+ "       ON n_rdsd_zfunc_loc.zfunc_loc = D.zfunc_loc"
 		+ "      AND to_date(D.calyear || '-01-01', 'YYYY-MM-DD')"
 		+ "          BETWEEN n_rdsd_zfunc_loc.datefrom::date AND n_rdsd_zfunc_loc.dateto::date"
-		+ "    LEFT JOIN " + C_TBL_T2320973 + "   n_rdsd_zsiu_fld"
+		+ "    LEFT JOIN " + nsiTable(C_NSI_RDSD_ZSIU_FLD) + "   n_rdsd_zsiu_fld"
 		+ "       ON n_rdsd_zsiu_fld.zsiu_fld = D.zsiu_fld"
 		+ "    LEFT JOIN " + nsiTable(C_NSI_RDSD_POSID) + "   n_rdsd_posid"
 		+ "       ON n_rdsd_posid.posid = D.posid"
@@ -2405,7 +2405,7 @@ Class ANALIZ_TEP_FORM_ON_SHOW: WebForm
 		+ "       ON n_rdsd_zbur_lu.code = D.zbur_lu"
 		+ "    LEFT JOIN " + nsiTable(C_NSI_RDSD_ZBUR_AREA) + "   n_rdsd_zbur_area"
 		+ "       ON n_rdsd_zbur_area.zbur_area = D.zbur_area"
-		+ "    LEFT JOIN " + C_TBL_T2337842 + "    n_rdsd_zbur_plst"
+		+ "    LEFT JOIN " + nsiTable(C_NSI_RDSD_ZBUR_PLST) + "    n_rdsd_zbur_plst"
 		+ "       ON n_rdsd_zbur_plst.zbur_plst = D.zbur_plst"
 		+ "    LEFT JOIN " + nsiTable(C_NSI_RDSD_ZPH_TEHK) + "   n_rdsd_zph_tehk"
 		+ "       ON n_rdsd_zph_tehk.code = D.name"
@@ -2419,9 +2419,9 @@ Class ANALIZ_TEP_FORM_ON_SHOW: WebForm
 		+ "       ON n_shortcut_to_rdsd_soldto_8.code = D.zpkr_subp"
 		+ "    LEFT JOIN " + nsiTable(C_NSI_RDSD_ZSHIFR) + "   n_rdsd_zshifr"
 		+ "       ON n_rdsd_zshifr.zshifr = D.name"
-		+ "    LEFT JOIN " + C_TBL_T2335657 + "   n_rdsd_zobjem"
+		+ "    LEFT JOIN " + nsiTable(C_NSI_RDSD_ZOBJEM) + "   n_rdsd_zobjem"
 		+ "       ON n_rdsd_zobjem.zobjem = D.name"
-		+ "    LEFT JOIN " + C_TBL_T2335635 + "   n_rdsd_zphd_sr"
+		+ "    LEFT JOIN " + nsiTable(C_NSI_RDSD_ZPHD_SR) + "   n_rdsd_zphd_sr"
 		+ "       ON n_rdsd_zphd_sr.zphd_sr = D.zphd_sr"
 		+ "    LEFT JOIN " + nsiTable(C_NSI_RDSD_ZPHD_GRSR) + "   n_rdsd_zphd_grsr"
 		+ "       ON n_rdsd_zphd_grsr.zphd_grsr = D.zphd_grsr"
@@ -2429,7 +2429,7 @@ Class ANALIZ_TEP_FORM_ON_SHOW: WebForm
 		+ "       ON n_rdsd_zgaz_type.code = D.zgaz_type"
 		+ "    LEFT JOIN " + nsiTable(C_NSI_RDSD_ZAVIATYPE) + "   n_rdsd_zaviatype"
 		+ "       ON n_rdsd_zaviatype.zaviatype = D.zaviatype"
-		+ "    LEFT JOIN " + C_TBL_T2321022 + " n_zph_usr0"
+		+ "    LEFT JOIN " + nsiTable(C_NSI_RDSD_ZPH_USR0) + " n_zph_usr0"
 		+ "    on n_zph_usr0.zph_usr0 = D.zph_usr2"
 		+ "    LEFT JOIN " + nsiTable(C_NSI_RDSD_PLANT) + " n_plant"
 		+ "       ON n_plant.plant = D.plant"
@@ -2437,7 +2437,7 @@ Class ANALIZ_TEP_FORM_ON_SHOW: WebForm
 		+ "       ON n_period_type.id = D.period_type"
 		+ "    LEFT JOIN " + nsiTable(C_NSI_RDSD_INDS) + " n_inds"
 		+ "       ON n_inds.code = D.zlib_indc"
-		+ "    LEFT JOIN " + C_TBL_T2494391 + " n_actvts"
+		+ "    LEFT JOIN " + nsiTable(C_NSI_RDSD_ACTVTS) + " n_actvts"
 		+ "       ON n_actvts.code_value = n_inds.actvts"
 		+ "    LEFT JOIN " + nsiTable(C_NSI_RDSD_OWNERS) + " n_owners"
 		+ "       ON n_owners.""KEY"" = n_inds.owner"
