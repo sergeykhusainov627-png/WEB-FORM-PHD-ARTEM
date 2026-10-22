@@ -287,6 +287,40 @@ Class ANALIZ_TEP_FORM_ON_SHOW: WebForm
 	Const C_PARAM_P_SQL = "P_SQL";
 	Const C_FILTER_PARAMS = "PLANT,CALYEAR,ZLIB_INDC,ZPHD_STAT,ZTYPEIND,VENDOR,SOLD_TO,ZHRGRPMO,PROFIT_CTR,COSTCENTER,ZORGUNIT,ZPH_USR2,ACTTYPE,ZEQUI,ZCLSVOBOR,MATERIAL,ZFUNC_LOC,ZSIU_FLD,POSID,ZLIB_INFS,PERIOD_TYPE,ZPHD_DOG,ZPHD_USL1,ZDEBITOR,ZPH_ESO2,ZPHD_SK,UCVOLTLEVL,ZUCVOLTTR,Z_CL_NAPR,ZSIU_TY,ZDOGLINK,ZBUR_LU,ZBUR_AREA,ZSKV_KUST,Z_SKV_GEO,ZBUR_PLST,ZPH_TEHK,ZPH_OPLST,ZPILOT,ZSKV_ST,ZGEN_POD,ZGEN_ZAK,ZSHIFR,ZOBJEM,ZPHD_SR,ZPHD_GRSR,ZGAZ_TYPE,ZAVIATYPE,ZPHD_SPR,ZINDTXT1,ZBUR_BEG,ZPHD_COMM,ZPHD_NCH";
 	Const C_LINK_PARAMS = "PLANT,CALYEAR,ZLIB_INDC,ZPHD_STAT,ZTYPEIND,VENDOR,SOLD_TO,ZHRGRPMO,PROFIT_CTR,COSTCENTER,ZORGUNIT,ZPH_USR2,ACTTYPE,ZEQUI,ZCLSVOBOR,MATERIAL,ZFUNC_LOC,ZSIU_FLD,POSID,ZLIB_INFS,PERIOD_TYPE,ZPHD_DOG,ZPHD_USL1,ZDEBITOR,ZPH_ESO2,ZPHD_SK,UCVOLTLEVL,ZUCVOLTTR,Z_CL_NAPR,ZSIU_TY,ZDOGLINK,ZBUR_LU,ZBUR_AREA,ZSKV_KUST,Z_SKV_GEO,ZBUR_PLST,ZPH_TEHK,ZPH_OPLST,ZPILOT,ZSKV_ST,ZGEN_POD,ZGEN_ZAK,ZSHIFR,ZOBJEM,ZPHD_SR,ZPHD_GRSR,ZGAZ_TYPE,ZAVIATYPE,ZPHD_SPR,ZINDTXT1,ZBUR_BEG,ZPHD_COMM,ZPHD_NCH,ZBUR_END,ZPKR_SUBP";
+	// ---------- физические таблицы БД (НСИ и справочники) ----------
+	Const C_TBL_RDSD_INDS = "t1895280";   // RDSD_INDS
+	Const C_TBL_RDSD_INFOSYSTEM = "t1895288";   // RDSD_INFOSYSTEM
+	Const C_TBL_DICT_PHD_LEFT = "t1913698";   // DICT_PHD_LEFT
+	Const C_TBL_RDSD_ZGAZ_TYPE = "t2290906";   // RDSD_ZGAZ_TYPE
+	Const C_TBL_SHORTCUT_TO_RDSD_SOLDTO_8 = "t2301822";   // SHORTCUT_TO_RDSD_SOLDTO_8
+	Const C_TBL_RDSD_ZHRGRPMO = "t2306331";   // RDSD_ZHRGRPMO
+	Const C_TBL_SHORTCUT_TO_RDSD_UCVOLTLEVL = "t2307584";   // SHORTCUT_TO_RDSD_UCVOLTLEVL
+	Const C_TBL_RDSD_ZAVIATYPE = "t2307768";   // RDSD_ZAVIATYPE
+	Const C_TBL_RDSD_ZSIU_TY = "t2307875";   // RDSD_ZSIU_TY
+	Const C_TBL_RDSD_Z_CL_NAPR = "t2307947";   // RDSD_Z_CL_NAPR
+	Const C_TBL_RDSD_ZCLSVOBOR = "t2308461";   // RDSD_ZCLSVOBOR
+	Const C_TBL_RDSD_ZSKV_ST = "t2311231";   // RDSD_ZSKV_ST
+	Const C_TBL_RDSD_ZSHIFR = "t2311391";   // RDSD_ZSHIFR
+	Const C_TBL_RDSD_ZBUR_AREA = "t2311573";   // RDSD_ZBUR_AREA
+	Const C_TBL_RDSD_ZPH_TEHK = "t2311619";   // RDSD_ZPH_TEHK
+	Const C_TBL_RDSD_ZPHD_GRSR = "t2311629";   // RDSD_ZPHD_GRSR
+	Const C_TBL_RDSD_PLANT = "t2312312";   // RDSD_PLANT
+	Const C_TBL_DIC_TYPE_PERIOD = "t2317517";   // DIC_TYPE_PERIOD
+	Const C_TBL_RDSD_ACTTYPE = "t2320948";   // RDSD_ACTTYPE
+	Const C_TBL_RDSD_PROFIT_CTR = "t2320954";   // RDSD_PROFIT_CTR
+	Const C_TBL_T2320973 = "t2320973";   // 
+	Const C_TBL_RDSD_ZBUR_LU = "t2320979";   // RDSD_ZBUR_LU
+	Const C_TBL_T2321022 = "t2321022";   // 
+	Const C_TBL_RDSD_MATERIAL = "t2321329";   // RDSD_MATERIAL
+	Const C_TBL_RDSD_VENDOR = "t2322857";   // RDSD_VENDOR
+	Const C_TBL_T2335635 = "t2335635";   // 
+	Const C_TBL_T2335657 = "t2335657";   // 
+	Const C_TBL_T2335739 = "t2335739";   // 
+	Const C_TBL_RDSD_POSID = "t2337709";   // RDSD_POSID
+	Const C_TBL_T2337842 = "t2337842";   // 
+	Const C_TBL_T2338354 = "t2338354";   // 
+	Const C_TBL_RDSD_OWNERS = "t2364976";   // RDSD_OWNERS
+	Const C_TBL_T2494391 = "t2494391";   // 
 	// запрос-генератор значений для EXTRA_FIELDS / EXTRA_NAMES (источник справочника)
 	
 	_AnalyzTepHyperlink: COpenHyperlink; // CUrlHyperlink
@@ -2322,96 +2356,96 @@ Class ANALIZ_TEP_FORM_ON_SHOW: WebForm
 		+ "           n_plant.TXTMD AS plant_name,"
 		+ "           n_period_type.NAME AS period_type_name,"
 		+ "           n_inds.SNAME AS zlib_indc_name"
-		+ "    FROM t1913698 D"
+		+ "    FROM " + C_TBL_DICT_PHD_LEFT + " D"
 		+ "    JOIN TBL_FAP_MULT TBL"
 		+ "      ON D.""KEY"" = TBL.KEY_CONNECT AND TBL.plant = D.plant AND TBL.year = D.calyear"
-		+ "    LEFT JOIN t2322857   n_rdsd_vendor"
+		+ "    LEFT JOIN " + C_TBL_RDSD_VENDOR + "   n_rdsd_vendor"
 		+ "       ON n_rdsd_vendor.vendor = D.vendor"
-		+ "    LEFT JOIN t2301822   n_rdsd_soldto"
+		+ "    LEFT JOIN " + C_TBL_SHORTCUT_TO_RDSD_SOLDTO_8 + "   n_rdsd_soldto"
 		+ "       ON n_rdsd_soldto.code = D.sold_to"
-		+ "    LEFT JOIN t2306331   n_rdsd_zhrgrpmo"
+		+ "    LEFT JOIN " + C_TBL_RDSD_ZHRGRPMO + "   n_rdsd_zhrgrpmo"
 		+ "       ON n_rdsd_zhrgrpmo.zhrgrpmo = D.zhrgrpmo"
-		+ "    LEFT JOIN t2320954   n_rdsd_profit_ctr"
+		+ "    LEFT JOIN " + C_TBL_RDSD_PROFIT_CTR + "   n_rdsd_profit_ctr"
 		+ "       ON n_rdsd_profit_ctr.profit_ctr = D.profit_ctr"
-		+ "    LEFT JOIN t2320948   n_rdsd_acttype"
+		+ "    LEFT JOIN " + C_TBL_RDSD_ACTTYPE + "   n_rdsd_acttype"
 		+ "       ON n_rdsd_acttype.acttype = D.acttype"
 		+ "      AND to_date(D.calyear || '-01-01', 'YYYY-MM-DD')"
 		+ "          BETWEEN n_rdsd_acttype.datefrom AND n_rdsd_acttype.dateto"
-		+ "    LEFT JOIN t2338354   n_rdsd_zequi"
+		+ "    LEFT JOIN " + C_TBL_T2338354 + "   n_rdsd_zequi"
 		+ "       ON n_rdsd_zequi.zequi = D.zequi"
 		+ "      AND to_date(D.calyear || '-01-01', 'YYYY-MM-DD')"
 		+ "          BETWEEN n_rdsd_zequi.datefrom AND n_rdsd_zequi.dateto"
-		+ "    LEFT JOIN t2308461   n_rdsd_zclsvobor"
+		+ "    LEFT JOIN " + C_TBL_RDSD_ZCLSVOBOR + "   n_rdsd_zclsvobor"
 		+ "       ON n_rdsd_zclsvobor.zclsvobor = D.zclsvobor"
-		+ "    LEFT JOIN t2321329   n_rdsd_material"
+		+ "    LEFT JOIN " + C_TBL_RDSD_MATERIAL + "   n_rdsd_material"
 		+ "       ON n_rdsd_material.material = D.material"
-		+ "    LEFT JOIN t2335739   n_rdsd_zfunc_loc"
+		+ "    LEFT JOIN " + C_TBL_T2335739 + "   n_rdsd_zfunc_loc"
 		+ "       ON n_rdsd_zfunc_loc.zfunc_loc = D.zfunc_loc"
 		+ "      AND to_date(D.calyear || '-01-01', 'YYYY-MM-DD')"
 		+ "          BETWEEN n_rdsd_zfunc_loc.datefrom::date AND n_rdsd_zfunc_loc.dateto::date"
-		+ "    LEFT JOIN t2320973   n_rdsd_zsiu_fld"
+		+ "    LEFT JOIN " + C_TBL_T2320973 + "   n_rdsd_zsiu_fld"
 		+ "       ON n_rdsd_zsiu_fld.zsiu_fld = D.zsiu_fld"
-		+ "    LEFT JOIN t2337709   n_rdsd_posid"
+		+ "    LEFT JOIN " + C_TBL_RDSD_POSID + "   n_rdsd_posid"
 		+ "       ON n_rdsd_posid.posid = D.posid"
-		+ "    LEFT JOIN t1895288   n_rdsd_infosystem"
+		+ "    LEFT JOIN " + C_TBL_RDSD_INFOSYSTEM + "   n_rdsd_infosystem"
 		+ "       ON n_rdsd_infosystem.code_value = D.zlib_infs"
-		+ "    LEFT JOIN t2301822   n_shortcut_to_rdsd_soldto_3"
+		+ "    LEFT JOIN " + C_TBL_SHORTCUT_TO_RDSD_SOLDTO_8 + "   n_shortcut_to_rdsd_soldto_3"
 		+ "       ON n_shortcut_to_rdsd_soldto_3.code = D.zphd_usl1"
-		+ "    LEFT JOIN t2301822   n_shortcut_to_rdsd_soldto"
+		+ "    LEFT JOIN " + C_TBL_SHORTCUT_TO_RDSD_SOLDTO_8 + "   n_shortcut_to_rdsd_soldto"
 		+ "       ON n_shortcut_to_rdsd_soldto.code = D.zdebitor"
-		+ "    LEFT JOIN t2301822   n_shortcut_to_rdsd_soldto_2"
+		+ "    LEFT JOIN " + C_TBL_SHORTCUT_TO_RDSD_SOLDTO_8 + "   n_shortcut_to_rdsd_soldto_2"
 		+ "       ON n_shortcut_to_rdsd_soldto_2.code = D.zph_eso2"
-		+ "    LEFT JOIN t2301822   n_shortcut_to_rdsd_soldto_4"
+		+ "    LEFT JOIN " + C_TBL_SHORTCUT_TO_RDSD_SOLDTO_8 + "   n_shortcut_to_rdsd_soldto_4"
 		+ "       ON n_shortcut_to_rdsd_soldto_4.code = D.zph_epok"
-		+ "    LEFT JOIN t2301822   n_shortcut_to_rdsd_soldto_5"
+		+ "    LEFT JOIN " + C_TBL_SHORTCUT_TO_RDSD_SOLDTO_8 + "   n_shortcut_to_rdsd_soldto_5"
 		+ "       ON n_shortcut_to_rdsd_soldto_5.code = D.zphd_sk"
-		+ "    LEFT JOIN t2307584   n_rdsd_ucvoltlevl"
+		+ "    LEFT JOIN " + C_TBL_SHORTCUT_TO_RDSD_UCVOLTLEVL + "   n_rdsd_ucvoltlevl"
 		+ "       ON n_rdsd_ucvoltlevl.ucvoltlevl = D.ucvoltlevl"
-		+ "    LEFT JOIN t2307584   n_shortcut_to_rdsd_ucvoltlevl"
+		+ "    LEFT JOIN " + C_TBL_SHORTCUT_TO_RDSD_UCVOLTLEVL + "   n_shortcut_to_rdsd_ucvoltlevl"
 		+ "       ON n_shortcut_to_rdsd_ucvoltlevl.ucvoltlevl = D.zucvolttr"
-		+ "    LEFT JOIN t2307947   n_rdsd_z_cl_napr"
+		+ "    LEFT JOIN " + C_TBL_RDSD_Z_CL_NAPR + "   n_rdsd_z_cl_napr"
 		+ "       ON n_rdsd_z_cl_napr.z_cl_napr = D.z_cl_napr"
-		+ "    LEFT JOIN t2307875   n_rdsd_zsiu_ty"
+		+ "    LEFT JOIN " + C_TBL_RDSD_ZSIU_TY + "   n_rdsd_zsiu_ty"
 		+ "       ON n_rdsd_zsiu_ty.zsiu_ty = D.zsiu_ty"
-		+ "    LEFT JOIN t2320979   n_rdsd_zbur_lu"
+		+ "    LEFT JOIN " + C_TBL_RDSD_ZBUR_LU + "   n_rdsd_zbur_lu"
 		+ "       ON n_rdsd_zbur_lu.code = D.zbur_lu"
-		+ "    LEFT JOIN t2311573   n_rdsd_zbur_area"
+		+ "    LEFT JOIN " + C_TBL_RDSD_ZBUR_AREA + "   n_rdsd_zbur_area"
 		+ "       ON n_rdsd_zbur_area.zbur_area = D.zbur_area"
-		+ "    LEFT JOIN t2337842    n_rdsd_zbur_plst"
+		+ "    LEFT JOIN " + C_TBL_T2337842 + "    n_rdsd_zbur_plst"
 		+ "       ON n_rdsd_zbur_plst.zbur_plst = D.zbur_plst"
-		+ "    LEFT JOIN t2311619   n_rdsd_zph_tehk"
+		+ "    LEFT JOIN " + C_TBL_RDSD_ZPH_TEHK + "   n_rdsd_zph_tehk"
 		+ "       ON n_rdsd_zph_tehk.code = D.name"
-		+ "    LEFT JOIN t2311231   n_rdsd_zskv_st"
+		+ "    LEFT JOIN " + C_TBL_RDSD_ZSKV_ST + "   n_rdsd_zskv_st"
 		+ "       ON n_rdsd_zskv_st.zskv_st = D.name"
-		+ "    LEFT JOIN t2301822   n_shortcut_to_rdsd_soldto_7"
+		+ "    LEFT JOIN " + C_TBL_SHORTCUT_TO_RDSD_SOLDTO_8 + "   n_shortcut_to_rdsd_soldto_7"
 		+ "       ON n_shortcut_to_rdsd_soldto_7.code = D.zgen_pod"
-		+ "    LEFT JOIN t2301822   n_shortcut_to_rdsd_soldto_6"
+		+ "    LEFT JOIN " + C_TBL_SHORTCUT_TO_RDSD_SOLDTO_8 + "   n_shortcut_to_rdsd_soldto_6"
 		+ "       ON n_shortcut_to_rdsd_soldto_6.code = D.zgen_zak"
-		+ "    LEFT JOIN t2301822   n_shortcut_to_rdsd_soldto_8"
+		+ "    LEFT JOIN " + C_TBL_SHORTCUT_TO_RDSD_SOLDTO_8 + "   n_shortcut_to_rdsd_soldto_8"
 		+ "       ON n_shortcut_to_rdsd_soldto_8.code = D.zpkr_subp"
-		+ "    LEFT JOIN t2311391   n_rdsd_zshifr"
+		+ "    LEFT JOIN " + C_TBL_RDSD_ZSHIFR + "   n_rdsd_zshifr"
 		+ "       ON n_rdsd_zshifr.zshifr = D.name"
-		+ "    LEFT JOIN t2335657   n_rdsd_zobjem"
+		+ "    LEFT JOIN " + C_TBL_T2335657 + "   n_rdsd_zobjem"
 		+ "       ON n_rdsd_zobjem.zobjem = D.name"
-		+ "    LEFT JOIN t2335635   n_rdsd_zphd_sr"
+		+ "    LEFT JOIN " + C_TBL_T2335635 + "   n_rdsd_zphd_sr"
 		+ "       ON n_rdsd_zphd_sr.zphd_sr = D.zphd_sr"
-		+ "    LEFT JOIN t2311629   n_rdsd_zphd_grsr"
+		+ "    LEFT JOIN " + C_TBL_RDSD_ZPHD_GRSR + "   n_rdsd_zphd_grsr"
 		+ "       ON n_rdsd_zphd_grsr.zphd_grsr = D.zphd_grsr"
-		+ "    LEFT JOIN t2290906   n_rdsd_zgaz_type"
+		+ "    LEFT JOIN " + C_TBL_RDSD_ZGAZ_TYPE + "   n_rdsd_zgaz_type"
 		+ "       ON n_rdsd_zgaz_type.code = D.zgaz_type"
-		+ "    LEFT JOIN t2307768   n_rdsd_zaviatype"
+		+ "    LEFT JOIN " + C_TBL_RDSD_ZAVIATYPE + "   n_rdsd_zaviatype"
 		+ "       ON n_rdsd_zaviatype.zaviatype = D.zaviatype"
-		+ "    LEFT JOIN t2321022 n_zph_usr0"
+		+ "    LEFT JOIN " + C_TBL_T2321022 + " n_zph_usr0"
 		+ "    on n_zph_usr0.zph_usr0 = D.zph_usr2"
-		+ "    LEFT JOIN t2312312 n_plant"
+		+ "    LEFT JOIN " + C_TBL_RDSD_PLANT + " n_plant"
 		+ "       ON n_plant.plant = D.plant"
-		+ "    LEFT JOIN t2317517 n_period_type"
+		+ "    LEFT JOIN " + C_TBL_DIC_TYPE_PERIOD + " n_period_type"
 		+ "       ON n_period_type.id = D.period_type"
-		+ "    LEFT JOIN t1895280 n_inds"
+		+ "    LEFT JOIN " + C_TBL_RDSD_INDS + " n_inds"
 		+ "       ON n_inds.code = D.zlib_indc"
-		+ "    LEFT JOIN t2494391 n_actvts"
+		+ "    LEFT JOIN " + C_TBL_T2494391 + " n_actvts"
 		+ "       ON n_actvts.code_value = n_inds.actvts"
-		+ "    LEFT JOIN t2364976 n_owners"
+		+ "    LEFT JOIN " + C_TBL_RDSD_OWNERS + " n_owners"
 		+ "       ON n_owners.""KEY"" = n_inds.owner"
 		+ "    WHERE D.IS_TEMPORARY = 2"
 		+ "AND"
@@ -2473,8 +2507,8 @@ Class ANALIZ_TEP_FORM_ON_SHOW: WebForm
 		+ "Main_Data AS ("
 		+ "    SELECT"
 		+ "        :ANALYTIC_SET,"
-		+ "        (SELECT t.ACTVTS FROM t1895280 t WHERE t.CODE = v.zlib_indc AND now() BETWEEN t.DATE_FROM AND t.DATE_TO LIMIT 1) AS ""Код вида деятельности"","
-		+ "        (SELECT t.SNAME FROM t1895280 t WHERE t.CODE = v.zlib_indc AND now() BETWEEN t.DATE_FROM AND t.DATE_TO LIMIT 1) AS ""Наименование вида деятельности"","
+		+ "        (SELECT t.ACTVTS FROM " + C_TBL_RDSD_INDS + " t WHERE t.CODE = v.zlib_indc AND now() BETWEEN t.DATE_FROM AND t.DATE_TO LIMIT 1) AS ""Код вида деятельности"","
+		+ "        (SELECT t.SNAME FROM " + C_TBL_RDSD_INDS + " t WHERE t.CODE = v.zlib_indc AND now() BETWEEN t.DATE_FROM AND t.DATE_TO LIMIT 1) AS ""Наименование вида деятельности"","
 		+ "        (SELECT f.forms_text FROM Forms_Agg f WHERE f.ZLIB_INDC = v.zlib_indc AND f.GJAHR = v.calyear AND f.PLANT = v.plant LIMIT 1) AS ""Формы ТЭП СНГ"","
 		+ "        :EXTRA_FIELDS"
 		+ "    FROM src v"
