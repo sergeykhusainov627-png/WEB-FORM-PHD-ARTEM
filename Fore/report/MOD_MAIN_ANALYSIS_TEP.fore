@@ -194,7 +194,7 @@ Begin
 	Except On E: Exception Do End Try;
 	Try
 		For col := 1 To colCount Do
-			wsData.Cell(1, col).Style.Font.Bold := True;
+			wsData.Cell(1, col).Style.Font.Bold := tristate.OnOption;
 		End For;
 	Except On E2: Exception Do End Try;
 	Try
