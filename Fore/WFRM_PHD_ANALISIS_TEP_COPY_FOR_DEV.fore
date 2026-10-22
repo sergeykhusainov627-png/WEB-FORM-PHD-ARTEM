@@ -2580,15 +2580,19 @@ Class ANALIZ_TEP_FORM_ON_SHOW: WebForm
 	/// </summary>
 	Function nsiTable(objectId: String): String;
 	Var
-		desc: IMetabaseObjectDescriptor;
+		desc, target: IMetabaseObjectDescriptor;
 	Begin
 		Try
 			If IsNull(MB) Then
 				MB := MetabaseClass.Active;
 			End If;
 			desc := MB.ItemByIdNamespace(objectId, MB.GetObjectKeyById(C_NSI_NAMESPACE_ID));
-			If IsNull(desc) Then
-				desc := MB.ItemByIdNamespace(objectId, MB.GetObjectKeyById(C_LOG_NAMESPACE_ID));
+			// Ярлык: берём ключ оригинального объекта — только у него есть физическая t-таблица
+			If (Not IsNull(desc)) And desc.IsShortcut Then
+				target := desc.Shortcut;
+				If Not IsNull(target) Then
+					desc := target;
+				End If;
 			End If;
 			Return "t" + desc.Key.ToString;
 		Except On E: Exception Do
