@@ -2363,7 +2363,7 @@ End Class ANALIZ_TEP_FORM_ON_SHOW;
 	/// </summary>
 	Function buildSql: String;
 	Var
-		sql, text: String;
+		sql, text, tempId: String;
 		names: Array Of String;
 		arrNames: Array Of String;
 		params: IHashtable;
@@ -2619,8 +2619,9 @@ End Class ANALIZ_TEP_FORM_ON_SHOW;
 				params := Hyperlink.ParameterManager.Params;
 				arrNames := C_FILTER_PARAMS.Split(",");
 				For i := 0 To arrNames.Length - 1 Do
-					text := paramText(params, String.Trim(arrNames[i] As String));
-					sql := String.Replace(sql, ":" + String.Trim(arrNames[i] As String), quoteLiteral(text));
+					tempId := String.Trim(arrNames[i] As String);
+					text := paramText(params, tempId);
+					sql := String.Replace(sql, ":" + tempId, quoteLiteral(text));
 				End For;
 			End If;
 		Except On E2: Exception Do
