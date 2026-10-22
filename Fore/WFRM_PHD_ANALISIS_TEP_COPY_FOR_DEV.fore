@@ -2618,5 +2618,36 @@ Class ANALIZ_TEP_FORM_ON_SHOW: WebForm
 		End Try;
 	End Function nsiTable;
 
+	/// <summary>Кнопка «Выбрать все» на вкладке аналитик (TabPage4): отмечает все чек-боксы вывода</summary>
+	Sub selectAllpage4OnClick;
+	Begin
+		Try
+		SetCheckBoxIfExists(CB_CALYEAR, True);
+		SetCheckBoxIfExists(CB_PLANT, True);
+		SetCheckBoxIfExists(CB_ZLIB_INDC, True);
+		SetCheckBoxIfExists(CB_ZLIB_INFS, True);
+		SetCheckBoxIfExists(CB_ACT_UNIT, True);
+		SetCheckBoxIfExists(CB_VENDOR, True);
+		SetCheckBoxIfExists(CB_SOLD_TO, True);
+		SetCheckBoxIfExists(CB_ZHRGRPMO, True);
+		SetCheckBoxIfExists(CB_PROFIT_CTR, True);
+		SetCheckBoxIfExists(CB_COSTCENTER, True);
+		SetCheckBoxIfExists(CB_ZORGUNIT, True);
+		SetCheckBoxIfExists(CB_ZPH_USR2, True);
+		SetCheckBoxIfExists(CB_ACTTYPE, True);
+		SetCheckBoxIfExists(CB_ZEQUI, True);
+		SetCheckBoxIfExists(CB_MATERIAL, True);
+		SetCheckBoxIfExists(CB_ZFUNC_LOC, True);
+		SetCheckBoxIfExists(CB_ZSIU_FLD, True);
+		SetCheckBoxIfExists(CB_POSID, True);
+		SetCheckBoxIfExists(CbHigherInd, True);
+		SetCheckBoxIfExists(CB_PERIOD_TYPE, True);
+			RefreshFieldList;
+		Except On E: Exception Do
+			showError("не удалось отметить все поля", E);
+		End Try;
+	End Sub selectAllpage4OnClick;
+
+
 
 End Class ANALIZ_TEP_FORM_ON_SHOW;
