@@ -1753,13 +1753,6 @@ Class ANALIZ_TEP_FORM_ON_SHOW: WebForm
 		// Список выбранных аналитик уходит МАССИВОМ в нижнем регистре: ровно в таком виде его
 		// подставляет в свой текст запрос QRY_PHD_MULT_DATA_COPY1 (параметр ANALYTIC_SET).
 		// Поэтому в отчёте появляются колонки только выбранных полей.
-		analyticSet := analyticSetArray;
-		If IsNull(analyticSet) Then
-			// Пустой список записывать нельзя: SELECT превратится в синтаксически неверный
-			setParamOrRemove("P_FIELD_LIST", "");
-			setParamOrRemove("ANALYTIC_SET", "");
-		Else
-		End If;
 		
 		Debug.WriteLine("[АнализТЭП/форма] полей в списке: " + fieldList.Count.ToString + " -> " + fieldList.Text(","));
 		logRecord(C_LOG_OP_FORM, True, "", "", "полей в списке: " + fieldList.Count.ToString + " -> " + fieldList.Text(","));
