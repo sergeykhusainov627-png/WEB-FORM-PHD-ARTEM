@@ -285,7 +285,8 @@ Class ANALIZ_TEP_FORM_ON_SHOW: WebForm
 	// параметр отчёта со списком выводимых аналитик (в форме используется как строка)
 	// ---------- новая схема: весь SQL собирается в форме и передаётся одной строкой в отчёт ----------
 	Const C_PARAM_P_SQL = "P_SQL";
-	Const C_FILTER_PARAMS = "PLANT,CALYEAR,ZLIB_INDC,ZPHD_STAT,ZTYPEIND,VENDOR,SOLD_TO,ZHRGRPMO,PROFIT_CTR,COSTCENTER,ZORGUNIT,ZPH_USR2,ACTTYPE,ZEQUI,ZCLSVOBOR,MATERIAL,ZFUNC_LOC,ZSIU_FLD,POSID,ZLIB_INFS,PERIOD_TYPE,ZPHD_DOG,ZPHD_USL1,ZDEBITOR,ZPH_ESO2,ZPHD_SK,UCVOLTLEVL,ZUCVOLTTR,Z_CL_NAPR,ZSIU_TY,ZDOGLINK,ZBUR_LU,ZBUR_AREA,ZSKV_KUST,Z_SKV_GEO,ZBUR_PLST,ZPH_TEHK,ZPH_OPLST,ZPILOT,ZSKV_ST,ZGEN_POD,ZGEN_ZAK,ZSHIFR,ZOBJEM,ZPHD_SR,ZPHD_GRSR,ZGAZ_TYPE,ZAVIATYPE,ZPHD_SPR,ZINDTXT1";
+	Const C_FILTER_PARAMS = "PLANT,CALYEAR,ZLIB_INDC,ZPHD_STAT,ZTYPEIND,VENDOR,SOLD_TO,ZHRGRPMO,PROFIT_CTR,COSTCENTER,ZORGUNIT,ZPH_USR2,ACTTYPE,ZEQUI,ZCLSVOBOR,MATERIAL,ZFUNC_LOC,ZSIU_FLD,POSID,ZLIB_INFS,PERIOD_TYPE,ZPHD_DOG,ZPHD_USL1,ZDEBITOR,ZPH_ESO2,ZPHD_SK,UCVOLTLEVL,ZUCVOLTTR,Z_CL_NAPR,ZSIU_TY,ZDOGLINK,ZBUR_LU,ZBUR_AREA,ZSKV_KUST,Z_SKV_GEO,ZBUR_PLST,ZPH_TEHK,ZPH_OPLST,ZPILOT,ZSKV_ST,ZGEN_POD,ZGEN_ZAK,ZSHIFR,ZOBJEM,ZPHD_SR,ZPHD_GRSR,ZGAZ_TYPE,ZAVIATYPE,ZPHD_SPR,ZINDTXT1,ZBUR_BEG,ZPHD_COMM,ZPHD_NCH";
+	Const C_LINK_PARAMS = "PLANT,CALYEAR,ZLIB_INDC,ZPHD_STAT,ZTYPEIND,VENDOR,SOLD_TO,ZHRGRPMO,PROFIT_CTR,COSTCENTER,ZORGUNIT,ZPH_USR2,ACTTYPE,ZEQUI,ZCLSVOBOR,MATERIAL,ZFUNC_LOC,ZSIU_FLD,POSID,ZLIB_INFS,PERIOD_TYPE,ZPHD_DOG,ZPHD_USL1,ZDEBITOR,ZPH_ESO2,ZPHD_SK,UCVOLTLEVL,ZUCVOLTTR,Z_CL_NAPR,ZSIU_TY,ZDOGLINK,ZBUR_LU,ZBUR_AREA,ZSKV_KUST,Z_SKV_GEO,ZBUR_PLST,ZPH_TEHK,ZPH_OPLST,ZPILOT,ZSKV_ST,ZGEN_POD,ZGEN_ZAK,ZSHIFR,ZOBJEM,ZPHD_SR,ZPHD_GRSR,ZGAZ_TYPE,ZAVIATYPE,ZPHD_SPR,ZINDTXT1,ZBUR_BEG,ZPHD_COMM,ZPHD_NCH,ZBUR_END,ZPKR_SUBP";
 	// запрос-генератор значений для EXTRA_FIELDS / EXTRA_NAMES (источник справочника)
 	
 	_AnalyzTepHyperlink: COpenHyperlink; // CUrlHyperlink
@@ -1670,15 +1671,49 @@ Class ANALIZ_TEP_FORM_ON_SHOW: WebForm
 	/// 	форму, теперь текст ошибки остаётся в TextArea1, а форма продолжает работать.
 	/// </summary>
 	Sub SafeGenerate;
+	Var
+		params: IHashtable;
+		keepIds: Array Of String;
+		keepValues: Array Of Variant;
+		keepFlags: Array Of Boolean;
+		i: Integer;
+		tempId: String;
 	Begin
 		Try
 			SetParamSafe(C_PARAM_P_SQL, buildSql);
+			// в ссылку отдаём только текст запроса: остальные параметры менеджера
+			// временно снимаем (их значения нужны лишь для сборки SQL) и возвращаем после Generate
+			keepIds := C_LINK_PARAMS.Split(",");
+			keepValues := New Variant[keepIds.Length];
+			keepFlags := New Boolean[keepIds.Length];
+			If Not IsNull(Hyperlink.ParameterManager) Then
+				params := Hyperlink.ParameterManager.Params;
+				If Not IsNull(params) Then
+					For i := 0 To keepIds.Length - 1 Do
+						tempId := String.Trim(keepIds[i] As String);
+						keepFlags[i] := params.Contains(tempId);
+						If keepFlags[i] Then
+							keepValues[i] := params.Item(tempId);
+							params.Remove(tempId);
+						End If;
+					End For;
+				End If;
+			End If;
 			Hyperlink.Generate;
-			Debug.WriteLine("[АнализТЭП/форма] гиперссылка сформирована");
+			If Not IsNull(Hyperlink.ParameterManager) Then
+				params := Hyperlink.ParameterManager.Params;
+				If Not IsNull(params) Then
+					For i := 0 To keepIds.Length - 1 Do
+						If keepFlags[i] Then
+							params.Item(String.Trim(keepIds[i] As String)) := keepValues[i];
+						End If;
+					End For;
+				End If;
+			End If;
 			logRecord(C_LOG_OP_FORM, True, C_ANALYZ_TEP_REP_ID, "PRX_ANALYSIS_TEP",
-				"ссылка сформирована; длина: " + Hyperlink.Action.Length.ToString + " симв.");
+				"ссылка сгенерирована; длина SQL: " + _sqlSqlLength.ToString + " симв.");
 		Except On E: Exception Do
-			showError("Не удалось сформировать ссылку", E);
+			showError("не удалось сгенерировать ссылку", E);
 		End Try;
 	End Sub SafeGenerate;
 	
@@ -1808,8 +1843,6 @@ Class ANALIZ_TEP_FORM_ON_SHOW: WebForm
 			setParamOrRemove("P_FIELD_LIST", "");
 			setParamOrRemove("ANALYTIC_SET", "");
 		Else
-			SetParamSafe("P_FIELD_LIST", analyticSet);
-			SetParamSafe("ANALYTIC_SET", analyticSet);
 		End If;
 		
 		SafeGenerate;
