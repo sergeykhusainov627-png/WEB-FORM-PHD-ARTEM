@@ -425,11 +425,11 @@ Class ANALIZ_TEP_FORM_ON_SHOW: WebForm
 		//TextArea1.Text := link.Action;
 	End Sub madeLinkForMyselfTst;	
 	
-	{Sub UpdateOpenDefHlink(paramId: String; paramValue: Variant);
-	Begin
-		_AnalyzTepHyperlink.SetParamValue(paramId, paramValue);
-		_AnalyzTepSafeGenerate;
-	End Sub UpdateOpenDefHlink;}
+	// Sub UpdateOpenDefHlink(paramId: String; paramValue: Variant);
+// Begin
+// _AnalyzTepHyperlink.SetParamValue(paramId, paramValue);
+// _AnalyzTepSafeGenerate;
+	// End Sub UpdateOpenDefHlink; //}
 	
 	{Function InitializeHlinkOpenObject(report: IPrxReport; hlinkText, hlinkAction: String): ITabHyperlink;
 	Var
@@ -506,7 +506,6 @@ Class ANALIZ_TEP_FORM_ON_SHOW: WebForm
 		//p_plant := D_PLANT.Selection.ToVariant;
 		//getCollectionValues(D_PLANT); // was 
 		// Attr := D_PLANT.Selection.Dimension.Attributes.FindById("KEY");
-		// (закомментировано) If Attr <> Null Then
         //  	index := Attr.LookupDisplayValue(p_plant);
 		// 	 Attr := D_PLANT.Selection.Dimension.Attributes.FindById("CODE");
 			
@@ -544,19 +543,16 @@ Class ANALIZ_TEP_FORM_ON_SHOW: WebForm
 				// Elems := ElemArr.Elements;
 				// Iter := Elems.Iterator;
 				
-				// (закомментировано) While Iter.Next Do
 				// 	//Debug.WriteLine(Elems.Name(Iter.Element));
 				// 	TextArea1.Text := Iter.Element.ToString;
 				// End While;
 			End If;
 			
-			// (закомментировано) If dim.Selection.SelectedCount = 1 Then
 			// 	TextArea1.Text := dim.Selection.SelectedCount.ToString;
 			// Else
 			// 	TextArea1.Text := dim.Selection.SelectedCount.ToString;
 			// End If;
 			
-			// (закомментировано) If dim.Selection.ToVariant Is Array Then
 			// 	//TextArea1.Text := "Это массив";
 			// End If;		
 			
@@ -583,7 +579,6 @@ Class ANALIZ_TEP_FORM_ON_SHOW: WebForm
 		// //_AnalyzTepHyperlink.SetParamValue(C_PARAM_ZLIB_INDC, p_zlib_indc); // san
 		
 		// // tst
-		// (закомментировано) If _AnalyzTepHyperlink <> Null Then
 		// 	TextArea1.Text := "";
 		// 	TextArea1.Text := p_zlib_indc;
 		// //	_AnalyzTepHyperlink := New COpenHyperlink.Create(ReportBoxOk.Report, AppNs.PHD, "Ок");
