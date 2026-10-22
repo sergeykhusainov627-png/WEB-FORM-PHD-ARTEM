@@ -2558,3 +2558,9 @@ End Class ANALIZ_TEP_FORM_ON_SHOW;
 			showError("не удалось применить изменения", E);
 		End Try;
 	End Sub applyAll;
+
+	/// <summary>Кнопка «Применить»: пересобрать поля и сформировать ссылку (открытие — по ссылке в ReportBoxOk)</summary>
+	Sub ButtonApplyOnClick;
+	Begin
+		applyAll;
+	End Sub ButtonApplyOnClick;
