@@ -86,3 +86,21 @@
 | zphd_stat | `zphd_stat` | — | — | — | (то же поле) |
 | zind_sche | `zind_sche` | — | — | — | (то же поле) |
 | key_connect | `key_connect` | — | — | — | (то же поле) |
+
+## Источник данных (CTE `src`)
+
+```
+t1913698 D                      -- боковик DICT_PHD_LEFT (IS_TEMPORARY = 2), все колонки-ключи
+  JOIN TBL_FAP_MULT TBL         -- OBJECT: TBL_PHD_FAP_MULT, физическая таблица TBL_FAP_MULT (не t-таблица)
+    ON D."KEY" = TBL.KEY_CONNECT
+   AND TBL.plant = D.plant
+   AND TBL.year  = D.calyear
+```
+
+* **`t1913698`** (объект `DICT_PHD_LEFT`) — боковик: в нём лежат все колонки-ключи аналитик (`sold_to`, `vendor`, `plant`, …) и `KEY` для связи с фактами;
+* **`TBL_FAP_MULT`** (объект `TBL_PHD_FAP_MULT`) — факты: `zsiu_indv`, `zvalue_sng`, `period`, `zphd_stat`, `zind_sche`, `key_connect`, а также `sp`, `plant`, `year`;
+* динамические колонки периодов/статусов (`EXTRA_FIELDS`) строятся из полей `TBL_FAP_MULT`:
+  `SUM(TBL.zsiu_indv) FILTER (WHERE TBL.period = N AND TBL.ztypeind = '…')`,
+  `SUM(TBL.zvalue_sng) FILTER (…)`, статус — `TBL.zphd_stat`;
+* наименования аналитик (`…_name`) получаются соединением боковика со справочниками НСИ (см. таблицу выше), а `TBL_FAP_MULT` в этих соединениях не участвует — только в фильтрах по периоду/статусу и в суммах.
+
