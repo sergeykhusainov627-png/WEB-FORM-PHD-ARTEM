@@ -298,6 +298,7 @@ Class ANALIZ_TEP_FORM_ON_SHOW: WebForm
 	extraPeriods: StringList;
 	extraConds: StringList;
 	_sqlExtraFields: String;
+	_sqlSqlLength: Integer;
 	_sqlExtraNames: String;
 	_sqlStatus: String;
 	extraCaptions: StringList;
