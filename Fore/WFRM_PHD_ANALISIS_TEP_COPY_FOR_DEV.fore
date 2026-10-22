@@ -290,7 +290,7 @@ Class ANALIZ_TEP_FORM_ON_SHOW: WebForm
 	Const C_EXCLUDE_ANALYTICS = ",ZPH_HIGHER,ACTVTS,ID1,ZF_NUMB,OWNER,ZPH_FUNC,ZPH_VOLUME,ZPH_TRUD,ZPH_PRICE_CP,ZPH_PRICE_CD,ZPH_ACTTYPE2,";
 	Const C_NAME_FIELDS = ",acttype_name,material_name,zskv_st_name,period_type_name,plant_name,posid_name,profit_ctr_name,sold_to_name,ucvoltlevl_name,vendor_name,z_cl_napr_name,zaviatype_name,zbur_area_name,zbur_lu_name,zbur_plst_name,zclsvobor_name,zdebitor_name,zequi_name,zfunc_loc_name,zgaz_type_name,zgen_pod_name,zgen_zak_name,zhrgrpmo_name,zlib_indc_name,zlib_infs_name,zph_epok_name,zph_eso2_name,zphd_grsr_name,zphd_sk_name,zphd_sr_name,zphd_usl1_name,zpkr_subp_name,zsiu_fld_name,zsiu_ty_name,zucvolttr_name,";
 	Const C_NSI_NAMESPACE_ID = "BA_PHD";   // пространство имён справочников НСИ
-	Const C_CRLF = #13 + #10;   // перевод строки для читаемого SQL
+	Const C_CRLF = String.Chr(13) + String.Chr(10);   // перевод строки для читаемого SQL
 	// ---------- физические таблицы БД (НСИ и справочники) ----------
 	Const C_NSI_RDSD_INDS                            = "RDSD_INDS";   // t1895280
 	Const C_NSI_RDSD_INFOSYSTEM                      = "RDSD_INFOSYSTEM";   // t1895288
