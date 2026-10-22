@@ -4,6 +4,64 @@
 
 Формат строки: `<объект> | <t-таблица> | <поле-ключ в t-таблице> | <join к D.поле> | <поле наименования> | примечание`
 
+## Реестр по ТЗ (актуально)
+
+Источник: файл ТЗ `sprav.txt` (прислан заказчиком). Формат: объект | t-таблица | поле-ключ.
+
+| Объект | t-таблица | Поле-ключ |
+|---|---|---|
+| TBL_PHD_FAP_MULT | TBL_FAP_MULT | — |
+| DIC_TYPE_PERIOD | t2317517 | — |
+| DICT_PHD_GROUPS | на запросе | — |
+| DICT_PHD_LEFT | t1913698 | — |
+| RDSD_ACTTYPE | t2320948 | `acttype` |
+| RDSD_ACTVTS | t2494391 | `code_value` |
+| RDSD_INDS | t1895280 | `code` |
+| RDSD_INFOSYSTEM | t1895288 | `code_value` |
+| RDSD_MATERIAL | t2321329 | `material` |
+| RDSD_OWNERS | t2364976 | `key` |
+| RDSD_ZPH_OPLST | t2311610 | `code` |
+| RDSD_PLANT | t2312312 | `plant` |
+| RDSD_POSID | t2337709 | `posid` |
+| RDSD_PROFIT_CTR | t2320954 | `profit_ctr` |
+| RDSD_SOLDTO | t2301822 | `code` |
+| RDSD_UCVOLTLEVL | t2307584 | `ucvoltlevl` |
+| RDSD_VENDOR | t2322857 | `vendor` |
+| RDSD_Z_CL_NAPR | t2307947 | `z_cl_napr` |
+| RDSD_ZAVIATYPE | t2307768 | `zaviatype` |
+| RDSD_ZBUR_AREA | t2311573 | `zbur_area` |
+| RDSD_ZBUR_LU | t2320979 | `code` |
+| RDSD_ZBUR_PLST | t2337842 | `zbur_plst` |
+| RDSD_ZCLSVOBOR | t2308461 | `zclsvobor` |
+| RDSD_ZEQUI | t2338354 | `zequi` |
+| RDSD_ZFUNC_LOC | t2335739 | `zfunc_loc` |
+| RDSD_ZGAZ_TYPE | t2290906 | `code` |
+| RDSD_ZHRGRPMO | t2306331 | `zhrgrpmo` |
+| RDSD_ZOBJEM | t2335657 | `zobjem` |
+| RDSD_ZORGU | t2335561 | `zorgu` |
+| RDSD_ZPH_TEHK | t2311619 | `code` |
+| RDSD_ZPH_USR0 | t2321022 | `zph_usr0` |
+| RDSD_ZPHD_GRSR | t2311629 | `zphd_grsr` |
+| RDSD_ZPHD_SPR | t2335720 | `zphd_spr` |
+| RDSD_ZPHD_SR | t2335635 | `zphd_sr` |
+| RDSD_ZSHIFR | t2311391 | `zshifr` |
+| RDSD_ZSIU_FLD | t2320973 | `zsiu_fld` |
+| RDSD_ZSIU_TY | t2307875 | `zsiu_ty` |
+| RDSD_ZSKV_ST | t2311231 | `zskv_st` |
+| SHORTCUT_TO_RDSD_SOLDTO | t2301822 | `code` |
+| SHORTCUT_TO_RDSD_SOLDTO_2 | t2301822 | `code` |
+| SHORTCUT_TO_RDSD_SOLDTO_3 | t2301822 | `code` |
+| SHORTCUT_TO_RDSD_SOLDTO_4 | t2301822 | `code` |
+| SHORTCUT_TO_RDSD_SOLDTO_5 | t2301822 | `code` |
+| SHORTCUT_TO_RDSD_SOLDTO_6 | t2301822 | `code` |
+| SHORTCUT_TO_RDSD_SOLDTO_7 | t2301822 | `code` |
+| SHORTCUT_TO_RDSD_SOLDTO_8 | t2301822 | `code` |
+| SHORTCUT_TO_RDSD_UCVOLTLEVL | t2307584 | `ucvoltlevl` |
+| TBL_ZIDNFORM | TBL_ZIDNFORM | — |
+
+> В форме физические таблицы не хардкодятся: `nsiTable(C_NSI_*)` вычисляет `t` + ключ объекта
+> в репозитории при выполнении, поэтому перенос на другой стенд безопасен.
+
 ## Таблицы фактов и служебные
 
 | Объект | t-таблица | Ключ | Примечание |
