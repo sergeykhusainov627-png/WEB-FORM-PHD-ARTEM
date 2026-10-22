@@ -320,7 +320,9 @@ Class ANALIZ_TEP_FORM_ON_SHOW: WebForm
 	Sub initialization;
 	Begin	
 		MB := MetabaseClass.Active;
-		If IsNull(fieldList) Then fieldList := New StringList.Create; End If;
+		If IsNull(fieldList) Then
+			fieldList := New StringList.Create;
+		End If;
 		InitOutputFieldIds;
 	End Sub initialization;
 	
@@ -504,7 +506,7 @@ Class ANALIZ_TEP_FORM_ON_SHOW: WebForm
 		//p_plant := D_PLANT.Selection.ToVariant;
 		//getCollectionValues(D_PLANT); // was 
 		// Attr := D_PLANT.Selection.Dimension.Attributes.FindById("KEY");
-		// If Attr <> Null Then
+		// (закомментировано) If Attr <> Null Then
         //  	index := Attr.LookupDisplayValue(p_plant);
 		// 	 Attr := D_PLANT.Selection.Dimension.Attributes.FindById("CODE");
 			
@@ -542,19 +544,19 @@ Class ANALIZ_TEP_FORM_ON_SHOW: WebForm
 				// Elems := ElemArr.Elements;
 				// Iter := Elems.Iterator;
 				
-				// While Iter.Next Do
+				// (закомментировано) While Iter.Next Do
 				// 	//Debug.WriteLine(Elems.Name(Iter.Element));
 				// 	TextArea1.Text := Iter.Element.ToString;
 				// End While;
 			End If;
 			
-			// If dim.Selection.SelectedCount = 1 Then
+			// (закомментировано) If dim.Selection.SelectedCount = 1 Then
 			// 	TextArea1.Text := dim.Selection.SelectedCount.ToString;
 			// Else
 			// 	TextArea1.Text := dim.Selection.SelectedCount.ToString;
 			// End If;
 			
-			// If dim.Selection.ToVariant Is Array Then
+			// (закомментировано) If dim.Selection.ToVariant Is Array Then
 			// 	//TextArea1.Text := "Это массив";
 			// End If;		
 			
@@ -581,7 +583,7 @@ Class ANALIZ_TEP_FORM_ON_SHOW: WebForm
 		// //_AnalyzTepHyperlink.SetParamValue(C_PARAM_ZLIB_INDC, p_zlib_indc); // san
 		
 		// // tst
-		// If _AnalyzTepHyperlink <> Null Then
+		// (закомментировано) If _AnalyzTepHyperlink <> Null Then
 		// 	TextArea1.Text := "";
 		// 	TextArea1.Text := p_zlib_indc;
 		// //	_AnalyzTepHyperlink := New COpenHyperlink.Create(ReportBoxOk.Report, AppNs.PHD, "Ок");
@@ -1363,7 +1365,9 @@ Class ANALIZ_TEP_FORM_ON_SHOW: WebForm
 	/// </summary>
 	Sub UpdateOpenDefHlinkFromSelection(paramId: String; dimSel: IDimSelection; attrId: String = "");
 	Begin
-		If IsNull(dimSel) Then Return; End If;
+		If IsNull(dimSel) Then
+			Return;
+		End If;
 		Hyperlink.SetParamValueFromSelection(paramId, dimSel, attrId);
 	End Sub UpdateOpenDefHlinkFromSelection;
 	
@@ -1411,7 +1415,9 @@ Class ANALIZ_TEP_FORM_ON_SHOW: WebForm
 	/// </summary>
 	Sub fillFieldListByStatusFlag(CB: IWebCheckBox; fieldName : String);
 	Begin	
-		If IsNull(CB) Then Return; End If;
+		If IsNull(CB) Then
+			Return;
+		End If;
 		RefreshFieldList;
 	End Sub fillFieldListByStatusFlag;
 	
@@ -1446,7 +1452,9 @@ Class ANALIZ_TEP_FORM_ON_SHOW: WebForm
 	// ============================================================================================
 	Sub InitOutputFieldIds;
 	Begin
-		If Not IsNull(_fieldIds) Then Return; End If;
+		If Not IsNull(_fieldIds) Then
+			Return;
+		End If;
 		_fieldIds := New Hashtable.Create;
 		_codeIds := New Hashtable.Create;
 		// --- подтверждённые поля (контролы используются в исходном модуле) ---
@@ -1561,7 +1569,9 @@ Class ANALIZ_TEP_FORM_ON_SHOW: WebForm
 		_lastError := what + ": " + E.Message;
 		Debug.WriteLine("[АнализТЭП/форма] ОШИБКА: " + _lastError);
 		logRecord(C_LOG_OP_FORM, False, "", "", what + ": " + logErrText(E));
-		If IsNull(TextArea1) Then Return; End If;
+		If IsNull(TextArea1) Then
+			Return;
+		End If;
 		TextArea1.Text := _lastError;
 	End Sub showError;
 	
@@ -1577,7 +1587,9 @@ Class ANALIZ_TEP_FORM_ON_SHOW: WebForm
 		values: Array[0..6] Of Variant;
 	Begin
 		Try
-			If IsNull(MB) Then MB := MetabaseClass.Active; End If;
+			If IsNull(MB) Then
+				MB := MetabaseClass.Active;
+			End If;
 			logObj := MB.ItemByIdNamespace(C_LOG_ID, MB.GetObjectKeyById(C_LOG_NAMESPACE_ID)).Bind As ILog;
 			values[0] := DateTime.Now;
 			values[1] := logUser;
@@ -1598,7 +1610,9 @@ Class ANALIZ_TEP_FORM_ON_SHOW: WebForm
 		part: String;
 	Begin
 		part := text;
-		If IsNull(part) Then part := ""; End If;
+		If IsNull(part) Then
+			part := "";
+		End If;
 		If part.IsEmpty Then
 			logRecord(C_LOG_OP_FORM, True, "", "", prefix + ": <пусто>");
 			Return;
@@ -1616,7 +1630,9 @@ Class ANALIZ_TEP_FORM_ON_SHOW: WebForm
 	/// <summary>Текст ошибки с модулем/формой и номером строки (e.Source, e.Line)</summary>
 	Function logErrText(E: Exception): String;
 	Begin
-		If IsNull(E) Then Return "ОШИБКА без описания"; End If;
+		If IsNull(E) Then
+			Return "ОШИБКА без описания";
+		End If;
 		Return "ОШИБКА: " + E.Message + " [модуль: " + E.Source + ", строка: " + E.Line.ToString + "]";
 	End Function logErrText;
 	
@@ -1626,8 +1642,12 @@ Class ANALIZ_TEP_FORM_ON_SHOW: WebForm
 		t: String;
 	Begin
 		t := text;
-		If IsNull(t) Then t := ""; End If;
-		If t.Length <= C_LOG_DESCR_MAX Then Return t; End If;
+		If IsNull(t) Then
+			t := "";
+		End If;
+		If t.Length <= C_LOG_DESCR_MAX Then
+			Return t;
+		End If;
 		Return t.Substring(0, C_LOG_DESCR_MAX) + "…";
 	End Function logCut;
 	
@@ -1642,7 +1662,9 @@ Class ANALIZ_TEP_FORM_ON_SHOW: WebForm
 		Except
 			name := "";
 		End Try;
-		If name.IsEmpty Then name := "WEB"; End If;
+		If name.IsEmpty Then
+			name := "WEB";
+		End If;
 		Return name;
 	End Function logUser;
 	
@@ -1669,7 +1691,9 @@ Class ANALIZ_TEP_FORM_ON_SHOW: WebForm
 	Sub SetParamSafe(paramId: String; value: Variant);
 	Begin
 		Try
-			If IsNull(Hyperlink.ParameterManager) Then Return; End If;
+			If IsNull(Hyperlink.ParameterManager) Then
+				Return;
+			End If;
 			Hyperlink.SetParamValue(paramId, value);
 		Except On E: Exception Do
 			showError("Не удалось записать параметр " + paramId, E);
@@ -1686,7 +1710,9 @@ Class ANALIZ_TEP_FORM_ON_SHOW: WebForm
 	Var
 		analyticSet: Variant;
 	Begin
-		If IsNull(fieldList) Then fieldList := New StringList.Create; End If;
+		If IsNull(fieldList) Then
+			fieldList := New StringList.Create;
+		End If;
 		fieldList.Clear;
 		addFieldsWithoutCheckBox;
 		
@@ -1794,7 +1820,9 @@ Class ANALIZ_TEP_FORM_ON_SHOW: WebForm
 		SafeGenerate;
 		Debug.WriteLine("[АнализТЭП/форма] полей в списке: " + fieldList.Count.ToString + " -> " + fieldList.Text(","));
 		logRecord(C_LOG_OP_FORM, True, "", "", "полей в списке: " + fieldList.Count.ToString + " -> " + fieldList.Text(","));
-		If (Not IsNull(TextArea1)) And _lastError.IsEmpty Then TextArea1.Text := Hyperlink.Action; End If;
+		If (Not IsNull(TextArea1)) And _lastError.IsEmpty Then
+			TextArea1.Text := Hyperlink.Action;
+		End If;
 		Debug.WriteLine("[АнализТЭП/форма] ссылка: " + Hyperlink.Action);
 		logLong("ссылка", Hyperlink.Action);
 	End Sub RefreshFieldList;
@@ -1804,25 +1832,37 @@ Class ANALIZ_TEP_FORM_ON_SHOW: WebForm
 	Var
 		value: Variant;
 	Begin
-		If IsNull(_fieldIds) Or controlName.IsEmpty Then Return ""; End If;
+		If IsNull(_fieldIds) Or controlName.IsEmpty Then
+			Return "";
+		End If;
 		value := _fieldIds.Item(controlName);
-		If IsNull(value) Then Return ""; End If;
+		If IsNull(value) Then
+			Return "";
+		End If;
 		Return value As String;
 	End Function fieldIdByControl;
 	
 	/// <summary>Добавляет поле, если его чек-бокс отмечен (идентификатор берётся из таблицы)</summary>
 	Sub CollectIfChecked(cb: IWebCheckBox; controlName: String);
 	Begin
-		If IsNull(cb) Then Return; End If;
-		If Not cb.Checked Then Return; End If;
+		If IsNull(cb) Then
+			Return;
+		End If;
+		If Not cb.Checked Then
+			Return;
+		End If;
 		addFieldToList(fieldIdByControl(controlName));
 	End Sub CollectIfChecked;
 	
 	/// <summary>Добавляет идентификатор в список полей, если его там ещё нет</summary>
 	Sub addFieldToList(fieldId: String);
 	Begin
-		If IsNull(fieldList) Or fieldId.IsEmpty Then Return; End If;
-		If fieldList.IndexOf(fieldId) = -1 Then fieldList.Add(fieldId); End If;
+		If IsNull(fieldList) Or fieldId.IsEmpty Then
+			Return;
+		End If;
+		If fieldList.IndexOf(fieldId) = -1 Then
+			fieldList.Add(fieldId);
+		End If;
 	End Sub addFieldToList;
 	
 	/// <summary>Поля статусов для выбранных периодов (режим «Выводить информацию по статусам»)</summary>
@@ -1844,8 +1884,12 @@ Class ANALIZ_TEP_FORM_ON_SHOW: WebForm
 	/// <summary>Период в динамический список, если отмечен его чек-бокс</summary>
 	Sub addPeriodIfChecked(cb: IWebCheckBox; periodNum: Integer; cond: String; caption: String);
 	Begin
-		If IsNull(cb) Then Return; End If;
-		If Not cb.Checked Then Return; End If;
+		If IsNull(cb) Then
+			Return;
+		End If;
+		If Not cb.Checked Then
+			Return;
+		End If;
 		// номер периода нужен для фильтрации строк генератора, cond/caption — для запасного пути
 		extraPeriods.Add(periodNum.ToString);
 		extraConds.Add(cond);
@@ -1863,9 +1907,15 @@ Class ANALIZ_TEP_FORM_ON_SHOW: WebForm
 		exprs, names: StringList;
 		hasStatus: Boolean;
 	Begin
-		If IsNull(extraConds) Then extraConds := New StringList.Create; End If;
-		If IsNull(extraCaptions) Then extraCaptions := New StringList.Create; End If;
-		If IsNull(extraPeriods) Then extraPeriods := New StringList.Create; End If;
+		If IsNull(extraConds) Then
+			extraConds := New StringList.Create;
+		End If;
+		If IsNull(extraCaptions) Then
+			extraCaptions := New StringList.Create;
+		End If;
+		If IsNull(extraPeriods) Then
+			extraPeriods := New StringList.Create;
+		End If;
 		extraPeriods.Clear;
 		extraConds.Clear;
 		extraCaptions.Clear;
@@ -1911,7 +1961,9 @@ Class ANALIZ_TEP_FORM_ON_SHOW: WebForm
 		// строки для сборки текста SQL (новая схема — параметры запроса больше не используются)
 		_sqlExtraFields := listTextSep(exprs, ", ");
 		_sqlExtraNames := listTextSep(names, ", ");
-		If hasStatus Then _sqlStatus := "1"; Else _sqlStatus := "0"; End If;
+		If hasStatus Then
+			_sqlStatus := "1"; Else _sqlStatus := "0";
+		End If;
 		Debug.WriteLine("[АнализТЭП/форма] динамических колонок: " + exprs.Count.ToString + " (статусы: " + (hasStatus ? "да" : "нет") + ")");
 		logRecord(C_LOG_OP_FORM, True, "", "", "динамических колонок: " + exprs.Count.ToString + " (статусы: " + (hasStatus ? "да" : "нет") + ")");
 	End Sub buildExtraFields;
@@ -1933,10 +1985,16 @@ Class ANALIZ_TEP_FORM_ON_SHOW: WebForm
 		found: Boolean;
 	Begin
 		ids := getSelectedTypeIds;
-		If ids.Count = 0 Then Return; End If;
-		If IsNull(D_ZTYPEIND) Then Return; End If;
+		If ids.Count = 0 Then
+			Return;
+		End If;
+		If IsNull(D_ZTYPEIND) Then
+			Return;
+		End If;
 		dim := D_ZTYPEIND.DimInstance;
-		If IsNull(dim) Then Return; End If;
+		If IsNull(dim) Then
+			Return;
+		End If;
 		attrs := dim.Attributes;
 		attrId := attrs.FindById("ID");
 		attrName := attrs.FindById("NAME");
@@ -1952,7 +2010,9 @@ Class ANALIZ_TEP_FORM_ON_SHOW: WebForm
 					End If;
 				End For;
 			End If;
-			If title.IsEmpty Then title := code; End If;
+			If title.IsEmpty Then
+				title := code;
+			End If;
 			addExtraForType(exprs, names, code, title, hasStatus);
 		End For;
 	End Sub addExtraForTypes;
@@ -1972,18 +2032,28 @@ Class ANALIZ_TEP_FORM_ON_SHOW: WebForm
 		i: Integer;
 	Begin
 		list := New StringList.Create;
-		If IsNull(Hyperlink.ParameterManager) Then Return list; End If;
+		If IsNull(Hyperlink.ParameterManager) Then
+			Return list;
+		End If;
 		params := Hyperlink.ParameterManager.Params;
-		If IsNull(params) Then Return list; End If;
-		If Not params.Contains(C_PARAM_ZTYPEIND) Then Return list; End If;
+		If IsNull(params) Then
+			Return list;
+		End If;
+		If Not params.Contains(C_PARAM_ZTYPEIND) Then
+			Return list;
+		End If;
 		value := params.Item(C_PARAM_ZTYPEIND);
-		If IsNull(value) Then Return list; End If;
+		If IsNull(value) Then
+			Return list;
+		End If;
 		If value Is Array Then
 			arr := value As Array;
 			For i := 0 To arr.Length - 1 Do
 				Try
 					If Not IsNull(arr[i]) Then
-						If Not (arr[i] As String).IsEmpty Then list.Add(arr[i] As String); End If;
+						If Not (arr[i] As String).IsEmpty Then
+							list.Add(arr[i] As String);
+						End If;
 					End If;
 				Except On E: Exception Do
 					Debug.WriteLine("[АнализТЭП/форма] элемент ZTYPEIND не строка: " + E.Message);
@@ -2037,13 +2107,17 @@ Class ANALIZ_TEP_FORM_ON_SHOW: WebForm
 		codeId: Variant;
 		i, count: Integer;
 	Begin
-		If IsNull(_codeIds) Then Return; End If;
+		If IsNull(_codeIds) Then
+			Return;
+		End If;
 		// count фиксируем заранее: добавляемые поля-коды не должны попасть в этот же перебор
 		count := fieldList.Count;
 		For i := 0 To count - 1 Do
 			fieldId := fieldList.Item(i) As String;
 			codeId := _codeIds.Item(fieldId);
-			If Not IsNull(codeId) Then addFieldToList(codeId As String); End If;
+			If Not IsNull(codeId) Then
+				addFieldToList(codeId As String);
+			End If;
 		End For;
 	End Sub addCodeFields;
 	
@@ -2053,12 +2127,18 @@ Class ANALIZ_TEP_FORM_ON_SHOW: WebForm
 	Var
 		params: IHashtable;
 	Begin
-		If IsNull(Hyperlink.ParameterManager) Then Return; End If;
+		If IsNull(Hyperlink.ParameterManager) Then
+			Return;
+		End If;
 		params := Hyperlink.ParameterManager.Params;
-		If IsNull(params) Then Return; End If;
+		If IsNull(params) Then
+			Return;
+		End If;
 		If value.IsEmpty Then
 			// Пустое значение нельзя писать в параметры: CObjectParamManager присваивает значение как есть
-			If params.Contains(paramId) Then params.Remove(paramId); End If;
+			If params.Contains(paramId) Then
+				params.Remove(paramId);
+			End If;
 		Else
 			Hyperlink.SetParamValue(paramId, value);
 		End If;
@@ -2077,13 +2157,19 @@ Class ANALIZ_TEP_FORM_ON_SHOW: WebForm
 		fieldId: String;
 		i, count: Integer;
 	Begin
-		If IsNull(fieldList) Then Return New String[0]; End If;
+		If IsNull(fieldList) Then
+			Return New String[0];
+		End If;
 		count := 0;
 		For i := 0 To fieldList.Count - 1 Do
 			fieldId := fieldList.Item(i) As String;
-			If Not fieldId.StartsWith("ZSIU_INDV_") Then count := count + 1; End If;
+			If Not fieldId.StartsWith("ZSIU_INDV_") Then
+				count := count + 1;
+			End If;
 		End For;
-		If count = 0 Then Return New String[0]; End If;
+		If count = 0 Then
+			Return New String[0];
+		End If;
 		arr := New String[count];
 		count := 0;
 		For i := 0 To fieldList.Count - 1 Do
@@ -2098,7 +2184,9 @@ Class ANALIZ_TEP_FORM_ON_SHOW: WebForm
 		/// <summary>Состояния чек-боксов «Поля для вывода» по умолчанию (ТТ, лист «СЭ - поля для вывода»)</summary>
 	Sub initOutputDefaults;
 	Begin
-		If Not C_APPLY_DEFAULT_CHECKED Then Return; End If;
+		If Not C_APPLY_DEFAULT_CHECKED Then
+			Return;
+		End If;
 		// Отмечаются только те контролы, существование которых подтверждено исходным модулем.
 		// Для неподтверждённых строки закомментированы — включить после добавления компонентов.
 		SetCheckBoxIfExists(CB_PLANT, True);
@@ -2115,7 +2203,9 @@ Class ANALIZ_TEP_FORM_ON_SHOW: WebForm
 	
 	Sub SetCheckBoxIfExists(CB: IWebCheckBox; checked: Boolean);
 	Begin
-		If IsNull(CB) Then Return; End If;
+		If IsNull(CB) Then
+			Return;
+		End If;
 		CB.Checked := checked;
 	End Sub SetCheckBoxIfExists;
 	
@@ -2125,9 +2215,13 @@ Class ANALIZ_TEP_FORM_ON_SHOW: WebForm
 		index: Integer;
 		sel: IDimSelection;
 	Begin
-		If IsNull(combo) Or value.IsEmpty Then Return; End If;
+		If IsNull(combo) Or value.IsEmpty Then
+			Return;
+		End If;
 		index := DimensionExt.GetElementIndexByAttributeValue(combo.DimInstance, attrId, value);
-		If index = -1 Then Return; End If;
+		If index = -1 Then
+			Return;
+		End If;
 		sel := combo.DimInstance.CreateSelection;
 		sel.SelectElement(index, False);
 		combo.Selection := sel;
@@ -2142,8 +2236,12 @@ Class ANALIZ_TEP_FORM_ON_SHOW: WebForm
 	Var
 		spCode: String;
 	Begin
-		If IsNull(D_PLANT) Then Return; End If;
-		If isPlantPrivileged Then Return; End If;
+		If IsNull(D_PLANT) Then
+			Return;
+		End If;
+		If isPlantPrivileged Then
+			Return;
+		End If;
 		
 		spCode := getUserSP;
 		If spCode.IsEmpty Then
@@ -2162,13 +2260,21 @@ Class ANALIZ_TEP_FORM_ON_SHOW: WebForm
 		group: ISecuritySubject;
 	Begin
 		user := MB.LogonSession.User;
-		If IsNull(user) Then Return False; End If;
-		If user.IsAdmin Then Return True; End If;
+		If IsNull(user) Then
+			Return False;
+		End If;
+		If user.IsAdmin Then
+			Return True;
+		End If;
 		
 		For Each group In user.MemberOf Do
 			If Not IsNull(group) Then
-				If group.Name = C_ACCESS_SP_GROUP Then Return True; End If;
-				If group.Name.StartsWith(C_ACCESS_SP_GROUP_PREFIX) Then Return True; End If;
+				If group.Name = C_ACCESS_SP_GROUP Then
+					Return True;
+				End If;
+				If group.Name.StartsWith(C_ACCESS_SP_GROUP_PREFIX) Then
+					Return True;
+				End If;
 			End If;
 		End For;
 		
@@ -2198,10 +2304,14 @@ End Class ANALIZ_TEP_FORM_ON_SHOW;
 		i: Integer;
 		text: String;
 	Begin
-		If IsNull(list) Then Return ""; End If;
+		If IsNull(list) Then
+			Return "";
+		End If;
 		text := "";
 		For i := 0 To list.Count - 1 Do
-			If i > 0 Then text := text + sep; End If;
+			If i > 0 Then
+				text := text + sep;
+			End If;
 			text := text + (list.Item(i) As String);
 		End For;
 		Return text;
@@ -2210,7 +2320,9 @@ End Class ANALIZ_TEP_FORM_ON_SHOW;
 	/// <summary>Строковый литерал для SQL</summary>
 	Function quoteLiteral(value: String): String;
 	Begin
-		If IsNull(value) Then Return "''"; End If;
+		If IsNull(value) Then
+			Return "''";
+		End If;
 		Return "'" + String.Replace(value, "'", "''") + "'";
 	End Function quoteLiteral;
 
@@ -2222,16 +2334,24 @@ End Class ANALIZ_TEP_FORM_ON_SHOW;
 		i: Integer;
 		text: String;
 	Begin
-		If IsNull(params) Then Return ""; End If;
+		If IsNull(params) Then
+			Return "";
+		End If;
 		Try
-			If Not params.Contains(paramId) Then Return ""; End If;
+			If Not params.Contains(paramId) Then
+				Return "";
+			End If;
 			value := params.Item(paramId);
-			If IsNull(value) Then Return ""; End If;
+			If IsNull(value) Then
+				Return "";
+			End If;
 			If value Is Array Then
 				arr := value As Array;
 				text := "";
 				For i := 0 To arr.Length - 1 Do
-					If i > 0 Then text := text + ","; End If;
+					If i > 0 Then
+						text := text + ",";
+					End If;
 					text := text + (arr[i] As String);
 				End For;
 				Return text;
@@ -2473,21 +2593,31 @@ End Class ANALIZ_TEP_FORM_ON_SHOW;
 			text := "";
 			If Not IsNull(names) Then
 				For i := 0 To names.Length - 1 Do
-					If i > 0 Then text := text + ", "; End If;
+					If i > 0 Then
+						text := text + ", ";
+					End If;
 					text := text + (names[i] As String);
 				End For;
 			End If;
-			If text.IsEmpty Then text := "v.zlib_indc, v.calyear, v.plant"; End If;
+			If text.IsEmpty Then
+				text := "v.zlib_indc, v.calyear, v.plant";
+			End If;
 			sql := String.Replace(sql, ":ANALYTIC_SET", text);
 		Except On E: Exception Do
 			Debug.WriteLine("[АнализТЭП/форма] аналитики в SQL: " + E.Message);
 			sql := String.Replace(sql, ":ANALYTIC_SET", "v.zlib_indc, v.calyear, v.plant");
 		End Try;
-		If _sqlExtraFields.IsEmpty Then _sqlExtraFields := "1 AS ""Нет данных"""; End If;
-		If _sqlExtraNames.IsEmpty Then _sqlExtraNames := """Нет данных"""; End If;
+		If _sqlExtraFields.IsEmpty Then
+			_sqlExtraFields := "1 AS ""Нет данных""";
+		End If;
+		If _sqlExtraNames.IsEmpty Then
+			_sqlExtraNames := """Нет данных""";
+		End If;
 		sql := String.Replace(sql, ":EXTRA_FIELDS", _sqlExtraFields);
 		sql := String.Replace(sql, ":EXTRA_NAMES", _sqlExtraNames);
-		If _sqlStatus.IsEmpty Then _sqlStatus := "0"; End If;
+		If _sqlStatus.IsEmpty Then
+			_sqlStatus := "0";
+		End If;
 		sql := String.Replace(sql, ":P_STATUS", "'" + _sqlStatus + "'");
 		Try
 			If Not IsNull(Hyperlink.ParameterManager) Then
