@@ -2534,21 +2534,10 @@ Class ANALIZ_TEP_FORM_ON_SHOW: WebForm
 		Except On E2: Exception Do
 			Debug.WriteLine("[АнализТЭП/форма] фильтры в SQL: " + E2.Message);
 		End Try;
-		// страховка: в собранном SQL не должно остаться параметров (:ИМЯ); :: — приведение типа, его не трогаем
-		pos := 1;
-		While True Do
-			pos := String.Find(sql, ":", pos);
-			If pos < 0 Then Break; End If;
-			If String.Mid(sql, pos + 1, 1) = ":" Then
-				pos := pos + 2;
-			Else
-				leftParamCount := leftParamCount + 1;
-				sql := sql.SubString(0, pos) + sql.SubString(pos + 1, sql.Length - pos);
-				pos := pos + 1;
-			End If;
-		End While;
+		// контроль без циклов: в SQL не должно быть параметров (двоеточия — только в приведениях ::тип)
+		leftParamCount := sql.Length - String.Replace(sql, ":", "").Length;
 		If leftParamCount > 0 Then
-			logRecord(C_LOG_OP_FORM, False, "", "", "в SQL остались параметры: " + leftParamCount.ToString);
+			logRecord(C_LOG_OP_FORM, False, "", "", "в SQL остались двоеточия: " + leftParamCount.ToString);
 		End If;
 		Debug.WriteLine("[АнализТЭП/форма] SQL собран, символов: " + sql.Length.ToString);
 		Return sql;
