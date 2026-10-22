@@ -2071,19 +2071,19 @@ Class ANALIZ_TEP_FORM_ON_SHOW: WebForm
 	/// 	Периоды (ZSIU_INDV_*) в массив не входят — это не аналитики запроса, а фиксированные колонки отчёта.
 	/// 	Возвращает Null, если аналитик не выбрано ни одной (пустой SELECT недопустим).
 	/// </summary>
-	Function analyticSetArray: Variant;
+	Function analyticSetArray: Array Of String;
 	Var
 		arr: Array Of String;
 		fieldId: String;
 		i, count: Integer;
 	Begin
-		If IsNull(fieldList) Then Return Null; End If;
+		If IsNull(fieldList) Then Return New String[0]; End If;
 		count := 0;
 		For i := 0 To fieldList.Count - 1 Do
 			fieldId := fieldList.Item(i) As String;
 			If Not fieldId.StartsWith("ZSIU_INDV_") Then count := count + 1; End If;
 		End For;
-		If count = 0 Then Return Null; End If;
+		If count = 0 Then Return New String[0]; End If;
 		arr := New String[count];
 		count := 0;
 		For i := 0 To fieldList.Count - 1 Do
