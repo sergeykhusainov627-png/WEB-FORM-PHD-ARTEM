@@ -2027,7 +2027,7 @@ Class ANALIZ_TEP_FORM_ON_SHOW: WebForm
 		For i := 0 To fieldList.Count - 1 Do
 			fieldId := fieldList.Item(i) As String;
 			newList.Add(fieldId);
-			If String.Find(C_NAME_FIELDS, "," + fieldId + "_name,") >= 0 Then
+			If String.Contains(C_NAME_FIELDS, "," + fieldId + "_name,") Then
 				newList.Add(fieldId + "_name");
 			Else
 				newList.Add(fieldId);
@@ -2555,7 +2555,7 @@ Class ANALIZ_TEP_FORM_ON_SHOW: WebForm
 			keptLines := New StringList.Create;
 			For i2 := 0 To sqlLines.Length - 1 Do
 				tempText := sqlLines[i2] As String;
-				If String.Find(tempText, "IN ('')") < 0 Then
+				If Not String.Contains(tempText, "IN ('')") Then
 					keptLines.Add(tempText);
 				End If;
 			End For;
