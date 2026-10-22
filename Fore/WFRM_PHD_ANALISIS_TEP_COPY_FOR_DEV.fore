@@ -383,18 +383,9 @@ Class ANALIZ_TEP_FORM_ON_SHOW: WebForm
 		End Try;
 									
 		//SafeGenerate; вернуть
-		//Hyperlink.DesingCell(ButtonCancel.Color);								
 				
-		//madeLinkForMyselfTst;
-		//TextArea1.Text := Hyperlink.Action;
 		
 		// Сбор значений с СЭ 			 
-		//openReportTab := ReportBoxOk.Report.ActiveSheet As ITabSheet;
-		//optionReport := ReportBoxVariant.Report;
-		//br := New GxSolidBrush.Create(Gxcolor.FromKnownColor(GxKnownColor.LightGray));
-		//activeButtonColor := ButtonCancel.Color; //New Gxcolor.CreateRGB(70, 142, 240);
-		//disabledButtonColor := New Gxcolor.CreateRGB(222, 235, 255);
-		//SetOpenRBActivity(False);				
 						
 	End Sub ANALIZ_TEP_FORM_ON_SHOW;
 	
@@ -405,7 +396,6 @@ Class ANALIZ_TEP_FORM_ON_SHOW: WebForm
 		openReportTab: ITabSheet;
 	Begin
 		// tst сделал ссылку сам
-		//openReportTab := ReportBoxOk.Report.ActiveSheet As ITabSheet;
 		openReportTab := ReportBoxOk.Report.ActiveSheet.Sheets.FindByName("Лист2") As ITabSheet;		
 		TextArea1.Text := ReportBoxOk.Report.ActiveSheet.Name;
 		
@@ -419,18 +409,11 @@ Class ANALIZ_TEP_FORM_ON_SHOW: WebForm
 		// 																							"6500", 
 		// 																							"2026", 
 		// 																							"IND00005000",
-		// 																							"[CALYEAR,PLANT,ZLIB_INDC,ACT_UNIT,MATERIAL]");	
 		link.Enable := TriState.OnOption;								
 		link.Color := GxColor.FromName("Blue");		
 		openReportTab.Cell(0, 0).Value := "tst";
-		//TextArea1.Text := link.Action;
 	End Sub madeLinkForMyselfTst;	
 	
-	// Sub UpdateOpenDefHlink(paramId: String; paramValue: Variant);
-// Begin
-// _AnalyzTepHyperlink.SetParamValue(paramId, paramValue);
-// _AnalyzTepSafeGenerate;
-	// End Sub UpdateOpenDefHlink; //}
 	
 	{Function InitializeHlinkOpenObject(report: IPrxReport; hlinkText, hlinkAction: String): ITabHyperlink;
 	Var
@@ -480,46 +463,28 @@ Class ANALIZ_TEP_FORM_ON_SHOW: WebForm
 		Hyperlink.SetParamValueFromSelection("CALYEAR", D_CALYEAR.Selection, "NAME");
 		SafeGenerate;
 		
-		//UpdateHyperlinkParams("CALYEAR", D_CALYEAR.Selection, "NAME");
 	End Sub D_CALYEAROnSelectionChange;
 
 	Sub D_PLANTOnSelectionChange;
 		
 	Begin
-		//UpdateOpenDefHlinkFromSelection("PLANT", D_PLANT.Selection, "CODE");
 		
 		
 		//tst := D_PLANT.Selection.AttributeToVariant(D_PLANT.DimInstance.Attributes.FindById("CODE").Attribute); // Извлелечение данных из отметки
 	
-		//TextArea1.Text := D_PLANT.Selection.ToString("CODE");
 		
-		//TextArea1.Text := path.Text(",");
 		
-		// path := New StringList.Create;
 		
-		// groupSel := D_PLANT.Selection;
-		// groupDim := groupSel.Dimension;
-		// path.Add(DimensionExt.GetAttributeValueByElementIndex(groupDim, C_ATTR_NAME_ID, elemIndex));
-		// TextArea1.Text := path.Text(",");
 		
-		//DimensionExt.GetAttributeValueByElementId(groupDim, "CODE");
 		
-		//p_plant := D_PLANT.Selection.ToVariant;
 		//getCollectionValues(D_PLANT); // was 
-		// Attr := D_PLANT.Selection.Dimension.Attributes.FindById("KEY");
-        //  	index := Attr.LookupDisplayValue(p_plant);
-		// 	 Attr := D_PLANT.Selection.Dimension.Attributes.FindById("CODE");
 			
 			 
-		// 	//TextArea1.Text := index.ToString;
-		// 	 TextArea1.Text := Attr.Value(index);
-   		// End If;		   
 		
 		UpdateOpenDefHlinkFromSelection("PLANT", D_PLANT.Selection, "CODE");
 		Hyperlink.SetParamValueFromSelection("PLANT", D_PLANT.Selection, "CODE");
 		SafeGenerate;
 		
-		//UpdateHyperlinkParams("PLANT", D_PLANT.Selection, "CODE");
 	End Sub D_PLANTOnSelectionChange;
 	
 	Function getCollectionValues(dim: IWebDimensionCombo): StringList;
@@ -532,7 +497,6 @@ Class ANALIZ_TEP_FORM_ON_SHOW: WebForm
 		dimValuesByAttr := New StringList.Create;
 		
 		If dim.Selection.MultiSelect Then
-			//TextArea1.Text := (dim.Selection.ToVariant Is Array);
 			
 			If dim.Selection.ToVariant Is Array Then
 				arrValue := dim.Selection.ToVariant;
@@ -540,22 +504,10 @@ Class ANALIZ_TEP_FORM_ON_SHOW: WebForm
 					TextArea1.Text := myArray[i] As String;
 				End For;
 			 
-				// ElemArr := (dim.Selection.ToVariant As Array);
-				// Elems := ElemArr.Elements;
-				// Iter := Elems.Iterator;
 				
-				// 	//Debug.WriteLine(Elems.Name(Iter.Element));
-				// 	TextArea1.Text := Iter.Element.ToString;
-				// End While;
 			End If;
 			
-			// 	TextArea1.Text := dim.Selection.SelectedCount.ToString;
-			// Else
-			// 	TextArea1.Text := dim.Selection.SelectedCount.ToString;
-			// End If;
 			
-			// 	//TextArea1.Text := "Это массив";
-			// End If;		
 			
 		End If;
 	
@@ -576,18 +528,7 @@ Class ANALIZ_TEP_FORM_ON_SHOW: WebForm
 	
 	Sub D_ZLIB_INDCOnSelectionChange;
 	Begin
-		// p_zlib_indc := D_ZLIB_INDC.Selection.ToVariant;
-		// //_AnalyzTepHyperlink.SetParamValue(C_PARAM_ZLIB_INDC, p_zlib_indc); // san
 		
-		// // tst
-		// 	TextArea1.Text := "";
-		// 	TextArea1.Text := p_zlib_indc;
-		// //	_AnalyzTepHyperlink := New COpenHyperlink.Create(ReportBoxOk.Report, AppNs.PHD, "Ок");
-		// 	//PM := _AnalyzTepHyperlink.ParamManager;
-		// 	//TextArea1.Text := _AnalyzTepHyperlink.ParamManager.Params.Count;
-		// Else
-		// 	TextArea1.Text := "0";
-		// End If;
 		
 		UpdateOpenDefHlinkFromSelection("ZLIB_INDC", D_ZLIB_INDC.Selection, "CODE");
 		Hyperlink.SetParamValueFromSelection("ZLIB_INDC", D_ZLIB_INDC.Selection, "CODE");
@@ -1436,13 +1377,9 @@ Class ANALIZ_TEP_FORM_ON_SHOW: WebForm
 	//  «Поля для вывода» — идентификаторы полей отчёта для параметра P_FIELD_LIST
 	//
 	//  Источник: ТТ «Анализ и выгрузка данных ТЭП», лист «Вывод полей в отчете» (колонка «Поле»).
-	//  Идентификаторы, помеченные «уточнить», в ТТ не указаны — приняты по имени поля/контрола;
 	//  при расхождении с отчётом PRX_ANALYSIS_TEP правьте ТОЛЬКО этот метод.
 	//
 	//  Чего пока нет (нужны контролы в дизайнере формы):
-	//    * группа «Значения ТЭП с начала года»  — 19 полей, источник TBL_PHD_FAP_MULT.ZVALUE_SNG;
-	//    * группа «Значения корректировок ТЭП»   — 19 полей, ZSIU_INDV + ZLIB_INFS=KOROUND;
-	//    * «Класс вида оборудования» (ZCLSVOBOR) — есть поле в ТТ, контрола на форме нет;
 	//    * не размечены: CB_ANALYTIC_SET, CB_AREA, CB_ESTIMATED_PRICES, CB_MVP_TEP, CbESO3
 	//      (в ТТ не найдены — уточнить назначение).
 	// ============================================================================================
@@ -1518,7 +1455,6 @@ Class ANALIZ_TEP_FORM_ON_SHOW: WebForm
 		// Существование этих компонентов на форме не подтверждено: ссылка на отсутствующий
 		// контрол ломает дизайнер формы («Ошибка сервера»). Когда компонент появится,
 		// раскомментируйте строку и добавьте в RefreshFieldList строку
-		//     CollectIfChecked(<Контрол>, "<Контрол>");
 		// _fieldIds.Add("CbHigherInd", "ZPH_HIGHER"); // Вышестоящий ТЭП (⚠ уточнить) (компонент не подтверждён)
 		// _fieldIds.Add("CB_ACTIVITY_TYPE", "ACTVTS"); // Вид деятельности (компонент не подтверждён)
 		// _fieldIds.Add("CB_IND_TYPE", "ID1");        // Вид показателя (компонент не подтверждён)
