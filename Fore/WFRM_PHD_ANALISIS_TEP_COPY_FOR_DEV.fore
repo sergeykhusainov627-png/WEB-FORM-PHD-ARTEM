@@ -2618,65 +2618,66 @@ Class ANALIZ_TEP_FORM_ON_SHOW: WebForm
 		End Try;
 	End Function nsiTable;
 
-	/// <summary>Кнопка «Выбрать все» на вкладке аналитик (TabPage4): отмечает все чек-боксы вывода</summary>
-	Sub selectAllpage4OnClick;
+	/// <summary>
+	/// 	Чек-бокс «Выбрать все» на вкладке аналитик (TabPage4): установлен — отмечаются все
+	/// 	чек-боксы вывода, снят — снимаются со всех.
+	/// </summary>
+	Sub CB_SEL_ALL_PG4OnChange;
 	Begin
 		Try
-		SetCheckBoxIfExists(CB_CALYEAR, True);
-		SetCheckBoxIfExists(CB_PLANT, True);
-		SetCheckBoxIfExists(CB_ZLIB_INDC, True);
-		SetCheckBoxIfExists(CB_ZLIB_INFS, True);
-		SetCheckBoxIfExists(CB_ACT_UNIT, True);
-		SetCheckBoxIfExists(CB_VENDOR, True);
-		SetCheckBoxIfExists(CB_SOLD_TO, True);
-		SetCheckBoxIfExists(CB_ZHRGRPMO, True);
-		SetCheckBoxIfExists(CB_PROFIT_CTR, True);
-		SetCheckBoxIfExists(CB_COSTCENTER, True);
-		SetCheckBoxIfExists(CB_ZORGUNIT, True);
-		SetCheckBoxIfExists(CB_ZPH_USR2, True);
-		SetCheckBoxIfExists(CB_ACTTYPE, True);
-		SetCheckBoxIfExists(CB_ZEQUI, True);
-		SetCheckBoxIfExists(CB_MATERIAL, True);
-		SetCheckBoxIfExists(CB_ZFUNC_LOC, True);
-		SetCheckBoxIfExists(CB_ZSIU_FLD, True);
-		SetCheckBoxIfExists(CB_POSID, True);
-		SetCheckBoxIfExists(CbHigherInd, True);
-		SetCheckBoxIfExists(CB_PERIOD_TYPE, True);
+			If CB_SEL_ALL_PG4.Checked Then
+			SetCheckBoxIfExists(CB_CALYEAR, True);
+			SetCheckBoxIfExists(CB_PLANT, True);
+			SetCheckBoxIfExists(CB_ZLIB_INDC, True);
+			SetCheckBoxIfExists(CB_ZLIB_INFS, True);
+			SetCheckBoxIfExists(CB_ACT_UNIT, True);
+			SetCheckBoxIfExists(CB_VENDOR, True);
+			SetCheckBoxIfExists(CB_SOLD_TO, True);
+			SetCheckBoxIfExists(CB_ZHRGRPMO, True);
+			SetCheckBoxIfExists(CB_PROFIT_CTR, True);
+			SetCheckBoxIfExists(CB_COSTCENTER, True);
+			SetCheckBoxIfExists(CB_ZORGUNIT, True);
+			SetCheckBoxIfExists(CB_ZPH_USR2, True);
+			SetCheckBoxIfExists(CB_ACTTYPE, True);
+			SetCheckBoxIfExists(CB_ZEQUI, True);
+			SetCheckBoxIfExists(CB_MATERIAL, True);
+			SetCheckBoxIfExists(CB_ZFUNC_LOC, True);
+			SetCheckBoxIfExists(CB_ZSIU_FLD, True);
+			SetCheckBoxIfExists(CB_POSID, True);
+			SetCheckBoxIfExists(CbHigherInd, True);
+			SetCheckBoxIfExists(CB_PERIOD_TYPE, True);
+			Else
+			SetCheckBoxIfExists(CB_CALYEAR, False);
+			SetCheckBoxIfExists(CB_PLANT, False);
+			SetCheckBoxIfExists(CB_ZLIB_INDC, False);
+			SetCheckBoxIfExists(CB_ZLIB_INFS, False);
+			SetCheckBoxIfExists(CB_ACT_UNIT, False);
+			SetCheckBoxIfExists(CB_VENDOR, False);
+			SetCheckBoxIfExists(CB_SOLD_TO, False);
+			SetCheckBoxIfExists(CB_ZHRGRPMO, False);
+			SetCheckBoxIfExists(CB_PROFIT_CTR, False);
+			SetCheckBoxIfExists(CB_COSTCENTER, False);
+			SetCheckBoxIfExists(CB_ZORGUNIT, False);
+			SetCheckBoxIfExists(CB_ZPH_USR2, False);
+			SetCheckBoxIfExists(CB_ACTTYPE, False);
+			SetCheckBoxIfExists(CB_ZEQUI, False);
+			SetCheckBoxIfExists(CB_MATERIAL, False);
+			SetCheckBoxIfExists(CB_ZFUNC_LOC, False);
+			SetCheckBoxIfExists(CB_ZSIU_FLD, False);
+			SetCheckBoxIfExists(CB_POSID, False);
+			SetCheckBoxIfExists(CbHigherInd, False);
+			SetCheckBoxIfExists(CB_PERIOD_TYPE, False);
+			End If;
 			RefreshFieldList;
 		Except On E: Exception Do
-			showError("не удалось отметить все поля", E);
+			showError("не удалось изменить отметки полей", E);
 		End Try;
-	End Sub selectAllpage4OnClick;
+	End Sub CB_SEL_ALL_PG4OnChange;
 
-	/// <summary>Кнопка «Снять все» на вкладке аналитик (TabPage4): снимает все чек-боксы вывода</summary>
-	Sub clearAllPg4OnClick;
-	Begin
-		Try
-		SetCheckBoxIfExists(CB_CALYEAR, False);
-		SetCheckBoxIfExists(CB_PLANT, False);
-		SetCheckBoxIfExists(CB_ZLIB_INDC, False);
-		SetCheckBoxIfExists(CB_ZLIB_INFS, False);
-		SetCheckBoxIfExists(CB_ACT_UNIT, False);
-		SetCheckBoxIfExists(CB_VENDOR, False);
-		SetCheckBoxIfExists(CB_SOLD_TO, False);
-		SetCheckBoxIfExists(CB_ZHRGRPMO, False);
-		SetCheckBoxIfExists(CB_PROFIT_CTR, False);
-		SetCheckBoxIfExists(CB_COSTCENTER, False);
-		SetCheckBoxIfExists(CB_ZORGUNIT, False);
-		SetCheckBoxIfExists(CB_ZPH_USR2, False);
-		SetCheckBoxIfExists(CB_ACTTYPE, False);
-		SetCheckBoxIfExists(CB_ZEQUI, False);
-		SetCheckBoxIfExists(CB_MATERIAL, False);
-		SetCheckBoxIfExists(CB_ZFUNC_LOC, False);
-		SetCheckBoxIfExists(CB_ZSIU_FLD, False);
-		SetCheckBoxIfExists(CB_POSID, False);
-		SetCheckBoxIfExists(CbHigherInd, False);
-		SetCheckBoxIfExists(CB_PERIOD_TYPE, False);
-			RefreshFieldList;
-		Except On E: Exception Do
-			showError("не удалось снять отметки полей", E);
-		End Try;
-	End Sub clearAllPg4OnClick;
+
+
+
+
 
 
 
