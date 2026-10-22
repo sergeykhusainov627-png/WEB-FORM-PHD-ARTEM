@@ -2277,218 +2277,218 @@ Class ANALIZ_TEP_FORM_ON_SHOW: WebForm
 	Begin
 		sql := 
 		"WITH"
-		+ "Forms_Agg AS ("
-		+ "    SELECT ZLIB_INDC, GJAHR, PLANT,"
-		+ "           STRING_AGG(DISTINCT ZF_NUMB, ', ') FILTER (WHERE ZF_NUMB IS NOT NULL AND ZF_NUMB <> '') AS forms_text"
-		+ "    FROM TBL_ZIDNFORM"
-		+ "    WHERE ZLIB_INDC IN (:ZLIB_INDC) AND GJAHR IN (:CALYEAR) AND PLANT IN (:PLANT)"
-		+ "    GROUP BY ZLIB_INDC, GJAHR, PLANT"
-		+ "),"
-		+ "src AS ("
-		+ "    SELECT D.*, TBL.zsiu_indv, TBL.zvalue_sng, TBL.period, TBL.zphd_stat, TBL.zind_sche, TBL.key_connect,"
-		+ "           n_rdsd_vendor.TXTMD AS vendor_name,"
-		+ "           n_rdsd_soldto.NAME AS sold_to_name,"
-		+ "           n_rdsd_zhrgrpmo.NAME AS zhrgrpmo_name,"
-		+ "           n_rdsd_profit_ctr.NAME AS profit_ctr_name,"
-		+ "           n_rdsd_acttype.NAME AS acttype_name,"
-		+ "           n_rdsd_zequi.NAME AS zequi_name,"
-		+ "           n_rdsd_zclsvobor.NAME AS zclsvobor_name,"
-		+ "           n_rdsd_material.NAME AS material_name,"
-		+ "           n_rdsd_zfunc_loc.NAME AS zfunc_loc_name,"
-		+ "           n_rdsd_zsiu_fld.NAME AS zsiu_fld_name,"
-		+ "           n_rdsd_posid.NAME AS posid_name,"
-		+ "           n_rdsd_infosystem.NAME AS zlib_infs_name,"
-		+ "           n_shortcut_to_rdsd_soldto_3.NAME AS zphd_usl1_name,"
-		+ "           n_shortcut_to_rdsd_soldto.NAME AS zdebitor_name,"
-		+ "           n_shortcut_to_rdsd_soldto_2.NAME AS zph_eso2_name,"
-		+ "           n_shortcut_to_rdsd_soldto_4.NAME AS zph_epok_name,"
-		+ "           n_shortcut_to_rdsd_soldto_5.NAME AS zphd_sk_name,"
-		+ "           n_rdsd_ucvoltlevl.NAME AS ucvoltlevl_name,"
-		+ "           n_shortcut_to_rdsd_ucvoltlevl.NAME AS zucvolttr_name,"
-		+ "           n_rdsd_z_cl_napr.NAME AS z_cl_napr_name,"
-		+ "           n_rdsd_zsiu_ty.NAME AS zsiu_ty_name,"
-		+ "           n_rdsd_zbur_lu.NAME AS zbur_lu_name,"
-		+ "           n_rdsd_zbur_area.NAME AS zbur_area_name,"
-		+ "           n_rdsd_zbur_plst.ZBUR_PLST AS zbur_plst_name,"
-		+ "           n_rdsd_zph_tehk.NAME AS name_name,"
-		+ "           n_shortcut_to_rdsd_soldto_7.NAME AS zgen_pod_name,"
-		+ "           n_shortcut_to_rdsd_soldto_6.NAME AS zgen_zak_name,"
-		+ "           n_shortcut_to_rdsd_soldto_8.NAME AS zpkr_subp_name,"
-		+ "           n_rdsd_zphd_sr.NAME AS zphd_sr_name,"
-		+ "           n_rdsd_zphd_grsr.NAME AS zphd_grsr_name,"
-		+ "           n_rdsd_zgaz_type.NAME AS zgaz_type_name,"
-		+ "           n_rdsd_zaviatype.NAME AS zaviatype_name,"
-		+ "           n_plant.TXTMD AS plant_name,"
-		+ "           n_period_type.NAME AS period_type_name,"
-		+ "           n_inds.SNAME AS zlib_indc_name"
-		+ "    FROM " + nsiTable(C_NSI_DICT_PHD_LEFT) + " D"
-		+ "    JOIN TBL_FAP_MULT TBL"
-		+ "      ON D.""KEY"" = TBL.KEY_CONNECT AND TBL.plant = D.plant AND TBL.year = D.calyear"
-		+ "    LEFT JOIN " + nsiTable(C_NSI_RDSD_VENDOR) + "   n_rdsd_vendor"
-		+ "       ON n_rdsd_vendor.vendor = D.vendor"
-		+ "    LEFT JOIN " + nsiTable(C_NSI_SHORTCUT_TO_RDSD_SOLDTO_8) + "   n_rdsd_soldto"
-		+ "       ON n_rdsd_soldto.code = D.sold_to"
-		+ "    LEFT JOIN " + nsiTable(C_NSI_RDSD_ZHRGRPMO) + "   n_rdsd_zhrgrpmo"
-		+ "       ON n_rdsd_zhrgrpmo.zhrgrpmo = D.zhrgrpmo"
-		+ "    LEFT JOIN " + nsiTable(C_NSI_RDSD_PROFIT_CTR) + "   n_rdsd_profit_ctr"
-		+ "       ON n_rdsd_profit_ctr.profit_ctr = D.profit_ctr"
-		+ "    LEFT JOIN " + nsiTable(C_NSI_RDSD_ACTTYPE) + "   n_rdsd_acttype"
-		+ "       ON n_rdsd_acttype.acttype = D.acttype"
-		+ "      AND to_date(D.calyear || '-01-01', 'YYYY-MM-DD')"
-		+ "          BETWEEN n_rdsd_acttype.datefrom AND n_rdsd_acttype.dateto"
-		+ "    LEFT JOIN " + nsiTable(C_NSI_RDSD_ZEQUI) + "   n_rdsd_zequi"
-		+ "       ON n_rdsd_zequi.zequi = D.zequi"
-		+ "      AND to_date(D.calyear || '-01-01', 'YYYY-MM-DD')"
-		+ "          BETWEEN n_rdsd_zequi.datefrom AND n_rdsd_zequi.dateto"
-		+ "    LEFT JOIN " + nsiTable(C_NSI_RDSD_ZCLSVOBOR) + "   n_rdsd_zclsvobor"
-		+ "       ON n_rdsd_zclsvobor.zclsvobor = D.zclsvobor"
-		+ "    LEFT JOIN " + nsiTable(C_NSI_RDSD_MATERIAL) + "   n_rdsd_material"
-		+ "       ON n_rdsd_material.material = D.material"
-		+ "    LEFT JOIN " + nsiTable(C_NSI_RDSD_ZFUNC_LOC) + "   n_rdsd_zfunc_loc"
-		+ "       ON n_rdsd_zfunc_loc.zfunc_loc = D.zfunc_loc"
-		+ "      AND to_date(D.calyear || '-01-01', 'YYYY-MM-DD')"
-		+ "          BETWEEN n_rdsd_zfunc_loc.datefrom::date AND n_rdsd_zfunc_loc.dateto::date"
-		+ "    LEFT JOIN " + nsiTable(C_NSI_RDSD_ZSIU_FLD) + "   n_rdsd_zsiu_fld"
-		+ "       ON n_rdsd_zsiu_fld.zsiu_fld = D.zsiu_fld"
-		+ "    LEFT JOIN " + nsiTable(C_NSI_RDSD_POSID) + "   n_rdsd_posid"
-		+ "       ON n_rdsd_posid.posid = D.posid"
-		+ "    LEFT JOIN " + nsiTable(C_NSI_RDSD_INFOSYSTEM) + "   n_rdsd_infosystem"
-		+ "       ON n_rdsd_infosystem.code_value = D.zlib_infs"
-		+ "    LEFT JOIN " + nsiTable(C_NSI_SHORTCUT_TO_RDSD_SOLDTO_8) + "   n_shortcut_to_rdsd_soldto_3"
-		+ "       ON n_shortcut_to_rdsd_soldto_3.code = D.zphd_usl1"
-		+ "    LEFT JOIN " + nsiTable(C_NSI_SHORTCUT_TO_RDSD_SOLDTO_8) + "   n_shortcut_to_rdsd_soldto"
-		+ "       ON n_shortcut_to_rdsd_soldto.code = D.zdebitor"
-		+ "    LEFT JOIN " + nsiTable(C_NSI_SHORTCUT_TO_RDSD_SOLDTO_8) + "   n_shortcut_to_rdsd_soldto_2"
-		+ "       ON n_shortcut_to_rdsd_soldto_2.code = D.zph_eso2"
-		+ "    LEFT JOIN " + nsiTable(C_NSI_SHORTCUT_TO_RDSD_SOLDTO_8) + "   n_shortcut_to_rdsd_soldto_4"
-		+ "       ON n_shortcut_to_rdsd_soldto_4.code = D.zph_epok"
-		+ "    LEFT JOIN " + nsiTable(C_NSI_SHORTCUT_TO_RDSD_SOLDTO_8) + "   n_shortcut_to_rdsd_soldto_5"
-		+ "       ON n_shortcut_to_rdsd_soldto_5.code = D.zphd_sk"
-		+ "    LEFT JOIN " + nsiTable(C_NSI_SHORTCUT_TO_RDSD_UCVOLTLEVL) + "   n_rdsd_ucvoltlevl"
-		+ "       ON n_rdsd_ucvoltlevl.ucvoltlevl = D.ucvoltlevl"
-		+ "    LEFT JOIN " + nsiTable(C_NSI_SHORTCUT_TO_RDSD_UCVOLTLEVL) + "   n_shortcut_to_rdsd_ucvoltlevl"
-		+ "       ON n_shortcut_to_rdsd_ucvoltlevl.ucvoltlevl = D.zucvolttr"
-		+ "    LEFT JOIN " + nsiTable(C_NSI_RDSD_Z_CL_NAPR) + "   n_rdsd_z_cl_napr"
-		+ "       ON n_rdsd_z_cl_napr.z_cl_napr = D.z_cl_napr"
-		+ "    LEFT JOIN " + nsiTable(C_NSI_RDSD_ZSIU_TY) + "   n_rdsd_zsiu_ty"
-		+ "       ON n_rdsd_zsiu_ty.zsiu_ty = D.zsiu_ty"
-		+ "    LEFT JOIN " + nsiTable(C_NSI_RDSD_ZBUR_LU) + "   n_rdsd_zbur_lu"
-		+ "       ON n_rdsd_zbur_lu.code = D.zbur_lu"
-		+ "    LEFT JOIN " + nsiTable(C_NSI_RDSD_ZBUR_AREA) + "   n_rdsd_zbur_area"
-		+ "       ON n_rdsd_zbur_area.zbur_area = D.zbur_area"
-		+ "    LEFT JOIN " + nsiTable(C_NSI_RDSD_ZBUR_PLST) + "    n_rdsd_zbur_plst"
-		+ "       ON n_rdsd_zbur_plst.zbur_plst = D.zbur_plst"
-		+ "    LEFT JOIN " + nsiTable(C_NSI_RDSD_ZPH_TEHK) + "   n_rdsd_zph_tehk"
-		+ "       ON n_rdsd_zph_tehk.code = D.name"
-		+ "    LEFT JOIN " + nsiTable(C_NSI_RDSD_ZSKV_ST) + "   n_rdsd_zskv_st"
-		+ "       ON n_rdsd_zskv_st.zskv_st = D.name"
-		+ "    LEFT JOIN " + nsiTable(C_NSI_SHORTCUT_TO_RDSD_SOLDTO_8) + "   n_shortcut_to_rdsd_soldto_7"
-		+ "       ON n_shortcut_to_rdsd_soldto_7.code = D.zgen_pod"
-		+ "    LEFT JOIN " + nsiTable(C_NSI_SHORTCUT_TO_RDSD_SOLDTO_8) + "   n_shortcut_to_rdsd_soldto_6"
-		+ "       ON n_shortcut_to_rdsd_soldto_6.code = D.zgen_zak"
-		+ "    LEFT JOIN " + nsiTable(C_NSI_SHORTCUT_TO_RDSD_SOLDTO_8) + "   n_shortcut_to_rdsd_soldto_8"
-		+ "       ON n_shortcut_to_rdsd_soldto_8.code = D.zpkr_subp"
-		+ "    LEFT JOIN " + nsiTable(C_NSI_RDSD_ZSHIFR) + "   n_rdsd_zshifr"
-		+ "       ON n_rdsd_zshifr.zshifr = D.name"
-		+ "    LEFT JOIN " + nsiTable(C_NSI_RDSD_ZOBJEM) + "   n_rdsd_zobjem"
-		+ "       ON n_rdsd_zobjem.zobjem = D.name"
-		+ "    LEFT JOIN " + nsiTable(C_NSI_RDSD_ZPHD_SR) + "   n_rdsd_zphd_sr"
-		+ "       ON n_rdsd_zphd_sr.zphd_sr = D.zphd_sr"
-		+ "    LEFT JOIN " + nsiTable(C_NSI_RDSD_ZPHD_GRSR) + "   n_rdsd_zphd_grsr"
-		+ "       ON n_rdsd_zphd_grsr.zphd_grsr = D.zphd_grsr"
-		+ "    LEFT JOIN " + nsiTable(C_NSI_RDSD_ZGAZ_TYPE) + "   n_rdsd_zgaz_type"
-		+ "       ON n_rdsd_zgaz_type.code = D.zgaz_type"
-		+ "    LEFT JOIN " + nsiTable(C_NSI_RDSD_ZAVIATYPE) + "   n_rdsd_zaviatype"
-		+ "       ON n_rdsd_zaviatype.zaviatype = D.zaviatype"
-		+ "    LEFT JOIN " + nsiTable(C_NSI_RDSD_ZPH_USR0) + " n_zph_usr0"
-		+ "    on n_zph_usr0.zph_usr0 = D.zph_usr2"
-		+ "    LEFT JOIN " + nsiTable(C_NSI_RDSD_PLANT) + " n_plant"
-		+ "       ON n_plant.plant = D.plant"
-		+ "    LEFT JOIN " + nsiTable(C_NSI_DIC_TYPE_PERIOD) + " n_period_type"
-		+ "       ON n_period_type.id = D.period_type"
-		+ "    LEFT JOIN " + nsiTable(C_NSI_RDSD_INDS) + " n_inds"
-		+ "       ON n_inds.code = D.zlib_indc"
-		+ "    LEFT JOIN " + nsiTable(C_NSI_RDSD_ACTVTS) + " n_actvts"
-		+ "       ON n_actvts.code_value = n_inds.actvts"
-		+ "    LEFT JOIN " + nsiTable(C_NSI_RDSD_OWNERS) + " n_owners"
-		+ "       ON n_owners.""KEY"" = n_inds.owner"
-		+ "    WHERE D.IS_TEMPORARY = 2"
-		+ "AND"
-		+ "     	          (D.PLANT 		    	IN (:PLANT) 	 							OR COALESCE(:PLANT,'')='')"
-		+ "        AND (D.ZLIB_INDC	    	IN (:ZLIB_INDC)  							OR COALESCE(:ZLIB_INDC,'')='')"
-		+ "        AND (D.CALYEAR 	    	IN (:CALYEAR) 	 							OR COALESCE(:CALYEAR,'')='')"
-		+ "        AND (TBL.ZPHD_STAT     	IN (:ZPHD_STAT)   							OR COALESCE(:ZPHD_STAT,'')='')"
-		+ "        AND (D.ZTYPEIND     	IN (:ZTYPEIND)   							OR COALESCE(:ZTYPEIND,'')='')"
-		+ "        AND (D.VENDOR 	    	IN (:VENDOR) 	  							OR COALESCE(:VENDOR,'')='')"
-		+ "        AND (D.SOLD_TO 	    	IN (:SOLD_TO) 	  							OR COALESCE(:SOLD_TO,'')='')"
-		+ "        AND (D.ZHRGRPMO       	IN (:ZHRGRPMO) 	  						OR COALESCE(:ZHRGRPMO,'')='')"
-		+ "        AND (D.PROFIT_CTR     	IN (:PROFIT_CTR)  							OR COALESCE(:PROFIT_CTR,'')='')"
-		+ "        AND (D.COSTCENTER     IN (:COSTCENTER)  						OR COALESCE(:COSTCENTER,'')='')"
-		+ "        AND (D.ZORGUNIT 	    	IN (:ZORGUNIT) 	  						OR COALESCE(:ZORGUNIT,'')='')"
-		+ "        AND (D.ZPH_USR2 	    	IN (:ZPH_USR2) 	  						OR COALESCE(:ZPH_USR2,'')='')"
-		+ "        AND (D.ACTTYPE  	    	IN (:ACTTYPE) 	  							OR COALESCE(:ACTTYPE,'')='')"
-		+ "        AND (D.ZEQUI 		    	IN (:ZEQUI) 	  								OR COALESCE(:ZEQUI,'')='')"
-		+ "        AND (D.ZCLSVOBOR      	IN (:ZCLSVOBOR)   							OR COALESCE(:ZCLSVOBOR,'')='')"
-		+ "        AND (D.MATERIAL 	    	IN (:MATERIAL) 	  						OR COALESCE(:MATERIAL,'')='')"
-		+ "        AND (D.ZFUNC_LOC 	    	IN (:ZFUNC_LOC)   							OR COALESCE(:ZFUNC_LOC,'')='')"
-		+ "        AND (D.ZSIU_FLD 	    	IN (:ZSIU_FLD)    							OR COALESCE(:ZSIU_FLD,'')='')"
-		+ "        AND (D.POSID 		    	IN (:POSID) 	  								OR COALESCE(:POSID,'')='')"
-		+ "        AND (D.ZLIB_INFS 	    	IN (:ZLIB_INFS)   							OR COALESCE(:ZLIB_INFS,'')='')"
-		+ "        AND (D.PERIOD_TYPE    IN (:PERIOD_TYPE) 						OR COALESCE(:PERIOD_TYPE,'')='')"
-		+ "        AND (D.ZPHD_DOG 	    	IN (:ZPHD_DOG) 	  						OR COALESCE(:ZPHD_DOG,'')='')"
-		+ "        AND (D.ZPHD_USL1 	    	IN (:ZPHD_USL1)   							OR COALESCE(:ZPHD_USL1,'')='')"
-		+ "        AND (D.ZDEBITOR 	    	IN (:ZDEBITOR) 	  						OR COALESCE(:ZDEBITOR,'')='')"
-		+ "        AND (D.ZPH_ESO2 	    	IN (:ZPH_ESO2) 	  						OR COALESCE(:ZPH_ESO2,'')='')"
-		+ "        AND (D.ZPHD_SK 	    	IN (:ZPHD_SK) 	  							OR COALESCE(:ZPHD_SK,'')='')"
-		+ "        AND (D.UCVOLTLEVL     	IN (:UCVOLTLEVL)  							OR COALESCE(:UCVOLTLEVL,'')='')"
-		+ "        AND (D.ZUCVOLTTR      	IN (:ZUCVOLTTR)   							OR COALESCE(:ZUCVOLTTR,'')='')"
-		+ "        AND (D.Z_CL_NAPR      	IN (:Z_CL_NAPR)   							OR COALESCE(:Z_CL_NAPR,'')='')"
-		+ "        AND (D.ZSIU_TY 	    	IN (:ZSIU_TY)     							OR COALESCE(:ZSIU_TY,'')='')"
-		+ "        AND (D.ZDOGLINK 	    	IN (:ZDOGLINK) 	  						OR COALESCE(:ZDOGLINK,'')='')"
-		+ "        AND (D.ZBUR_LU 	    	IN (:ZBUR_LU) 	  							OR COALESCE(:ZBUR_LU,'')='')"
-		+ "        AND (D.ZBUR_AREA      	IN (:ZBUR_AREA)   							OR COALESCE(:ZBUR_AREA,'')='')"
-		+ "        AND (D.ZSKV_KUST 	   	IN (:ZSKV_KUST)   							OR COALESCE(:ZSKV_KUST,'')='')"
-		+ "        AND (D.Z_SKV_GEO 	  	IN (:Z_SKV_GEO)   							OR COALESCE(:Z_SKV_GEO,'')='')"
-		+ "        AND (D.ZBUR_PLST 	   	IN (:ZBUR_PLST)   							OR COALESCE(:ZBUR_PLST,'')='')"
-		+ "        AND (D.ZPH_TEHK 	   	IN (:ZPH_TEHK) 	  						OR COALESCE(:ZPH_TEHK,'')='')"
-		+ "        AND (D.ZPH_OPLST 	    	IN (:ZPH_OPLST)   							OR COALESCE(:ZPH_OPLST,'')='')"
-		+ "        AND (D.ZPHD_COMM      IN (:ZPHD_COMM)   						OR COALESCE(:ZPHD_COMM,'')='')"
-		+ "        AND (TO_DATE(D.ZBUR_BEG, 'YYYY-MM-DD')"
-		+ "							IN (TO_DATE(:ZBUR_BEG, 'YYYY-MM-DD')) 	OR COALESCE(:ZBUR_BEG,'')='')"
-		+ "        AND (D.ZPILOT 	    		IN (:ZPILOT) 	  							OR COALESCE(:ZPILOT,'')='')"
-		+ "        AND (D.ZSKV_ST 	    	IN (:ZSKV_ST) 	  							OR COALESCE(:ZSKV_ST,'')='')"
-		+ "        AND (D.ZGEN_POD 	    	IN (:ZGEN_POD) 	  						OR COALESCE(:ZGEN_POD,'')='')"
-		+ "        AND (D.ZGEN_ZAK 	    	IN (:ZGEN_ZAK) 	  						OR COALESCE(:ZGEN_ZAK,'')='')"
-		+ "        AND (D.ZSHIFR 			IN (:ZSHIFR) 	  							OR COALESCE(:ZSHIFR,'')='')"
-		+ "        AND (D.ZOBJEM 	    		IN (:ZOBJEM) 	  							OR COALESCE(:ZOBJEM,'')='')"
-		+ "        AND (D.ZPHD_SR 	    	IN (:ZPHD_SR) 	  							OR COALESCE(:ZPHD_SR,'')='')"
-		+ "        AND (D.ZPHD_GRSR      IN (:ZPHD_GRSR)   							OR COALESCE(:ZPHD_GRSR,'')='')"
-		+ "        AND (D.ZGAZ_TYPE 	    	IN (:ZGAZ_TYPE)   							OR COALESCE(:ZGAZ_TYPE,'')='')"
-		+ "        AND (D.ZAVIATYPE 	    	IN (:ZAVIATYPE)   							OR COALESCE(:ZAVIATYPE,'')='')"
-		+ "        AND (D.ZPHD_NCH 	    	IN (:ZPHD_NCH) 	  						OR COALESCE(:ZPHD_NCH,'')='')"
-		+ "        AND (D.ZPHD_SPR 	    	IN (:ZPHD_SPR) 	  						OR COALESCE(:ZPHD_SPR,'')='')"
-		+ "	 AND (D.ZINDTXT1 	    	ILIKE '%' || :ZINDTXT1 || '%' 					OR COALESCE(:ZINDTXT1,'')='')"
-		+ "),"
-		+ "Main_Data AS ("
-		+ "    SELECT"
-		+ "        :ANALYTIC_SET,"
-		+ "        (SELECT t.ACTVTS FROM " + nsiTable(C_NSI_RDSD_INDS) + " t WHERE t.CODE = v.zlib_indc AND now() BETWEEN t.DATE_FROM AND t.DATE_TO LIMIT 1) AS ""Код вида деятельности"","
-		+ "        (SELECT t.SNAME FROM " + nsiTable(C_NSI_RDSD_INDS) + " t WHERE t.CODE = v.zlib_indc AND now() BETWEEN t.DATE_FROM AND t.DATE_TO LIMIT 1) AS ""Наименование вида деятельности"","
-		+ "        (SELECT f.forms_text FROM Forms_Agg f WHERE f.ZLIB_INDC = v.zlib_indc AND f.GJAHR = v.calyear AND f.PLANT = v.plant LIMIT 1) AS ""Формы ТЭП СНГ"","
-		+ "        :EXTRA_FIELDS"
-		+ "    FROM src v"
-		+ "    GROUP BY"
-		+ "        :ANALYTIC_SET,"
-		+ "        CASE WHEN COALESCE(:P_STATUS, '0') = '1' THEN COALESCE(zphd_stat, '') ELSE 'Итого' END,"
-		+ "        v.zlib_indc, v.calyear, v.plant"
-		+ ")"
-		+ "SELECT"
-		+ "    :ANALYTIC_SET,"
-		+ "    :EXTRA_NAMES,"
-		+ "    ""Код вида деятельности"","
-		+ "    ""Наименование вида деятельности"","
-		+ "    ""Формы ТЭП СНГ"""
-		+ "FROM Main_Data;";
+		+ "Forms_Agg AS (" + C_CRLF
+		+ "    SELECT ZLIB_INDC, GJAHR, PLANT," + C_CRLF
+		+ "           STRING_AGG(DISTINCT ZF_NUMB, ', ') FILTER (WHERE ZF_NUMB IS NOT NULL AND ZF_NUMB <> '') AS forms_text" + C_CRLF
+		+ "    FROM TBL_ZIDNFORM" + C_CRLF
+		+ "    WHERE ZLIB_INDC IN (:ZLIB_INDC) AND GJAHR IN (:CALYEAR) AND PLANT IN (:PLANT)" + C_CRLF
+		+ "    GROUP BY ZLIB_INDC, GJAHR, PLANT" + C_CRLF
+		+ ")," + C_CRLF
+		+ "src AS (" + C_CRLF
+		+ "    SELECT D.*, TBL.zsiu_indv, TBL.zvalue_sng, TBL.period, TBL.zphd_stat, TBL.zind_sche, TBL.key_connect," + C_CRLF
+		+ "           n_rdsd_vendor.TXTMD AS vendor_name," + C_CRLF
+		+ "           n_rdsd_soldto.NAME AS sold_to_name," + C_CRLF
+		+ "           n_rdsd_zhrgrpmo.NAME AS zhrgrpmo_name," + C_CRLF
+		+ "           n_rdsd_profit_ctr.NAME AS profit_ctr_name," + C_CRLF
+		+ "           n_rdsd_acttype.NAME AS acttype_name," + C_CRLF
+		+ "           n_rdsd_zequi.NAME AS zequi_name," + C_CRLF
+		+ "           n_rdsd_zclsvobor.NAME AS zclsvobor_name," + C_CRLF
+		+ "           n_rdsd_material.NAME AS material_name," + C_CRLF
+		+ "           n_rdsd_zfunc_loc.NAME AS zfunc_loc_name," + C_CRLF
+		+ "           n_rdsd_zsiu_fld.NAME AS zsiu_fld_name," + C_CRLF
+		+ "           n_rdsd_posid.NAME AS posid_name," + C_CRLF
+		+ "           n_rdsd_infosystem.NAME AS zlib_infs_name," + C_CRLF
+		+ "           n_shortcut_to_rdsd_soldto_3.NAME AS zphd_usl1_name," + C_CRLF
+		+ "           n_shortcut_to_rdsd_soldto.NAME AS zdebitor_name," + C_CRLF
+		+ "           n_shortcut_to_rdsd_soldto_2.NAME AS zph_eso2_name," + C_CRLF
+		+ "           n_shortcut_to_rdsd_soldto_4.NAME AS zph_epok_name," + C_CRLF
+		+ "           n_shortcut_to_rdsd_soldto_5.NAME AS zphd_sk_name," + C_CRLF
+		+ "           n_rdsd_ucvoltlevl.NAME AS ucvoltlevl_name," + C_CRLF
+		+ "           n_shortcut_to_rdsd_ucvoltlevl.NAME AS zucvolttr_name," + C_CRLF
+		+ "           n_rdsd_z_cl_napr.NAME AS z_cl_napr_name," + C_CRLF
+		+ "           n_rdsd_zsiu_ty.NAME AS zsiu_ty_name," + C_CRLF
+		+ "           n_rdsd_zbur_lu.NAME AS zbur_lu_name," + C_CRLF
+		+ "           n_rdsd_zbur_area.NAME AS zbur_area_name," + C_CRLF
+		+ "           n_rdsd_zbur_plst.ZBUR_PLST AS zbur_plst_name," + C_CRLF
+		+ "           n_rdsd_zph_tehk.NAME AS name_name," + C_CRLF
+		+ "           n_shortcut_to_rdsd_soldto_7.NAME AS zgen_pod_name," + C_CRLF
+		+ "           n_shortcut_to_rdsd_soldto_6.NAME AS zgen_zak_name," + C_CRLF
+		+ "           n_shortcut_to_rdsd_soldto_8.NAME AS zpkr_subp_name," + C_CRLF
+		+ "           n_rdsd_zphd_sr.NAME AS zphd_sr_name," + C_CRLF
+		+ "           n_rdsd_zphd_grsr.NAME AS zphd_grsr_name," + C_CRLF
+		+ "           n_rdsd_zgaz_type.NAME AS zgaz_type_name," + C_CRLF
+		+ "           n_rdsd_zaviatype.NAME AS zaviatype_name," + C_CRLF
+		+ "           n_plant.TXTMD AS plant_name," + C_CRLF
+		+ "           n_period_type.NAME AS period_type_name," + C_CRLF
+		+ "           n_inds.SNAME AS zlib_indc_name" + C_CRLF
+		+ "    FROM " + nsiTable(C_NSI_DICT_PHD_LEFT) + " D" + C_CRLF
+		+ "    JOIN TBL_FAP_MULT TBL" + C_CRLF
+		+ "      ON D.""KEY"" = TBL.KEY_CONNECT AND TBL.plant = D.plant AND TBL.year = D.calyear" + C_CRLF
+		+ "    LEFT JOIN " + nsiTable(C_NSI_RDSD_VENDOR) + "   n_rdsd_vendor" + C_CRLF
+		+ "       ON n_rdsd_vendor.vendor = D.vendor" + C_CRLF
+		+ "    LEFT JOIN " + nsiTable(C_NSI_SHORTCUT_TO_RDSD_SOLDTO_8) + "   n_rdsd_soldto" + C_CRLF
+		+ "       ON n_rdsd_soldto.code = D.sold_to" + C_CRLF
+		+ "    LEFT JOIN " + nsiTable(C_NSI_RDSD_ZHRGRPMO) + "   n_rdsd_zhrgrpmo" + C_CRLF
+		+ "       ON n_rdsd_zhrgrpmo.zhrgrpmo = D.zhrgrpmo" + C_CRLF
+		+ "    LEFT JOIN " + nsiTable(C_NSI_RDSD_PROFIT_CTR) + "   n_rdsd_profit_ctr" + C_CRLF
+		+ "       ON n_rdsd_profit_ctr.profit_ctr = D.profit_ctr" + C_CRLF
+		+ "    LEFT JOIN " + nsiTable(C_NSI_RDSD_ACTTYPE) + "   n_rdsd_acttype" + C_CRLF
+		+ "       ON n_rdsd_acttype.acttype = D.acttype" + C_CRLF
+		+ "      AND to_date(D.calyear || '-01-01', 'YYYY-MM-DD')" + C_CRLF
+		+ "          BETWEEN n_rdsd_acttype.datefrom AND n_rdsd_acttype.dateto" + C_CRLF
+		+ "    LEFT JOIN " + nsiTable(C_NSI_RDSD_ZEQUI) + "   n_rdsd_zequi" + C_CRLF
+		+ "       ON n_rdsd_zequi.zequi = D.zequi" + C_CRLF
+		+ "      AND to_date(D.calyear || '-01-01', 'YYYY-MM-DD')" + C_CRLF
+		+ "          BETWEEN n_rdsd_zequi.datefrom AND n_rdsd_zequi.dateto" + C_CRLF
+		+ "    LEFT JOIN " + nsiTable(C_NSI_RDSD_ZCLSVOBOR) + "   n_rdsd_zclsvobor" + C_CRLF
+		+ "       ON n_rdsd_zclsvobor.zclsvobor = D.zclsvobor" + C_CRLF
+		+ "    LEFT JOIN " + nsiTable(C_NSI_RDSD_MATERIAL) + "   n_rdsd_material" + C_CRLF
+		+ "       ON n_rdsd_material.material = D.material" + C_CRLF
+		+ "    LEFT JOIN " + nsiTable(C_NSI_RDSD_ZFUNC_LOC) + "   n_rdsd_zfunc_loc" + C_CRLF
+		+ "       ON n_rdsd_zfunc_loc.zfunc_loc = D.zfunc_loc" + C_CRLF
+		+ "      AND to_date(D.calyear || '-01-01', 'YYYY-MM-DD')" + C_CRLF
+		+ "          BETWEEN n_rdsd_zfunc_loc.datefrom::date AND n_rdsd_zfunc_loc.dateto::date" + C_CRLF
+		+ "    LEFT JOIN " + nsiTable(C_NSI_RDSD_ZSIU_FLD) + "   n_rdsd_zsiu_fld" + C_CRLF
+		+ "       ON n_rdsd_zsiu_fld.zsiu_fld = D.zsiu_fld" + C_CRLF
+		+ "    LEFT JOIN " + nsiTable(C_NSI_RDSD_POSID) + "   n_rdsd_posid" + C_CRLF
+		+ "       ON n_rdsd_posid.posid = D.posid" + C_CRLF
+		+ "    LEFT JOIN " + nsiTable(C_NSI_RDSD_INFOSYSTEM) + "   n_rdsd_infosystem" + C_CRLF
+		+ "       ON n_rdsd_infosystem.code_value = D.zlib_infs" + C_CRLF
+		+ "    LEFT JOIN " + nsiTable(C_NSI_SHORTCUT_TO_RDSD_SOLDTO_8) + "   n_shortcut_to_rdsd_soldto_3" + C_CRLF
+		+ "       ON n_shortcut_to_rdsd_soldto_3.code = D.zphd_usl1" + C_CRLF
+		+ "    LEFT JOIN " + nsiTable(C_NSI_SHORTCUT_TO_RDSD_SOLDTO_8) + "   n_shortcut_to_rdsd_soldto" + C_CRLF
+		+ "       ON n_shortcut_to_rdsd_soldto.code = D.zdebitor" + C_CRLF
+		+ "    LEFT JOIN " + nsiTable(C_NSI_SHORTCUT_TO_RDSD_SOLDTO_8) + "   n_shortcut_to_rdsd_soldto_2" + C_CRLF
+		+ "       ON n_shortcut_to_rdsd_soldto_2.code = D.zph_eso2" + C_CRLF
+		+ "    LEFT JOIN " + nsiTable(C_NSI_SHORTCUT_TO_RDSD_SOLDTO_8) + "   n_shortcut_to_rdsd_soldto_4" + C_CRLF
+		+ "       ON n_shortcut_to_rdsd_soldto_4.code = D.zph_epok" + C_CRLF
+		+ "    LEFT JOIN " + nsiTable(C_NSI_SHORTCUT_TO_RDSD_SOLDTO_8) + "   n_shortcut_to_rdsd_soldto_5" + C_CRLF
+		+ "       ON n_shortcut_to_rdsd_soldto_5.code = D.zphd_sk" + C_CRLF
+		+ "    LEFT JOIN " + nsiTable(C_NSI_SHORTCUT_TO_RDSD_UCVOLTLEVL) + "   n_rdsd_ucvoltlevl" + C_CRLF
+		+ "       ON n_rdsd_ucvoltlevl.ucvoltlevl = D.ucvoltlevl" + C_CRLF
+		+ "    LEFT JOIN " + nsiTable(C_NSI_SHORTCUT_TO_RDSD_UCVOLTLEVL) + "   n_shortcut_to_rdsd_ucvoltlevl" + C_CRLF
+		+ "       ON n_shortcut_to_rdsd_ucvoltlevl.ucvoltlevl = D.zucvolttr" + C_CRLF
+		+ "    LEFT JOIN " + nsiTable(C_NSI_RDSD_Z_CL_NAPR) + "   n_rdsd_z_cl_napr" + C_CRLF
+		+ "       ON n_rdsd_z_cl_napr.z_cl_napr = D.z_cl_napr" + C_CRLF
+		+ "    LEFT JOIN " + nsiTable(C_NSI_RDSD_ZSIU_TY) + "   n_rdsd_zsiu_ty" + C_CRLF
+		+ "       ON n_rdsd_zsiu_ty.zsiu_ty = D.zsiu_ty" + C_CRLF
+		+ "    LEFT JOIN " + nsiTable(C_NSI_RDSD_ZBUR_LU) + "   n_rdsd_zbur_lu" + C_CRLF
+		+ "       ON n_rdsd_zbur_lu.code = D.zbur_lu" + C_CRLF
+		+ "    LEFT JOIN " + nsiTable(C_NSI_RDSD_ZBUR_AREA) + "   n_rdsd_zbur_area" + C_CRLF
+		+ "       ON n_rdsd_zbur_area.zbur_area = D.zbur_area" + C_CRLF
+		+ "    LEFT JOIN " + nsiTable(C_NSI_RDSD_ZBUR_PLST) + "    n_rdsd_zbur_plst" + C_CRLF
+		+ "       ON n_rdsd_zbur_plst.zbur_plst = D.zbur_plst" + C_CRLF
+		+ "    LEFT JOIN " + nsiTable(C_NSI_RDSD_ZPH_TEHK) + "   n_rdsd_zph_tehk" + C_CRLF
+		+ "       ON n_rdsd_zph_tehk.code = D.name" + C_CRLF
+		+ "    LEFT JOIN " + nsiTable(C_NSI_RDSD_ZSKV_ST) + "   n_rdsd_zskv_st" + C_CRLF
+		+ "       ON n_rdsd_zskv_st.zskv_st = D.name" + C_CRLF
+		+ "    LEFT JOIN " + nsiTable(C_NSI_SHORTCUT_TO_RDSD_SOLDTO_8) + "   n_shortcut_to_rdsd_soldto_7" + C_CRLF
+		+ "       ON n_shortcut_to_rdsd_soldto_7.code = D.zgen_pod" + C_CRLF
+		+ "    LEFT JOIN " + nsiTable(C_NSI_SHORTCUT_TO_RDSD_SOLDTO_8) + "   n_shortcut_to_rdsd_soldto_6" + C_CRLF
+		+ "       ON n_shortcut_to_rdsd_soldto_6.code = D.zgen_zak" + C_CRLF
+		+ "    LEFT JOIN " + nsiTable(C_NSI_SHORTCUT_TO_RDSD_SOLDTO_8) + "   n_shortcut_to_rdsd_soldto_8" + C_CRLF
+		+ "       ON n_shortcut_to_rdsd_soldto_8.code = D.zpkr_subp" + C_CRLF
+		+ "    LEFT JOIN " + nsiTable(C_NSI_RDSD_ZSHIFR) + "   n_rdsd_zshifr" + C_CRLF
+		+ "       ON n_rdsd_zshifr.zshifr = D.name" + C_CRLF
+		+ "    LEFT JOIN " + nsiTable(C_NSI_RDSD_ZOBJEM) + "   n_rdsd_zobjem" + C_CRLF
+		+ "       ON n_rdsd_zobjem.zobjem = D.name" + C_CRLF
+		+ "    LEFT JOIN " + nsiTable(C_NSI_RDSD_ZPHD_SR) + "   n_rdsd_zphd_sr" + C_CRLF
+		+ "       ON n_rdsd_zphd_sr.zphd_sr = D.zphd_sr" + C_CRLF
+		+ "    LEFT JOIN " + nsiTable(C_NSI_RDSD_ZPHD_GRSR) + "   n_rdsd_zphd_grsr" + C_CRLF
+		+ "       ON n_rdsd_zphd_grsr.zphd_grsr = D.zphd_grsr" + C_CRLF
+		+ "    LEFT JOIN " + nsiTable(C_NSI_RDSD_ZGAZ_TYPE) + "   n_rdsd_zgaz_type" + C_CRLF
+		+ "       ON n_rdsd_zgaz_type.code = D.zgaz_type" + C_CRLF
+		+ "    LEFT JOIN " + nsiTable(C_NSI_RDSD_ZAVIATYPE) + "   n_rdsd_zaviatype" + C_CRLF
+		+ "       ON n_rdsd_zaviatype.zaviatype = D.zaviatype" + C_CRLF
+		+ "    LEFT JOIN " + nsiTable(C_NSI_RDSD_ZPH_USR0) + " n_zph_usr0" + C_CRLF
+		+ "    on n_zph_usr0.zph_usr0 = D.zph_usr2" + C_CRLF
+		+ "    LEFT JOIN " + nsiTable(C_NSI_RDSD_PLANT) + " n_plant" + C_CRLF
+		+ "       ON n_plant.plant = D.plant" + C_CRLF
+		+ "    LEFT JOIN " + nsiTable(C_NSI_DIC_TYPE_PERIOD) + " n_period_type" + C_CRLF
+		+ "       ON n_period_type.id = D.period_type" + C_CRLF
+		+ "    LEFT JOIN " + nsiTable(C_NSI_RDSD_INDS) + " n_inds" + C_CRLF
+		+ "       ON n_inds.code = D.zlib_indc" + C_CRLF
+		+ "    LEFT JOIN " + nsiTable(C_NSI_RDSD_ACTVTS) + " n_actvts" + C_CRLF
+		+ "       ON n_actvts.code_value = n_inds.actvts" + C_CRLF
+		+ "    LEFT JOIN " + nsiTable(C_NSI_RDSD_OWNERS) + " n_owners" + C_CRLF
+		+ "       ON n_owners.""KEY"" = n_inds.owner" + C_CRLF
+		+ "    WHERE D.IS_TEMPORARY = 2" + C_CRLF
+		+ "AND" + C_CRLF
+		+ "     	          (D.PLANT 		    	IN (:PLANT) 	 							OR COALESCE(:PLANT,'')='')" + C_CRLF
+		+ "        AND (D.ZLIB_INDC	    	IN (:ZLIB_INDC)  							OR COALESCE(:ZLIB_INDC,'')='')" + C_CRLF
+		+ "        AND (D.CALYEAR 	    	IN (:CALYEAR) 	 							OR COALESCE(:CALYEAR,'')='')" + C_CRLF
+		+ "        AND (TBL.ZPHD_STAT     	IN (:ZPHD_STAT)   							OR COALESCE(:ZPHD_STAT,'')='')" + C_CRLF
+		+ "        AND (D.ZTYPEIND     	IN (:ZTYPEIND)   							OR COALESCE(:ZTYPEIND,'')='')" + C_CRLF
+		+ "        AND (D.VENDOR 	    	IN (:VENDOR) 	  							OR COALESCE(:VENDOR,'')='')" + C_CRLF
+		+ "        AND (D.SOLD_TO 	    	IN (:SOLD_TO) 	  							OR COALESCE(:SOLD_TO,'')='')" + C_CRLF
+		+ "        AND (D.ZHRGRPMO       	IN (:ZHRGRPMO) 	  						OR COALESCE(:ZHRGRPMO,'')='')" + C_CRLF
+		+ "        AND (D.PROFIT_CTR     	IN (:PROFIT_CTR)  							OR COALESCE(:PROFIT_CTR,'')='')" + C_CRLF
+		+ "        AND (D.COSTCENTER     IN (:COSTCENTER)  						OR COALESCE(:COSTCENTER,'')='')" + C_CRLF
+		+ "        AND (D.ZORGUNIT 	    	IN (:ZORGUNIT) 	  						OR COALESCE(:ZORGUNIT,'')='')" + C_CRLF
+		+ "        AND (D.ZPH_USR2 	    	IN (:ZPH_USR2) 	  						OR COALESCE(:ZPH_USR2,'')='')" + C_CRLF
+		+ "        AND (D.ACTTYPE  	    	IN (:ACTTYPE) 	  							OR COALESCE(:ACTTYPE,'')='')" + C_CRLF
+		+ "        AND (D.ZEQUI 		    	IN (:ZEQUI) 	  								OR COALESCE(:ZEQUI,'')='')" + C_CRLF
+		+ "        AND (D.ZCLSVOBOR      	IN (:ZCLSVOBOR)   							OR COALESCE(:ZCLSVOBOR,'')='')" + C_CRLF
+		+ "        AND (D.MATERIAL 	    	IN (:MATERIAL) 	  						OR COALESCE(:MATERIAL,'')='')" + C_CRLF
+		+ "        AND (D.ZFUNC_LOC 	    	IN (:ZFUNC_LOC)   							OR COALESCE(:ZFUNC_LOC,'')='')" + C_CRLF
+		+ "        AND (D.ZSIU_FLD 	    	IN (:ZSIU_FLD)    							OR COALESCE(:ZSIU_FLD,'')='')" + C_CRLF
+		+ "        AND (D.POSID 		    	IN (:POSID) 	  								OR COALESCE(:POSID,'')='')" + C_CRLF
+		+ "        AND (D.ZLIB_INFS 	    	IN (:ZLIB_INFS)   							OR COALESCE(:ZLIB_INFS,'')='')" + C_CRLF
+		+ "        AND (D.PERIOD_TYPE    IN (:PERIOD_TYPE) 						OR COALESCE(:PERIOD_TYPE,'')='')" + C_CRLF
+		+ "        AND (D.ZPHD_DOG 	    	IN (:ZPHD_DOG) 	  						OR COALESCE(:ZPHD_DOG,'')='')" + C_CRLF
+		+ "        AND (D.ZPHD_USL1 	    	IN (:ZPHD_USL1)   							OR COALESCE(:ZPHD_USL1,'')='')" + C_CRLF
+		+ "        AND (D.ZDEBITOR 	    	IN (:ZDEBITOR) 	  						OR COALESCE(:ZDEBITOR,'')='')" + C_CRLF
+		+ "        AND (D.ZPH_ESO2 	    	IN (:ZPH_ESO2) 	  						OR COALESCE(:ZPH_ESO2,'')='')" + C_CRLF
+		+ "        AND (D.ZPHD_SK 	    	IN (:ZPHD_SK) 	  							OR COALESCE(:ZPHD_SK,'')='')" + C_CRLF
+		+ "        AND (D.UCVOLTLEVL     	IN (:UCVOLTLEVL)  							OR COALESCE(:UCVOLTLEVL,'')='')" + C_CRLF
+		+ "        AND (D.ZUCVOLTTR      	IN (:ZUCVOLTTR)   							OR COALESCE(:ZUCVOLTTR,'')='')" + C_CRLF
+		+ "        AND (D.Z_CL_NAPR      	IN (:Z_CL_NAPR)   							OR COALESCE(:Z_CL_NAPR,'')='')" + C_CRLF
+		+ "        AND (D.ZSIU_TY 	    	IN (:ZSIU_TY)     							OR COALESCE(:ZSIU_TY,'')='')" + C_CRLF
+		+ "        AND (D.ZDOGLINK 	    	IN (:ZDOGLINK) 	  						OR COALESCE(:ZDOGLINK,'')='')" + C_CRLF
+		+ "        AND (D.ZBUR_LU 	    	IN (:ZBUR_LU) 	  							OR COALESCE(:ZBUR_LU,'')='')" + C_CRLF
+		+ "        AND (D.ZBUR_AREA      	IN (:ZBUR_AREA)   							OR COALESCE(:ZBUR_AREA,'')='')" + C_CRLF
+		+ "        AND (D.ZSKV_KUST 	   	IN (:ZSKV_KUST)   							OR COALESCE(:ZSKV_KUST,'')='')" + C_CRLF
+		+ "        AND (D.Z_SKV_GEO 	  	IN (:Z_SKV_GEO)   							OR COALESCE(:Z_SKV_GEO,'')='')" + C_CRLF
+		+ "        AND (D.ZBUR_PLST 	   	IN (:ZBUR_PLST)   							OR COALESCE(:ZBUR_PLST,'')='')" + C_CRLF
+		+ "        AND (D.ZPH_TEHK 	   	IN (:ZPH_TEHK) 	  						OR COALESCE(:ZPH_TEHK,'')='')" + C_CRLF
+		+ "        AND (D.ZPH_OPLST 	    	IN (:ZPH_OPLST)   							OR COALESCE(:ZPH_OPLST,'')='')" + C_CRLF
+		+ "        AND (D.ZPHD_COMM      IN (:ZPHD_COMM)   						OR COALESCE(:ZPHD_COMM,'')='')" + C_CRLF
+		+ "        AND (TO_DATE(D.ZBUR_BEG, 'YYYY-MM-DD')" + C_CRLF
+		+ "							IN (TO_DATE(:ZBUR_BEG, 'YYYY-MM-DD')) 	OR COALESCE(:ZBUR_BEG,'')='')" + C_CRLF
+		+ "        AND (D.ZPILOT 	    		IN (:ZPILOT) 	  							OR COALESCE(:ZPILOT,'')='')" + C_CRLF
+		+ "        AND (D.ZSKV_ST 	    	IN (:ZSKV_ST) 	  							OR COALESCE(:ZSKV_ST,'')='')" + C_CRLF
+		+ "        AND (D.ZGEN_POD 	    	IN (:ZGEN_POD) 	  						OR COALESCE(:ZGEN_POD,'')='')" + C_CRLF
+		+ "        AND (D.ZGEN_ZAK 	    	IN (:ZGEN_ZAK) 	  						OR COALESCE(:ZGEN_ZAK,'')='')" + C_CRLF
+		+ "        AND (D.ZSHIFR 			IN (:ZSHIFR) 	  							OR COALESCE(:ZSHIFR,'')='')" + C_CRLF
+		+ "        AND (D.ZOBJEM 	    		IN (:ZOBJEM) 	  							OR COALESCE(:ZOBJEM,'')='')" + C_CRLF
+		+ "        AND (D.ZPHD_SR 	    	IN (:ZPHD_SR) 	  							OR COALESCE(:ZPHD_SR,'')='')" + C_CRLF
+		+ "        AND (D.ZPHD_GRSR      IN (:ZPHD_GRSR)   							OR COALESCE(:ZPHD_GRSR,'')='')" + C_CRLF
+		+ "        AND (D.ZGAZ_TYPE 	    	IN (:ZGAZ_TYPE)   							OR COALESCE(:ZGAZ_TYPE,'')='')" + C_CRLF
+		+ "        AND (D.ZAVIATYPE 	    	IN (:ZAVIATYPE)   							OR COALESCE(:ZAVIATYPE,'')='')" + C_CRLF
+		+ "        AND (D.ZPHD_NCH 	    	IN (:ZPHD_NCH) 	  						OR COALESCE(:ZPHD_NCH,'')='')" + C_CRLF
+		+ "        AND (D.ZPHD_SPR 	    	IN (:ZPHD_SPR) 	  						OR COALESCE(:ZPHD_SPR,'')='')" + C_CRLF
+		+ "	 AND (D.ZINDTXT1 	    	ILIKE '%' || :ZINDTXT1 || '%' 					OR COALESCE(:ZINDTXT1,'')='')" + C_CRLF
+		+ ")," + C_CRLF
+		+ "Main_Data AS (" + C_CRLF
+		+ "    SELECT" + C_CRLF
+		+ "        :ANALYTIC_SET," + C_CRLF
+		+ "        (SELECT t.ACTVTS FROM " + nsiTable(C_NSI_RDSD_INDS) + " t WHERE t.CODE = v.zlib_indc AND now() BETWEEN t.DATE_FROM AND t.DATE_TO LIMIT 1) AS ""Код вида деятельности""," + C_CRLF
+		+ "        (SELECT t.SNAME FROM " + nsiTable(C_NSI_RDSD_INDS) + " t WHERE t.CODE = v.zlib_indc AND now() BETWEEN t.DATE_FROM AND t.DATE_TO LIMIT 1) AS ""Наименование вида деятельности""," + C_CRLF
+		+ "        (SELECT f.forms_text FROM Forms_Agg f WHERE f.ZLIB_INDC = v.zlib_indc AND f.GJAHR = v.calyear AND f.PLANT = v.plant LIMIT 1) AS ""Формы ТЭП СНГ""," + C_CRLF
+		+ "        :EXTRA_FIELDS" + C_CRLF
+		+ "    FROM src v" + C_CRLF
+		+ "    GROUP BY" + C_CRLF
+		+ "        :ANALYTIC_SET," + C_CRLF
+		+ "        CASE WHEN COALESCE(:P_STATUS, '0') = '1' THEN COALESCE(zphd_stat, '') ELSE 'Итого' END," + C_CRLF
+		+ "        v.zlib_indc, v.calyear, v.plant" + C_CRLF
+		+ ")" + C_CRLF
+		+ "SELECT" + C_CRLF
+		+ "    :ANALYTIC_SET," + C_CRLF
+		+ "    :EXTRA_NAMES," + C_CRLF
+		+ "    ""Код вида деятельности""," + C_CRLF
+		+ "    ""Наименование вида деятельности""," + C_CRLF
+		+ "    ""Формы ТЭП СНГ""" + C_CRLF
+		+ "FROM Main_Data;" + C_CRLF;
 		Try
 			names := analyticSetArray;
 			text := "";
@@ -2517,15 +2517,6 @@ Class ANALIZ_TEP_FORM_ON_SHOW: WebForm
 		sql := String.Replace(sql, ":EXTRA_FIELDS", _sqlExtraFields);
 		sql := String.Replace(sql, ":EXTRA_NAMES", _sqlExtraNames);
 
-		// читаемый SQL: переносы строк перед ключевыми словами
-		sql := String.Replace(sql, " WITH ", C_CRLF + "WITH ");
-		sql := String.Replace(sql, " SELECT ", C_CRLF + "SELECT ");
-		sql := String.Replace(sql, " FROM ", C_CRLF + "FROM ");
-		sql := String.Replace(sql, " LEFT JOIN ", C_CRLF + "LEFT JOIN ");
-		sql := String.Replace(sql, " JOIN ", C_CRLF + "JOIN ");
-		sql := String.Replace(sql, " WHERE ", C_CRLF + "WHERE ");
-		sql := String.Replace(sql, " GROUP BY ", C_CRLF + "GROUP BY ");
-		sql := String.Replace(sql, " ORDER BY ", C_CRLF + "ORDER BY ");
 		If _sqlStatus.IsEmpty Then
 			_sqlStatus := "0";
 		End If;
