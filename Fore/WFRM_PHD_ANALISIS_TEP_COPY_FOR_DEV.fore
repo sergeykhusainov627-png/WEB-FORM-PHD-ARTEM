@@ -2211,7 +2211,7 @@ End Class ANALIZ_TEP_FORM_ON_SHOW;
 	Function quoteLiteral(value: String): String;
 	Begin
 		If IsNull(value) Then Return "''"; End If;
-		Return "'" + value.Replace("'", "''") + "'";
+		Return "'" + String.Replace(value, "'", "''") + "'";
 	End Function quoteLiteral;
 
 	/// <summary>Значение параметра гиперссылки текстом (массив — через запятую)</summary>
@@ -2478,24 +2478,24 @@ End Class ANALIZ_TEP_FORM_ON_SHOW;
 				End For;
 			End If;
 			If text.IsEmpty Then text := "v.zlib_indc, v.calyear, v.plant"; End If;
-			sql := sql.Replace(":ANALYTIC_SET", text);
+			sql := String.Replace(sql, ":ANALYTIC_SET", text);
 		Except On E: Exception Do
 			Debug.WriteLine("[АнализТЭП/форма] аналитики в SQL: " + E.Message);
-			sql := sql.Replace(":ANALYTIC_SET", "v.zlib_indc, v.calyear, v.plant");
+			sql := String.Replace(sql, ":ANALYTIC_SET", "v.zlib_indc, v.calyear, v.plant");
 		End Try;
 		If _sqlExtraFields.IsEmpty Then _sqlExtraFields := "1 AS ""Нет данных"""; End If;
 		If _sqlExtraNames.IsEmpty Then _sqlExtraNames := """Нет данных"""; End If;
-		sql := sql.Replace(":EXTRA_FIELDS", _sqlExtraFields);
-		sql := sql.Replace(":EXTRA_NAMES", _sqlExtraNames);
+		sql := String.Replace(sql, ":EXTRA_FIELDS", _sqlExtraFields);
+		sql := String.Replace(sql, ":EXTRA_NAMES", _sqlExtraNames);
 		If _sqlStatus.IsEmpty Then _sqlStatus := "0"; End If;
-		sql := sql.Replace(":P_STATUS", "'" + _sqlStatus + "'");
+		sql := String.Replace(sql, ":P_STATUS", "'" + _sqlStatus + "'");
 		Try
 			If Not IsNull(Hyperlink.ParameterManager) Then
 				params := Hyperlink.ParameterManager.Params;
 				arrNames := C_FILTER_PARAMS.Split(",");
 				For i := 0 To arrNames.Length - 1 Do
-					text := paramText(params, (arrNames[i] As String).Trim);
-					sql := sql.Replace(":" + (arrNames[i] As String).Trim, quoteLiteral(text));
+					text := paramText(params, String.Trim(arrNames[i] As String));
+					sql := String.Replace(sql, ":" + String.Trim(arrNames[i] As String), quoteLiteral(text));
 				End For;
 			End If;
 		Except On E2: Exception Do
