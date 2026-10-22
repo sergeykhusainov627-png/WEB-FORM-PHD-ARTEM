@@ -225,7 +225,7 @@ Sub logRecord(op: String; success: Boolean; objId: String; objName: String; desc
 Var
 	desc: IMetabaseObjectDescriptor;
 	logObj: ILog;
-	vals: Array;
+	vals: Array Of Variant;
 Begin
 	Try
 		desc := MB.ItemById(C_LOG_ID);
