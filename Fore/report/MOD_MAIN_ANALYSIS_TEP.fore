@@ -14,6 +14,24 @@ Const
 	C_NUM_FORMAT = "#,##0.00";
 	C_COL_WIDTH = 22;
 
+Class RepEvents: ReportEvents
+	/// <summary>
+	/// 	Событие открытия отчёта: выполняем SQL, переданный из формы в параметре P_SQL,
+	/// 	и выгружаем результат на лист данных.
+	/// </summary>
+	Public Sub OnBeforeOpenReport(Report: IPrxReport; Var Cancel: Boolean);
+	Begin
+		If Report.MetabaseObject.IsEdited = False Then
+			loadQueryDataToSheet(Report);
+		End If;
+	End Sub OnBeforeOpenReport;
+
+	Sub OnAfterExecuteTableIsland(TableIsland: IPrxTableIsland);
+	Begin
+	End Sub OnAfterExecuteTableIsland;
+
+End Class RepEvents;
+
 /// <summary>
 /// 	Точка входа: получает готовый текст SQL из параметра отчёта P_SQL,
 /// 	выполняет его напрямую через соединение БД и выгружает результат на «Лист1».
