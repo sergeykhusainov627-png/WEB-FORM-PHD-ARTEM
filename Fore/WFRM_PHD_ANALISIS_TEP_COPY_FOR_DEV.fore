@@ -2269,6 +2269,7 @@ Class ANALIZ_TEP_FORM_ON_SHOW: WebForm
 	Function buildSql: String;
 	Var
 		sql, text, tempId: String;
+		pos, leftParamCount: Integer;
 		names: Array Of String;
 		arrNames: Array Of String;
 		params: IHashtable;
@@ -2542,6 +2543,22 @@ Class ANALIZ_TEP_FORM_ON_SHOW: WebForm
 		Except On E2: Exception Do
 			Debug.WriteLine("[АнализТЭП/форма] фильтры в SQL: " + E2.Message);
 		End Try;
+		// страховка: в собранном SQL не должно остаться параметров (:ИМЯ); :: — приведение типа, его не трогаем
+		pos := 1;
+		While True Do
+			pos := String.Find(sql, ":", pos);
+			If pos < 0 Then Break; End If;
+			If String.Mid(sql, pos + 1, 1) = ":" Then
+				pos := pos + 2;
+			Else
+				leftParamCount := leftParamCount + 1;
+				sql := String.SubString(sql, 0, pos) + String.SubString(sql, pos + 1, sql.Length);
+				pos := pos + 1;
+			End If;
+		End While;
+		If leftParamCount > 0 Then
+			logRecord(C_LOG_OP_FORM, False, "", "", "в SQL остались параметры: " + leftParamCount.ToString);
+		End If;
 		Debug.WriteLine("[АнализТЭП/форма] SQL собран, символов: " + sql.Length.ToString);
 		Return sql;
 	End Function buildSql;
