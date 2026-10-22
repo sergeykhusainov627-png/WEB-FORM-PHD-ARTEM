@@ -2276,7 +2276,7 @@ Class ANALIZ_TEP_FORM_ON_SHOW: WebForm
 		i: Integer;
 	Begin
 		sql := 
-		"WITH"
+		"WITH" + C_CRLF
 		+ "Forms_Agg AS (" + C_CRLF
 		+ "    SELECT ZLIB_INDC, GJAHR, PLANT," + C_CRLF
 		+ "           STRING_AGG(DISTINCT ZF_NUMB, ', ') FILTER (WHERE ZF_NUMB IS NOT NULL AND ZF_NUMB <> '') AS forms_text" + C_CRLF
