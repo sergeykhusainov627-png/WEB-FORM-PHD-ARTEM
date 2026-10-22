@@ -2281,8 +2281,10 @@ Class ANALIZ_TEP_FORM_ON_SHOW: WebForm
 	/// </summary>
 	Function buildSql: String;
 	Var
-		sql, text, tempId: String;
-		pos, leftParamCount: Integer;
+		sql, text, tempId, tempText: String;
+		sqlLines: Array Of String;
+		keptLines: StringList;
+		pos, leftParamCount, i2: Integer;
 		names: Array Of String;
 		arrNames: Array Of String;
 		params: IHashtable;
@@ -2547,6 +2549,21 @@ Class ANALIZ_TEP_FORM_ON_SHOW: WebForm
 		Except On E2: Exception Do
 			Debug.WriteLine("[АнализТЭП/форма] фильтры в SQL: " + E2.Message);
 		End Try;
+		// пустые фильтры не нужны в запросе: строки вида "AND (D.X IN ('') OR COALESCE('','')='')" убираем
+		Try
+			sqlLines := sql.Split(C_CRLF);
+			keptLines := New StringList.Create;
+			For i2 := 0 To sqlLines.Length - 1 Do
+				tempText := sqlLines[i2] As String;
+				If String.Find(tempText, "IN ('')") < 0 Then
+					keptLines.Add(tempText);
+				End If;
+			End For;
+			sql := keptLines.Text(C_CRLF);
+		Except On E3: Exception Do
+			Debug.WriteLine("[АнализТЭП/форма] очистка пустых фильтров: " + E3.Message);
+		End Try;
+
 		// контроль без циклов: в SQL не должно быть параметров (двоеточия — только в приведениях ::тип)
 		leftParamCount := sql.Length - String.Replace(sql, ":", "").Length;
 		If leftParamCount > 0 Then
