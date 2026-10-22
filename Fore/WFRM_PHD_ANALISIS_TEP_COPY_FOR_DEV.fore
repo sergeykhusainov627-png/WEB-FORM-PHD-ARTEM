@@ -1533,10 +1533,10 @@ Class ANALIZ_TEP_FORM_ON_SHOW: WebForm
 		While Not part.IsEmpty Do
 			If part.Length <= C_LOG_DESCR_MAX Then
 				logRecord(C_LOG_OP_FORM, True, "", "", prefix + ": " + part);
-				Return;
+				Break;
 			End If;
-			logRecord(C_LOG_OP_FORM, True, "", "", prefix + ": " + part.Substring(0, C_LOG_DESCR_MAX));
-			part := part.Substring(C_LOG_DESCR_MAX);
+			logRecord(C_LOG_OP_FORM, True, "", "", prefix + ": " + part.SubString(0, C_LOG_DESCR_MAX));
+			part := part.SubString(C_LOG_DESCR_MAX, part.Length - C_LOG_DESCR_MAX);
 		End While;
 	End Sub logLong;
 	
