@@ -1471,7 +1471,7 @@ Class ANALIZ_TEP_FORM_ON_SHOW: WebForm
 		// --- Идентификаторы полей-кодов для режима «Выводить коды аналитик»
 		// (ТТ, лист «Вывод полей в отчете», колонка «Поле» при «Выводить код = да»).
 		// Ключ — основной идентификатор поля; указываются только те, где код отличается от него.
-		_codeIds.Add("PLANT", "SOLD_TO");
+		_codeIds.Add("PLANT", "PLANT");
 		_codeIds.Add("SOLD_TO", "KEY");
 		_codeIds.Add("ZPH_USR2", "CODE_ZPH_USR0");
 		_codeIds.Add("PERIOD_TYPE", "PERIOD_TY");
