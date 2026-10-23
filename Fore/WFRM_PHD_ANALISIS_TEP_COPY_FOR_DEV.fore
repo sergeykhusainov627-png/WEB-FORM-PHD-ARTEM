@@ -2471,8 +2471,7 @@ Class ANALIZ_TEP_FORM_ON_SHOW: WebForm
 		+ "    LEFT JOIN " + nsiTable(C_NSI_RDSD_OWNERS) + " n_owners" + C_CRLF
 		+ "       ON n_owners.""KEY"" = n_inds.owner" + C_CRLF
 		+ "    WHERE D.IS_TEMPORARY = 2" + C_CRLF
-		+ "AND" + C_CRLF
-		+ "     	          (D.PLANT 		    	IN (:PLANT) 	 							OR COALESCE(:PLANT,'')='')" + C_CRLF
+		+ "AND (D.PLANT 		    	IN (:PLANT) 	 							OR COALESCE(:PLANT,'')='')" + C_CRLF
 		+ "        AND (D.ZLIB_INDC	    	IN (:ZLIB_INDC)  							OR COALESCE(:ZLIB_INDC,'')='')" + C_CRLF
 		+ "        AND (D.CALYEAR 	    	IN (:CALYEAR) 	 							OR COALESCE(:CALYEAR,'')='')" + C_CRLF
 		+ "        AND (TBL.ZPHD_STAT     	IN (:ZPHD_STAT)   							OR COALESCE(:ZPHD_STAT,'')='')" + C_CRLF
