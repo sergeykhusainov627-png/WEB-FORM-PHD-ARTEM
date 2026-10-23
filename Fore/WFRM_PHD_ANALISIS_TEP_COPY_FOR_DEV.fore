@@ -2497,7 +2497,7 @@ Class ANALIZ_TEP_FORM_ON_SHOW: WebForm
 		+ "        CASE WHEN COALESCE(:P_STATUS, '0') = '1' THEN COALESCE(zphd_stat, '') ELSE 'Итого' END," + C_CRLF
 		+ "        v.zlib_indc, v.calyear, v.plant" + C_CRLF
 		+ ")" + C_CRLF
-		+ "    *" + C_CRLF
+		+ "SELECT *" + C_CRLF
 		+ "FROM Main_Data;" + C_CRLF;
 		Try
 			names := analyticSetArray;
