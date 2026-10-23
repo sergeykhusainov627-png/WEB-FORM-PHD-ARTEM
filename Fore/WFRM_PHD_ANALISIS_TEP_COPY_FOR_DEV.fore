@@ -378,7 +378,10 @@ Class ANALIZ_TEP_FORM_ON_SHOW: WebForm
 		// Год: текущий год
 		setComboSelectionByAttribute(D_CALYEAR, C_PARAM_CALYEAR, "NAME", DateTime.Now.Year.ToString);
 		// СП: из основной записи пользователя
-		setComboSelectionByAttribute(D_PLANT, C_PARAM_PLANT, "CODE", getUserSP);
+		// по умолчанию подставляем СП пользователя, но при отключённом ограничении — нет
+		If Not C_IGNORE_PLANT_RIGHTS Then
+			setComboSelectionByAttribute(D_PLANT, C_PARAM_PLANT, "CODE", getUserSP);
+		End If;
 		// Тип данных: «План» (ID 0000000001)
 		setComboSelectionByAttribute(D_ZTYPEIND, C_PARAM_ZTYPEIND, "ID", C_DEFAULT_TYPE_IND);
 		// Поля вывода, установленные по умолчанию (ТТ, лист «СЭ - поля для вывода»)
