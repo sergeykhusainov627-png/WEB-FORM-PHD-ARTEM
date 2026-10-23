@@ -2519,6 +2519,8 @@ Class ANALIZ_TEP_FORM_ON_SHOW: WebForm
 				text := "zlib_indc, calyear, plant";
 			End If;
 			sql := String.Replace(sql, ":ANALYTIC_SET", text);
+
+			logRecord(C_LOG_OP_FORM, True, "", "", "ANALYTIC_SET = " + text);
 		Except On E: Exception Do
 			Debug.WriteLine("[АнализТЭП/форма] аналитики в SQL: " + E.Message);
 			sql := String.Replace(sql, ":ANALYTIC_SET", "zlib_indc, calyear, plant");
