@@ -2499,7 +2499,7 @@ Class ANALIZ_TEP_FORM_ON_SHOW: WebForm
 		+ ")" + C_CRLF
 		+ "SELECT" + C_CRLF
 		+ "    :ANALYTIC_SET," + C_CRLF
-		+ "    :EXTRA_NAMES," + C_CRLF
+
 		+ "    ""Код вида деятельности""," + C_CRLF
 		+ "    ""Наименование вида деятельности""," + C_CRLF
 		+ "    ""Формы ТЭП СНГ""" + C_CRLF
