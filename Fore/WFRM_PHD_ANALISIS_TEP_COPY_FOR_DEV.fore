@@ -2079,7 +2079,7 @@ Class ANALIZ_TEP_FORM_ON_SHOW: WebForm
 		For i := 0 To fieldList.Count - 1 Do
 			fieldId := fieldList.Item(i) As String;
 			If Not fieldId.StartsWith("ZSIU_INDV_") Then
-				If String.Find(C_EXCLUDE_ANALYTICS, "," + fieldId + ",") < 0 Then
+				If Not String.Contains(C_EXCLUDE_ANALYTICS, "," + fieldId + ",") Then
 					count := count + 1;
 				End If;
 			End If;
@@ -2092,7 +2092,7 @@ Class ANALIZ_TEP_FORM_ON_SHOW: WebForm
 		For i := 0 To fieldList.Count - 1 Do
 			fieldId := fieldList.Item(i) As String;
 			If Not fieldId.StartsWith("ZSIU_INDV_") Then
-				If String.Find(C_EXCLUDE_ANALYTICS, "," + fieldId + ",") < 0 Then
+				If Not String.Contains(C_EXCLUDE_ANALYTICS, "," + fieldId + ",") Then
 					arr[count] := String.ToLower(fieldId);
 					count := count + 1;
 				End If;
