@@ -2279,6 +2279,41 @@ Class ANALIZ_TEP_FORM_ON_SHOW: WebForm
 	/// 	Собирает полный текст SQL для отчёта (параметр P_SQL): подставляет в шаблон
 	/// 	C_SQL_TEMPLATE аналитики, динамические колонки, статусы и все фильтры СЭ.
 	/// </summary>
+
+	/// <summary>
+	/// 	Значение параметра в виде списка SQL-литералов: для массива — 'a','b',
+	/// 	для одиночного значения — 'a'. Нужно для IN (:PARAM), где каждый элемент
+	/// 	должен быть отдельной строкой, а не одной 'a,b'.
+	/// </summary>
+	Function paramLiterals(params: IHashtable; paramId: String): String;
+	Var
+		value: Variant;
+		arr: Array;
+		i: Integer;
+		text: String;
+	Begin
+		If IsNull(params) Then Return "''"; End If;
+		Try
+			If Not params.Contains(paramId) Then Return "''"; End If;
+			value := params.Item(paramId);
+			If IsNull(value) Then Return "''"; End If;
+			If value Is Array Then
+				arr := value As Array;
+				text := "";
+				For i := 0 To arr.Length - 1 Do
+					If i > 0 Then text := text + ","; End If;
+					text := text + quoteLiteral(arr[i] As String);
+				End For;
+				If text.IsEmpty Then Return "''"; End If;
+				Return text;
+			End If;
+			Return quoteLiteral(value As String);
+		Except On E: Exception Do
+			Debug.WriteLine("[АнализТЭП/форма] литералы параметра " + paramId + ": " + E.Message);
+			Return "''";
+		End Try;
+	End Function paramLiterals;
+
 	Function buildSql: String;
 	Var
 		sql, text, tempId, tempText: String;
@@ -2539,8 +2574,7 @@ Class ANALIZ_TEP_FORM_ON_SHOW: WebForm
 				arrNames := C_FILTER_PARAMS.Split(",");
 				For i := 0 To arrNames.Length - 1 Do
 					tempId := String.Trim(arrNames[i] As String);
-					text := paramText(params, tempId);
-					sql := String.Replace(sql, ":" + tempId, quoteLiteral(text));
+					sql := String.Replace(sql, ":" + tempId, paramLiterals(params, tempId));
 				End For;
 			End If;
 		Except On E2: Exception Do
