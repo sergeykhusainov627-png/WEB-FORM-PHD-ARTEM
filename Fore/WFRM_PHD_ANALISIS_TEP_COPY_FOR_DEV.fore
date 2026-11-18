@@ -2,15 +2,64 @@ Var
 	fieldList: IStringList;	
 
 Class ANALIZ_TEP_FORM_ON_SHOW: WebForm
+	CheckBox6: WebCheckBox;
+	CheckBox5: WebCheckBox;
+	CheckBox4: WebCheckBox;
+	CheckBox3: WebCheckBox;
+	CheckBox2: WebCheckBox;
+	CB_CONTRACT: WebCheckBox;
+	TabPage21: WebTabPage;
+	CB_SIX_MONTH_CORR: WebCheckBox;
+	CB_NINE_MONTH_CORR: WebCheckBox;
+	CB_YEAR_CORR: WebCheckBox;
+	CB_FOURTH_QUARTER_CORR: WebCheckBox;
+	CB_THIRD_QUARTER_CORR: WebCheckBox;
+	CB_SECOND_QUARTER_CORR: WebCheckBox;
+	CB_FIRST_QUARTER_CORR: WebCheckBox;
+	CB_DECEMBER_CORR: WebCheckBox;
+	CB_NOVEMBER_CORR: WebCheckBox;
+	CB_OCTOBER_CORR: WebCheckBox;
+	CB_SEPTEMBER_CORR: WebCheckBox;
+	CB_AUGUST_CORR: WebCheckBox;
+	CB_JULY_CORR: WebCheckBox;
+	CB_JUNE_CORR: WebCheckBox;
+	CB_MAY_CORR: WebCheckBox;
+	CB_APRIL_CORR: WebCheckBox;
+	CB_MARCH_CORR: WebCheckBox;
+	CB_FEBRUARY_CORR: WebCheckBox;
+	CB_JANUARY_CORR: WebCheckBox;
+	CB_YEAR_YEAR_TO_DATE: WebCheckBox;
+	CB_NINE_MONTH_YEAR_TO_DATE: WebCheckBox;
+	B_SIX_MONTH_YEAR_TO_DATE: WebCheckBox;
+	CB_FOURTH_QUARTER_YEAR_TO_DATE: WebCheckBox;
+	CB_THIRD_QUARTER_YEAR_TO_DATE: WebCheckBox;
+	CB_SECOND_QUARTER_YEAR_TO_DATE: WebCheckBox;
+	CB_FIRST_QUARTER_YEAR_TO_DATE: WebCheckBox;
+	CB_DECEMBER_YEAR_TO_DATE: WebCheckBox;
+	CB_NOVEMBER_YEAR_TO_DATE: WebCheckBox;
+	CB_OCTOBER_YEAR_TO_DATE: WebCheckBox;
+	CB_SEPTEMBER_YEAR_TO_DATE: WebCheckBox;
+	CB_AUGUST_YEAR_TO_DATE: WebCheckBox;
+	CB_JULY_YEAR_TO_DATE: WebCheckBox;
+	CB_JUNE_YEAR_TO_DATE: WebCheckBox;
+	CB_MAY_YEAR_TO_DATE: WebCheckBox;
+	CB_APRIL_YEAR_TO_DATE: WebCheckBox;
+	CB_MARCH_YEAR_TO_DATE: WebCheckBox;
+	CB_FEBRUARY_YEAR_TO_DATE: WebCheckBox;
+	CB_JANUARY_YEAR_TO_DATE: WebCheckBox;
+	TabPage20: WebTabPage;
+	TabPage19: WebTabPage;
 		
 	TextArea1: WebTextArea;
 	PANEL3: WebPanel;
+	
 	
 	TabControl: WebTabControl;
 	TabControl1: WebTabControl;
 	TabControl2: WebTabControl;
 	
 	TabPage1: WebTabPage;
+	
 	TabPage2: WebTabPage;
 	TabPage3: WebTabPage;
 	TabPage4: WebTabPage;
@@ -341,7 +390,13 @@ Class ANALIZ_TEP_FORM_ON_SHOW: WebForm
 	_sqlSqlLength: Integer;
 	_sqlExtraNames: String;
 	_sqlStatus: String;
-	extraCaptions: StringList;
+		extraCaptions: StringList;
+	extraYtdPeriods: StringList;
+	extraYtdConds: StringList;
+	extraYtdCaptions: StringList;
+	extraCorrPeriods: StringList;
+	extraCorrConds: StringList;
+	extraCorrCaptions: StringList;
 	_fieldIds: IHashtable;
 	_codeIds: IHashtable;
 	
@@ -1809,6 +1864,35 @@ Class ANALIZ_TEP_FORM_ON_SHOW: WebForm
 		extraCaptions.Add(caption);
 	End Sub addPeriodIfChecked;
 
+	/// <summary>Период «с начала года» (CB_*_YEAR_TO_DATE): считается по ZVALUE_SNG</summary>
+	Sub addYtdPeriodIfChecked(cb: IWebCheckBox; periodNum: Integer; cond: String; caption: String);
+	Begin
+		If IsNull(cb) Then
+			Return;
+		End If;
+		If Not cb.Checked Then
+			Return;
+		End If;
+		extraYtdPeriods.Add(periodNum.ToString);
+		extraYtdConds.Add(cond);
+		extraYtdCaptions.Add(caption);
+	End Sub addYtdPeriodIfChecked;
+
+	/// <summary>Период «корректировки» (CB_*_CORR): ZSIU_INDV с фильтром ZLIB_INFS = 'KOROUND'</summary>
+	Sub addCorrPeriodIfChecked(cb: IWebCheckBox; periodNum: Integer; cond: String; caption: String);
+	Begin
+		If IsNull(cb) Then
+			Return;
+		End If;
+		If Not cb.Checked Then
+			Return;
+		End If;
+		extraCorrPeriods.Add(periodNum.ToString);
+		extraCorrConds.Add(cond);
+		extraCorrCaptions.Add(caption);
+	End Sub addCorrPeriodIfChecked;
+
+
 	/// <summary>
 	/// 	Собирает динамические колонки: периоды (по чек-боксам «Поля для вывода») x типы данных
 	/// 	(по выбору D_ZTYPEIND, укрупнённо план/факт — attr_for_fltr не влияет на состав колонок).
@@ -1829,9 +1913,33 @@ Class ANALIZ_TEP_FORM_ON_SHOW: WebForm
 		If IsNull(extraPeriods) Then
 			extraPeriods := New StringList.Create;
 		End If;
+		If IsNull(extraYtdConds) Then
+			extraYtdConds := New StringList.Create;
+		End If;
+		If IsNull(extraYtdCaptions) Then
+			extraYtdCaptions := New StringList.Create;
+		End If;
+		If IsNull(extraYtdPeriods) Then
+			extraYtdPeriods := New StringList.Create;
+		End If;
+		If IsNull(extraCorrConds) Then
+			extraCorrConds := New StringList.Create;
+		End If;
+		If IsNull(extraCorrCaptions) Then
+			extraCorrCaptions := New StringList.Create;
+		End If;
+		If IsNull(extraCorrPeriods) Then
+			extraCorrPeriods := New StringList.Create;
+		End If;
 		extraPeriods.Clear;
 		extraConds.Clear;
 		extraCaptions.Clear;
+		extraYtdPeriods.Clear;
+		extraYtdConds.Clear;
+		extraYtdCaptions.Clear;
+		extraCorrPeriods.Clear;
+		extraCorrConds.Clear;
+		extraCorrCaptions.Clear;
 		
 		// --- 1. периоды по отмеченным чек-боксам (19 периодов запроса)
 		addPeriodIfChecked(CB_JANUARY, 1, "period = 1", "Январь");
@@ -1853,6 +1961,47 @@ Class ANALIZ_TEP_FORM_ON_SHOW: WebForm
 		addPeriodIfChecked(CB_NINE_MONTH, 17, "period IN (17)", "9 мес.");
 		addPeriodIfChecked(CB_FOURTH_QUARTER, 18, "period IN (18)", "IV кв.");
 		addPeriodIfChecked(CB_YEAR, 19, "period IN (19)", "Год");
+
+		// --- 1a. Периоды «с начала года» (CB_*_YEAR_TO_DATE) — считаются по ZVALUE_SNG
+		addYtdPeriodIfChecked(CB_JANUARY_YEAR_TO_DATE, 1, "period = 1", "Январь");
+		addYtdPeriodIfChecked(CB_FEBRUARY_YEAR_TO_DATE, 2, "period = 2", "Февраль");
+		addYtdPeriodIfChecked(CB_MARCH_YEAR_TO_DATE, 3, "period = 3", "Март");
+		addYtdPeriodIfChecked(CB_APRIL_YEAR_TO_DATE, 4, "period = 4", "Апрель");
+		addYtdPeriodIfChecked(CB_MAY_YEAR_TO_DATE, 5, "period = 5", "Май");
+		addYtdPeriodIfChecked(CB_JUNE_YEAR_TO_DATE, 6, "period = 6", "Июнь");
+		addYtdPeriodIfChecked(CB_JULY_YEAR_TO_DATE, 7, "period = 7", "Июль");
+		addYtdPeriodIfChecked(CB_AUGUST_YEAR_TO_DATE, 8, "period = 8", "Август");
+		addYtdPeriodIfChecked(CB_SEPTEMBER_YEAR_TO_DATE, 9, "period = 9", "Сентябрь");
+		addYtdPeriodIfChecked(CB_OCTOBER_YEAR_TO_DATE, 10, "period = 10", "Октябрь");
+		addYtdPeriodIfChecked(CB_NOVEMBER_YEAR_TO_DATE, 11, "period = 11", "Ноябрь");
+		addYtdPeriodIfChecked(CB_DECEMBER_YEAR_TO_DATE, 12, "period = 12", "Декабрь");
+		addYtdPeriodIfChecked(CB_FIRST_QUARTER_YEAR_TO_DATE, 13, "period IN (13)", "I кв.");
+		addYtdPeriodIfChecked(CB_SECOND_QUARTER_YEAR_TO_DATE, 14, "period IN (14)", "II кв.");
+		addYtdPeriodIfChecked(CB_THIRD_QUARTER_YEAR_TO_DATE, 16, "period IN (16)", "III кв.");
+		addYtdPeriodIfChecked(CB_NINE_MONTH_YEAR_TO_DATE, 17, "period IN (17)", "9 мес.");
+		addYtdPeriodIfChecked(CB_FOURTH_QUARTER_YEAR_TO_DATE, 18, "period IN (18)", "IV кв.");
+		addYtdPeriodIfChecked(CB_YEAR_YEAR_TO_DATE, 19, "period IN (19)", "Год");
+
+		// --- 1b. Периоды «корректировки» (CB_*_CORR) — ZSIU_INDV, ZLIB_INFS = KOROUND
+		addCorrPeriodIfChecked(CB_JANUARY_CORR, 1, "period = 1", "Январь");
+		addCorrPeriodIfChecked(CB_FEBRUARY_CORR, 2, "period = 2", "Февраль");
+		addCorrPeriodIfChecked(CB_MARCH_CORR, 3, "period = 3", "Март");
+		addCorrPeriodIfChecked(CB_APRIL_CORR, 4, "period = 4", "Апрель");
+		addCorrPeriodIfChecked(CB_MAY_CORR, 5, "period = 5", "Май");
+		addCorrPeriodIfChecked(CB_JUNE_CORR, 6, "period = 6", "Июнь");
+		addCorrPeriodIfChecked(CB_JULY_CORR, 7, "period = 7", "Июль");
+		addCorrPeriodIfChecked(CB_AUGUST_CORR, 8, "period = 8", "Август");
+		addCorrPeriodIfChecked(CB_SEPTEMBER_CORR, 9, "period = 9", "Сентябрь");
+		addCorrPeriodIfChecked(CB_OCTOBER_CORR, 10, "period = 10", "Октябрь");
+		addCorrPeriodIfChecked(CB_NOVEMBER_CORR, 11, "period = 11", "Ноябрь");
+		addCorrPeriodIfChecked(CB_DECEMBER_CORR, 12, "period = 12", "Декабрь");
+		addCorrPeriodIfChecked(CB_FIRST_QUARTER_CORR, 13, "period IN (13)", "I кв.");
+		addCorrPeriodIfChecked(CB_SECOND_QUARTER_CORR, 14, "period IN (14)", "II кв.");
+		addCorrPeriodIfChecked(CB_SIX_MONTH_CORR, 15, "period IN (15)", "6 мес.");
+		addCorrPeriodIfChecked(CB_THIRD_QUARTER_CORR, 16, "period IN (16)", "III кв.");
+		addCorrPeriodIfChecked(CB_NINE_MONTH_CORR, 17, "period IN (17)", "9 мес.");
+		addCorrPeriodIfChecked(CB_FOURTH_QUARTER_CORR, 18, "period IN (18)", "IV кв.");
+		addCorrPeriodIfChecked(CB_YEAR_CORR, 19, "period IN (19)", "Год");
 		// защита от пустого параметра: хотя бы один период
 		If extraConds.Count = 0 Then
 			extraPeriods.Add("19");
@@ -1988,28 +2137,48 @@ Class ANALIZ_TEP_FORM_ON_SHOW: WebForm
 		i: Integer;
 		caption: String;
 	Begin
+		// 1) за период: ZSIU_INDV
 		For i := 0 To extraCaptions.Count - 1 Do
 			caption := extraCaptions.Item(i) As String;
-			// набор за период + набор «С нач.года»
 			addExtraColumn(exprs, names, "SUM(zsiu_indv)", extraConds.Item(i) As String, typeId,
-				caption + " (" + typeName + ")", caption + " (" + typeName + ")");
+				caption + " (" + typeName + ")", caption + " (" + typeName + ")", "");
 			If hasStatus Then
 				addExtraColumn(exprs, names, "MAX(zphd_stat)", extraConds.Item(i) As String, typeId,
-					caption + ". Статус (" + typeName + ")", caption + ". Статус (" + typeName + ")");
+					caption + ". Статус (" + typeName + ")", caption + ". Статус (" + typeName + ")", "");
 			End If;
-			addExtraColumn(exprs, names, "SUM(zvalue_sng)", extraConds.Item(i) As String, typeId,
-				caption + ". С нач.года (" + typeName + ")", caption + ". С нач.года (" + typeName + ")");
+		End For;
+		// 2) с начала года: ZVALUE_SNG
+		For i := 0 To extraYtdCaptions.Count - 1 Do
+			caption := extraYtdCaptions.Item(i) As String;
+			addExtraColumn(exprs, names, "SUM(zvalue_sng)", extraYtdConds.Item(i) As String, typeId,
+				caption + ". С нач.года (" + typeName + ")", caption + ". С нач.года (" + typeName + ")", "");
 			If hasStatus Then
-				addExtraColumn(exprs, names, "MAX(zphd_stat)", extraConds.Item(i) As String, typeId,
-					caption + ". С нач.года. Статус (" + typeName + ")", caption + ". С нач.года. Статус (" + typeName + ")");
+				addExtraColumn(exprs, names, "MAX(zphd_stat)", extraYtdConds.Item(i) As String, typeId,
+					caption + ". С нач.года. Статус (" + typeName + ")", caption + ". С нач.года. Статус (" + typeName + ")", "");
+			End If;
+		End For;
+		// 3) корректировки: ZSIU_INDV с ZLIB_INFS = 'KOROUND'
+		For i := 0 To extraCorrCaptions.Count - 1 Do
+			caption := extraCorrCaptions.Item(i) As String;
+			addExtraColumn(exprs, names, "SUM(zsiu_indv)", extraCorrConds.Item(i) As String, typeId,
+				caption + " (Коррект.) (" + typeName + ")", caption + " (Коррект.) (" + typeName + ")", "zlib_infs = 'KOROUND'");
+			If hasStatus Then
+				addExtraColumn(exprs, names, "MAX(zphd_stat)", extraCorrConds.Item(i) As String, typeId,
+					caption + ". Статус (Коррект.) (" + typeName + ")", caption + ". Статус (Коррект.) (" + typeName + ")", "zlib_infs = 'KOROUND'");
 			End If;
 		End For;
 	End Sub addExtraForType;
 
 	/// <summary>Одна динамическая колонка: выражение для EXTRA_FIELDS и псевдоним для EXTRA_NAMES</summary>
-	Sub addExtraColumn(exprs: StringList; names: StringList; agg: String; cond: String; typeId: String; alias: String; name: String);
+	Sub addExtraColumn(exprs: StringList; names: StringList; agg: String; cond: String; typeId: String; alias: String; name: String; extraFilter: String);
+	Var
+		filterCond: String;
 	Begin
-		exprs.Add(agg + " FILTER (WHERE " + cond + " AND ztypeind = '" + typeId + "') AS """ + alias + """");
+		filterCond := cond + " AND ztypeind = '" + typeId + "'";
+		If Not extraFilter.IsEmpty Then
+			filterCond := filterCond + " AND " + extraFilter;
+		End If;
+		exprs.Add(agg + " FILTER (WHERE " + filterCond + ") AS """ + alias + """");
 		names.Add("""" + name + """");
 	End Sub addExtraColumn;
 
@@ -2300,19 +2469,29 @@ Class ANALIZ_TEP_FORM_ON_SHOW: WebForm
 		i: Integer;
 		text: String;
 	Begin
-		If IsNull(params) Then Return "''"; End If;
+		If IsNull(params) Then
+			Return "''";
+		End If;
 		Try
-			If Not params.Contains(paramId) Then Return "''"; End If;
+			If Not params.Contains(paramId) Then
+				Return "''";
+			End If;
 			value := params.Item(paramId);
-			If IsNull(value) Then Return "''"; End If;
+			If IsNull(value) Then
+				Return "''";
+			End If;
 			If value Is Array Then
 				arr := value As Array;
 				text := "";
 				For i := 0 To arr.Length - 1 Do
-					If i > 0 Then text := text + ","; End If;
+					If i > 0 Then
+						text := text + ",";
+					End If;
 					text := text + quoteLiteral(arr[i] As String);
 				End For;
-				If text.IsEmpty Then Return "''"; End If;
+				If text.IsEmpty Then
+					Return "''";
+				End If;
 				Return text;
 			End If;
 			Return quoteLiteral(value As String);
