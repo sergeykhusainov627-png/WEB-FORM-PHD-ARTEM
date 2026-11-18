@@ -1977,6 +1977,7 @@ Class ANALIZ_TEP_FORM_ON_SHOW: WebForm
 		addYtdPeriodIfChecked(CB_DECEMBER_YEAR_TO_DATE, 12, "period = 12", "Декабрь");
 		addYtdPeriodIfChecked(CB_FIRST_QUARTER_YEAR_TO_DATE, 13, "period IN (13)", "I кв.");
 		addYtdPeriodIfChecked(CB_SECOND_QUARTER_YEAR_TO_DATE, 14, "period IN (14)", "II кв.");
+		addYtdPeriodIfChecked(B_SIX_MONTH_YEAR_TO_DATE, 15, "period IN (15)", "6 мес.");
 		addYtdPeriodIfChecked(CB_THIRD_QUARTER_YEAR_TO_DATE, 16, "period IN (16)", "III кв.");
 		addYtdPeriodIfChecked(CB_NINE_MONTH_YEAR_TO_DATE, 17, "period IN (17)", "9 мес.");
 		addYtdPeriodIfChecked(CB_FOURTH_QUARTER_YEAR_TO_DATE, 18, "period IN (18)", "IV кв.");
