@@ -2504,7 +2504,7 @@ Class ANALIZ_TEP_FORM_ON_SHOW: WebForm
 
 	Function buildSql: String;
 	Var
-		sql, text, tempId, tempText: String;
+		sql, text, tempId, tempText, refCols: String;
 		sqlLines: Array Of String;
 		keptLines: StringList;
 		pos, leftParamCount, i2: Integer;
@@ -2709,9 +2709,7 @@ Class ANALIZ_TEP_FORM_ON_SHOW: WebForm
 		+ "Main_Data AS (" + C_CRLF
 		+ "    SELECT" + C_CRLF
 		+ "        :ANALYTIC_SET," + C_CRLF
-		+ "        (SELECT t.ACTVTS FROM " + nsiTable(C_NSI_RDSD_INDS) + " t WHERE t.CODE = v.zlib_indc AND now() BETWEEN t.DATE_FROM AND t.DATE_TO LIMIT 1) AS ""Код вида деятельности""," + C_CRLF
-		+ "        (SELECT t.SNAME FROM " + nsiTable(C_NSI_RDSD_INDS) + " t WHERE t.CODE = v.zlib_indc AND now() BETWEEN t.DATE_FROM AND t.DATE_TO LIMIT 1) AS ""Наименование вида деятельности""," + C_CRLF
-		+ "        (SELECT f.forms_text FROM Forms_Agg f WHERE f.ZLIB_INDC = v.zlib_indc AND f.GJAHR = v.calyear AND f.PLANT = v.plant LIMIT 1) AS ""Формы ТЭП СНГ""," + C_CRLF
+		+ "        :REF_COLUMNS" + C_CRLF
 		+ "        :EXTRA_FIELDS" + C_CRLF
 		+ "    FROM src v" + C_CRLF
 		+ "    GROUP BY" + C_CRLF
@@ -2750,6 +2748,16 @@ Class ANALIZ_TEP_FORM_ON_SHOW: WebForm
 		End If;
 		sql := String.Replace(sql, ":EXTRA_FIELDS", _sqlExtraFields);
 		sql := String.Replace(sql, ":EXTRA_NAMES", _sqlExtraNames);
+		// Справочные колонки — по чек-боксам «Вид деятельности» и «Формы ТЭП СНГ»
+		refCols := "";
+		If (Not IsNull(CB_ACTIVITY_TYPE)) And CB_ACTIVITY_TYPE.Checked Then
+			refCols := refCols + "        (SELECT t.ACTVTS FROM " + nsiTable(C_NSI_RDSD_INDS) + " t WHERE t.CODE = v.zlib_indc AND now() BETWEEN t.DATE_FROM AND t.DATE_TO LIMIT 1) AS ""Код вида деятельности""," + C_CRLF;
+			refCols := refCols + "        (SELECT t.SNAME FROM " + nsiTable(C_NSI_RDSD_INDS) + " t WHERE t.CODE = v.zlib_indc AND now() BETWEEN t.DATE_FROM AND t.DATE_TO LIMIT 1) AS ""Наименование вида деятельности""," + C_CRLF;
+		End If;
+		If (Not IsNull(CB_TEP_FORM_OF_SNG)) And CB_TEP_FORM_OF_SNG.Checked Then
+			refCols := refCols + "        (SELECT f.forms_text FROM Forms_Agg f WHERE f.ZLIB_INDC = v.zlib_indc AND f.GJAHR = v.calyear AND f.PLANT = v.plant LIMIT 1) AS ""Формы ТЭП СНГ""," + C_CRLF;
+		End If;
+		sql := String.Replace(sql, ":REF_COLUMNS", refCols);
 
 		If _sqlStatus.IsEmpty Then
 			_sqlStatus := "0";
@@ -2773,7 +2781,7 @@ Class ANALIZ_TEP_FORM_ON_SHOW: WebForm
 			keptLines := New StringList.Create;
 			For i2 := 0 To sqlLines.Length - 1 Do
 				tempText := sqlLines[i2] As String;
-				If Not String.Contains(tempText, "IN ('')") Then
+				If (Not String.Contains(tempText, "IN ('')")) Or String.Contains(tempText, "WHERE") Then
 					keptLines.Add(tempText);
 				End If;
 			End For;
